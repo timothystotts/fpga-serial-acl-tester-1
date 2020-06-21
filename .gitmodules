@@ -1,4 +1,4 @@
 [submodule "ACL-Tester-Design-AXI/IP/vivado-library"]
 	path = ACL-Tester-Design-AXI/IP/vivado-library
 	url = https://github.com/timothystotts/vivado-library.git
-	branch = arty-a7-100-vivado-2020.1
+	branch = arty-a7-100-vivado-2019.1
