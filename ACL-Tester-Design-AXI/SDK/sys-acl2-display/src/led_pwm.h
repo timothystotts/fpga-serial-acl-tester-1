@@ -68,12 +68,10 @@ typedef struct RGB_LED_TAG {
 	u8 paletteBlue;
 } t_rgb_led_palette;
 
-/*
 typedef struct RGB_LED_SILK_TAG {
 	t_rgb_led_palette rgb;
 	u8 ledSilk;
 } t_rgb_led_palette_silk;
-*/
 
 typedef t_color_pwm_constants t_basic_pwm_constants;
 
