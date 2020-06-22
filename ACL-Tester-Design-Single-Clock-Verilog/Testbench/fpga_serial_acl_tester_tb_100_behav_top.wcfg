@@ -12,14 +12,14 @@
    </db_ref_list>
    <zoom_setting>
       <ZoomStartTime time="0fs"></ZoomStartTime>
-      <ZoomEndTime time="200001000000001fs"></ZoomEndTime>
-      <Cursor1Time time="200001000000000fs"></Cursor1Time>
+      <ZoomEndTime time="220340084745764fs"></ZoomEndTime>
+      <Cursor1Time time="1000000000fs"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="204"></NameColumnWidth>
-      <ValueColumnWidth column_width="91"></ValueColumnWidth>
+      <ValueColumnWidth column_width="87"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="165" />
+   <WVObjectSize size="174" />
    <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/CLK100MHZ" type="logic">
       <obj_property name="ElementShortName">CLK100MHZ</obj_property>
       <obj_property name="ObjectShortName">CLK100MHZ</obj_property>
@@ -187,22 +187,6 @@
    <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_ce_2_5mhz" type="logic">
       <obj_property name="ElementShortName">s_ce_2_5mhz</obj_property>
       <obj_property name="ObjectShortName">s_ce_2_5mhz</obj_property>
-   </wvobject>
-   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/sc_aux_reset_in" type="logic">
-      <obj_property name="ElementShortName">sc_aux_reset_in</obj_property>
-      <obj_property name="ObjectShortName">sc_aux_reset_in</obj_property>
-   </wvobject>
-   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/sc_mb_debug_sys_rst" type="logic">
-      <obj_property name="ElementShortName">sc_mb_debug_sys_rst</obj_property>
-      <obj_property name="ObjectShortName">sc_mb_debug_sys_rst</obj_property>
-   </wvobject>
-   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_periph_reset" type="array">
-      <obj_property name="ElementShortName">s_periph_reset[0:0]</obj_property>
-      <obj_property name="ObjectShortName">s_periph_reset[0:0]</obj_property>
-   </wvobject>
-   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_737_periph_reset" type="array">
-      <obj_property name="ElementShortName">s_737_periph_reset[0:0]</obj_property>
-      <obj_property name="ObjectShortName">s_737_periph_reset[0:0]</obj_property>
    </wvobject>
    <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/so_pmod_acl2_sck_o" type="logic">
       <obj_property name="ElementShortName">so_pmod_acl2_sck_o</obj_property>
@@ -679,5 +663,57 @@
    <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_temp_m0" type="array">
       <obj_property name="ElementShortName">s_char_temp_m0[7:0]</obj_property>
       <obj_property name="ObjectShortName">s_char_temp_m0[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk0b" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk0b</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk0b</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk1b" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk1b</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk1b</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk2" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk2</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk2b" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk2b</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk2b</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk3" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk3</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk3</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk3b" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk3b</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk3b</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk4" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk4</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk5" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk5</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk5</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk6" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk6</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk6</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clkfboutb" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clkfboutb</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clkfboutb</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_clkfbout" type="logic">
+      <obj_property name="ElementShortName">s_clk_clkfbout</obj_property>
+      <obj_property name="ObjectShortName">s_clk_clkfbout</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_pwrdwn" type="logic">
+      <obj_property name="ElementShortName">s_clk_pwrdwn</obj_property>
+      <obj_property name="ObjectShortName">s_clk_pwrdwn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_resetin" type="logic">
+      <obj_property name="ElementShortName">s_clk_resetin</obj_property>
+      <obj_property name="ObjectShortName">s_clk_resetin</obj_property>
    </wvobject>
 </wave_config>

@@ -51,7 +51,7 @@ parameter parm_tx_len_bits = 10;
 /* LOG2 of max Wait Cycles count between end of TX and start of RX */
 parameter parm_wait_cyc_bits = 5;
 /* LOG2 of the RX FIFO max count */
-parameter parm_rx_len_bits = 10;
+parameter parm_rx_len_bits = 10; /* now ignored due to usage of MACRO */
 
 output reg eo_sck_o;
 output reg eo_sck_t;
@@ -163,8 +163,13 @@ wire s_data_fifo_rx_re;
 reg s_data_fifo_rx_we;
 wire s_data_fifo_rx_full;
 wire s_data_fifo_rx_empty;
-wire s_data_fifo_rx_valid;
-wire [(parm_rx_len_bits - 1):0] s_data_fifo_rx_count;
+reg s_data_fifo_rx_valid;
+wire [10:0] s_data_fifo_rx_rdcount;
+wire [10:0] s_data_fifo_rx_wrcount;
+wire s_data_fifo_rx_almostfull;
+wire s_data_fifo_rx_almostempty;
+wire s_data_fifo_rx_wrerr;
+wire s_data_fifo_rx_rderr;
 
 /* Mapping for FIFO TX */
 wire [7:0] s_data_fifo_tx_in;
@@ -173,8 +178,13 @@ reg s_data_fifo_tx_re;
 wire s_data_fifo_tx_we;
 wire s_data_fifo_tx_full;
 wire s_data_fifo_tx_empty;
-wire s_data_fifo_tx_valid;
-wire [(parm_tx_len_bits - 1):0] s_data_fifo_tx_count;
+reg s_data_fifo_tx_valid;
+wire [10:0] s_data_fifo_tx_rdcount;
+wire [10:0] s_data_fifo_tx_wrcount;
+wire s_data_fifo_tx_almostfull;
+wire s_data_fifo_tx_almostempty;
+wire s_data_fifo_tx_wrerr;
+wire s_data_fifo_tx_rderr;
 
 //Part 3: Statements------------------------------------------------------------
 /* The SPI driver is IDLE only if the state signals as IDLE and more than four
@@ -195,37 +205,107 @@ assign o_rx_valid = s_data_fifo_rx_valid & s_spi_ce_4x;
 assign s_data_fifo_rx_re = i_rx_dequeue & s_spi_ce_4x;
 assign o_rx_data = s_data_fifo_rx_out;
 
-fifo_generator_0 #() u_fifo_rx_0 (
-	.clk(i_ext_spi_clk_x),
-	.srst(i_srst),
-	.din(s_data_fifo_rx_in),
-	.wr_en(s_data_fifo_rx_we),
-	.rd_en(s_data_fifo_rx_re),
-	.dout(s_data_fifo_rx_out),
-	.full(s_data_fifo_rx_full),
-	.empty(s_data_fifo_rx_empty),
-	.valid(s_data_fifo_rx_valid),
-	.data_count(s_data_fifo_rx_count) /* Simulation display, only */
-	);
+always @(posedge i_ext_spi_clk_x)
+begin: p_gen_fifo_rx_valid
+	s_data_fifo_rx_valid <= s_data_fifo_rx_re;
+end
 
+// FIFO_SYNC_MACRO: Synchronous First-In, First-Out (FIFO) RAM Buffer
+//                  Artix-7
+// Xilinx HDL Language Template, version 2019.1
+
+/////////////////////////////////////////////////////////////////
+// DATA_WIDTH | FIFO_SIZE | FIFO Depth | RDCOUNT/WRCOUNT Width //
+// ===========|===========|============|=======================//
+//   37-72    |  "36Kb"   |     512    |         9-bit         //
+//   19-36    |  "36Kb"   |    1024    |        10-bit         //
+//   19-36    |  "18Kb"   |     512    |         9-bit         //
+//   10-18    |  "36Kb"   |    2048    |        11-bit         //
+//   10-18    |  "18Kb"   |    1024    |        10-bit         //
+//    5-9     |  "36Kb"   |    4096    |        12-bit         //
+//    5-9     |  "18Kb"   |    2048    |        11-bit         //
+//    1-4     |  "36Kb"   |    8192    |        13-bit         //
+//    1-4     |  "18Kb"   |    4096    |        12-bit         //
+/////////////////////////////////////////////////////////////////
+
+FIFO_SYNC_MACRO  #(
+  .DEVICE("7SERIES"), // Target Device: "7SERIES" 
+  .ALMOST_EMPTY_OFFSET(11'h080), // Sets the almost empty threshold
+  .ALMOST_FULL_OFFSET(11'h080),  // Sets almost full threshold
+  .DATA_WIDTH(8), // Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
+  .DO_REG(0),     // Optional output register (0 or 1)
+  .FIFO_SIZE ("18Kb")  // Target BRAM: "18Kb" or "36Kb" 
+) u_fifo_rx_0 (
+  .ALMOSTEMPTY(s_data_fifo_rx_almostempty), // 1-bit output almost empty
+  .ALMOSTFULL(s_data_fifo_rx_almostfull),   // 1-bit output almost full
+  .DO(s_data_fifo_rx_out),                  // Output data, width defined by DATA_WIDTH parameter
+  .EMPTY(s_data_fifo_rx_empty),             // 1-bit output empty
+  .FULL(s_data_fifo_rx_full),               // 1-bit output full
+  .RDCOUNT(s_data_fifo_rx_rdcount),         // Output read count, width determined by FIFO depth
+  .RDERR(s_data_fifo_rx_rderr),             // 1-bit output read error
+  .WRCOUNT(s_data_fifo_rx_wrcount),         // Output write count, width determined by FIFO depth
+  .WRERR(s_data_fifo_rx_wrerr),             // 1-bit output write error
+  .CLK(i_ext_spi_clk_x),                    // 1-bit input clock
+  .DI(s_data_fifo_rx_in),                   // Input data, width defined by DATA_WIDTH parameter
+  .RDEN(s_data_fifo_rx_re),                 // 1-bit input read enable
+  .RST(i_srst),                             // 1-bit input reset
+  .WREN(s_data_fifo_rx_we)                  // 1-bit input write enable
+);
+// End of FIFO_SYNC_MACRO_inst instantiation
+				
 /* Mapping of the TX FIFO to external control and transmission of data for
    writing operations */
 assign s_data_fifo_tx_in = i_tx_data;
 assign s_data_fifo_tx_we = i_tx_enqueue & s_spi_ce_4x;
 assign o_tx_ready = (~ s_data_fifo_tx_full) & s_spi_ce_4x;
 
-fifo_generator_1 #() u_fifo_tx_0 (
-	.clk(i_ext_spi_clk_x),
-	.srst(i_srst),
-	.din(s_data_fifo_tx_in),
-	.wr_en(s_data_fifo_tx_we),
-	.rd_en(s_data_fifo_tx_re),
-	.dout(s_data_fifo_tx_out),
-	.full(s_data_fifo_tx_full),
-	.empty(s_data_fifo_tx_empty),
-	.valid(s_data_fifo_tx_valid),
-	.data_count(s_data_fifo_tx_count) /* Simulation display, only */
-	);
+always @(posedge i_ext_spi_clk_x)
+begin: p_gen_fifo_tx_valid
+	s_data_fifo_tx_valid <= s_data_fifo_tx_re;
+end
+
+// FIFO_SYNC_MACRO: Synchronous First-In, First-Out (FIFO) RAM Buffer
+//                  Artix-7
+// Xilinx HDL Language Template, version 2019.1
+
+/////////////////////////////////////////////////////////////////
+// DATA_WIDTH | FIFO_SIZE | FIFO Depth | RDCOUNT/WRCOUNT Width //
+// ===========|===========|============|=======================//
+//   37-72    |  "36Kb"   |     512    |         9-bit         //
+//   19-36    |  "36Kb"   |    1024    |        10-bit         //
+//   19-36    |  "18Kb"   |     512    |         9-bit         //
+//   10-18    |  "36Kb"   |    2048    |        11-bit         //
+//   10-18    |  "18Kb"   |    1024    |        10-bit         //
+//    5-9     |  "36Kb"   |    4096    |        12-bit         //
+//    5-9     |  "18Kb"   |    2048    |        11-bit         //
+//    1-4     |  "36Kb"   |    8192    |        13-bit         //
+//    1-4     |  "18Kb"   |    4096    |        12-bit         //
+/////////////////////////////////////////////////////////////////
+
+FIFO_SYNC_MACRO  #(
+  .DEVICE("7SERIES"), // Target Device: "7SERIES" 
+  .ALMOST_EMPTY_OFFSET(11'h080), // Sets the almost empty threshold
+  .ALMOST_FULL_OFFSET(11'h080),  // Sets almost full threshold
+  .DATA_WIDTH(8), // Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
+  .DO_REG(0),     // Optional output register (0 or 1)
+  .FIFO_SIZE ("18Kb")  // Target BRAM: "18Kb" or "36Kb" 
+) u_fifo_tx_0 (
+  .ALMOSTEMPTY(s_data_fifo_tx_almostempty), // 1-bit output almost empty
+  .ALMOSTFULL(s_data_fifo_tx_almostfull),   // 1-bit output almost full
+  .DO(s_data_fifo_tx_out),                  // Output data, width defined by DATA_WIDTH parameter
+  .EMPTY(s_data_fifo_tx_empty),             // 1-bit output empty
+  .FULL(s_data_fifo_tx_full),               // 1-bit output full
+  .RDCOUNT(s_data_fifo_tx_rdcount),         // Output read count, width determined by FIFO depth
+  .RDERR(s_data_fifo_tx_rderr),             // 1-bit output read error
+  .WRCOUNT(s_data_fifo_tx_wrcount),         // Output write count, width determined by FIFO depth
+  .WRERR(s_data_fifo_tx_wrerr),             // 1-bit output write error
+  .CLK(i_ext_spi_clk_x),                    // 1-bit input clock
+  .DI(s_data_fifo_tx_in),                   // Input data, width defined by DATA_WIDTH parameter
+  .RDEN(s_data_fifo_tx_re),                 // 1-bit input read enable
+  .RST(i_srst),                             // 1-bit input reset
+  .WREN(s_data_fifo_tx_we)                  // 1-bit input write enable
+);
+// End of FIFO_SYNC_MACRO_inst instantiation
 
 /* spi clock for SCK output, generated clock
    requires create_generated_clock constraint in XDC */

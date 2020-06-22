@@ -142,10 +142,6 @@ wire s_rst_20mhz;
 wire s_clk_7_37mhz;
 wire s_rst_7_37mhz;
 wire s_ce_2_5mhz;
-wire sc_aux_reset_in;
-wire sc_mb_debug_sys_rst;
-wire [0:0] s_periph_reset;
-wire [0:0] s_737_periph_reset;
 
 /* Definitions of the Standard SPI driver to pass to the ACL2 and CLS drivers */
 `define c_stand_spi_tx_fifo_count_bits 5
@@ -343,49 +339,105 @@ wire [7:0] s_char_temp_m2;
 wire [7:0] s_char_temp_m1;
 wire [7:0] s_char_temp_m0;
 
+/* Extra MMCM signals for full connectivity to the MMCM primative */
+wire s_clk_ignore_clk0b;
+wire s_clk_ignore_clk1b;
+wire s_clk_ignore_clk2;
+wire s_clk_ignore_clk2b;
+wire s_clk_ignore_clk3;
+wire s_clk_ignore_clk3b;
+wire s_clk_ignore_clk4;
+wire s_clk_ignore_clk5;
+wire s_clk_ignore_clk6;
+wire s_clk_ignore_clkfboutb;
+wire s_clk_clkfbout;
+wire s_clk_pwrdwn;
+wire s_clk_resetin;
+
 //Part 3: Statements------------------------------------------------------------
-/* Clocking Wizard module with MMCM. Two clocks are generated from the 100 MHz
-   input: 20 MHz to operate the ACL2 and 10 MHz to operate the CLS. */
-clk_wiz_0 #() u_clk_wiz_0 (
-	.clk_out1(s_clk_20mhz),
-	.clk_out2(s_clk_7_37mhz),
-	.resetn(i_resetn),
-	.locked(s_mmcm_locked),
-	.clk_in1(CLK100MHZ));
+assign s_clk_pwrdwn = 1'b0;
+assign s_clk_resetin = (~i_resetn);
 
-/* Wiring between the Clocking Wizard and the Processor System Reset being used
-   to provide extended synchronous reset to the custom FPGA design. */
-assign sc_aux_reset_in = 1'b0;
-assign sc_mb_debug_sys_rst = 1'b0;
-assign s_rst_7_37mhz = s_737_periph_reset[0];
-assign s_rst_20mhz = s_periph_reset[0];
+// MMCME2_BASE: Base Mixed Mode Clock Manager
+//              Artix-7
+// Xilinx HDL Language Template, version 2019.1
 
+MMCME2_BASE #(
+  .BANDWIDTH("OPTIMIZED"),   // Jitter programming (OPTIMIZED, HIGH, LOW)
+  .CLKFBOUT_MULT_F(36.125),  // Multiply value for all CLKOUT (2.000-64.000).
+  .CLKFBOUT_PHASE(0.0),      // Phase offset in degrees of CLKFB (-360.000-360.000).
+  .CLKIN1_PERIOD(10.0),      // Input clock period in ns to ps resolution (i.e. 33.333 is 30 MHz).
+  // CLKOUT0_DIVIDE - CLKOUT6_DIVIDE: Divide amount for each CLKOUT (1-128)
+  .CLKOUT1_DIVIDE(98),
+  .CLKOUT2_DIVIDE(1),
+  .CLKOUT3_DIVIDE(1),
+  .CLKOUT4_DIVIDE(1),
+  .CLKOUT5_DIVIDE(1),
+  .CLKOUT6_DIVIDE(1),
+  .CLKOUT0_DIVIDE_F(36.125),  // Divide amount for CLKOUT0 (1.000-128.000).
+  // CLKOUT0_DUTY_CYCLE - CLKOUT6_DUTY_CYCLE: Duty cycle for each CLKOUT (0.01-0.99).
+  .CLKOUT0_DUTY_CYCLE(0.5),
+  .CLKOUT1_DUTY_CYCLE(0.5),
+  .CLKOUT2_DUTY_CYCLE(0.5),
+  .CLKOUT3_DUTY_CYCLE(0.5),
+  .CLKOUT4_DUTY_CYCLE(0.5),
+  .CLKOUT5_DUTY_CYCLE(0.5),
+  .CLKOUT6_DUTY_CYCLE(0.5),
+  // CLKOUT0_PHASE - CLKOUT6_PHASE: Phase offset for each CLKOUT (-360.000-360.000).
+  .CLKOUT0_PHASE(0.0),
+  .CLKOUT1_PHASE(0.0),
+  .CLKOUT2_PHASE(0.0),
+  .CLKOUT3_PHASE(0.0),
+  .CLKOUT4_PHASE(0.0),
+  .CLKOUT5_PHASE(0.0),
+  .CLKOUT6_PHASE(0.0),
+  .CLKOUT4_CASCADE("FALSE"), // Cascade CLKOUT4 counter with CLKOUT6 (FALSE, TRUE)
+  .DIVCLK_DIVIDE(5),         // Master division value (1-106)
+  .REF_JITTER1(0.010),       // Reference input jitter in UI (0.000-0.999).
+  .STARTUP_WAIT("FALSE")     // Delays DONE until MMCM is locked (FALSE, TRUE)
+)
+MMCME2_BASE_inst (
+  // Clock Outputs: 1-bit (each) output: User configurable clock outputs
+  .CLKOUT0(s_clk_20mhz),              // 1-bit output: CLKOUT0
+  .CLKOUT0B(s_clk_ignore_clk0b),      // 1-bit output: Inverted CLKOUT0
+  .CLKOUT1(s_clk_7_37mhz),            // 1-bit output: CLKOUT1
+  .CLKOUT1B(s_clk_ignore_clk1b),      // 1-bit output: Inverted CLKOUT1
+  .CLKOUT2(s_clk_ignore_clk2),        // 1-bit output: CLKOUT2
+  .CLKOUT2B(s_clk_ignore_clk2b),      // 1-bit output: Inverted CLKOUT2
+  .CLKOUT3(s_clk_ignore_clk3),        // 1-bit output: CLKOUT3
+  .CLKOUT3B(s_clk_ignore_clk3b),      // 1-bit output: Inverted CLKOUT3
+  .CLKOUT4(s_clk_ignore_clk4),        // 1-bit output: CLKOUT4
+  .CLKOUT5(s_clk_ignore_clk5),        // 1-bit output: CLKOUT5
+  .CLKOUT6(s_clk_ignore_clk6),        // 1-bit output: CLKOUT6
+  // Feedback Clocks: 1-bit (each) output: Clock feedback ports
+  .CLKFBOUT(s_clk_clkfbout),          // 1-bit output: Feedback clock
+  .CLKFBOUTB(s_clk_ignore_clkfboutb), // 1-bit output: Inverted CLKFBOUT
+  // Status Ports: 1-bit (each) output: MMCM status ports
+  .LOCKED(s_mmcm_locked),             // 1-bit output: LOCK
+  // Clock Inputs: 1-bit (each) input: Clock input
+  .CLKIN1(CLK100MHZ),                 // 1-bit input: Clock
+  // Control Ports: 1-bit (each) input: MMCM control ports
+  .PWRDWN(s_clk_pwrdwn),              // 1-bit input: Power-down
+  .RST(s_clk_resetin),                // 1-bit input: Reset
+  // Feedback Clocks: 1-bit (each) input: Clock feedback ports
+  .CLKFBIN(s_clk_clkfbout)            // 1-bit input: Feedback clock
+);
 
-/* Process System Reset module for 10 MHz and 20 MHz clocks. */
-proc_sys_reset_0 #() u_proc_sys_reset_0(
-	.slowest_sync_clk(s_clk_20mhz),
-	.ext_reset_in(i_resetn),
-	.aux_reset_in(sc_aux_reset_in),
-	.mb_debug_sys_rst(sc_mb_debug_sys_rst),
-	.dcm_locked(s_mmcm_locked),
-	.mb_reset(),
-	.bus_struct_reset(),
-	.peripheral_reset(s_periph_reset),
-	.interconnect_aresetn(),
-	.peripheral_aresetn());
+// End of MMCME2_BASE_inst instantiation
 
-/* Process System Reset module for 7.37 MHz clock. */
-proc_sys_reset_1 #() u_proc_sys_reset_1(
-	.slowest_sync_clk(s_clk_7_37mhz),
-	.ext_reset_in(i_resetn),
-	.aux_reset_in(sc_aux_reset_in),
-	.mb_debug_sys_rst(sc_mb_debug_sys_rst),
-	.dcm_locked(s_mmcm_locked),
-	.mb_reset(),
-	.bus_struct_reset(),
-	.peripheral_reset(s_737_periph_reset),
-	.interconnect_aresetn(),
-	.peripheral_aresetn());
+/* Reset Synchronization for 20 MHz clocks. */
+arty_reset_synchronizer #() u_reset_synch_20mhz(
+	.i_clk_mhz(s_clk_20mhz),
+	.i_rstn_global(i_resetn),
+	.o_rst_mhz(s_rst_20mhz)
+	);
+
+/* Reset Synchronization for 20 MHz clocks. */
+arty_reset_synchronizer #() u_reset_synch_7_37mhz (
+	.i_clk_mhz(s_clk_7_37mhz),
+	.i_rstn_global(i_resetn),
+	.o_rst_mhz(s_rst_7_37mhz)
+	);
 
 /* 4x spi clock enable divider for PMOD CLS SCK output. No
    generated clock constraint. The 20 MHz clock is divided
@@ -745,7 +797,7 @@ assign eo_pmod_cls_dq0 = so_pmod_cls_mosi_t ? 1'bz : so_pmod_cls_mosi_o;
    of an output display. */
 pmod_cls_custom_driver #(
 	.parm_fast_simulation(parm_fast_simulation),
-	.FCLK(2500000),
+	.FCLK(20000000),
 	.parm_ext_spi_clk_ratio(32),
 	.parm_tx_len_bits(`c_stand_spi_tx_fifo_count_bits),
 	.parm_wait_cyc_bits(`c_stand_spi_wait_count_bits),
