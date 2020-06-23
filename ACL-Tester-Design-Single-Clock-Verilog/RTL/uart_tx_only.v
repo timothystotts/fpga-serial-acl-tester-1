@@ -26,7 +26,7 @@
 --
 -- \brief A simplified UART function to drive TX characters on a UART board
 --        connection, independent of any RX function (presumed to be ingored).
---        Maximum baudrate is 115200; input clock if 7.37 MHz to support divison
+--        Maximum baudrate is 115200; input clock is 7.37 MHz to support divison
 --        to modem clock rates.
 ------------------------------------------------------------------------------*/
 //Recursive Moore Machine-------------------------------------------------------
