@@ -468,9 +468,7 @@ pmod_acl2_custom_driver #(
 	.parm_fast_simulation(parm_fast_simulation),
 	.FCLK(20000000),
 	.parm_ext_spi_clk_ratio(4),
-	.parm_tx_len_bits(`c_stand_spi_tx_fifo_count_bits),
-	.parm_wait_cyc_bits(`c_stand_spi_wait_count_bits),
-	.parm_rx_len_bits(`c_stand_spi_rx_fifo_count_bits)
+	.parm_wait_cyc_bits(`c_stand_spi_wait_count_bits)
 	) u_pmod_acl2_custom_driver (
 	.i_clk_20mhz(s_clk_20mhz),
 	.i_rst_20mhz(s_rst_20mhz),
@@ -799,9 +797,7 @@ pmod_cls_custom_driver #(
 	.parm_fast_simulation(parm_fast_simulation),
 	.FCLK(20000000),
 	.parm_ext_spi_clk_ratio(32),
-	.parm_tx_len_bits(`c_stand_spi_tx_fifo_count_bits),
-	.parm_wait_cyc_bits(`c_stand_spi_wait_count_bits),
-	.parm_rx_len_bits(`c_stand_spi_rx_fifo_count_bits)
+	.parm_wait_cyc_bits(`c_stand_spi_wait_count_bits)
 	) u_pmod_cls_custom_driver (
 	.i_clk_20mhz(s_clk_20mhz),
 	.i_rst_20mhz(s_rst_20mhz),
@@ -1068,9 +1064,7 @@ end
 assign s_uart_tx_go = s_cls_wr_clear_display;
 
 uart_tx_only #(
-	.BAUD(115200),
-	.parm_tx_len_bits(8),
-	.parm_tx_avail_ready(128 - 34))
+	.BAUD(115200))
 u_uart_tx_only (
 	.i_clk_20mhz  (s_clk_20mhz),
 	.i_rst_20mhz  (s_rst_20mhz),

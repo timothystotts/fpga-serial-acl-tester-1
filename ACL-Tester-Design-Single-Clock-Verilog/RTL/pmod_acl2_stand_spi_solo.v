@@ -59,11 +59,11 @@ parameter integer parm_fast_simulation = 0;
 /* Actual frequency in Hz of \ref i_ext_spi_clk_4x */
 parameter integer FCLK = 20000000;
 /* LOG2 of the TX FIFO max count */
-parameter parm_tx_len_bits = 10;
+parameter parm_tx_len_bits = 11;
 /* LOG2 of max Wait Cycles count between end of TX and start of RX */
-parameter parm_wait_cyc_bits = 5;
+parameter parm_wait_cyc_bits = 2;
 /* LOG2 of the RX FIFO max count */
-parameter parm_rx_len_bits = 10;
+parameter parm_rx_len_bits = 11;
 
 input wire i_ext_spi_clk_x;
 input wire i_srst;

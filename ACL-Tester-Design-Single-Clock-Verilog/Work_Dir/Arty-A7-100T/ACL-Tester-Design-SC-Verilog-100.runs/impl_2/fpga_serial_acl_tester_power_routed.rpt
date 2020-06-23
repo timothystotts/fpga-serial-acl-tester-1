@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
-| Date             : Mon Jun 22 19:19:59 2020
+| Date             : Mon Jun 22 22:43:41 2020
 | Host             : M3ENGINEERING running 64-bit major release  (build 9200)
 | Command          : report_power -file fpga_serial_acl_tester_power_routed.rpt -pb fpga_serial_acl_tester_power_summary_routed.pb -rpx fpga_serial_acl_tester_power_routed.rpx
 | Design           : fpga_serial_acl_tester
@@ -30,10 +30,10 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.190        |
+| Total On-Chip Power (W)  | 0.189        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.106        |
+| Dynamic (W)              | 0.105        |
 | Device Static (W)        | 0.084        |
 | Effective TJA (C/W)      | 4.6          |
 | Max Ambient (C)          | 99.1         |
@@ -53,18 +53,18 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |     0.001 |       10 |       --- |             --- |
-| Slice Logic    |    <0.001 |     3673 |       --- |             --- |
-|   LUT as Logic |    <0.001 |     2031 |     63400 |            3.20 |
+| Slice Logic    |    <0.001 |     3724 |       --- |             --- |
+|   LUT as Logic |    <0.001 |     2046 |     63400 |            3.23 |
 |   CARRY4       |    <0.001 |      273 |     15850 |            1.72 |
-|   Register     |    <0.001 |      856 |    126800 |            0.68 |
-|   F7/F8 Muxes  |    <0.001 |       10 |     63400 |            0.02 |
+|   Register     |    <0.001 |      861 |    126800 |            0.68 |
+|   F7/F8 Muxes  |    <0.001 |       12 |     63400 |            0.02 |
 |   Others       |     0.000 |       45 |       --- |             --- |
-| Signals        |    <0.001 |     2933 |       --- |             --- |
+| Signals        |    <0.001 |     2962 |       --- |             --- |
 | Block RAM      |    <0.001 |        2 |       135 |            1.48 |
 | MMCM           |     0.102 |        1 |         6 |           16.67 |
 | I/O            |     0.001 |       30 |       210 |           14.29 |
 | Static Power   |     0.084 |          |           |                 |
-| Total          |     0.190 |          |           |                 |
+| Total          |     0.189 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 
@@ -74,7 +74,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) |
 +-----------+-------------+-----------+-------------+------------+
-| Vccint    |       0.950 |     0.012 |       0.003 |      0.009 |
+| Vccint    |       0.950 |     0.012 |       0.002 |      0.009 |
 | Vccaux    |       1.800 |     0.073 |       0.057 |      0.016 |
 | Vcco33    |       3.300 |     0.004 |       0.000 |      0.004 |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |
@@ -146,7 +146,7 @@ Table of Contents
 +-----------------------------+-----------+
 | Name                        | Power (W) |
 +-----------------------------+-----------+
-| fpga_serial_acl_tester      |     0.106 |
+| fpga_serial_acl_tester      |     0.105 |
 |   u_pmod_acl2_custom_driver |     0.001 |
 +-----------------------------+-----------+
 

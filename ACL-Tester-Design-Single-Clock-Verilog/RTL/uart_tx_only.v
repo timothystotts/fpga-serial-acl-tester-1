@@ -39,8 +39,6 @@ module uart_tx_only(
 	);
 
 parameter BAUD = 115200;
-parameter integer parm_tx_len_bits = 8;
-parameter integer parm_tx_avail_ready = 128 - 34;
 
 input wire i_clk_20mhz;
 input wire i_rst_20mhz;
@@ -104,8 +102,7 @@ clock_enable_divider #(.par_ce_divisor(4 * 16 * 115200 / BAUD))
    The FIFO must implement read-ahead output on rd_en. */
 assign s_data_fifo_tx_in = i_tx_data;
 assign s_data_fifo_tx_we = i_tx_valid;
-assign o_tx_ready = ((~ s_data_fifo_tx_full) &&
-					 (s_data_fifo_tx_wr_count <= parm_tx_avail_ready));
+assign o_tx_ready = ((~ s_data_fifo_tx_full) && (~ s_data_fifo_tx_almostfull));
 
 always @(posedge i_clk_7_37mhz)
 begin: p_gen_fifo_tx_valid
@@ -131,8 +128,8 @@ end
 /////////////////////////////////////////////////////////////////
 
 FIFO_DUALCLOCK_MACRO  #(
-  .ALMOST_EMPTY_OFFSET(11'h080), // Sets the almost empty threshold
-  .ALMOST_FULL_OFFSET(11'h080),  // Sets almost full threshold
+  .ALMOST_EMPTY_OFFSET(11'h022), // Sets the almost empty threshold
+  .ALMOST_FULL_OFFSET(11'h7de),  // Sets almost full threshold
   .DATA_WIDTH(8),   // Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
   .DEVICE("7SERIES"),  // Target device: "7SERIES" 
   .FIFO_SIZE ("18Kb"), // Target BRAM: "18Kb" or "36Kb" 
@@ -150,7 +147,7 @@ FIFO_DUALCLOCK_MACRO  #(
   .DI(s_data_fifo_tx_in),                   // Input data, width defined by DATA_WIDTH parameter
   .RDCLK(i_clk_7_37mhz),                    // 1-bit input read clock
   .RDEN(s_data_fifo_tx_re),                 // 1-bit input read enable
-  .RST(i_rst_20mhz),                        // 1-bit input reset
+  .RST(i_rst_7_37mhz),                      // 1-bit input reset
   .WRCLK(i_clk_20mhz),                      // 1-bit input write clock
   .WREN(s_data_fifo_tx_we)                  // 1-bit input write enable
 );
