@@ -781,6 +781,7 @@ begin
 		generic map (
 			parm_fast_simulation   => parm_fast_simulation,
 			parm_FCLK              => 20_000_000,
+			parm_FCLK_ce           => 2_500_000,
 			parm_ext_spi_clk_ratio => 32,
 			parm_wait_cyc_bits     => c_stand_spi_wait_count_bits
 		)

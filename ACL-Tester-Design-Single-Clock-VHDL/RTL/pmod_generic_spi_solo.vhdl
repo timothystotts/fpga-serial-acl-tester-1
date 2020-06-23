@@ -85,38 +85,6 @@ end entity pmod_generic_spi_solo;
 
 --------------------------------------------------------------------------------
 architecture moore_fsm_recursive of pmod_generic_spi_solo is
-	-- RX FIFOcomponent
-	COMPONENT fifo_generator_0
-		PORT (
-			clk        : IN  STD_LOGIC;
-			srst       : IN  STD_LOGIC;
-			din        : IN  STD_LOGIC_VECTOR(7 DOWNTO 0);
-			wr_en      : IN  STD_LOGIC;
-			rd_en      : IN  STD_LOGIC;
-			dout       : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-			full       : OUT STD_LOGIC;
-			empty      : OUT STD_LOGIC;
-			valid      : OUT STD_LOGIC;
-			data_count : OUT STD_LOGIC_VECTOR(4 DOWNTO 0)
-		);
-	END COMPONENT;
-
-	-- TX FIFOcomponent
-	COMPONENT fifo_generator_1
-		PORT (
-			clk        : IN  STD_LOGIC;
-			srst       : IN  STD_LOGIC;
-			din        : IN  STD_LOGIC_VECTOR(7 DOWNTO 0);
-			wr_en      : IN  STD_LOGIC;
-			rd_en      : IN  STD_LOGIC;
-			dout       : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-			full       : OUT STD_LOGIC;
-			empty      : OUT STD_LOGIC;
-			valid      : OUT STD_LOGIC;
-			data_count : OUT STD_LOGIC_VECTOR(4 DOWNTO 0)
-		);
-	END COMPONENT;
-
 	-- SPI FSM statedeclarations
 	type t_spi_state is (ST_STAND_IDLE, ST_STAND_START_D, ST_STAND_START_S,
 			ST_STAND_TX, ST_STAND_WAIT, ST_STAND_RX, ST_STAND_STOP_S,
@@ -263,9 +231,9 @@ begin
 	u_fifo_rx_0 : FIFO_SYNC_MACRO
 		generic map (
 			DEVICE              => "7SERIES", -- Target Device: "VIRTEX5, "VIRTEX6", "7SERIES" 
-			ALMOST_FULL_OFFSET  => X"0080",   -- Sets almost full threshold
-			ALMOST_EMPTY_OFFSET => X"0080",   -- Sets the almost empty threshold
-			DATA_WIDTH          => 0,         -- Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
+			ALMOST_FULL_OFFSET  => "0000" & x"80",   -- Sets almost full threshold
+			ALMOST_EMPTY_OFFSET => "0000" & x"80",   -- Sets the almost empty threshold
+			DATA_WIDTH          => 8,         -- Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
 			FIFO_SIZE           => "18Kb")    -- Target BRAM, "18Kb" or "36Kb" 
 		port map (
 			ALMOSTEMPTY => s_data_fifo_rx_almostempty, -- 1-bit output almost empty
@@ -322,8 +290,8 @@ begin
 	u_fifo_tx_0 : FIFO_SYNC_MACRO
 		generic map (
 			DEVICE              => "7SERIES", -- Target Device: "VIRTEX5, "VIRTEX6", "7SERIES" 
-			ALMOST_FULL_OFFSET  => X"0080",   -- Sets almost full threshold
-			ALMOST_EMPTY_OFFSET => X"0080",   -- Sets the almost empty threshold
+			ALMOST_FULL_OFFSET  => "000" & x"80",   -- Sets almost full threshold
+			ALMOST_EMPTY_OFFSET => "000" & x"80",   -- Sets the almost empty threshold
 			DATA_WIDTH          => 8,         -- Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
 			FIFO_SIZE           => "18Kb")    -- Target BRAM, "18Kb" or "36Kb" 
 		port map (

@@ -155,3 +155,6 @@ set_false_path -from [get_ports i_resetn] -to [all_registers]
 ## Quad SPI Flash
 
 ## Power Measurements
+
+## Internal asynchronous items requiring false_path
+set_false_path -to [get_pins {u_uart_tx_only/u_fifo_uart_tx_0/bl.fifo_18_inst_bl.fifo_18_bl/RST}];

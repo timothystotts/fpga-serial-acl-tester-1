@@ -38,7 +38,9 @@ entity pmod_cls_stand_spi_solo is
 		-- Disable or enable fast FSM delays for simulation instead of impelementation.
 		parm_fast_simulation : integer := 0;
 		-- Actual frequency in Hz of \ref i_ext_spi_clk_4x
-		parm_FCLK : natural := 2_500_000;
+		parm_FCLK : natural := 20_000_000;
+		-- Clock enable frequency in Hz of \ref i_ext_spi_clk_4x with i_spi_ce_4x
+		parm_FCLK_ce : natural := 2_500_000;
 		-- LOG2 of the TX FIFO max count
 		parm_tx_len_bits : natural := 11;
 		-- LOG2 of max Wait Cycles count between end of TX and start of RX
@@ -83,8 +85,8 @@ architecture moore_fsm_recursive of pmod_cls_stand_spi_solo is
 
 	-- Boot time should be in hundreds of milliseconds as the PMOD CLS
 	-- datasheet does not indicate boot-up time of the PMOD CLS microcontroller.
-	constant c_t_pmodcls_boot_fast_sim : natural := parm_FCLK * 2 / 1000;
-	constant c_t_pmodcls_boot          : natural := parm_FCLK * 800 / 1000;
+	constant c_t_pmodcls_boot_fast_sim : natural := parm_FCLK_ce / 1000 * 2;
+	constant c_t_pmodcls_boot          : natural := parm_FCLK_ce / 1000 * 800;
 	constant c_tmax                    : natural := c_t_pmodcls_boot - 1;
 
 	signal s_t : natural range 0 to c_tmax;

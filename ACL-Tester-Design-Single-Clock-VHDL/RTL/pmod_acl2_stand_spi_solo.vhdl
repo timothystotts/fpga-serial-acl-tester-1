@@ -202,8 +202,8 @@ architecture moore_fsm_recursive of pmod_acl2_stand_spi_solo is
 	-- Boot time should be in hundreds of milliseconds as the ADXL362 lists on
 	-- page 5 of datasheet Rev. F that the Power-Up to Standby time is
 	-- 5 milliseconds typical, and does not list a maximum time.
-	constant c_t_adx1362_boot_fast_sim : natural := parm_FCLK * 1 / 10000;
-	constant c_t_adx1362_boot          : natural := parm_FCLK * 100 / 1000 ;
+	constant c_t_adx1362_boot_fast_sim : natural := parm_FCLK / 1000 * 1;
+	constant c_t_adx1362_boot          : natural := parm_FCLK / 1000 * 100;
 	constant c_tmax                    : natural := c_t_adx1362_boot - 1;
 	signal s_t                         : natural range 0 to c_tmax;
 

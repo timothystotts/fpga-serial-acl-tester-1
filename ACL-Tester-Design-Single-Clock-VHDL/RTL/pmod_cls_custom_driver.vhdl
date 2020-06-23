@@ -40,6 +40,8 @@ entity pmod_cls_custom_driver is
 		parm_fast_simulation : integer := 0;
 		-- Actual frequency in Hz of \ref i_clk_2_5mhz
 		parm_FCLK : natural := 20_000_000;
+		-- Clock enable frequency in Hz of \ref i_ext_spi_clk_4x with i_spi_ce_4x
+		parm_FCLK_ce : natural := 2_500_000;
 		-- Ratio of i_ext_spi_clk_x to SPI sck bus output
 		parm_ext_spi_clk_ratio : natural := 32;
 		-- LOG2 of the TX FIFO max count
@@ -139,6 +141,7 @@ begin
 		generic map (
 			parm_fast_simulation => parm_fast_simulation,
 			parm_FCLK            => parm_FCLK,
+			parm_FCLK_ce         => parm_FCLK_ce,
 			parm_tx_len_bits     => parm_tx_len_bits,
 			parm_wait_cyc_bits   => parm_wait_cyc_bits,
 			parm_rx_len_bits     => parm_rx_len_bits
