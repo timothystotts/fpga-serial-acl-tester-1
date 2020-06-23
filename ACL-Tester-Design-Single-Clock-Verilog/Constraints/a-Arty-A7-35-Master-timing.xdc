@@ -141,7 +141,7 @@ set_output_delay -clock [get_clocks wiz_7_373mhz_virt_out] 81.379 [get_ports {eo
 ## ChipKit I2C
 
 ## Misc. ChipKit Ports
-set_false_path -from [get_ports {i_resetn}] -to [all_registers]
+set_false_path -from [get_ports {i_resetn}] -to [all_registers];
 
 ## SMSC Ethernet PHY
 

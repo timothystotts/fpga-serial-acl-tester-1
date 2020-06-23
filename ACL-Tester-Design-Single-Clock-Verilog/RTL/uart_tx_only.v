@@ -81,9 +81,13 @@ reg s_data_fifo_tx_re;
 wire s_data_fifo_tx_we;
 wire s_data_fifo_tx_full;
 wire s_data_fifo_tx_empty;
-wire s_data_fifo_tx_valid;
-wire [(parm_tx_len_bits - 1):0] s_data_fifo_tx_wr_count;
-wire [(parm_tx_len_bits - 1):0] s_data_fifo_tx_rd_count;
+reg s_data_fifo_tx_valid;
+wire [10:0] s_data_fifo_tx_wr_count;
+wire [10:0] s_data_fifo_tx_rd_count;
+wire s_data_fifo_tx_almostempty;
+wire s_data_fifo_tx_almostfull;
+wire s_data_fifo_tx_rd_err;
+wire s_data_fifo_tx_wr_err;
 
 //Part 3: Statements------------------------------------------------------------
 
@@ -103,21 +107,56 @@ assign s_data_fifo_tx_we = i_tx_valid;
 assign o_tx_ready = ((~ s_data_fifo_tx_full) &&
 					 (s_data_fifo_tx_wr_count <= parm_tx_avail_ready));
 
-fifo_generator_2 #() u_fifo_uart_tx_0 (
-	.rst(i_rst_20mhz),
-	.wr_clk(i_clk_20mhz),
-	.rd_clk(i_clk_7_37mhz),
-	.din(s_data_fifo_tx_in),
-	.wr_en(s_data_fifo_tx_we),
-	.rd_en(s_data_fifo_tx_re),
-	.dout(s_data_fifo_tx_out),
-	.full(s_data_fifo_tx_full),
-	.empty(s_data_fifo_tx_empty),
-	.valid(s_data_fifo_tx_valid),
-	.rd_data_count(s_data_fifo_tx_rd_count), /* RD Count Simulation display, only */
-	.wr_data_count(s_data_fifo_tx_wr_count), /* WR Count used for o_tx_ready output threshold */
-	.wr_rst_busy(),
-	.rd_rst_busy());
+always @(posedge i_clk_7_37mhz)
+begin: p_gen_fifo_tx_valid
+	s_data_fifo_tx_valid <= s_data_fifo_tx_re;
+end
+
+// FIFO_DUALCLOCK_MACRO: Dual Clock First-In, First-Out (FIFO) RAM Buffer
+//                       Artix-7
+// Xilinx HDL Language Template, version 2019.1
+
+/////////////////////////////////////////////////////////////////
+// DATA_WIDTH | FIFO_SIZE | FIFO Depth | RDCOUNT/WRCOUNT Width //
+// ===========|===========|============|=======================//
+//   37-72    |  "36Kb"   |     512    |         9-bit         //
+//   19-36    |  "36Kb"   |    1024    |        10-bit         //
+//   19-36    |  "18Kb"   |     512    |         9-bit         //
+//   10-18    |  "36Kb"   |    2048    |        11-bit         //
+//   10-18    |  "18Kb"   |    1024    |        10-bit         //
+//    5-9     |  "36Kb"   |    4096    |        12-bit         //
+//    5-9     |  "18Kb"   |    2048    |        11-bit         //
+//    1-4     |  "36Kb"   |    8192    |        13-bit         //
+//    1-4     |  "18Kb"   |    4096    |        12-bit         //
+/////////////////////////////////////////////////////////////////
+
+FIFO_DUALCLOCK_MACRO  #(
+  .ALMOST_EMPTY_OFFSET(11'h080), // Sets the almost empty threshold
+  .ALMOST_FULL_OFFSET(11'h080),  // Sets almost full threshold
+  .DATA_WIDTH(8),   // Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
+  .DEVICE("7SERIES"),  // Target device: "7SERIES" 
+  .FIFO_SIZE ("18Kb"), // Target BRAM: "18Kb" or "36Kb" 
+  .FIRST_WORD_FALL_THROUGH ("TRUE") // Sets the FIFO FWFT to "TRUE" or "FALSE" 
+) u_fifo_uart_tx_0 (
+  .ALMOSTEMPTY(s_data_fifo_tx_almostempty), // 1-bit output almost empty
+  .ALMOSTFULL(s_data_fifo_tx_almostfull),   // 1-bit output almost full
+  .DO(s_data_fifo_tx_out),                  // Output data, width defined by DATA_WIDTH parameter
+  .EMPTY(s_data_fifo_tx_empty),             // 1-bit output empty
+  .FULL(s_data_fifo_tx_full),               // 1-bit output full
+  .RDCOUNT(s_data_fifo_tx_rd_count),        // Output read count, width determined by FIFO depth
+  .RDERR(s_data_fifo_tx_rd_err),            // 1-bit output read error
+  .WRCOUNT(s_data_fifo_tx_wr_count),        // Output write count, width determined by FIFO depth
+  .WRERR(s_data_fifo_tx_wr_err),            // 1-bit output write error
+  .DI(s_data_fifo_tx_in),                   // Input data, width defined by DATA_WIDTH parameter
+  .RDCLK(i_clk_7_37mhz),                    // 1-bit input read clock
+  .RDEN(s_data_fifo_tx_re),                 // 1-bit input read enable
+  .RST(i_rst_20mhz),                        // 1-bit input reset
+  .WRCLK(i_clk_20mhz),                      // 1-bit input write clock
+  .WREN(s_data_fifo_tx_we)                  // 1-bit input write enable
+);
+
+// End of FIFO_DUALCLOCK_MACRO_inst instantiation
+				
 
 /* FSM register and auxiliary registers */
 always @(posedge i_clk_7_37mhz)

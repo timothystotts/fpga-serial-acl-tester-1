@@ -1,0 +1,35 @@
+Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
+| Date         : Mon Jun 22 18:15:02 2020
+| Host         : M3ENGINEERING running 64-bit major release  (build 9200)
+| Command      : report_drc -file fpga_serial_acl_tester_drc_routed.rpt -pb fpga_serial_acl_tester_drc_routed.pb -rpx fpga_serial_acl_tester_drc_routed.rpx
+| Design       : fpga_serial_acl_tester
+| Device       : xc7a35ticsg324-1L
+| Speed File   : -1L
+| Design State : Fully Routed
+------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Report DRC
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: netlist
+          Floorplan: design_1
+      Design limits: <entire design considered>
+           Ruledeck: default
+             Max violations: <unlimited>
+             Violations found: 0
++------+----------+-------------+------------+
+| Rule | Severity | Description | Violations |
++------+----------+-------------+------------+
++------+----------+-------------+------------+
+
+2. REPORT DETAILS
+-----------------
+

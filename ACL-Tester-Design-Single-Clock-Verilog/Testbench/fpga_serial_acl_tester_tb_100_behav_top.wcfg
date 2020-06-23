@@ -1,0 +1,719 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="fpga_serial_acl_tester_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="fpga_serial_acl_tester_tb" />
+            <top_module name="glbl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0fs"></ZoomStartTime>
+      <ZoomEndTime time="220340084745764fs"></ZoomEndTime>
+      <Cursor1Time time="1000000000fs"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="204"></NameColumnWidth>
+      <ValueColumnWidth column_width="87"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="174" />
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/CLK100MHZ" type="logic">
+      <obj_property name="ElementShortName">CLK100MHZ</obj_property>
+      <obj_property name="ObjectShortName">CLK100MHZ</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/i_resetn" type="logic">
+      <obj_property name="ElementShortName">i_resetn</obj_property>
+      <obj_property name="ObjectShortName">i_resetn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_pmod_acl2_sck" type="logic">
+      <obj_property name="ElementShortName">eo_pmod_acl2_sck</obj_property>
+      <obj_property name="ObjectShortName">eo_pmod_acl2_sck</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_pmod_acl2_ssn" type="logic">
+      <obj_property name="ElementShortName">eo_pmod_acl2_ssn</obj_property>
+      <obj_property name="ObjectShortName">eo_pmod_acl2_ssn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_pmod_acl2_mosi" type="logic">
+      <obj_property name="ElementShortName">eo_pmod_acl2_mosi</obj_property>
+      <obj_property name="ObjectShortName">eo_pmod_acl2_mosi</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/ei_pmod_acl2_miso" type="logic">
+      <obj_property name="ElementShortName">ei_pmod_acl2_miso</obj_property>
+      <obj_property name="ObjectShortName">ei_pmod_acl2_miso</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/ei_pmod_acl2_int1" type="logic">
+      <obj_property name="ElementShortName">ei_pmod_acl2_int1</obj_property>
+      <obj_property name="ObjectShortName">ei_pmod_acl2_int1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/ei_pmod_acl2_int2" type="logic">
+      <obj_property name="ElementShortName">ei_pmod_acl2_int2</obj_property>
+      <obj_property name="ObjectShortName">ei_pmod_acl2_int2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_led0_b" type="logic">
+      <obj_property name="ElementShortName">eo_led0_b</obj_property>
+      <obj_property name="ObjectShortName">eo_led0_b</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_led1_b" type="logic">
+      <obj_property name="ElementShortName">eo_led1_b</obj_property>
+      <obj_property name="ObjectShortName">eo_led1_b</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_led2_b" type="logic">
+      <obj_property name="ElementShortName">eo_led2_b</obj_property>
+      <obj_property name="ObjectShortName">eo_led2_b</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_led3_b" type="logic">
+      <obj_property name="ElementShortName">eo_led3_b</obj_property>
+      <obj_property name="ObjectShortName">eo_led3_b</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_led0_r" type="logic">
+      <obj_property name="ElementShortName">eo_led0_r</obj_property>
+      <obj_property name="ObjectShortName">eo_led0_r</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_led1_r" type="logic">
+      <obj_property name="ElementShortName">eo_led1_r</obj_property>
+      <obj_property name="ObjectShortName">eo_led1_r</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_led2_r" type="logic">
+      <obj_property name="ElementShortName">eo_led2_r</obj_property>
+      <obj_property name="ObjectShortName">eo_led2_r</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_led3_r" type="logic">
+      <obj_property name="ElementShortName">eo_led3_r</obj_property>
+      <obj_property name="ObjectShortName">eo_led3_r</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_led0_g" type="logic">
+      <obj_property name="ElementShortName">eo_led0_g</obj_property>
+      <obj_property name="ObjectShortName">eo_led0_g</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_led1_g" type="logic">
+      <obj_property name="ElementShortName">eo_led1_g</obj_property>
+      <obj_property name="ObjectShortName">eo_led1_g</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_led2_g" type="logic">
+      <obj_property name="ElementShortName">eo_led2_g</obj_property>
+      <obj_property name="ObjectShortName">eo_led2_g</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_led3_g" type="logic">
+      <obj_property name="ElementShortName">eo_led3_g</obj_property>
+      <obj_property name="ObjectShortName">eo_led3_g</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_led4" type="logic">
+      <obj_property name="ElementShortName">eo_led4</obj_property>
+      <obj_property name="ObjectShortName">eo_led4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_led5" type="logic">
+      <obj_property name="ElementShortName">eo_led5</obj_property>
+      <obj_property name="ObjectShortName">eo_led5</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_led6" type="logic">
+      <obj_property name="ElementShortName">eo_led6</obj_property>
+      <obj_property name="ObjectShortName">eo_led6</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_led7" type="logic">
+      <obj_property name="ElementShortName">eo_led7</obj_property>
+      <obj_property name="ObjectShortName">eo_led7</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/ei_sw0" type="logic">
+      <obj_property name="ElementShortName">ei_sw0</obj_property>
+      <obj_property name="ObjectShortName">ei_sw0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/ei_sw1" type="logic">
+      <obj_property name="ElementShortName">ei_sw1</obj_property>
+      <obj_property name="ObjectShortName">ei_sw1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/ei_sw2" type="logic">
+      <obj_property name="ElementShortName">ei_sw2</obj_property>
+      <obj_property name="ObjectShortName">ei_sw2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/ei_sw3" type="logic">
+      <obj_property name="ElementShortName">ei_sw3</obj_property>
+      <obj_property name="ObjectShortName">ei_sw3</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_pmod_cls_ssn" type="logic">
+      <obj_property name="ElementShortName">eo_pmod_cls_ssn</obj_property>
+      <obj_property name="ObjectShortName">eo_pmod_cls_ssn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_pmod_cls_sck" type="logic">
+      <obj_property name="ElementShortName">eo_pmod_cls_sck</obj_property>
+      <obj_property name="ObjectShortName">eo_pmod_cls_sck</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_pmod_cls_dq0" type="logic">
+      <obj_property name="ElementShortName">eo_pmod_cls_dq0</obj_property>
+      <obj_property name="ObjectShortName">eo_pmod_cls_dq0</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/ei_pmod_cls_dq1" type="logic">
+      <obj_property name="ElementShortName">ei_pmod_cls_dq1</obj_property>
+      <obj_property name="ObjectShortName">ei_pmod_cls_dq1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/eo_uart_tx" type="logic">
+      <obj_property name="ElementShortName">eo_uart_tx</obj_property>
+      <obj_property name="ObjectShortName">eo_uart_tx</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/ei_uart_rx" type="logic">
+      <obj_property name="ElementShortName">ei_uart_rx</obj_property>
+      <obj_property name="ObjectShortName">ei_uart_rx</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_tester_pr_state" type="array">
+      <obj_property name="ElementShortName">s_tester_pr_state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s_tester_pr_state[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_tester_nx_state" type="array">
+      <obj_property name="ElementShortName">s_tester_nx_state[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s_tester_nx_state[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_mmcm_locked" type="logic">
+      <obj_property name="ElementShortName">s_mmcm_locked</obj_property>
+      <obj_property name="ObjectShortName">s_mmcm_locked</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_20mhz" type="logic">
+      <obj_property name="ElementShortName">s_clk_20mhz</obj_property>
+      <obj_property name="ObjectShortName">s_clk_20mhz</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_rst_20mhz" type="logic">
+      <obj_property name="ElementShortName">s_rst_20mhz</obj_property>
+      <obj_property name="ObjectShortName">s_rst_20mhz</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_7_37mhz" type="logic">
+      <obj_property name="ElementShortName">s_clk_7_37mhz</obj_property>
+      <obj_property name="ObjectShortName">s_clk_7_37mhz</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_rst_7_37mhz" type="logic">
+      <obj_property name="ElementShortName">s_rst_7_37mhz</obj_property>
+      <obj_property name="ObjectShortName">s_rst_7_37mhz</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_ce_2_5mhz" type="logic">
+      <obj_property name="ElementShortName">s_ce_2_5mhz</obj_property>
+      <obj_property name="ObjectShortName">s_ce_2_5mhz</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/so_pmod_acl2_sck_o" type="logic">
+      <obj_property name="ElementShortName">so_pmod_acl2_sck_o</obj_property>
+      <obj_property name="ObjectShortName">so_pmod_acl2_sck_o</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/so_pmod_acl2_sck_t" type="logic">
+      <obj_property name="ElementShortName">so_pmod_acl2_sck_t</obj_property>
+      <obj_property name="ObjectShortName">so_pmod_acl2_sck_t</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/so_pmod_acl2_ssn_o" type="logic">
+      <obj_property name="ElementShortName">so_pmod_acl2_ssn_o</obj_property>
+      <obj_property name="ObjectShortName">so_pmod_acl2_ssn_o</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/so_pmod_acl2_ssn_t" type="logic">
+      <obj_property name="ElementShortName">so_pmod_acl2_ssn_t</obj_property>
+      <obj_property name="ObjectShortName">so_pmod_acl2_ssn_t</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/so_pmod_acl2_mosi_o" type="logic">
+      <obj_property name="ElementShortName">so_pmod_acl2_mosi_o</obj_property>
+      <obj_property name="ObjectShortName">so_pmod_acl2_mosi_o</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/so_pmod_acl2_mosi_t" type="logic">
+      <obj_property name="ElementShortName">so_pmod_acl2_mosi_t</obj_property>
+      <obj_property name="ObjectShortName">so_pmod_acl2_mosi_t</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_acl2_command_ready" type="logic">
+      <obj_property name="ElementShortName">s_acl2_command_ready</obj_property>
+      <obj_property name="ObjectShortName">s_acl2_command_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_acl2_cmd_init_linked_mode" type="logic">
+      <obj_property name="ElementShortName">s_acl2_cmd_init_linked_mode</obj_property>
+      <obj_property name="ObjectShortName">s_acl2_cmd_init_linked_mode</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_acl2_cmd_start_linked_mode" type="logic">
+      <obj_property name="ElementShortName">s_acl2_cmd_start_linked_mode</obj_property>
+      <obj_property name="ObjectShortName">s_acl2_cmd_start_linked_mode</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_acl2_cmd_init_measur_mode" type="logic">
+      <obj_property name="ElementShortName">s_acl2_cmd_init_measur_mode</obj_property>
+      <obj_property name="ObjectShortName">s_acl2_cmd_init_measur_mode</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_acl2_cmd_start_measur_mode" type="logic">
+      <obj_property name="ElementShortName">s_acl2_cmd_start_measur_mode</obj_property>
+      <obj_property name="ObjectShortName">s_acl2_cmd_start_measur_mode</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_acl2_cmd_soft_reset_acl2" type="logic">
+      <obj_property name="ElementShortName">s_acl2_cmd_soft_reset_acl2</obj_property>
+      <obj_property name="ObjectShortName">s_acl2_cmd_soft_reset_acl2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_acl2_reg_status" type="array">
+      <obj_property name="ElementShortName">s_acl2_reg_status[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_acl2_reg_status[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_acl2_reg_status_activity_stretched" type="logic">
+      <obj_property name="ElementShortName">s_acl2_reg_status_activity_stretched</obj_property>
+      <obj_property name="ObjectShortName">s_acl2_reg_status_activity_stretched</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_acl2_reg_status_inactivity_stretched" type="logic">
+      <obj_property name="ElementShortName">s_acl2_reg_status_inactivity_stretched</obj_property>
+      <obj_property name="ObjectShortName">s_acl2_reg_status_inactivity_stretched</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_hex_3axis_temp_measurements_final" type="array">
+      <obj_property name="ElementShortName">s_hex_3axis_temp_measurements_final[63:0]</obj_property>
+      <obj_property name="ObjectShortName">s_hex_3axis_temp_measurements_final[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_hex_3axis_temp_measurements_valid" type="logic">
+      <obj_property name="ElementShortName">s_hex_3axis_temp_measurements_valid</obj_property>
+      <obj_property name="ObjectShortName">s_hex_3axis_temp_measurements_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_hex_3axis_temp_measurements_display" type="array">
+      <obj_property name="ElementShortName">s_hex_3axis_temp_measurements_display[63:0]</obj_property>
+      <obj_property name="ObjectShortName">s_hex_3axis_temp_measurements_display[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_active_init_display" type="logic">
+      <obj_property name="ElementShortName">s_active_init_display</obj_property>
+      <obj_property name="ObjectShortName">s_active_init_display</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_active_run_display" type="logic">
+      <obj_property name="ElementShortName">s_active_run_display</obj_property>
+      <obj_property name="ObjectShortName">s_active_run_display</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_mode_is_measur_val" type="logic">
+      <obj_property name="ElementShortName">s_mode_is_measur_val</obj_property>
+      <obj_property name="ObjectShortName">s_mode_is_measur_val</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_mode_is_measur_aux" type="logic">
+      <obj_property name="ElementShortName">s_mode_is_measur_aux</obj_property>
+      <obj_property name="ObjectShortName">s_mode_is_measur_aux</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_mode_is_linked_val" type="logic">
+      <obj_property name="ElementShortName">s_mode_is_linked_val</obj_property>
+      <obj_property name="ObjectShortName">s_mode_is_linked_val</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_mode_is_linked_aux" type="logic">
+      <obj_property name="ElementShortName">s_mode_is_linked_aux</obj_property>
+      <obj_property name="ObjectShortName">s_mode_is_linked_aux</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/si_sw0_debounced" type="logic">
+      <obj_property name="ElementShortName">si_sw0_debounced</obj_property>
+      <obj_property name="ObjectShortName">si_sw0_debounced</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/si_sw1_debounced" type="logic">
+      <obj_property name="ElementShortName">si_sw1_debounced</obj_property>
+      <obj_property name="ObjectShortName">si_sw1_debounced</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_cls_upd_pr_state" type="array">
+      <obj_property name="ElementShortName">s_cls_upd_pr_state[1:0]</obj_property>
+      <obj_property name="ObjectShortName">s_cls_upd_pr_state[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_cls_upd_nx_state" type="array">
+      <obj_property name="ElementShortName">s_cls_upd_nx_state[1:0]</obj_property>
+      <obj_property name="ObjectShortName">s_cls_upd_nx_state[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_i" type="array">
+      <obj_property name="ElementShortName">s_i[23:0]</obj_property>
+      <obj_property name="ObjectShortName">s_i[23:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_cls_command_ready" type="logic">
+      <obj_property name="ElementShortName">s_cls_command_ready</obj_property>
+      <obj_property name="ObjectShortName">s_cls_command_ready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_cls_wr_clear_display" type="logic">
+      <obj_property name="ElementShortName">s_cls_wr_clear_display</obj_property>
+      <obj_property name="ObjectShortName">s_cls_wr_clear_display</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_cls_wr_text_line1" type="logic">
+      <obj_property name="ElementShortName">s_cls_wr_text_line1</obj_property>
+      <obj_property name="ObjectShortName">s_cls_wr_text_line1</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_cls_wr_text_line2" type="logic">
+      <obj_property name="ElementShortName">s_cls_wr_text_line2</obj_property>
+      <obj_property name="ObjectShortName">s_cls_wr_text_line2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_cls_dat_ascii_line1" type="array">
+      <obj_property name="ElementShortName">s_cls_dat_ascii_line1[127:0]</obj_property>
+      <obj_property name="ObjectShortName">s_cls_dat_ascii_line1[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_cls_dat_ascii_line2" type="array">
+      <obj_property name="ElementShortName">s_cls_dat_ascii_line2[127:0]</obj_property>
+      <obj_property name="ObjectShortName">s_cls_dat_ascii_line2[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_cls_txt_ascii_line1" type="array">
+      <obj_property name="ElementShortName">s_cls_txt_ascii_line1[127:0]</obj_property>
+      <obj_property name="ObjectShortName">s_cls_txt_ascii_line1[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_cls_txt_ascii_line2" type="array">
+      <obj_property name="ElementShortName">s_cls_txt_ascii_line2[127:0]</obj_property>
+      <obj_property name="ObjectShortName">s_cls_txt_ascii_line2[127:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_uartfeed_pr_state" type="array">
+      <obj_property name="ElementShortName">s_uartfeed_pr_state[1:0]</obj_property>
+      <obj_property name="ObjectShortName">s_uartfeed_pr_state[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_uartfeed_nx_state" type="array">
+      <obj_property name="ElementShortName">s_uartfeed_nx_state[1:0]</obj_property>
+      <obj_property name="ObjectShortName">s_uartfeed_nx_state[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_uart_dat_ascii_line" type="array">
+      <obj_property name="ElementShortName">s_uart_dat_ascii_line[271:0]</obj_property>
+      <obj_property name="ObjectShortName">s_uart_dat_ascii_line[271:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_uart_tx_go" type="logic">
+      <obj_property name="ElementShortName">s_uart_tx_go</obj_property>
+      <obj_property name="ObjectShortName">s_uart_tx_go</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_uart_txdata" type="array">
+      <obj_property name="ElementShortName">s_uart_txdata[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_uart_txdata[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_uart_txvalid" type="logic">
+      <obj_property name="ElementShortName">s_uart_txvalid</obj_property>
+      <obj_property name="ObjectShortName">s_uart_txvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_uart_txready" type="logic">
+      <obj_property name="ElementShortName">s_uart_txready</obj_property>
+      <obj_property name="ObjectShortName">s_uart_txready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_uart_k_val" type="array">
+      <obj_property name="ElementShortName">s_uart_k_val[5:0]</obj_property>
+      <obj_property name="ObjectShortName">s_uart_k_val[5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_uart_k_aux" type="array">
+      <obj_property name="ElementShortName">s_uart_k_aux[5:0]</obj_property>
+      <obj_property name="ObjectShortName">s_uart_k_aux[5:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/so_pmod_cls_sck_o" type="logic">
+      <obj_property name="ElementShortName">so_pmod_cls_sck_o</obj_property>
+      <obj_property name="ObjectShortName">so_pmod_cls_sck_o</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/so_pmod_cls_sck_t" type="logic">
+      <obj_property name="ElementShortName">so_pmod_cls_sck_t</obj_property>
+      <obj_property name="ObjectShortName">so_pmod_cls_sck_t</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/so_pmod_cls_ssn_o" type="logic">
+      <obj_property name="ElementShortName">so_pmod_cls_ssn_o</obj_property>
+      <obj_property name="ObjectShortName">so_pmod_cls_ssn_o</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/so_pmod_cls_ssn_t" type="logic">
+      <obj_property name="ElementShortName">so_pmod_cls_ssn_t</obj_property>
+      <obj_property name="ObjectShortName">so_pmod_cls_ssn_t</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/so_pmod_cls_mosi_o" type="logic">
+      <obj_property name="ElementShortName">so_pmod_cls_mosi_o</obj_property>
+      <obj_property name="ObjectShortName">so_pmod_cls_mosi_o</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/so_pmod_cls_mosi_t" type="logic">
+      <obj_property name="ElementShortName">so_pmod_cls_mosi_t</obj_property>
+      <obj_property name="ObjectShortName">so_pmod_cls_mosi_t</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_hex_xaxis_msb" type="array">
+      <obj_property name="ElementShortName">s_hex_xaxis_msb[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_hex_xaxis_msb[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_hex_xaxis_lsb" type="array">
+      <obj_property name="ElementShortName">s_hex_xaxis_lsb[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_hex_xaxis_lsb[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_hex_yaxis_msb" type="array">
+      <obj_property name="ElementShortName">s_hex_yaxis_msb[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_hex_yaxis_msb[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_hex_yaxis_lsb" type="array">
+      <obj_property name="ElementShortName">s_hex_yaxis_lsb[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_hex_yaxis_lsb[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_hex_zaxis_msb" type="array">
+      <obj_property name="ElementShortName">s_hex_zaxis_msb[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_hex_zaxis_msb[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_hex_zaxis_lsb" type="array">
+      <obj_property name="ElementShortName">s_hex_zaxis_lsb[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_hex_zaxis_lsb[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_hex_temp_msb" type="array">
+      <obj_property name="ElementShortName">s_hex_temp_msb[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_hex_temp_msb[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_hex_temp_lsb" type="array">
+      <obj_property name="ElementShortName">s_hex_temp_lsb[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_hex_temp_lsb[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_txt_xaxis_s16" type="array">
+      <obj_property name="ElementShortName">s_txt_xaxis_s16[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_txt_xaxis_s16[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_txt_yaxis_s16" type="array">
+      <obj_property name="ElementShortName">s_txt_yaxis_s16[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_txt_yaxis_s16[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_txt_zaxis_s16" type="array">
+      <obj_property name="ElementShortName">s_txt_zaxis_s16[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_txt_zaxis_s16[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_txt_temp_s16" type="array">
+      <obj_property name="ElementShortName">s_txt_temp_s16[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_txt_temp_s16[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_txt_xaxis_u16" type="array">
+      <obj_property name="ElementShortName">s_txt_xaxis_u16[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_txt_xaxis_u16[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_txt_yaxis_u16" type="array">
+      <obj_property name="ElementShortName">s_txt_yaxis_u16[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_txt_yaxis_u16[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_txt_zaxis_u16" type="array">
+      <obj_property name="ElementShortName">s_txt_zaxis_u16[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_txt_zaxis_u16[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_txt_temp_u16" type="array">
+      <obj_property name="ElementShortName">s_txt_temp_u16[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_txt_temp_u16[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_xaxis_msb_3" type="array">
+      <obj_property name="ElementShortName">s_char_xaxis_msb_3[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_xaxis_msb_3[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_xaxis_msb_2" type="array">
+      <obj_property name="ElementShortName">s_char_xaxis_msb_2[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_xaxis_msb_2[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_xaxis_lsb_1" type="array">
+      <obj_property name="ElementShortName">s_char_xaxis_lsb_1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_xaxis_lsb_1[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_xaxis_lsb_0" type="array">
+      <obj_property name="ElementShortName">s_char_xaxis_lsb_0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_xaxis_lsb_0[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_yaxis_msb_3" type="array">
+      <obj_property name="ElementShortName">s_char_yaxis_msb_3[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_yaxis_msb_3[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_yaxis_msb_2" type="array">
+      <obj_property name="ElementShortName">s_char_yaxis_msb_2[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_yaxis_msb_2[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_yaxis_lsb_1" type="array">
+      <obj_property name="ElementShortName">s_char_yaxis_lsb_1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_yaxis_lsb_1[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_yaxis_lsb_0" type="array">
+      <obj_property name="ElementShortName">s_char_yaxis_lsb_0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_yaxis_lsb_0[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_zaxis_msb_3" type="array">
+      <obj_property name="ElementShortName">s_char_zaxis_msb_3[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_zaxis_msb_3[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_zaxis_msb_2" type="array">
+      <obj_property name="ElementShortName">s_char_zaxis_msb_2[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_zaxis_msb_2[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_zaxis_lsb_1" type="array">
+      <obj_property name="ElementShortName">s_char_zaxis_lsb_1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_zaxis_lsb_1[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_zaxis_lsb_0" type="array">
+      <obj_property name="ElementShortName">s_char_zaxis_lsb_0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_zaxis_lsb_0[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_temp_msb_3" type="array">
+      <obj_property name="ElementShortName">s_char_temp_msb_3[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_temp_msb_3[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_temp_msb_2" type="array">
+      <obj_property name="ElementShortName">s_char_temp_msb_2[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_temp_msb_2[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_temp_lsb_1" type="array">
+      <obj_property name="ElementShortName">s_char_temp_lsb_1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_temp_lsb_1[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_temp_lsb_0" type="array">
+      <obj_property name="ElementShortName">s_char_temp_lsb_0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_temp_lsb_0[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_dat_xaxis_m0" type="array">
+      <obj_property name="ElementShortName">s_dat_xaxis_m0[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dat_xaxis_m0[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_dat_xaxis_f0" type="array">
+      <obj_property name="ElementShortName">s_dat_xaxis_f0[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dat_xaxis_f0[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_dat_xaxis_f1" type="array">
+      <obj_property name="ElementShortName">s_dat_xaxis_f1[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dat_xaxis_f1[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_dat_xaxis_f2" type="array">
+      <obj_property name="ElementShortName">s_dat_xaxis_f2[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dat_xaxis_f2[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_xaxis_sg" type="array">
+      <obj_property name="ElementShortName">s_char_xaxis_sg[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_xaxis_sg[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_xaxis_m0" type="array">
+      <obj_property name="ElementShortName">s_char_xaxis_m0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_xaxis_m0[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_xaxis_f0" type="array">
+      <obj_property name="ElementShortName">s_char_xaxis_f0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_xaxis_f0[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_xaxis_f1" type="array">
+      <obj_property name="ElementShortName">s_char_xaxis_f1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_xaxis_f1[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_xaxis_f2" type="array">
+      <obj_property name="ElementShortName">s_char_xaxis_f2[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_xaxis_f2[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_dat_yaxis_m0" type="array">
+      <obj_property name="ElementShortName">s_dat_yaxis_m0[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dat_yaxis_m0[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_dat_yaxis_f0" type="array">
+      <obj_property name="ElementShortName">s_dat_yaxis_f0[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dat_yaxis_f0[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_dat_yaxis_f1" type="array">
+      <obj_property name="ElementShortName">s_dat_yaxis_f1[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dat_yaxis_f1[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_dat_yaxis_f2" type="array">
+      <obj_property name="ElementShortName">s_dat_yaxis_f2[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dat_yaxis_f2[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_yaxis_sg" type="array">
+      <obj_property name="ElementShortName">s_char_yaxis_sg[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_yaxis_sg[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_yaxis_m0" type="array">
+      <obj_property name="ElementShortName">s_char_yaxis_m0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_yaxis_m0[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_yaxis_f0" type="array">
+      <obj_property name="ElementShortName">s_char_yaxis_f0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_yaxis_f0[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_yaxis_f1" type="array">
+      <obj_property name="ElementShortName">s_char_yaxis_f1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_yaxis_f1[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_yaxis_f2" type="array">
+      <obj_property name="ElementShortName">s_char_yaxis_f2[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_yaxis_f2[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_dat_zaxis_m0" type="array">
+      <obj_property name="ElementShortName">s_dat_zaxis_m0[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dat_zaxis_m0[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_dat_zaxis_f0" type="array">
+      <obj_property name="ElementShortName">s_dat_zaxis_f0[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dat_zaxis_f0[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_dat_zaxis_f1" type="array">
+      <obj_property name="ElementShortName">s_dat_zaxis_f1[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dat_zaxis_f1[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_dat_zaxis_f2" type="array">
+      <obj_property name="ElementShortName">s_dat_zaxis_f2[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dat_zaxis_f2[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_zaxis_sg" type="array">
+      <obj_property name="ElementShortName">s_char_zaxis_sg[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_zaxis_sg[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_zaxis_m0" type="array">
+      <obj_property name="ElementShortName">s_char_zaxis_m0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_zaxis_m0[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_zaxis_f0" type="array">
+      <obj_property name="ElementShortName">s_char_zaxis_f0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_zaxis_f0[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_zaxis_f1" type="array">
+      <obj_property name="ElementShortName">s_char_zaxis_f1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_zaxis_f1[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_zaxis_f2" type="array">
+      <obj_property name="ElementShortName">s_char_zaxis_f2[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_zaxis_f2[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_dat_temp_m3" type="array">
+      <obj_property name="ElementShortName">s_dat_temp_m3[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dat_temp_m3[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_dat_temp_m2" type="array">
+      <obj_property name="ElementShortName">s_dat_temp_m2[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dat_temp_m2[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_dat_temp_m1" type="array">
+      <obj_property name="ElementShortName">s_dat_temp_m1[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dat_temp_m1[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_dat_temp_m0" type="array">
+      <obj_property name="ElementShortName">s_dat_temp_m0[15:0]</obj_property>
+      <obj_property name="ObjectShortName">s_dat_temp_m0[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_temp_m3" type="array">
+      <obj_property name="ElementShortName">s_char_temp_m3[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_temp_m3[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_temp_m2" type="array">
+      <obj_property name="ElementShortName">s_char_temp_m2[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_temp_m2[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_temp_m1" type="array">
+      <obj_property name="ElementShortName">s_char_temp_m1[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_temp_m1[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_char_temp_m0" type="array">
+      <obj_property name="ElementShortName">s_char_temp_m0[7:0]</obj_property>
+      <obj_property name="ObjectShortName">s_char_temp_m0[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk0b" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk0b</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk0b</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk1b" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk1b</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk1b</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk2" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk2</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk2</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk2b" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk2b</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk2b</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk3" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk3</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk3</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk3b" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk3b</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk3b</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk4" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk4</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk4</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk5" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk5</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk5</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clk6" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clk6</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clk6</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_ignore_clkfboutb" type="logic">
+      <obj_property name="ElementShortName">s_clk_ignore_clkfboutb</obj_property>
+      <obj_property name="ObjectShortName">s_clk_ignore_clkfboutb</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_clkfbout" type="logic">
+      <obj_property name="ElementShortName">s_clk_clkfbout</obj_property>
+      <obj_property name="ObjectShortName">s_clk_clkfbout</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_pwrdwn" type="logic">
+      <obj_property name="ElementShortName">s_clk_pwrdwn</obj_property>
+      <obj_property name="ObjectShortName">s_clk_pwrdwn</obj_property>
+   </wvobject>
+   <wvobject fp_name="/fpga_serial_acl_tester_tb/uut_fpga_serial_acl_tester/s_clk_resetin" type="logic">
+      <obj_property name="ElementShortName">s_clk_resetin</obj_property>
+      <obj_property name="ObjectShortName">s_clk_resetin</obj_property>
+   </wvobject>
+</wave_config>
