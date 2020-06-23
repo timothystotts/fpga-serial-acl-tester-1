@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
-| Date         : Mon Jun 22 18:15:04 2020
+| Date         : Mon Jun 22 22:59:02 2020
 | Host         : M3ENGINEERING running 64-bit major release  (build 9200)
 | Command      : report_methodology -file fpga_serial_acl_tester_methodology_drc_routed.rpt -pb fpga_serial_acl_tester_methodology_drc_routed.pb -rpx fpga_serial_acl_tester_methodology_drc_routed.rpx
 | Design       : fpga_serial_acl_tester
@@ -23,11 +23,11 @@ Table of Contents
           Floorplan: design_1
       Design limits: <entire design considered>
              Max violations: <unlimited>
-             Violations found: 24
+             Violations found: 25
 +---------+----------+------------------------------------------+------------+
 | Rule    | Severity | Description                              | Violations |
 +---------+----------+------------------------------------------+------------+
-| LUTAR-1 | Warning  | LUT drives async reset alert             | 1          |
+| LUTAR-1 | Warning  | LUT drives async reset alert             | 2          |
 | XDCH-2  | Warning  | Same min and max delay values on IO port | 23         |
 +---------+----------+------------------------------------------+------------+
 
@@ -35,7 +35,12 @@ Table of Contents
 -----------------
 LUTAR-1#1 Warning
 LUT drives async reset alert  
-LUT cell u_reset_synch_20mhz/v_phase_counter[0]_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) u_reset_synch_7_37mhz/s_rst_shift_reg[0]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[10]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[11]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[12]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[13]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[1]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[2]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[3]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[4]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[5]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[6]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[7]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[8]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[9]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[0]/PRE (the first 15 of 28 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+LUT cell u_switch_deb_sw0/FSM_gray_s_swdeb_pr_state[1]_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) u_reset_synch_20mhz/s_rst_shift_reg[0]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[10]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[11]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[12]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[13]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[1]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[2]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[3]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[4]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[5]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[6]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[7]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[8]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[9]/PRE. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+LUTAR-1#2 Warning
+LUT drives async reset alert  
+LUT cell u_switch_deb_sw0/FSM_gray_s_swdeb_pr_state[1]_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) u_reset_synch_7_37mhz/s_rst_shift_reg[0]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[10]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[11]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[12]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[13]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[1]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[2]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[3]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[4]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[5]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[6]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[7]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[8]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[9]/PRE. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
 Related violations: <none>
 
 XDCH-2#1 Warning
