@@ -25,7 +25,7 @@
 -- \file clock_enable_divider.v
 --
 -- \brief A clock enable divider for an integer division of the source
--  clock enable. The clock and synchronous reset are kept the same; but the
+-- clock enable. The clock and synchronous reset are kept the same; but the
 -- clock enable is further divided.
 ------------------------------------------------------------------------------*/
 //------------------------------------------------------------------------------

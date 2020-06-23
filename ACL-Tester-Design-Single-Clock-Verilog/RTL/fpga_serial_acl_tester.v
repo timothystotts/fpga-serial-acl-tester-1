@@ -339,7 +339,8 @@ wire [7:0] s_char_temp_m2;
 wire [7:0] s_char_temp_m1;
 wire [7:0] s_char_temp_m0;
 
-/* Extra MMCM signals for full connectivity to the MMCM primative */
+/* Extra MMCM signals for full port map to the MMCM primative,
+   where these signals will remain disconnected. */
 wire s_clk_ignore_clk0b;
 wire s_clk_ignore_clk1b;
 wire s_clk_ignore_clk2;
@@ -425,14 +426,14 @@ MMCME2_BASE_inst (
 
 // End of MMCME2_BASE_inst instantiation
 
-/* Reset Synchronization for 20 MHz clocks. */
+/* Reset Synchronization for 20 MHz clock. */
 arty_reset_synchronizer #() u_reset_synch_20mhz(
 	.i_clk_mhz(s_clk_20mhz),
 	.i_rstn_global(i_resetn),
 	.o_rst_mhz(s_rst_20mhz)
 	);
 
-/* Reset Synchronization for 20 MHz clocks. */
+/* Reset Synchronization for 7.37 MHz clock. */
 arty_reset_synchronizer #() u_reset_synch_7_37mhz (
 	.i_clk_mhz(s_clk_7_37mhz),
 	.i_rstn_global(i_resetn),
