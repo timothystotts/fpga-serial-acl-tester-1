@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="40" Path="C:/wa/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-VHDL/Work_Dir/Arty-A7-100/fpga_serial_acl_tester-100.xpr">
+<Project Version="7" Minor="40" Path="W:/wa/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-VHDL/Work_Dir/Arty-A7-100T/ACL-Tester-Design-SC-VHDL-100.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="4841db791fe6440dbf547bd620636d61"/>
