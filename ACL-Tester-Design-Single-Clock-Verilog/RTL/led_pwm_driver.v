@@ -30,7 +30,7 @@
 ------------------------------------------------------------------------------*/
 //Generate loops for PWMs-------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
-module(i_clk, i_srst, i_color_led_red_value, i_color_led_green_value,
+module led_pwm_driver(i_clk, i_srst, i_color_led_red_value, i_color_led_green_value,
 	i_color_led_blue_value, i_basic_led_lumin_value,
 	eo_color_leds_r, eo_color_leds_g, eo_color_leds_b, eo_basic_leds_l);
 
@@ -88,7 +88,7 @@ generate
 					eo_color_leds_r[redidx] <= c_filament_on_value;
 					s_color_red_pwm_period_count <= c_pwm_period_ms - 1;
 					s_color_red_pwm_duty_cycles <= c_pwm_color_max_duty_cycle *
-						i_color_led_red_value[(redidx * 8 - 1)-:8] / 255;
+						i_color_led_red_value[(redidx * 8 + 7)-:8] / 255;
 				end
 			end
 		end
@@ -119,7 +119,7 @@ generate
 					eo_color_leds_g[greenidx] <= c_filament_on_value;
 					s_color_green_pwm_period_count <= c_pwm_period_ms - 1;
 					s_color_green_pwm_duty_cycles <= c_pwm_color_max_duty_cycle *
-						i_color_led_green_value[(greenidx * 8 - 1)-:8] / 255;
+						i_color_led_green_value[(greenidx * 8 + 7)-:8] / 255;
 				end
 			end
 		end
@@ -150,7 +150,7 @@ generate
 					eo_color_leds_b[blueidx] <= c_filament_on_value;
 					s_color_blue_pwm_period_count <= c_pwm_period_ms - 1;
 					s_color_blue_pwm_duty_cycles <= c_pwm_color_max_duty_cycle *
-						i_color_led_blue_value[(blueidx * 8 - 1)-:8] / 255;
+						i_color_led_blue_value[(blueidx * 8 + 7)-:8] / 255;
 				end
 			end
 		end
@@ -181,7 +181,7 @@ generate
 					eo_basic_leds_l[basicidx] <= c_filament_on_value;
 					s_basic_lumin_pwm_period_count <= c_pwm_period_ms - 1;
 					s_basic_lumin_pwm_duty_cycles <= c_pwm_basic_max_duty_cycle *
-						i_basic_led_lumin_value[(basicidx * 8 - 1)-:8] / 255;
+						i_basic_led_lumin_value[(basicidx * 8 + 7)-:8] / 255;
 				end
 			end
 		end

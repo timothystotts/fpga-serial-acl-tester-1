@@ -69,25 +69,25 @@ input wire ei_pmod_acl2_miso;
 input wire ei_pmod_acl2_int1;
 input wire ei_pmod_acl2_int2;
 
-output reg eo_led0_b;
-output reg eo_led1_b;
-output reg eo_led2_b;
-output reg eo_led3_b;
+output wire eo_led0_b;
+output wire eo_led1_b;
+output wire eo_led2_b;
+output wire eo_led3_b;
 
-output reg eo_led0_r;
-output reg eo_led1_r;
-output reg eo_led2_r;
-output reg eo_led3_r;
+output wire eo_led0_r;
+output wire eo_led1_r;
+output wire eo_led2_r;
+output wire eo_led3_r;
 
-output reg eo_led0_g;
-output reg eo_led1_g;
-output reg eo_led2_g;
-output reg eo_led3_g;
+output wire eo_led0_g;
+output wire eo_led1_g;
+output wire eo_led2_g;
+output wire eo_led3_g;
 
-output reg eo_led4;
-output reg eo_led5;
-output reg eo_led6;
-output reg eo_led7;
+output wire eo_led4;
+output wire eo_led5;
+output wire eo_led6;
+output wire eo_led7;
 
 input wire ei_sw0;
 input wire ei_sw1;
@@ -355,6 +355,24 @@ wire s_clk_clkfbout;
 wire s_clk_pwrdwn;
 wire s_clk_resetin;
 
+/* Color LED PWM driver signals for 8-bit color mixing. */
+reg [7:0] s_ld0_red_value;
+reg [7:0] s_ld1_red_value;
+reg [7:0] s_ld2_red_value;
+reg [7:0] s_ld3_red_value;
+reg [7:0] s_ld0_green_value;
+reg [7:0] s_ld1_green_value;
+reg [7:0] s_ld2_green_value;
+reg [7:0] s_ld3_green_value;
+reg [7:0] s_ld0_blue_value;
+reg [7:0] s_ld1_blue_value;
+reg [7:0] s_ld2_blue_value;
+reg [7:0] s_ld3_blue_value;
+reg [7:0] s_ld4_basic_value;
+reg [7:0] s_ld5_basic_value;
+reg [7:0] s_ld6_basic_value;
+reg [7:0] s_ld7_basic_value;
+
 //Part 3: Statements------------------------------------------------------------
 assign s_clk_pwrdwn = 1'b0;
 assign s_clk_resetin = (~i_resetn);
@@ -458,6 +476,24 @@ switch_debouncer #() u_switch_deb_sw0 (
 switch_debouncer #() u_switch_deb_sw1 (
 	si_sw1_debounced, s_clk_20mhz, s_rst_20mhz, ei_sw1);
 
+/* LED PWM driver for color-mixed LED driving with variable intensity. */
+led_pwm_driver #(
+    .parm_color_led_count(4),
+    .parm_basic_led_count(4),
+    .parm_FCLK(20000000)
+    ) u_led_pwm_driver (
+    .i_clk(s_clk_20mhz),
+    .i_srst(s_rst_20mhz),
+    .i_color_led_red_value({s_ld3_red_value, s_ld2_red_value, s_ld1_red_value, s_ld0_red_value}),
+    .i_color_led_green_value({s_ld3_green_value, s_ld2_green_value, s_ld1_green_value, s_ld0_green_value}),
+    .i_color_led_blue_value({s_ld3_blue_value, s_ld2_blue_value, s_ld1_blue_value, s_ld0_blue_value}),
+    .i_basic_led_lumin_value({s_ld7_basic_value, s_ld6_basic_value, s_ld5_basic_value, s_ld4_basic_value}),
+    .eo_color_leds_r({eo_led3_r, eo_led2_r, eo_led1_r, eo_led0_r}),
+    .eo_color_leds_g({eo_led3_g, eo_led2_g, eo_led1_g, eo_led0_g}),
+    .eo_color_leds_b({eo_led3_b, eo_led2_b, eo_led1_b, eo_led0_b}),
+    .eo_basic_leds_l({eo_led7, eo_led6, eo_led5, eo_led4})
+    );
+    
 /* Provide possible tri-state for later design revision for the PMOD ACL2 SPI
    output ports. */
 assign eo_pmod_acl2_sck = so_pmod_acl2_sck_t ? 1'bz : so_pmod_acl2_sck_o;
@@ -736,55 +772,79 @@ always @(posedge s_clk_20mhz)
 begin: p_tester_fsm_display
 	if (s_active_init_display) begin
 		/* LED 0 will be red when tester is initializing. */
-		eo_led0_r <= 1'b1;
-		eo_led0_g <= 1'b0;
-		eo_led0_b <= 1'b0;
+		s_ld0_red_value <= 8'hFF;
+		s_ld0_green_value <= 8'h00;
+		s_ld0_blue_value <= 8'h00;
 	end else if (s_active_run_display) begin
 		/* LED 0 will be green when tester is running. */
-		eo_led0_r <= 1'b0;
-		eo_led0_g <= 1'b1;
-		eo_led0_b <= 1'b0;
+		s_ld0_red_value <= 8'h00;
+		s_ld0_green_value <= 8'hFF;
+		s_ld0_blue_value <= 8'h00;
 	end else begin
 		/* LED 0 will be blue when tester is not working at all. */
-		eo_led0_r <= 1'b0;
-		eo_led0_g <= 1'b0;
-		eo_led0_b <= 1'b1;
+		s_ld0_red_value <= 8'h00;
+		s_ld0_green_value <= 8'h00;
+		s_ld0_blue_value <= 8'hFF;
 	end
 
 	/* LED 1 will be red when tester is not working at all. */
 	/* LED 1 will be white when tester is measuring continuously. */
 	/* LED 1 will be purple when tester is only detecting motion toggle. */
-	eo_led1_r <= 1'b1;
 	if (s_mode_is_measur_aux) begin
-		eo_led1_g <= 1'b1;
-		eo_led1_b <= 1'b1;
+    s_ld1_red_value <= 8'h80;
+		s_ld1_green_value <= 8'h80;
+		s_ld1_blue_value <= 8'h80;
 	end else if (s_mode_is_linked_aux) begin
-		eo_led1_g <= 1'b0;
-		eo_led1_b <= 1'b1;
+    s_ld1_red_value <= 8'hB0;
+		s_ld1_green_value <= 8'h00;
+		s_ld1_blue_value <= 8'hB0;
 	end else begin
-		eo_led1_g <= 1'b0;
-		eo_led1_b <= 1'b0;
+    s_ld1_red_value <= 8'hFF;
+		s_ld1_green_value <= 8'h00;
+		s_ld1_blue_value <= 8'h00;
 	end
 
 	/* LED 2 is Red when no Activity detect, Green when Activity detect. */
-	eo_led2_r <= ~ s_acl2_reg_status_activity_stretched;
-	eo_led2_g <= s_acl2_reg_status_activity_stretched;
-	eo_led2_b <= 1'b0;
+	if (s_acl2_reg_status_activity_stretched) begin
+	   s_ld2_red_value <= 8'h00;
+	   s_ld2_green_value <= 8'hFF;
+	   s_ld2_blue_value <= 8'h00;
+	end else begin
+	   s_ld2_red_value <= 8'hFF;
+	   s_ld2_green_value <= 8'h00;
+	   s_ld2_blue_value <= 8'h00;
+	end
 
 	/* LED 3 is Red when no Inactivity detect, Green when Inactivity detect. */
-	eo_led3_r <= ~ s_acl2_reg_status_inactivity_stretched;
-	eo_led3_g <= s_acl2_reg_status_inactivity_stretched;
-	eo_led3_b <= 1'b0;
+	if (s_acl2_reg_status_inactivity_stretched) begin
+	   s_ld3_red_value <= 8'h00;
+	   s_ld3_green_value <= 8'hFF;
+	   s_ld3_blue_value <= 8'h00;
+	end else begin
+	   s_ld3_red_value <= 8'hFF;
+	   s_ld3_green_value <= 8'h00;
+	   s_ld3_blue_value <= 8'h00;
+	end
 
 	/* LED4 is AWAKE status from the status register. */
-	eo_led4	<= s_acl2_reg_status[6];
+	if (s_acl2_reg_status[6])
+	   s_ld4_basic_value <= 8'hFF;
+	else
+	   s_ld4_basic_value <= 8'h00;
 
 	/* LED 5 */
-	eo_led5	<= 1'b0;
+    s_ld5_basic_value <= 8'h00;
 
 	/* LED 6, LED 7, indicate the debounced switch positions. */
-	eo_led6	<= si_sw0_debounced;
-	eo_led7	<= si_sw1_debounced;
+	if (si_sw0_debounced)
+	   s_ld6_basic_value <= 8'hFF;
+	else
+	   s_ld6_basic_value <= 8'h00;
+	
+	if (si_sw1_debounced)
+	   s_ld7_basic_value <= 8'hFF;
+	else
+	   s_ld7_basic_value <= 8'h00;
 end
 
 /* Tri-state outputs of PMOD CLS custom driver. */
