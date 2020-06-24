@@ -3,7 +3,7 @@
 <!--                                                         -->
 <!-- Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="40" Path="C:/wa/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-Verilog/Work_Dir/Arty-A7-100T/ACL-Tester-Design-SC-Verilog-100.xpr">
+<Project Version="7" Minor="40" Path="W:/wa/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-Verilog/Work_Dir/Arty-A7-100T/ACL-Tester-Design-SC-Verilog-100.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="02111efe09dd462a82bd745b14f0ac55"/>
@@ -75,13 +75,6 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/../../RTL/switch_debouncer.v">
-        <FileInfo>
-          <Attr Name="UsedIn" Val="synthesis"/>
-          <Attr Name="UsedIn" Val="implementation"/>
-          <Attr Name="UsedIn" Val="simulation"/>
-        </FileInfo>
-      </File>
       <File Path="$PPRDIR/../../RTL/ext_interrupt_debouncer.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
@@ -138,7 +131,14 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/../../RTL/fpga_serial_acl_tester.v">
+      <File Path="$PPRDIR/../../RTL/multi_input_debounce.v">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="UsedIn" Val="implementation"/>
+          <Attr Name="UsedIn" Val="simulation"/>
+        </FileInfo>
+      </File>
+      <File Path="$PPRDIR/../../RTL/led_pwm_driver.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>
@@ -152,7 +152,7 @@
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
       </File>
-      <File Path="$PPRDIR/../../RTL/led_pwm_driver.v">
+      <File Path="$PPRDIR/../../RTL/fpga_serial_acl_tester.v">
         <FileInfo>
           <Attr Name="UsedIn" Val="synthesis"/>
           <Attr Name="UsedIn" Val="implementation"/>

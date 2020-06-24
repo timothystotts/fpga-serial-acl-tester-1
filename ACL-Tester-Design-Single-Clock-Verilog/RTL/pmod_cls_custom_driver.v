@@ -50,6 +50,8 @@ module pmod_cls_custom_driver (
 parameter integer parm_fast_simulation = 0;
 /* Actual frequency in Hz of \ref i_ce_2_5mhz */
 parameter integer FCLK = 20000000;
+/* Clock enable frequency in Hz of \ref i_ext_spi_clk_4x with i_spi_ce_4x */
+parameter integer FCLK_ce = 2500000;
 /* Ratio of i_ext_spi_clk_x to SPI sck bus output. */
 parameter parm_ext_spi_clk_ratio = 32;
 /* LOG2 of the TX FIFO max count */
@@ -138,6 +140,7 @@ end
 pmod_cls_stand_spi_solo #(
 	.parm_fast_simulation(parm_fast_simulation),
 	.FCLK (FCLK),
+	.FCLK_ce (FCLK_ce),
 	.parm_tx_len_bits (parm_tx_len_bits),
 	.parm_wait_cyc_bits(parm_wait_cyc_bits),
 	.parm_rx_len_bits (parm_rx_len_bits)

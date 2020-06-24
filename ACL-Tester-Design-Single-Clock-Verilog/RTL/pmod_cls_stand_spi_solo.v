@@ -51,7 +51,9 @@ module pmod_cls_stand_spi_solo(
 /* Disable or enable fast FSM delays for simulation instead of impelementation. */
 parameter integer parm_fast_simulation = 0;
 /* Actual frequency in Hz of \ref i_ext_spi_clk_4x */
-parameter integer FCLK = 2500000;
+parameter integer FCLK = 20000000;
+/* Actual frequency in Hz of \ref i_ext_spi_clk_4x */
+parameter integer FCLK_ce = 2500000;
 /* LOG2 of the TX FIFO max count */
 parameter parm_tx_len_bits = 11;
 /* LOG2 of max Wait Cycles count between end of TX and start of RX */
@@ -93,7 +95,7 @@ input wire [(16 * 8 - 1):0] i_dat_ascii_line2;
 /* This constant can be temporarily changed iby parameter to shorten the
    boot-up time of the project's simulation. */
 localparam [(`c_cls_drv_time_value_bits - 1):0] c_t_pmodcls_boot =
-	parm_fast_simulation ? (FCLK * 2 / 1000) : (FCLK * 800 / 1000);
+	parm_fast_simulation ? (FCLK_ce / 1000 * 2) : (FCLK_ce / 1000 * 800);
 localparam [(`c_cls_drv_time_value_bits - 1):0] c_tmax = c_t_pmodcls_boot - 1;
 
 reg [(`c_cls_drv_time_value_bits - 1):0] s_t;

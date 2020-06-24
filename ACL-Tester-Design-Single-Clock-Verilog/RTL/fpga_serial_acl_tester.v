@@ -58,6 +58,7 @@ module fpga_serial_acl_tester (
 
 /* Disable or enable fast FSM delays for simulation instead of impelementation. */
 parameter integer parm_fast_simulation = 0;
+localparam integer c_FCLK = 20000000;
 
 input wire CLK100MHZ;
 input wire i_resetn;
@@ -180,9 +181,9 @@ reg s_mode_is_measur_aux;
 reg s_mode_is_linked_val;
 reg s_mode_is_linked_aux;
 
-/* Switch 0:1 debounced signals. */
-wire si_sw0_debounced;
-wire si_sw1_debounced;
+/* switch inputs debounced */
+wire [3:0] si_switches;
+wire [3:0] s_sw_deb;
 
 /* Connections and variables for instance of the PMOD CLS SPI SOLO driver. */
 `define c_cls_update_fsm_bits 2
@@ -468,19 +469,24 @@ clock_enable_divider #(.par_ce_divisor(8)) u_2_5mhz_ce_divider (
 	.i_rst_mhz(s_rst_20mhz),
 	.i_ce_mhz(1'b1));
 
-/* Synchronize and debounce the SW0 incoming switch position on the Arty A7. */
-switch_debouncer #() u_switch_deb_sw0 (
-	si_sw0_debounced, s_clk_20mhz, s_rst_20mhz, ei_sw0);
+// Synchronize and debounce the four input switches on the Arty A7 to be
+// debounced and exclusive of each other (ignored if more than one
+// selected at the same time).
+assign si_switches = {ei_sw3, ei_sw2, ei_sw1, ei_sw0};
 
-/* Synchronize and debounce the SW1 incoming switch position on the Arty A7. */
-switch_debouncer #() u_switch_deb_sw1 (
-	si_sw1_debounced, s_clk_20mhz, s_rst_20mhz, ei_sw1);
+multi_input_debounce #(.FCLK(c_FCLK)
+  ) u_switches_deb_0123 (
+    .i_clk_mhz(s_clk_20mhz),
+    .i_rst_mhz(s_rst_20mhz),
+    .ei_buttons(si_switches),
+    .o_btns_deb(s_sw_deb)
+    );
 
 /* LED PWM driver for color-mixed LED driving with variable intensity. */
 led_pwm_driver #(
     .parm_color_led_count(4),
     .parm_basic_led_count(4),
-    .parm_FCLK(20000000)
+    .parm_FCLK(c_FCLK)
     ) u_led_pwm_driver (
     .i_clk(s_clk_20mhz),
     .i_srst(s_rst_20mhz),
@@ -503,7 +509,7 @@ assign eo_pmod_acl2_mosi = so_pmod_acl2_mosi_t ? 1'bz : so_pmod_acl2_mosi_o;
 /* PMOD ACL2 Custom Driver instance. */
 pmod_acl2_custom_driver #(
 	.parm_fast_simulation(parm_fast_simulation),
-	.FCLK(20000000),
+	.FCLK(c_FCLK),
 	.parm_ext_spi_clk_ratio(4),
 	.parm_wait_cyc_bits(`c_stand_spi_wait_count_bits)
 	) u_pmod_acl2_custom_driver (
@@ -569,7 +575,7 @@ end
    Switch 0 and Not Switch 1, then Mode Measurement is executed. If Switch 1
    and Not Switch 0, then Mode Linked is executed. */
 always @(s_tester_pr_state, s_acl2_command_ready,
-	si_sw0_debounced, si_sw1_debounced,
+	s_sw_deb,
 	s_mode_is_measur_aux, s_mode_is_linked_aux)
 begin: p_tester_fsm_comb
 	case (s_tester_pr_state)
@@ -699,7 +705,7 @@ begin: p_tester_fsm_comb
 			s_mode_is_measur_val = s_mode_is_measur_aux;
 			s_mode_is_linked_val = s_mode_is_linked_aux;
 
-			if (~ (si_sw0_debounced ^ si_sw1_debounced))
+			if (s_sw_deb == 4'b0000)
 				s_tester_nx_state = ST_A;
 			else s_tester_nx_state = ST_9;
 		end
@@ -736,9 +742,9 @@ begin: p_tester_fsm_comb
 			s_mode_is_linked_val = s_mode_is_linked_aux;
 
 			if (s_acl2_command_ready)
-				if (si_sw0_debounced && (~ si_sw1_debounced))
+				if (s_sw_deb == 4'b0001)
 					s_tester_nx_state = ST_1;
-				else if (si_sw1_debounced && (~ si_sw0_debounced))
+				else if (s_sw_deb == 4'b0010)
 					s_tester_nx_state = ST_5;
 				else
 					s_tester_nx_state = ST_0;
@@ -836,12 +842,12 @@ begin: p_tester_fsm_display
     s_ld5_basic_value <= 8'h00;
 
 	/* LED 6, LED 7, indicate the debounced switch positions. */
-	if (si_sw0_debounced)
+	if (s_sw_deb[0])
 	   s_ld6_basic_value <= 8'hFF;
 	else
 	   s_ld6_basic_value <= 8'h00;
 	
-	if (si_sw1_debounced)
+	if (s_sw_deb[1])
 	   s_ld7_basic_value <= 8'hFF;
 	else
 	   s_ld7_basic_value <= 8'h00;
@@ -856,7 +862,8 @@ assign eo_pmod_cls_dq0 = so_pmod_cls_mosi_t ? 1'bz : so_pmod_cls_mosi_o;
    of an output display. */
 pmod_cls_custom_driver #(
 	.parm_fast_simulation(parm_fast_simulation),
-	.FCLK(20000000),
+	.FCLK(c_FCLK),
+  .FCLK_ce(2500000),
 	.parm_ext_spi_clk_ratio(32),
 	.parm_wait_cyc_bits(`c_stand_spi_wait_count_bits)
 	) u_pmod_cls_custom_driver (
