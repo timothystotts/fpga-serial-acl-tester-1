@@ -2,3 +2,4 @@
 *.hw/
 *.runs/
 *.sim/
+*.ip_user_files/
