@@ -710,7 +710,7 @@ begin
 				s_mode_is_measur_val  <= s_mode_is_measur_aux;
 				s_mode_is_linked_val  <= s_mode_is_linked_aux;
 
-				if (s_sw_deb(0) = '0') then
+				if (s_sw_deb = "0000") then -- no single switch is ON
 					s_tester_nx_state <= ST_A;
 				else
 					s_tester_nx_state <= ST_9;
@@ -740,9 +740,9 @@ begin
 				s_mode_is_linked_val  <= s_mode_is_linked_aux;
 
 				if (s_acl2_command_ready = '1') then
-					if (s_sw_deb(0) = '1') then
+					if (s_sw_deb = "0001") then -- switch 0
 						s_tester_nx_state <= ST_1;
-					elsif (s_sw_deb(1) = '1') then
+					elsif (s_sw_deb = "0010") then -- switch 1
 						s_tester_nx_state <= ST_5;
 					else
 						s_tester_nx_state <= ST_0;
