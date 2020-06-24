@@ -14,8 +14,8 @@
 --------------------------------------------------------------------------------
 -- \module multi_input_debounce
 --
--- \brief This FSM is the full 4-button debouncer, level output, without
--- embedded one-shot, with 1 millisecond debounce.
+-- \brief This FSM is the full 4-button mutual-exclusive debouncer, level
+-- output, without embedded one-shot, with 1 millisecond debounce.
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
@@ -87,7 +87,7 @@ begin
 	end process p_fsm_timer1;
 
 	-- FSM state register:
-	p_fsm_state : process(i_clk_mhz, i_rst_mhz)
+	p_fsm_state : process(i_clk_mhz)
 	begin
 		if rising_edge(i_clk_mhz) then
 			if (i_rst_mhz = '1') then
