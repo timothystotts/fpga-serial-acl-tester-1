@@ -97,6 +97,9 @@ end entity fpga_serial_acl_tester;
 --------------------------------------------------------------------------------
 architecture fsm_rtl of fpga_serial_acl_tester is
 
+	-- Main clock frequency in Hz
+	constant c_FCLK : natural := 20_000_000;
+
 	-- A re-entrant function that converts a 4-bit vector to an 8-bit ASCII
 	-- hexadecimal character.
 	function ascii_of_hdigit(bchex_val : std_logic_vector(3 downto 0))
@@ -168,9 +171,9 @@ architecture fsm_rtl of fpga_serial_acl_tester is
 	signal s_mode_is_linked_val  : std_logic;
 	signal s_mode_is_linked_aux  : std_logic;
 
-	-- Switch 0:1 debounced signals.
-	signal si_sw0_debounced : std_logic;
-	signal si_sw1_debounced : std_logic;
+	-- switch inputs debounced
+	signal si_switches : std_logic_vector(3 downto 0);
+	signal s_sw_deb    : std_logic_vector(3 downto 0);
 
 	-- Display update FSM state declarations
 	type t_cls_update_state is (ST_CLS_IDLE, ST_CLS_CLEAR, ST_CLS_LINE1, ST_CLS_LINE2);
@@ -329,6 +332,25 @@ architecture fsm_rtl of fpga_serial_acl_tester is
 	signal s_clk_clkfbout         : std_logic;
 	signal s_clk_pwrdwn           : std_logic;
 	signal s_clk_resetin          : std_logic;
+
+	-- Color LED PWM driver signals for 8-bit color mixing.
+	signal s_ld0_red_value : std_logic_vector(7 downto 0);
+	signal s_ld1_red_value : std_logic_vector(7 downto 0);
+	signal s_ld2_red_value : std_logic_vector(7 downto 0);
+	signal s_ld3_red_value : std_logic_vector(7 downto 0);
+	signal s_ld0_green_value : std_logic_vector(7 downto 0);
+	signal s_ld1_green_value : std_logic_vector(7 downto 0);
+	signal s_ld2_green_value : std_logic_vector(7 downto 0);
+	signal s_ld3_green_value : std_logic_vector(7 downto 0);
+	signal s_ld0_blue_value : std_logic_vector(7 downto 0);
+	signal s_ld1_blue_value : std_logic_vector(7 downto 0);
+	signal s_ld2_blue_value : std_logic_vector(7 downto 0);
+	signal s_ld3_blue_value : std_logic_vector(7 downto 0);
+	signal s_ld4_basic_value : std_logic_vector(7 downto 0);
+	signal s_ld5_basic_value : std_logic_vector(7 downto 0);
+	signal s_ld6_basic_value : std_logic_vector(7 downto 0);
+	signal s_ld7_basic_value : std_logic_vector(7 downto 0);
+
 begin
 
 	s_clk_pwrdwn  <= '0';
@@ -432,23 +454,66 @@ begin
 			i_ce_mhz  => '1'
 		);
 
-	-- Synchronize and debounce the SW0 incoming switch position on the Arty A7.
-	u_switch_deb_sw0 : entity work.switch_debouncer(moore_fsm)
+	-- Synchronize and debounce the four input switches on the Arty A7 to be
+	-- debounced and exclusive of each other (ignored if more than one
+	-- selected at the same time).
+	si_switches <= ei_sw3 & ei_sw2 & ei_sw1 & ei_sw0;
+
+	u_switches_deb_0123 : entity work.multi_input_debounce(moore_fsm)
+		generic map(
+			FCLK => c_FCLK
+		)
 		port map(
-			o_sw_deb    => si_sw0_debounced,
-			i_clk_20mhz => s_clk_20mhz,
-			i_rst_20mhz => s_rst_20mhz,
-			ei_switch   => ei_sw0
+			i_clk_mhz  => s_clk_20mhz,
+			i_rst_mhz  => s_rst_20mhz,
+			ei_buttons => si_switches,
+			o_btns_deb => s_sw_deb
 		);
 
-	-- Synchronize and debounce the SW1 incoming switch position on the Arty A7.
-	u_switch_deb_sw1 : entity work.switch_debouncer(moore_fsm)
+	-- LED PWM driver for color-mixed LED driving with variable intensity.
+	u_led_pwm_driver : entity work.led_pwm_driver(rtl)
+		generic map(
+			parm_color_led_count => 4,
+			parm_basic_led_count => 4,
+			parm_FCLK => c_FCLK,
+			parm_pwm_period_milliseconds => 10
+			)
 		port map(
-			o_sw_deb    => si_sw1_debounced,
-			i_clk_20mhz => s_clk_20mhz,
-			i_rst_20mhz => s_rst_20mhz,
-			ei_switch   => ei_sw1
-		);
+			i_clk => s_clk_20mhz,
+			i_srst => s_rst_20mhz,
+			i_color_led_red_value(3) => s_ld3_red_value,
+			i_color_led_red_value(2) => s_ld2_red_value,
+			i_color_led_red_value(1) => s_ld1_red_value,
+			i_color_led_red_value(0) => s_ld0_red_value,
+			i_color_led_green_value(3) => s_ld3_green_value,
+			i_color_led_green_value(2) => s_ld2_green_value,
+			i_color_led_green_value(1) => s_ld1_green_value,
+			i_color_led_green_value(0) => s_ld0_green_value,
+			i_color_led_blue_value(3) => s_ld3_blue_value,
+			i_color_led_blue_value(2) => s_ld2_blue_value,
+			i_color_led_blue_value(1) => s_ld1_blue_value,
+			i_color_led_blue_value(0) => s_ld0_blue_value,
+			i_basic_led_lumin_value(3) => s_ld7_basic_value,
+			i_basic_led_lumin_value(2) => s_ld6_basic_value,
+			i_basic_led_lumin_value(1) => s_ld5_basic_value,
+			i_basic_led_lumin_value(0) => s_ld4_basic_value,
+			eo_color_leds_r(3) => eo_led3_r,
+			eo_color_leds_r(2) => eo_led2_r,
+			eo_color_leds_r(1) => eo_led1_r,
+			eo_color_leds_r(0) => eo_led0_r,
+			eo_color_leds_g(3) => eo_led3_g,
+			eo_color_leds_g(2) => eo_led2_g,
+			eo_color_leds_g(1) => eo_led1_g,
+			eo_color_leds_g(0) => eo_led0_g,
+			eo_color_leds_b(3) => eo_led3_b,
+			eo_color_leds_b(2) => eo_led2_b,
+			eo_color_leds_b(1) => eo_led1_b,
+			eo_color_leds_b(0) => eo_led0_b,
+			eo_basic_leds_l(3) => eo_led7,
+			eo_basic_leds_l(2) => eo_led6,
+			eo_basic_leds_l(1) => eo_led5,
+			eo_basic_leds_l(0) => eo_led4
+			);
 
 	-- Provide possible tri-state for later design revision for the PMOD ACL2 SPI
 	-- output ports.
@@ -460,7 +525,7 @@ begin
 	u_pmod_acl2_custom_driver : entity work.pmod_acl2_custom_driver(rtl)
 		generic map (
 			parm_fast_simulation   => parm_fast_simulation,
-			parm_FCLK              => 20_000_000,
+			parm_FCLK              => c_FCLK,
 			parm_ext_spi_clk_ratio => 4,
 			parm_wait_cyc_bits     => c_stand_spi_wait_count_bits
 		)
@@ -531,7 +596,7 @@ begin
 	-- Switch 0 and Not Switch 1, then Mode Measurement is executed. If Switch 1
 	-- and Not Switch 0, then Mode Linked is executed.
 	p_tester_fsm_comb : process(s_tester_pr_state, s_acl2_command_ready,
-			si_sw0_debounced, si_sw1_debounced,
+			s_sw_deb,
 			s_mode_is_measur_aux, s_mode_is_linked_aux)
 	begin
 		-- default the current PR state to not issue any of the five possible commands
@@ -645,7 +710,7 @@ begin
 				s_mode_is_measur_val  <= s_mode_is_measur_aux;
 				s_mode_is_linked_val  <= s_mode_is_linked_aux;
 
-				if ((si_sw0_debounced xor si_sw1_debounced) = '0') then
+				if (s_sw_deb(0) = '0') then
 					s_tester_nx_state <= ST_A;
 				else
 					s_tester_nx_state <= ST_9;
@@ -675,9 +740,9 @@ begin
 				s_mode_is_linked_val  <= s_mode_is_linked_aux;
 
 				if (s_acl2_command_ready = '1') then
-					if ((si_sw0_debounced = '1') and (si_sw1_debounced = '0')) then
+					if (s_sw_deb(0) = '1') then
 						s_tester_nx_state <= ST_1;
-					elsif ((si_sw1_debounced = '1') and (si_sw0_debounced = '0')) then
+					elsif (s_sw_deb(1) = '1') then
 						s_tester_nx_state <= ST_5;
 					else
 						s_tester_nx_state <= ST_0;
@@ -691,7 +756,7 @@ begin
 	-- Stretch the Activity indication so it can be displayed as color LED 2.
 	u_pulse_stretcher_activity : entity work.pulse_stretcher_synch(moore_fsm_timed)
 		generic map(
-			par_T_stretch_count => 20_000_000)
+			par_T_stretch_count => c_FCLK)
 		port map(
 			o_y   => s_acl2_reg_status_activity_stretched,
 			i_clk => s_clk_20mhz,
@@ -701,7 +766,7 @@ begin
 	-- Stretch the Inactivity indication so it can be displayed as color LED 3.
 	u_pulse_stretcher_inactivity : entity work.pulse_stretcher_synch(moore_fsm_timed)
 		generic map(
-			par_T_stretch_count => 20_000_000)
+			par_T_stretch_count => c_FCLK)
 		port map(
 			o_y   => s_acl2_reg_status_inactivity_stretched,
 			i_clk => s_clk_20mhz,
@@ -718,55 +783,82 @@ begin
 		if rising_edge(s_clk_20mhz) then
 			if (s_active_init_display = '1') then
 				-- LED 0 will be red when tester is initializing.
-				eo_led0_r <= '1';
-				eo_led0_g <= '0';
-				eo_led0_b <= '0';
+				s_ld0_red_value <= x"FF";
+				s_ld0_green_value <= x"00";
+				s_ld0_blue_value <= x"00";
 			elsif (s_active_run_display = '1') then
 				-- LED 0 will be green when tester is running.
-				eo_led0_r <= '0';
-				eo_led0_g <= '1';
-				eo_led0_b <= '0';
+				s_ld0_red_value <= x"00";
+				s_ld0_green_value <= x"FF";
+				s_ld0_blue_value <= x"00";
 			else
 				-- LED 0 will be blue when tester is not working at all.
-				eo_led0_r <= '0';
-				eo_led0_g <= '0';
-				eo_led0_b <= '1';
+				s_ld0_red_value <= x"00";
+				s_ld0_green_value <= x"00";
+				s_ld0_blue_value <= x"FF";
 			end if;
 
 			-- LED 1 will be red when tester is not working at all.
 			-- LED 1 will be white when tester is measuring continuously.
 			-- LED 1 will be purple when tester is only detecting motion toggle.
-			eo_led1_r <= '1';
 			if (s_mode_is_measur_aux = '1') then
-				eo_led1_g <= '1';
-				eo_led1_b <= '1';
+				s_ld1_red_value <= x"80";
+				s_ld1_green_value <= x"80";
+				s_ld1_blue_value <= x"80";
 			elsif (s_mode_is_linked_aux = '1') then
-				eo_led1_g <= '0';
-				eo_led1_b <= '1';
+				s_ld1_red_value <= x"B0";
+				s_ld1_green_value <= x"00";
+				s_ld1_blue_value <= x"B0";
 			else
-				eo_led1_g <= '0';
-				eo_led1_b <= '0';
+				s_ld1_red_value <= x"FF";
+				s_ld1_green_value <= x"00";
+				s_ld1_blue_value <= x"00";
 			end if;
 
 			-- LED 2 is Red when no Activity detect, Green when Activity detect.
-			eo_led2_r <= not s_acl2_reg_status_activity_stretched;
-			eo_led2_g <= s_acl2_reg_status_activity_stretched;
-			eo_led2_b <= '0';
+			if (s_acl2_reg_status_activity_stretched = '1') then
+				s_ld2_red_value <= x"00";
+				s_ld2_green_value <= x"FF";
+				s_ld2_blue_value <= x"00";
+			else
+				s_ld2_red_value <= x"FF";
+				s_ld2_green_value <= x"00";
+				s_ld2_blue_value <= x"00";
+			end if;
 
 			-- LED 3 is Red when no Inactivity detect, Green when Inactivity detect.
-			eo_led3_r <= not s_acl2_reg_status_inactivity_stretched;
-			eo_led3_g <= s_acl2_reg_status_inactivity_stretched;
-			eo_led3_b <= '0';
+			if (s_acl2_reg_status_inactivity_stretched = '1') then
+				s_ld3_red_value <= x"00";
+				s_ld3_green_value <= x"FF";
+				s_ld3_blue_value <= x"00";
+			else
+				s_ld3_red_value <= x"FF";
+				s_ld3_green_value <= x"00";
+				s_ld3_blue_value <= x"00";
+			end if;
 
-			-- LED4 is AWAKE status from the status register.
-			eo_led4 <= s_acl2_reg_status(6);
+			-- LED4 is AWAKE status from the status register
+			if (s_acl2_reg_status(6) = '1') Then
+				s_ld4_basic_value <= x"FF";
+			else
+				s_ld4_basic_value <= x"00";
+			end if;
 
 			-- LED 5 is unused at this time.
-			eo_led5 <= '0';
+			s_ld5_basic_value <= x"00";
 
 			-- LED 6, LED 7, indicate the debounced switch positions.
-			eo_led6 <= si_sw0_debounced;
-			eo_led7 <= si_sw1_debounced;
+			if (s_sw_deb(0) = '1') Then
+				s_ld6_basic_value <= x"FF";
+			else
+				s_ld6_basic_value <= x"00";
+			end if;
+
+			if (s_sw_deb(1) = '1') Then
+				s_ld7_basic_value <= x"FF";
+			else
+				s_ld7_basic_value <= x"00";
+			end if;
 		end if;
 	end process p_tester_fsm_display;
 
@@ -780,7 +872,7 @@ begin
 	u_pmod_cls_custom_driver : entity work.pmod_cls_custom_driver(rtl)
 		generic map (
 			parm_fast_simulation   => parm_fast_simulation,
-			parm_FCLK              => 20_000_000,
+			parm_FCLK              => c_FCLK,
 			parm_FCLK_ce           => 2_500_000,
 			parm_ext_spi_clk_ratio => 32,
 			parm_wait_cyc_bits     => c_stand_spi_wait_count_bits
