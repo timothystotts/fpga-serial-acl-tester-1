@@ -800,7 +800,7 @@ begin
 
 	-- A clock enable divider for the process \ref p_tester_fsm_display .
 	-- Divides the 20 MHz clock down to 128 enables per 1.5 seconds.
-	clock_enable_divider_2 : entity work.clock_enable_divider
+	u_clock_enable_led_pulse : entity work.clock_enable_divider
 		generic map (
 			par_ce_divisor => c_FCLK / 85
 		)
@@ -832,7 +832,7 @@ begin
 	s_ld3_green_value <= std_logic_vector(s_ld3_green_pulse) & "11";
 	s_ld3_blue_value  <= std_logic_vector(s_ld3_blue_pulse) & "11";
 
-	p_tester_fsm_display : process(s_clk_20mhz)
+	p_tester_led_pulse : process(s_clk_20mhz)
 	begin
 		if rising_edge(s_clk_20mhz) then
 			if (s_rst_20mhz = '1') then
@@ -905,7 +905,12 @@ begin
 				end if;
 
 			end if;
+		end if;
+	end process p_tester_led_pulse;
 
+	p_tester_led_display : process(s_clk_20mhz)
+	begin
+		if rising_edge(s_clk_20mhz) then
 			if (s_active_init_display = '1') then
 				-- LED 0 will be red when tester is initializing.
 				s_ld0_red_pulse   <= s_ld0_led_pulse;
@@ -985,7 +990,7 @@ begin
 				s_ld7_basic_value <= x"00";
 			end if;
 		end if;
-	end process p_tester_fsm_display;
+	end process p_tester_led_display;
 
 	-- Tri-state outputs of PMOD CLS custom driver.
 	eo_pmod_cls_sck <= so_pmod_cls_sck_o  when so_pmod_cls_sck_t = '0' else 'Z';
