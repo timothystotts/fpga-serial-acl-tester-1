@@ -357,22 +357,48 @@ wire s_clk_pwrdwn;
 wire s_clk_resetin;
 
 /* Color LED PWM driver signals for 8-bit color mixing. */
-reg [7:0] s_ld0_red_value;
-reg [7:0] s_ld1_red_value;
-reg [7:0] s_ld2_red_value;
-reg [7:0] s_ld3_red_value;
-reg [7:0] s_ld0_green_value;
-reg [7:0] s_ld1_green_value;
-reg [7:0] s_ld2_green_value;
-reg [7:0] s_ld3_green_value;
-reg [7:0] s_ld0_blue_value;
-reg [7:0] s_ld1_blue_value;
-reg [7:0] s_ld2_blue_value;
-reg [7:0] s_ld3_blue_value;
+wire s_tester_led_ce;
+
+wire [7:0] s_ld0_red_value;
+wire [7:0] s_ld1_red_value;
+wire [7:0] s_ld2_red_value;
+wire [7:0] s_ld3_red_value;
+wire [7:0] s_ld0_green_value;
+wire [7:0] s_ld1_green_value;
+wire [7:0] s_ld2_green_value;
+wire [7:0] s_ld3_green_value;
+wire [7:0] s_ld0_blue_value;
+wire [7:0] s_ld1_blue_value;
+wire [7:0] s_ld2_blue_value;
+wire [7:0] s_ld3_blue_value;
 reg [7:0] s_ld4_basic_value;
 reg [7:0] s_ld5_basic_value;
 reg [7:0] s_ld6_basic_value;
 reg [7:0] s_ld7_basic_value;
+
+reg [5:0] s_ld0_red_pulse;
+reg [5:0] s_ld0_green_pulse;
+reg [5:0] s_ld0_blue_pulse;
+reg s_ld0_dir_pulse;
+reg [5:0] s_ld0_led_pulse;
+
+reg [5:0] s_ld1_red_pulse;
+reg [5:0] s_ld1_green_pulse;
+reg [5:0] s_ld1_blue_pulse;
+reg s_ld1_dir_pulse;
+reg [5:0] s_ld1_led_pulse;
+
+reg [5:0] s_ld2_red_pulse;
+reg [5:0] s_ld2_green_pulse;
+reg [5:0] s_ld2_blue_pulse;
+reg s_ld2_dir_pulse;
+reg [5:0] s_ld2_led_pulse;
+
+reg [5:0] s_ld3_red_pulse;
+reg [5:0] s_ld3_green_pulse;
+reg [5:0] s_ld3_blue_pulse;
+reg s_ld3_dir_pulse;
+reg [5:0] s_ld3_led_pulse;
 
 //Part 3: Statements------------------------------------------------------------
 assign s_clk_pwrdwn = 1'b0;
@@ -769,67 +795,155 @@ pulse_stretcher_synch #(.par_T_stretch_bits(25), .par_T_stretch_val(20000000))
 		.i_rst(s_rst_20mhz),
 		.i_x(s_acl2_reg_status[5]));
 
+/* A clock enable divider for the process \ref p_tester_fsm_display .
+   Divides the 20 MHz clock down to 128 enables per 1.5 seconds. */
+clock_enable_divider #(.par_ce_divisor(c_FCLK / 85)
+  ) u_clock_enable_led_pulse (
+  .o_ce_div(s_tester_led_ce),
+  .i_clk_mhz(s_clk_20mhz),
+  .i_rst_mhz(s_rst_20mhz),
+  .i_ce_mhz(1'b1)
+  );
+
 /* Tester FSM registered outputs to multicolor LED 0:3 to indicate the
    execution state of \ref p_tester_fsm_state and \ref p_tester_comb and also
    the status register Activity and Inactivity. Also displayed on LED 4
    is the AWAKE state of the PMOD ACL2; and on LED 6,7 the Switch 0
    and Switch 1 debounced positions. */
+assign s_ld0_red_value = {s_ld0_red_pulse, 2'b11};
+assign s_ld0_green_value = {s_ld0_green_pulse, 2'b11};
+assign s_ld0_blue_value = {s_ld0_blue_pulse, 2'b11};
+
+assign s_ld1_red_value = {1'b0, s_ld1_red_pulse, 1'b1};
+assign s_ld1_green_value = {1'b0, s_ld1_green_pulse, 1'b1};
+assign s_ld1_blue_value = {1'b0, s_ld1_blue_pulse, 1'b1};
+
+assign s_ld2_red_value = {s_ld2_red_pulse, 2'b11};
+assign s_ld2_green_value = {s_ld2_green_pulse, 2'b11};
+assign s_ld2_blue_value = {s_ld2_blue_pulse, 2'b11};
+
+assign s_ld3_red_value = {s_ld3_red_pulse, 2'b11};
+assign s_ld3_green_value = {s_ld3_green_pulse, 2'b11};
+assign s_ld3_blue_value = {s_ld3_blue_pulse, 2'b11};
+
 always @(posedge s_clk_20mhz)
-begin: p_tester_fsm_display
+begin: p_tester_led_pulse
+  if (s_rst_20mhz) begin
+    s_ld0_dir_pulse <= 1'b0;
+    s_ld0_led_pulse <= 6'b000001;
+    s_ld1_dir_pulse <= 1'b0;
+    s_ld1_led_pulse <= 6'b010101;
+    s_ld2_dir_pulse <= 1'b0;
+    s_ld2_led_pulse <= 6'b101010;
+    s_ld3_dir_pulse <= 1'b0;
+    s_ld3_led_pulse <= 6'b111111;
+
+  end else if (s_tester_led_ce) begin
+
+    // Rotate up and down a pulse value to be used for LD0
+    if (s_ld0_dir_pulse)
+      if (s_ld0_led_pulse == 6'b111111)
+        s_ld0_dir_pulse <= 1'b0;
+      else
+        s_ld0_led_pulse <= s_ld0_led_pulse + 1;
+    else
+      if (s_ld0_led_pulse == 6'b000001)
+        s_ld0_dir_pulse <= 1'b1;
+      else
+        s_ld0_led_pulse <= s_ld0_led_pulse - 1;
+    // Rotate up and down a pulse value to be used for LD1
+    if (s_ld1_dir_pulse)
+      if (s_ld1_led_pulse == 6'b111111)
+        s_ld1_dir_pulse <= 1'b0;
+      else
+        s_ld1_led_pulse <= s_ld1_led_pulse + 1;
+    else
+      if (s_ld1_led_pulse == 6'b000001)
+        s_ld1_dir_pulse <= 1'b1;
+      else
+        s_ld1_led_pulse <= s_ld1_led_pulse - 1;
+    // Rotate up and down a pulse value to be used for LD2
+    if (s_ld2_dir_pulse)
+      if (s_ld2_led_pulse == 6'b111111)
+        s_ld2_dir_pulse <= 1'b0;
+      else
+        s_ld2_led_pulse <= s_ld2_led_pulse + 1;
+    else
+      if (s_ld2_led_pulse == 6'b000001)
+        s_ld2_dir_pulse <= 1'b1;
+      else
+        s_ld2_led_pulse <= s_ld2_led_pulse - 1;
+    // Rotate up and down a pulse value to be used for LD3
+    if (s_ld3_dir_pulse)
+      if (s_ld3_led_pulse == 6'b111111)
+        s_ld3_dir_pulse <= 1'b0;
+      else
+        s_ld3_led_pulse <= s_ld3_led_pulse + 1;
+    else
+      if (s_ld3_led_pulse == 6'b000001)
+        s_ld3_dir_pulse <= 1'b1;
+      else
+        s_ld3_led_pulse <= s_ld3_led_pulse - 1;
+
+  end
+end
+
+always @(posedge s_clk_20mhz)
+begin: p_tester_led_display
 	if (s_active_init_display) begin
 		/* LED 0 will be red when tester is initializing. */
-		s_ld0_red_value <= 8'hFF;
-		s_ld0_green_value <= 8'h00;
-		s_ld0_blue_value <= 8'h00;
+		s_ld0_red_pulse   <= s_ld0_led_pulse;
+    s_ld0_green_pulse <= 6'b000001;
+    s_ld0_blue_pulse  <= 6'b000001;
 	end else if (s_active_run_display) begin
 		/* LED 0 will be green when tester is running. */
-		s_ld0_red_value <= 8'h00;
-		s_ld0_green_value <= 8'hFF;
-		s_ld0_blue_value <= 8'h00;
+		s_ld0_red_pulse   <= 6'b000001;
+    s_ld0_green_pulse <= s_ld0_led_pulse;
+    s_ld0_blue_pulse  <= 6'b000001;
 	end else begin
 		/* LED 0 will be blue when tester is not working at all. */
-		s_ld0_red_value <= 8'h00;
-		s_ld0_green_value <= 8'h00;
-		s_ld0_blue_value <= 8'hFF;
+    s_ld0_red_pulse   <= 6'b000001;
+    s_ld0_green_pulse <= 6'b000001;
+    s_ld0_blue_pulse  <= s_ld0_led_pulse;
 	end
 
 	/* LED 1 will be red when tester is not working at all. */
 	/* LED 1 will be white when tester is measuring continuously. */
 	/* LED 1 will be purple when tester is only detecting motion toggle. */
 	if (s_mode_is_measur_aux) begin
-    s_ld1_red_value <= 8'h80;
-		s_ld1_green_value <= 8'h80;
-		s_ld1_blue_value <= 8'h80;
+    s_ld1_red_pulse   <= s_ld1_led_pulse;
+    s_ld1_green_pulse <= s_ld1_led_pulse;
+    s_ld1_blue_pulse  <= s_ld1_led_pulse;
 	end else if (s_mode_is_linked_aux) begin
-    s_ld1_red_value <= 8'hB0;
-		s_ld1_green_value <= 8'h00;
-		s_ld1_blue_value <= 8'hB0;
+    s_ld1_red_pulse   <= s_ld1_led_pulse;
+    s_ld1_green_pulse <= 6'b000001;
+    s_ld1_blue_pulse  <= s_ld1_led_pulse;
 	end else begin
-    s_ld1_red_value <= 8'hFF;
-		s_ld1_green_value <= 8'h00;
-		s_ld1_blue_value <= 8'h00;
+    s_ld1_red_pulse   <= s_ld1_led_pulse;
+    s_ld1_green_pulse <= 6'b000001;
+    s_ld1_blue_pulse  <= 6'b000001;
 	end
 
 	/* LED 2 is Red when no Activity detect, Green when Activity detect. */
 	if (s_acl2_reg_status_activity_stretched) begin
-	   s_ld2_red_value <= 8'h00;
-	   s_ld2_green_value <= 8'hFF;
-	   s_ld2_blue_value <= 8'h00;
+    s_ld2_red_pulse   <= 6'b000001;
+    s_ld2_green_pulse <= 6'b111111;
+    s_ld2_blue_pulse  <= 6'b000001;
 	end else begin
-	   s_ld2_red_value <= 8'hFF;
-	   s_ld2_green_value <= 8'h00;
-	   s_ld2_blue_value <= 8'h00;
+    s_ld2_red_pulse   <= s_ld2_led_pulse;
+    s_ld2_green_pulse <= {4'b0000, s_ld2_led_pulse[1-:2]};
+    s_ld2_blue_pulse  <= 6'b000000;
 	end
 
 	/* LED 3 is Red when no Inactivity detect, Green when Inactivity detect. */
 	if (s_acl2_reg_status_inactivity_stretched) begin
-	   s_ld3_red_value <= 8'h00;
-	   s_ld3_green_value <= 8'hFF;
-	   s_ld3_blue_value <= 8'h00;
+    s_ld3_red_pulse   <= 6'b000001;
+    s_ld3_green_pulse <= 6'b111111;
+    s_ld3_blue_pulse  <= 6'b000001;
 	end else begin
-	   s_ld3_red_value <= 8'hFF;
-	   s_ld3_green_value <= 8'h00;
-	   s_ld3_blue_value <= 8'h00;
+    s_ld3_red_pulse   <= s_ld3_led_pulse;
+    s_ld3_green_pulse <= {4'b0000, s_ld3_led_pulse[1-:2]};
+    s_ld3_blue_pulse  <= 6'b000000;
 	end
 
 	/* LED4 is AWAKE status from the status register. */
