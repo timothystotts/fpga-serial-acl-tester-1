@@ -353,26 +353,29 @@ architecture fsm_rtl of fpga_serial_acl_tester is
 	signal s_ld6_basic_value : std_logic_vector(7 downto 0);
 	signal s_ld7_basic_value : std_logic_vector(7 downto 0);
 
-	signal s_ld0_red_pulse   : unsigned(3 downto 0);
-	signal s_ld0_green_pulse : unsigned(3 downto 0);
-	signal s_ld0_blue_pulse  : unsigned(3 downto 0);
+	signal s_ld0_red_pulse   : unsigned(5 downto 0);
+	signal s_ld0_green_pulse : unsigned(5 downto 0);
+	signal s_ld0_blue_pulse  : unsigned(5 downto 0);
 	signal s_ld0_dir_pulse   : std_logic;
-	signal s_ld0_led_pulse   : unsigned(3 downto 0);
+	signal s_ld0_led_pulse   : unsigned(5 downto 0);
 
-	signal s_ld1_red_pulse   : unsigned(3 downto 0);
-	signal s_ld1_green_pulse : unsigned(3 downto 0);
-	signal s_ld1_blue_pulse  : unsigned(3 downto 0);
-	signal s_ld1_led_pulse   : unsigned(3 downto 0);
+	signal s_ld1_red_pulse   : unsigned(5 downto 0);
+	signal s_ld1_green_pulse : unsigned(5 downto 0);
+	signal s_ld1_blue_pulse  : unsigned(5 downto 0);
+	signal s_ld1_dir_pulse   : std_logic;
+	signal s_ld1_led_pulse   : unsigned(5 downto 0);
 
-	signal s_ld2_red_pulse   : unsigned(3 downto 0);
-	signal s_ld2_green_pulse : unsigned(3 downto 0);
-	signal s_ld2_blue_pulse  : unsigned(3 downto 0);
-	signal s_ld2_led_pulse   : unsigned(3 downto 0);
+	signal s_ld2_red_pulse   : unsigned(5 downto 0);
+	signal s_ld2_green_pulse : unsigned(5 downto 0);
+	signal s_ld2_blue_pulse  : unsigned(5 downto 0);
+	signal s_ld2_dir_pulse   : std_logic;
+	signal s_ld2_led_pulse   : unsigned(5 downto 0);
 
-	signal s_ld3_red_pulse   : unsigned(3 downto 0);
-	signal s_ld3_green_pulse : unsigned(3 downto 0);
-	signal s_ld3_blue_pulse  : unsigned(3 downto 0);
-	signal s_ld3_led_pulse   : unsigned(3 downto 0);
+	signal s_ld3_red_pulse   : unsigned(5 downto 0);
+	signal s_ld3_green_pulse : unsigned(5 downto 0);
+	signal s_ld3_blue_pulse  : unsigned(5 downto 0);
+	signal s_ld3_dir_pulse   : std_logic;
+	signal s_ld3_led_pulse   : unsigned(5 downto 0);
 begin
 
 	s_clk_pwrdwn  <= '0';
@@ -796,10 +799,10 @@ begin
 			i_x   => s_acl2_reg_status(5));
 
 	-- A clock enable divider for the process \ref p_tester_fsm_display .
-	-- Divides the 20 MHz clock down to 16 enables per two seconds.
+	-- Divides the 20 MHz clock down to 128 enables per 1.5 seconds.
 	clock_enable_divider_2 : entity work.clock_enable_divider
 		generic map (
-			par_ce_divisor => c_FCLK / 8
+			par_ce_divisor => c_FCLK / 85
 		)
 		port map (
 			o_ce_div  => s_tester_led_ce,
@@ -813,105 +816,150 @@ begin
 	-- the status register Activity and Inactivity. Also displayed on LED 4
 	-- is the AWAKE state of the PMOD ACL2; and on LED 6,7 the Switch 0
 	-- and Switch 1 debounced positions.
-	s_ld0_red_value   <= std_logic_vector(s_ld0_red_pulse) & x"0";
-	s_ld0_green_value <= std_logic_vector(s_ld0_green_pulse) & x"0";
-	s_ld0_blue_value  <= std_logic_vector(s_ld0_blue_pulse) & x"0";
+	s_ld0_red_value   <= std_logic_vector(s_ld0_red_pulse) & "11";
+	s_ld0_green_value <= std_logic_vector(s_ld0_green_pulse) & "11";
+	s_ld0_blue_value  <= std_logic_vector(s_ld0_blue_pulse) & "11";
 
-	s_ld1_red_value <= '0' & std_logic_vector(s_ld1_red_pulse) & "000";
-	s_ld1_green_value <= '0' & std_logic_vector(s_ld1_green_pulse) & "000";
-	s_ld1_blue_value <= '0' & std_logic_vector(s_ld1_blue_pulse) & "000";
+	s_ld1_red_value   <= "0" & std_logic_vector(s_ld1_red_pulse) & "1";
+	s_ld1_green_value <= "0" & std_logic_vector(s_ld1_green_pulse) & "1";
+	s_ld1_blue_value  <= "0" & std_logic_vector(s_ld1_blue_pulse) & "1";
 
-	s_ld2_red_value   <= std_logic_vector(s_ld2_red_pulse) & x"0";
-	s_ld2_green_value <= std_logic_vector(s_ld2_green_pulse) & x"0";
-	s_ld2_blue_value  <= std_logic_vector(s_ld2_blue_pulse) & x"0";
+	s_ld2_red_value   <= std_logic_vector(s_ld2_red_pulse) & "11";
+	s_ld2_green_value <= std_logic_vector(s_ld2_green_pulse) & "11";
+	s_ld2_blue_value  <= std_logic_vector(s_ld2_blue_pulse) & "11";
 
-	s_ld3_red_value   <= std_logic_vector(s_ld3_red_pulse) & x"0";
-	s_ld3_green_value <= std_logic_vector(s_ld3_green_pulse) & x"0";
-	s_ld3_blue_value  <= std_logic_vector(s_ld3_blue_pulse) & x"0";
+	s_ld3_red_value   <= std_logic_vector(s_ld3_red_pulse) & "11";
+	s_ld3_green_value <= std_logic_vector(s_ld3_green_pulse) & "11";
+	s_ld3_blue_value  <= std_logic_vector(s_ld3_blue_pulse) & "11";
 
 	p_tester_fsm_display : process(s_clk_20mhz)
 	begin
 		if rising_edge(s_clk_20mhz) then
 			if (s_rst_20mhz = '1') then
 				s_ld0_dir_pulse <= '0';
-				s_ld0_led_pulse <= x"7";
+				s_ld0_led_pulse <= "000001";
+				s_ld1_dir_pulse <= '0';
+				s_ld1_led_pulse <= "010101";
+				s_ld2_dir_pulse <= '0';
+				s_ld2_led_pulse <= "101010";
+				s_ld3_dir_pulse <= '0';
+				s_ld3_led_pulse <= "111111";
 
 			elsif (s_tester_led_ce = '1') then
+
+				-- Rotate up and down a pulse value to be used for LD0
 				if (s_ld0_dir_pulse = '1') then
-					if (s_ld0_led_pulse = x"F") then
+					if (s_ld0_led_pulse = "111111") then
 						s_ld0_dir_pulse <= '0';
 					else
 						s_ld0_led_pulse <= s_ld0_led_pulse + 1;
 					end if;
 				else
-					if (s_ld0_led_pulse = x"7") then
+					if (s_ld0_led_pulse = "000001") then
 						s_ld0_dir_pulse <= '1';
 					else
 						s_ld0_led_pulse <= s_ld0_led_pulse - 1;
 					end if;
 				end if;
+				-- Rotate up and down a pulse value to be used for LD1
+				if (s_ld1_dir_pulse = '1') then
+					if (s_ld1_led_pulse = "111111") then
+						s_ld1_dir_pulse <= '0';
+					else
+						s_ld1_led_pulse <= s_ld1_led_pulse + 1;
+					end if;
+				else
+					if (s_ld1_led_pulse = "000001") then
+						s_ld1_dir_pulse <= '1';
+					else
+						s_ld1_led_pulse <= s_ld1_led_pulse - 1;
+					end if;
+				end if;
+				-- Rotate up and down a pulse value to be used for LD2
+				if (s_ld2_dir_pulse = '1') then
+					if (s_ld2_led_pulse = "111111") then
+						s_ld2_dir_pulse <= '0';
+					else
+						s_ld2_led_pulse <= s_ld2_led_pulse + 1;
+					end if;
+				else
+					if (s_ld2_led_pulse = "000001") then
+						s_ld2_dir_pulse <= '1';
+					else
+						s_ld2_led_pulse <= s_ld2_led_pulse - 1;
+					end if;
+				end if;
+				-- Rotate up and down a pulse value to be used for LD3
+				if (s_ld3_dir_pulse = '1') then
+					if (s_ld3_led_pulse = "111111") then
+						s_ld3_dir_pulse <= '0';
+					else
+						s_ld3_led_pulse <= s_ld3_led_pulse + 1;
+					end if;
+				else
+					if (s_ld3_led_pulse = "000001") then
+						s_ld3_dir_pulse <= '1';
+					else
+						s_ld3_led_pulse <= s_ld3_led_pulse - 1;
+					end if;
+				end if;
+
 			end if;
 
 			if (s_active_init_display = '1') then
 				-- LED 0 will be red when tester is initializing.
 				s_ld0_red_pulse   <= s_ld0_led_pulse;
-				s_ld0_green_pulse <= x"0";
-				s_ld0_blue_pulse  <= x"0";
+				s_ld0_green_pulse <= "000001";
+				s_ld0_blue_pulse  <= "000001";
 			elsif (s_active_run_display = '1') then
 				-- LED 0 will be green when tester is running.
-				s_ld0_red_pulse   <= x"0";
+				s_ld0_red_pulse   <= "000001";
 				s_ld0_green_pulse <= s_ld0_led_pulse;
-				s_ld0_blue_pulse  <= x"0";
+				s_ld0_blue_pulse  <= "000001";
 			else
 				-- LED 0 will be blue when tester is not working at all.
-				s_ld0_red_pulse   <= x"0";
-				s_ld0_green_pulse <= x"0";
+				s_ld0_red_pulse   <= "000001";
+				s_ld0_green_pulse <= "000001";
 				s_ld0_blue_pulse  <= s_ld0_led_pulse;
 			end if;
 
 			-- LED 1 will be red when tester is not working at all.
 			-- LED 1 will be white when tester is measuring continuously.
 			-- LED 1 will be purple when tester is only detecting motion toggle.
-			s_ld1_led_pulse <= s_ld0_led_pulse;
-
 			if (s_mode_is_measur_aux = '1') then
 				s_ld1_red_pulse   <= s_ld1_led_pulse;
 				s_ld1_green_pulse <= s_ld1_led_pulse;
 				s_ld1_blue_pulse  <= s_ld1_led_pulse;
 			elsif (s_mode_is_linked_aux = '1') then
 				s_ld1_red_pulse   <= s_ld1_led_pulse;
-				s_ld1_green_pulse <= x"0";
+				s_ld1_green_pulse <= "000001";
 				s_ld1_blue_pulse  <= s_ld1_led_pulse;
 			else
 				s_ld1_red_pulse   <= s_ld1_led_pulse;
-				s_ld1_green_pulse <= x"0";
-				s_ld1_blue_pulse  <= x"0";
+				s_ld1_green_pulse <= "000001";
+				s_ld1_blue_pulse  <= "000001";
 			end if;
 
 			-- LED 2 is Red when no Activity detect, Green when Activity detect.
-			s_ld2_led_pulse <= s_ld0_led_pulse;
-
 			if (s_acl2_reg_status_activity_stretched = '1') then
-				s_ld2_red_pulse   <= x"0";
-				s_ld2_green_pulse <= x"F";
-				s_ld2_blue_pulse  <= x"0";
+				s_ld2_red_pulse   <= "000001";
+				s_ld2_green_pulse <= "111111";
+				s_ld2_blue_pulse  <= "000001";
 			else
 				s_ld2_red_pulse   <= s_ld2_led_pulse;
-				s_ld2_green_pulse <= x"0";
-				s_ld2_blue_pulse  <= x"0";
+				s_ld2_green_pulse <= "0000" & s_ld2_led_pulse(1 downto 0);
+				s_ld2_blue_pulse  <= "000000";
 			end if;
 
 			-- LED 3 is Red when no Inactivity detect, Green when Inactivity detect.
-			s_ld3_led_pulse <= s_ld0_led_pulse;
-
 			if (s_acl2_reg_status_inactivity_stretched = '1') then
-				s_ld3_red_pulse   <= x"0";
-				s_ld3_green_pulse <= x"F";
-				s_ld3_blue_pulse  <= x"0";
+				s_ld3_red_pulse   <= "000001";
+				s_ld3_green_pulse <= "111111";
+				s_ld3_blue_pulse  <= "000001";
 			else
 				s_ld3_red_pulse   <= s_ld3_led_pulse;
-				s_ld3_green_pulse <= x"0";
-				s_ld3_blue_pulse  <= x"0";
+				s_ld3_green_pulse <= "0000" & s_ld3_led_pulse(1 downto 0);
+				s_ld3_blue_pulse  <= "000000";
 			end if;
 
 			-- LED4 is AWAKE status from the status register
