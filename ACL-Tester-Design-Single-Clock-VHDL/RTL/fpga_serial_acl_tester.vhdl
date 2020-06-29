@@ -208,23 +208,6 @@ architecture fsm_rtl of fpga_serial_acl_tester is
 	signal s_cls_txt_ascii_line1  : std_logic_vector((16*8-1) downto 0);
 	signal s_cls_txt_ascii_line2  : std_logic_vector((16*8-1) downto 0);
 
-	-- UART TX update FSM state declarations
-	type t_uarttx_feed_state is (ST_UARTFEED_IDLE, ST_UARTFEED_DATA, ST_UARTFEED_WAIT);
-
-	signal s_uartfeed_pr_state : t_uarttx_feed_state;
-	signal s_uartfeed_nx_state : t_uarttx_feed_state;
-
-	constant c_uart_k_preset : natural := 34;
-
-	-- UART TX signals for UART TX update FSM
-	signal s_uart_dat_ascii_line : std_logic_vector((34*8-1) downto 0);
-	signal s_uart_tx_go          : std_logic;
-	signal s_uart_txdata         : std_logic_vector(7 downto 0);
-	signal s_uart_txvalid        : std_logic;
-	signal s_uart_txready        : std_logic;
-	signal s_uart_k_val          : natural range 0 to 63;
-	signal s_uart_k_aux          : natural range 0 to 63;
-
 	-- Signals for inferring tri-state buffer for CLS SPI bus outputs.
 	signal so_pmod_cls_sck_o  : std_logic;
 	signal so_pmod_cls_sck_t  : std_logic;
@@ -343,6 +326,13 @@ architecture fsm_rtl of fpga_serial_acl_tester is
 	signal s_color_led_green_value : t_led_color_values(3 downto 0);
 	signal s_color_led_blue_value  : t_led_color_values(3 downto 0);
 	signal s_basic_led_lumin_value : t_led_color_values(3 downto 0);
+
+	-- UART TX signals to connect \ref uart_tx_only and \ref uart_tx_feed .
+	signal s_uart_dat_ascii_line : std_logic_vector((34*8-1) downto 0);
+	signal s_uart_tx_go          : std_logic;
+	signal s_uart_txdata         : std_logic_vector(7 downto 0);
+	signal s_uart_txvalid        : std_logic;
+	signal s_uart_txready        : std_logic;
 begin
 
 	s_clk_pwrdwn  <= '0';
@@ -963,9 +953,6 @@ begin
 			x"54" & s_char_temp_m3 & s_char_temp_m2 &
 			s_char_temp_m1 & s_char_temp_m0 & x"20" & x"20" & x"20");
 
-	-- Assembly of UART text line.
-	s_uart_dat_ascii_line <= (s_cls_dat_ascii_line1 & s_cls_dat_ascii_line2 & x"0D" & x"0A");
-
 	-- Timer (strategy #1) for timing the PMOD CLS display update
 	p_fsm_timer_run_display_update : process(s_clk_20mhz)
 	begin
@@ -1079,6 +1066,8 @@ begin
 
 	-- TX ONLY UART function to print the two lines of the PMOD CLS output as a
 	-- single line on the dumb terminal, at the same rate as the PMOD CLS updates.
+		-- Assembly of UART text line.
+	s_uart_dat_ascii_line <= (s_cls_dat_ascii_line1 & s_cls_dat_ascii_line2 & x"0D" & x"0A");
 	s_uart_tx_go <= s_cls_wr_clear_display;
 
 	u_uart_tx_only : entity work.uart_tx_only(moore_fsm_recursive)
@@ -1096,73 +1085,16 @@ begin
 			o_tx_ready    => s_uart_txready
 		);
 
-	-- UART TX machine, the 34 bytes of \ref s_uart_dat_ascii_line
-	-- are feed into the UART TX ONLY FIFO upon every pulse of the
-	-- \ref s_uart_tx_go signal. The UART TX ONLY FIFO machine will
-	-- automatically dequeue any bytes present in the queue and quickly
-	-- transmit them, one-at-a-time at the \ref parm_BAUD baudrate.
-
-	-- UART TX machine, synchronous state and auxiliary counting register.
-	p_uartfeed_fsm_state_aux : process(s_clk_20mhz)
-	begin
-		if rising_edge(s_clk_20mhz) then
-			if (s_rst_20mhz = '1') then
-				s_uartfeed_pr_state <= ST_UARTFEED_IDLE;
-				s_uart_k_aux        <= 0;
-			else
-				s_uartfeed_pr_state <= s_uartfeed_nx_state;
-				s_uart_k_aux        <= s_uart_k_val;
-			end if;
-		end if;
-	end process p_uartfeed_fsm_state_aux;
-
-	-- UART TX machine, combinatorial next state and auxiliary counting register.
-	p_uartfeed_fsm_nx_out : process(s_uartfeed_pr_state, s_uart_k_aux,
-			s_uart_tx_go, s_uart_dat_ascii_line, s_uart_txready)
-	begin
-		case (s_uartfeed_pr_state) is
-			when ST_UARTFEED_DATA =>
-				-- Enqueue the \ref c_uart_k_preset count of bytes from signal
-				-- \ref s_uart_dat_ascii_line. Then transition to the WAIT state.
-				s_uart_txdata  <= s_uart_dat_ascii_line(((8 * s_uart_k_aux) - 1) downto (8 * (s_uart_k_aux - 1)));
-				s_uart_txvalid <= '1';
-				s_uart_k_val   <= s_uart_k_aux - 1;
-
-				if (s_uart_k_aux <= 1) then
-					s_uartfeed_nx_state <= ST_UARTFEED_WAIT;
-				else
-					s_uartfeed_nx_state <= ST_UARTFEED_DATA;
-				end if;
-
-			when ST_UARTFEED_WAIT =>
-				-- Wait for the \ref s_uart_tx_go pulse to be idle, and then
-				-- transition to the IDLE state.
-				s_uart_txdata  <= x"00";
-				s_uart_txvalid <= '0';
-				s_uart_k_val   <= s_uart_k_aux;
-
-				if (s_uart_tx_go = '0') then
-					s_uartfeed_nx_state <= ST_UARTFEED_IDLE;
-				else
-					s_uartfeed_nx_state <= ST_UARTFEED_WAIT;
-				end if;
-
-			when others => -- ST_UARTFEED_IDLE
-				           -- IDLE the FSM while waiting for a pulse on s_uart_tx_go.
-				           -- The value of \ref s_uart_txready is also checked as to
-				           -- not overflow the UART TX buffer. If both signals are a
-				           -- TRUE value, then transition to enqueueing data.
-				s_uart_txdata  <= x"00";
-				s_uart_txvalid <= '0';
-				s_uart_k_val   <= c_uart_k_preset;
-
-				if ((s_uart_tx_go = '1') and (s_uart_txready = '1')) then
-					s_uartfeed_nx_state <= ST_UARTFEED_DATA;
-				else
-					s_uartfeed_nx_state <= ST_UARTFEED_IDLE;
-				end if;
-		end case;
-	end process p_uartfeed_fsm_nx_out;
+	u_uart_tx_feed : entity work.uart_tx_feed(rtl)
+		port map(
+			i_clk_20mhz      => s_clk_20mhz,
+			i_rst_20mhz      => s_rst_20mhz,
+			o_tx_data        => s_uart_txdata,
+			o_tx_valid       => s_uart_txvalid,
+			i_tx_ready       => s_uart_txready,
+			i_tx_go          => s_uart_tx_go,
+			i_dat_ascii_line => s_uart_dat_ascii_line
+		);
 
 end architecture fsm_rtl;
 --------------------------------------------------------------------------------

@@ -59,25 +59,6 @@ end entity uart_tx_only;
 
 --------------------------------------------------------------------------------
 architecture moore_fsm_recursive of uart_tx_only is
-	COMPONENT fifo_generator_2
-		PORT (
-			rst           : IN  STD_LOGIC;
-			wr_clk        : IN  STD_LOGIC;
-			rd_clk        : IN  STD_LOGIC;
-			din           : IN  STD_LOGIC_VECTOR(7 DOWNTO 0);
-			wr_en         : IN  STD_LOGIC;
-			rd_en         : IN  STD_LOGIC;
-			dout          : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-			full          : OUT STD_LOGIC;
-			empty         : OUT STD_LOGIC;
-			valid         : OUT STD_LOGIC;
-			rd_data_count : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-			wr_data_count : OUT STD_LOGIC_VECTOR(7 DOWNTO 0);
-			wr_rst_busy   : OUT STD_LOGIC;
-			rd_rst_busy   : OUT STD_LOGIC
-		);
-	END COMPONENT;
-
 	-- State machine states.
 	type t_uarttxonly_fsm_state is (ST_IDLE, ST_START, ST_DATA, ST_STOP);
 
