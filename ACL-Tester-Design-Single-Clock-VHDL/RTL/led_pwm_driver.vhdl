@@ -37,8 +37,7 @@ package led_pwm_driver_pkg is
 	subtype t_led_pwm_period is unsigned(31 downto 0);
 	type t_led_pwms_period is array(natural range <>) of t_led_pwm_period;
 
-	subtype t_led_color_value is std_logic_vector(7 downto 0);
-	type t_led_color_values is array(natural range <>) of t_led_color_value;
+	type t_led_color_values is array(natural range <>) of std_logic_vector(7 downto 0);
 end package led_pwm_driver_pkg;
 --------------------------------------------------------------------------------
 
