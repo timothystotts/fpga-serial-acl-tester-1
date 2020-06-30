@@ -151,7 +151,7 @@ architecture fsm_rtl of fpga_serial_acl_tester is
 	signal s_hex_3axis_temp_measurements_final    : std_logic_vector(63 downto 0);
 	signal s_hex_3axis_temp_measurements_valid    : std_logic;
 	signal s_hex_3axis_temp_measurements_display  : std_logic_vector(63 downto 0);
-	signal s_reading_inactive : std_logic;
+	signal s_reading_inactive                     : std_logic;
 
 	-- Tester FSM general outputs that translate to LED color display.
 	signal s_active_init_display : std_logic;
@@ -167,29 +167,7 @@ architecture fsm_rtl of fpga_serial_acl_tester is
 
 	-- switch inputs debounced
 	signal si_buttons : std_logic_vector(3 downto 0);
-	signal s_btn_deb    : std_logic_vector(3 downto 0);
-
-	-- Display update FSM state declarations
-	type t_cls_update_state is (ST_CLS_IDLE, ST_CLS_CLEAR, ST_CLS_LINE1, ST_CLS_LINE2);
-
-	signal s_cls_upd_pr_state : t_cls_update_state;
-	signal s_cls_upd_nx_state : t_cls_update_state;
-
-	-- Timer steps for the continuous refresh of the PMOD CLS display:
-	-- Wait 0.2 seconds
-	-- Clear Display
-	-- Wait 1.0 milliseconds
-	-- Write Line 1
-	-- Wait 1.0 milliseconds
-	-- Write Line 2
-	-- Repeat the above.
-	constant c_i_subsecond_fast : natural := (2500000 / 100 - 1);
-	constant c_i_subsecond      : natural := (2500000 / 5 - 1);
-	constant c_i_one_ms         : natural := 2500 - 1;
-	constant c_i_step           : natural := 4 - 1;
-	constant c_i_max            : natural := c_i_subsecond;
-
-	signal s_i : natural range 0 to c_i_max;
+	signal s_btn_deb  : std_logic_vector(3 downto 0);
 
 	-- Signals for controlling the PMOD CLS custom driver.
 	signal s_cls_command_ready    : std_logic;
@@ -198,12 +176,13 @@ architecture fsm_rtl of fpga_serial_acl_tester is
 	signal s_cls_wr_text_line2    : std_logic;
 	signal s_cls_txt_ascii_line1  : std_logic_vector((16*8-1) downto 0);
 	signal s_cls_txt_ascii_line2  : std_logic_vector((16*8-1) downto 0);
+	signal s_cls_feed_is_idle     : std_logic;
 
 	-- Signals for text and data ASCII lines
-	signal s_adxl_dat_ascii_line1  : std_logic_vector((16*8-1) downto 0);
-	signal s_adxl_dat_ascii_line2  : std_logic_vector((16*8-1) downto 0);
-	signal s_adxl_txt_ascii_line1  : std_logic_vector((16*8-1) downto 0);
-	signal s_adxl_txt_ascii_line2  : std_logic_vector((16*8-1) downto 0);
+	signal s_adxl_dat_ascii_line1 : std_logic_vector((16*8-1) downto 0);
+	signal s_adxl_dat_ascii_line2 : std_logic_vector((16*8-1) downto 0);
+	signal s_adxl_txt_ascii_line1 : std_logic_vector((16*8-1) downto 0);
+	signal s_adxl_txt_ascii_line2 : std_logic_vector((16*8-1) downto 0);
 
 	-- Signals for inferring tri-state buffer for CLS SPI bus outputs.
 	signal so_pmod_cls_sck_o  : std_logic;
@@ -483,7 +462,7 @@ begin
 			if (s_rst_20mhz = '1') then
 				s_hex_3axis_temp_measurements_display <= (others => '0');
 			else
-				if ((s_hex_3axis_temp_measurements_valid = '1') and (s_cls_upd_pr_state = ST_CLS_IDLE)) then
+				if ((s_hex_3axis_temp_measurements_valid = '1') and (s_cls_feed_is_idle = '1')) then
 
 					s_hex_3axis_temp_measurements_display <= s_hex_3axis_temp_measurements_final;
 				end if;
@@ -728,9 +707,25 @@ begin
 		);
 
 	s_cls_txt_ascii_line1 <= s_adxl_txt_ascii_line1 when s_btn_deb(3) = '0' else
-							 s_adxl_dat_ascii_line1;
+		s_adxl_dat_ascii_line1;
 	s_cls_txt_ascii_line2 <= s_adxl_txt_ascii_line2 when s_btn_deb(3) = '0' else
-							 s_adxl_dat_ascii_line2;
+		s_adxl_dat_ascii_line2;
+
+	-- LCD Update FSM
+	u_lcd_text_feed : entity work.lcd_text_feed(rtl)
+		generic map (
+			parm_fast_simulation => parm_fast_simulation
+		)
+		port map (
+			i_clk_20mhz            => s_clk_20mhz,
+			i_rst_20mhz            => s_rst_20mhz,
+			i_ce_2_5mhz            => s_ce_2_5mhz,
+			i_lcd_command_ready    => s_cls_command_ready,
+			o_lcd_wr_clear_display => s_cls_wr_clear_display,
+			o_lcd_wr_text_line1    => s_cls_wr_text_line1,
+			o_lcd_wr_text_line2    => s_cls_wr_text_line2,
+			o_lcd_feed_is_idle     => s_cls_feed_is_idle
+		);
 
 	-- Measurement Readings to ASCII conversion
 	s_reading_inactive <= '1' when (s_tester_pr_state = ST_0) else '0';
@@ -745,123 +740,12 @@ begin
 			o_txt_ascii_line2  => s_adxl_txt_ascii_line2
 		);
 
-	-- Timer (strategy #1) for timing the PMOD CLS display update
-	p_fsm_timer_run_display_update : process(s_clk_20mhz)
-	begin
-		if rising_edge(s_clk_20mhz) then
-			if (s_rst_20mhz = '1') then
-				s_i <= 0;
-			elsif (s_ce_2_5mhz = '1') then
-				if (s_cls_upd_pr_state /= s_cls_upd_nx_state) then
-					s_i <= 0;
-				elsif (s_i /= c_i_max) then
-					s_i <= s_i + 1;
-				end if;
-			end if;
-		end if;
-	end process p_fsm_timer_run_display_update;
-
-	-- FSM state transition for timing the PMOD CLS display udpate
-	p_fsm_state_run_display_update : process(s_clk_20mhz)
-	begin
-		if rising_edge(s_clk_20mhz) then
-			if (s_rst_20mhz = '1') then
-				s_cls_upd_pr_state <= ST_CLS_IDLE;
-			elsif (s_ce_2_5mhz = '1') then
-				s_cls_upd_pr_state <= s_cls_upd_nx_state;
-			end if;
-		end if;
-	end process p_fsm_state_run_display_update;
-
-	-- FSM combinatorial logic for timing the PMOD CLS display udpate
-	p_fsm_comb_run_display_update : process(s_cls_upd_pr_state,
-			s_cls_command_ready, s_i)
-	begin
-		case (s_cls_upd_pr_state) is
-			when ST_CLS_CLEAR => -- Step CLEAR: clear the display
-				                 -- and then pause until display ready and
-				                 -- minimum of \ref c_i_one_ms time delay.
-				if (s_i <= c_i_step) then
-					s_cls_wr_clear_display <= '1';
-				else
-					s_cls_wr_clear_display <= '0';
-				end if;
-
-				s_cls_wr_text_line1 <= '0';
-				s_cls_wr_text_line2 <= '0';
-
-				if ((s_i >= c_i_one_ms) and (s_cls_command_ready = '1')) then
-					s_cls_upd_nx_state <= ST_CLS_LINE1;
-				else
-					s_cls_upd_nx_state <= ST_CLS_CLEAR;
-				end if;
-
-			when ST_CLS_LINE1 => -- Step LINE1: write the top line of the LCD
-				                 -- and then pause until display ready and
-				                 -- minimum of \ref c_i_one_ms time delay.
-				s_cls_wr_clear_display <= '0';
-
-				if (s_i <= c_i_step) then
-					s_cls_wr_text_line1 <= '1';
-				else
-					s_cls_wr_text_line1 <= '0';
-				end if;
-
-				s_cls_wr_text_line2 <= '0';
-
-				if ((s_i >= c_i_one_ms) and (s_cls_command_ready = '1')) then
-					s_cls_upd_nx_state <= ST_CLS_LINE2;
-				else
-					s_cls_upd_nx_state <= ST_CLS_LINE1;
-				end if;
-
-			when ST_CLS_LINE2 => -- Step LINE2: write the bottom line of the LCD
-				                 -- and then pause until display ready and
-				                 -- minimum of \ref c_i_one_ms time delay.
-				s_cls_wr_clear_display <= '0';
-				s_cls_wr_text_line1    <= '0';
-
-				if (s_i <= c_i_step) then
-					s_cls_wr_text_line2 <= '1';
-				else
-					s_cls_wr_text_line2 <= '0';
-				end if;
-
-				if ((s_i >= c_i_one_ms) and (s_cls_command_ready = '1')) then
-					s_cls_upd_nx_state <= ST_CLS_IDLE;
-				else
-					s_cls_upd_nx_state <= ST_CLS_LINE2;
-				end if;
-
-			when others => -- ST_CLS_IDLE
-				           -- Step IDLE, wait until display ready to write again
-				           -- and minimum of \ref c_i_subsecond time has elapsed.
-				s_cls_wr_clear_display <= '0';
-				s_cls_wr_text_line1    <= '0';
-				s_cls_wr_text_line2    <= '0';
-
-				if (parm_fast_simulation = 0) then
-					if ((s_i >= c_i_subsecond) and (s_cls_command_ready = '1')) then
-						s_cls_upd_nx_state <= ST_CLS_CLEAR;
-					else
-						s_cls_upd_nx_state <= ST_CLS_IDLE;
-					end if;
-				else
-					if ((s_i >= c_i_subsecond_fast) and (s_cls_command_ready = '1')) then
-						s_cls_upd_nx_state <= ST_CLS_CLEAR;
-					else
-						s_cls_upd_nx_state <= ST_CLS_IDLE;
-					end if;
-				end if;
-		end case;
-	end process p_fsm_comb_run_display_update;
-
 	-- TX ONLY UART function to print the two lines of the PMOD CLS output as a
 	-- single line on the dumb terminal, at the same rate as the PMOD CLS updates.
-		-- Assembly of UART text line.
+	-- Assembly of UART text line.
 	s_uart_dat_ascii_line <= (s_adxl_dat_ascii_line1 & s_adxl_dat_ascii_line2 & x"0D" & x"0A")
-							 when s_btn_deb(2) = '0' else
-							 (s_adxl_txt_ascii_line1 & s_adxl_txt_ascii_line2 & x"0D" & x"0A");
+	when s_btn_deb(2) = '0' else
+		(s_adxl_txt_ascii_line1 & s_adxl_txt_ascii_line2 & x"0D" & x"0A");
 
 	s_uart_tx_go <= s_cls_wr_clear_display;
 
