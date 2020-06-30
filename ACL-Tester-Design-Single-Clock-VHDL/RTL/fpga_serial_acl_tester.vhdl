@@ -83,6 +83,11 @@ entity fpga_serial_acl_tester is
 		ei_sw1 : in std_logic;
 		ei_sw2 : in std_logic;
 		ei_sw3 : in std_logic;
+		-- four switches
+		ei_btn0 : in std_logic;
+		ei_btn1 : in std_logic;
+		ei_btn2 : in std_logic;
+		ei_btn3 : in std_logic;
 		-- PMOD CLS SPI bus 4-wire
 		eo_pmod_cls_ssn : out std_logic;
 		eo_pmod_cls_sck : out std_logic;
@@ -160,6 +165,10 @@ architecture fsm_rtl of fpga_serial_acl_tester is
 	signal si_switches : std_logic_vector(3 downto 0);
 	signal s_sw_deb    : std_logic_vector(3 downto 0);
 
+	-- switch inputs debounced
+	signal si_buttons : std_logic_vector(3 downto 0);
+	signal s_btn_deb    : std_logic_vector(3 downto 0);
+
 	-- Display update FSM state declarations
 	type t_cls_update_state is (ST_CLS_IDLE, ST_CLS_CLEAR, ST_CLS_LINE1, ST_CLS_LINE2);
 
@@ -187,10 +196,14 @@ architecture fsm_rtl of fpga_serial_acl_tester is
 	signal s_cls_wr_clear_display : std_logic;
 	signal s_cls_wr_text_line1    : std_logic;
 	signal s_cls_wr_text_line2    : std_logic;
-	signal s_cls_dat_ascii_line1  : std_logic_vector((16*8-1) downto 0);
-	signal s_cls_dat_ascii_line2  : std_logic_vector((16*8-1) downto 0);
 	signal s_cls_txt_ascii_line1  : std_logic_vector((16*8-1) downto 0);
 	signal s_cls_txt_ascii_line2  : std_logic_vector((16*8-1) downto 0);
+
+	-- Signals for text and data ASCII lines
+	signal s_adxl_dat_ascii_line1  : std_logic_vector((16*8-1) downto 0);
+	signal s_adxl_dat_ascii_line2  : std_logic_vector((16*8-1) downto 0);
+	signal s_adxl_txt_ascii_line1  : std_logic_vector((16*8-1) downto 0);
+	signal s_adxl_txt_ascii_line2  : std_logic_vector((16*8-1) downto 0);
 
 	-- Signals for inferring tri-state buffer for CLS SPI bus outputs.
 	signal so_pmod_cls_sck_o  : std_logic;
@@ -345,6 +358,22 @@ begin
 			i_rst_mhz  => s_rst_20mhz,
 			ei_buttons => si_switches,
 			o_btns_deb => s_sw_deb
+		);
+
+	-- Synchronize and debounce the four input buttons on the Arty A7 to be
+	-- debounced and exclusive of each other (ignored if more than one
+	-- selected at the same time).
+	si_buttons <= ei_btn3 & ei_btn2 & ei_btn1 & ei_btn0;
+
+	u_buttons_deb_0123 : entity work.multi_input_debounce(moore_fsm)
+		generic map(
+			FCLK => c_FCLK
+		)
+		port map(
+			i_clk_mhz  => s_clk_20mhz,
+			i_rst_mhz  => s_rst_20mhz,
+			ei_buttons => si_buttons,
+			o_btns_deb => s_btn_deb
 		);
 
 	-- LED PWM driver for color-mixed LED driving with variable intensity.
@@ -698,17 +727,22 @@ begin
 			i_dat_ascii_line2      => s_cls_txt_ascii_line2
 		);
 
+	s_cls_txt_ascii_line1 <= s_adxl_txt_ascii_line1 when s_btn_deb(3) = '0' else
+							 s_adxl_dat_ascii_line1;
+	s_cls_txt_ascii_line2 <= s_adxl_txt_ascii_line2 when s_btn_deb(3) = '0' else
+							 s_adxl_dat_ascii_line2;
+
 	-- Measurement Readings to ASCII conversion
 	s_reading_inactive <= '1' when (s_tester_pr_state = ST_0) else '0';
-	
+
 	u_adxl362_readings_to_ascii : entity work.adxl362_readings_to_ascii
 		port map (
 			i_3axis_temp       => s_hex_3axis_temp_measurements_display,
 			i_reading_inactive => s_reading_inactive,
-			o_dat_ascii_line1  => s_cls_dat_ascii_line1,
-			o_dat_ascii_line2  => s_cls_dat_ascii_line2,
-			o_txt_ascii_line1  => s_cls_txt_ascii_line1,
-			o_txt_ascii_line2  => s_cls_txt_ascii_line2
+			o_dat_ascii_line1  => s_adxl_dat_ascii_line1,
+			o_dat_ascii_line2  => s_adxl_dat_ascii_line2,
+			o_txt_ascii_line1  => s_adxl_txt_ascii_line1,
+			o_txt_ascii_line2  => s_adxl_txt_ascii_line2
 		);
 
 	-- Timer (strategy #1) for timing the PMOD CLS display update
@@ -825,7 +859,10 @@ begin
 	-- TX ONLY UART function to print the two lines of the PMOD CLS output as a
 	-- single line on the dumb terminal, at the same rate as the PMOD CLS updates.
 		-- Assembly of UART text line.
-	s_uart_dat_ascii_line <= (s_cls_dat_ascii_line1 & s_cls_dat_ascii_line2 & x"0D" & x"0A");
+	s_uart_dat_ascii_line <= (s_adxl_dat_ascii_line1 & s_adxl_dat_ascii_line2 & x"0D" & x"0A")
+							 when s_btn_deb(2) = '0' else
+							 (s_adxl_txt_ascii_line1 & s_adxl_txt_ascii_line2 & x"0D" & x"0A");
+
 	s_uart_tx_go <= s_cls_wr_clear_display;
 
 	u_uart_tx_only : entity work.uart_tx_only(moore_fsm_recursive)
