@@ -101,23 +101,6 @@ architecture fsm_rtl of fpga_serial_acl_tester is
 	-- Main clock frequency in Hz
 	constant c_FCLK : natural := 20_000_000;
 
-	-- A re-entrant function that converts a 4-bit vector to an 8-bit ASCII
-	-- hexadecimal character.
-	function ascii_of_hdigit(bchex_val : std_logic_vector(3 downto 0))
-		return std_logic_vector is
-		variable v_bchex_nibble : unsigned(bchex_val'range);
-		variable v_ascii_byte   : std_logic_vector(7 downto 0);
-	begin
-		v_bchex_nibble := unsigned(bchex_val);
-		if (v_bchex_nibble < 10) then
-			v_ascii_byte := std_logic_vector(unsigned'(x"30") + (unsigned'(x"0") & unsigned(bchex_val)));
-		else
-			v_ascii_byte := std_logic_vector(unsigned'(x"37") + (unsigned'(x"0") & unsigned(bchex_val)));
-		end if;
-
-		return v_ascii_byte;
-	end function ascii_of_hdigit;
-
 	-- Tester FSM state declarations
 	type t_tester_state is (ST_0, ST_1, ST_2, ST_3, ST_4, ST_5, ST_6, ST_7,
 			ST_8, ST_9, ST_A, ST_B);
@@ -163,6 +146,7 @@ architecture fsm_rtl of fpga_serial_acl_tester is
 	signal s_hex_3axis_temp_measurements_final    : std_logic_vector(63 downto 0);
 	signal s_hex_3axis_temp_measurements_valid    : std_logic;
 	signal s_hex_3axis_temp_measurements_display  : std_logic_vector(63 downto 0);
+	signal s_reading_inactive : std_logic;
 
 	-- Tester FSM general outputs that translate to LED color display.
 	signal s_active_init_display : std_logic;
@@ -215,95 +199,6 @@ architecture fsm_rtl of fpga_serial_acl_tester is
 	signal so_pmod_cls_ssn_t  : std_logic;
 	signal so_pmod_cls_mosi_o : std_logic;
 	signal so_pmod_cls_mosi_t : std_logic;
-
-	-- Signals for reparse of the eight PMOD ACL2 measurement reading bytes
-	signal s_hex_xaxis_msb : std_logic_vector(7 downto 0);
-	signal s_hex_xaxis_lsb : std_logic_vector(7 downto 0);
-	signal s_hex_xaxis_16  : std_logic_vector(15 downto 0);
-	signal s_hex_yaxis_msb : std_logic_vector(7 downto 0);
-	signal s_hex_yaxis_lsb : std_logic_vector(7 downto 0);
-	signal s_hex_yaxis_16  : std_logic_vector(15 downto 0);
-	signal s_hex_zaxis_msb : std_logic_vector(7 downto 0);
-	signal s_hex_zaxis_lsb : std_logic_vector(7 downto 0);
-	signal s_hex_zaxis_16  : std_logic_vector(15 downto 0);
-	signal s_hex_temp_msb  : std_logic_vector(7 downto 0);
-	signal s_hex_temp_lsb  : std_logic_vector(7 downto 0);
-	signal s_hex_temp_16   : std_logic_vector(15 downto 0);
-
-	-- Signals for reparse of the eight PMOD ACL2 measurement reading bytes
-	constant c_signed_zero : signed(15 downto 0) := signed'(x"0000");
-	signal s_txt_xaxis_s16 : signed(15 downto 0);
-	signal s_txt_yaxis_s16 : signed(15 downto 0);
-	signal s_txt_zaxis_s16 : signed(15 downto 0);
-	signal s_txt_temp_s16  : signed(15 downto 0);
-	signal s_txt_xaxis_u16 : unsigned(15 downto 0);
-	signal s_txt_yaxis_u16 : unsigned(15 downto 0);
-	signal s_txt_zaxis_u16 : unsigned(15 downto 0);
-	signal s_txt_temp_u16  : unsigned(15 downto 0);
-
-	-- Signals for Hex to ASCII reparse of the sixteen digits of the eight
-	-- PMOD ACL2 measurement reading bytes
-	signal s_char_xaxis_msb_3 : std_logic_vector(7 downto 0);
-	signal s_char_xaxis_msb_2 : std_logic_vector(7 downto 0);
-	signal s_char_xaxis_lsb_1 : std_logic_vector(7 downto 0);
-	signal s_char_xaxis_lsb_0 : std_logic_vector(7 downto 0);
-	signal s_char_yaxis_msb_3 : std_logic_vector(7 downto 0);
-	signal s_char_yaxis_msb_2 : std_logic_vector(7 downto 0);
-	signal s_char_yaxis_lsb_1 : std_logic_vector(7 downto 0);
-	signal s_char_yaxis_lsb_0 : std_logic_vector(7 downto 0);
-	signal s_char_zaxis_msb_3 : std_logic_vector(7 downto 0);
-	signal s_char_zaxis_msb_2 : std_logic_vector(7 downto 0);
-	signal s_char_zaxis_lsb_1 : std_logic_vector(7 downto 0);
-	signal s_char_zaxis_lsb_0 : std_logic_vector(7 downto 0);
-	signal s_char_temp_msb_3  : std_logic_vector(7 downto 0);
-	signal s_char_temp_msb_2  : std_logic_vector(7 downto 0);
-	signal s_char_temp_lsb_1  : std_logic_vector(7 downto 0);
-	signal s_char_temp_lsb_0  : std_logic_vector(7 downto 0);
-
-	-- Signals for Decimal to ASCII reparse of the sixteen digits of the eight
-	-- PMOD ACL2 measurement reading bytes
-	signal s_dat_xaxis_m0 : std_logic_vector(15 downto 0);
-	signal s_dat_xaxis_f0 : std_logic_vector(15 downto 0);
-	signal s_dat_xaxis_f1 : std_logic_vector(15 downto 0);
-	signal s_dat_xaxis_f2 : std_logic_vector(15 downto 0);
-
-	signal s_char_xaxis_sg : std_logic_vector(7 downto 0);
-	signal s_char_xaxis_m0 : std_logic_vector(7 downto 0);
-	signal s_char_xaxis_f0 : std_logic_vector(7 downto 0);
-	signal s_char_xaxis_f1 : std_logic_vector(7 downto 0);
-	signal s_char_xaxis_f2 : std_logic_vector(7 downto 0);
-
-	signal s_dat_yaxis_m0 : std_logic_vector(15 downto 0);
-	signal s_dat_yaxis_f0 : std_logic_vector(15 downto 0);
-	signal s_dat_yaxis_f1 : std_logic_vector(15 downto 0);
-	signal s_dat_yaxis_f2 : std_logic_vector(15 downto 0);
-
-	signal s_char_yaxis_sg : std_logic_vector(7 downto 0);
-	signal s_char_yaxis_m0 : std_logic_vector(7 downto 0);
-	signal s_char_yaxis_f0 : std_logic_vector(7 downto 0);
-	signal s_char_yaxis_f1 : std_logic_vector(7 downto 0);
-	signal s_char_yaxis_f2 : std_logic_vector(7 downto 0);
-
-	signal s_dat_zaxis_m0 : std_logic_vector(15 downto 0);
-	signal s_dat_zaxis_f0 : std_logic_vector(15 downto 0);
-	signal s_dat_zaxis_f1 : std_logic_vector(15 downto 0);
-	signal s_dat_zaxis_f2 : std_logic_vector(15 downto 0);
-
-	signal s_char_zaxis_sg : std_logic_vector(7 downto 0);
-	signal s_char_zaxis_m0 : std_logic_vector(7 downto 0);
-	signal s_char_zaxis_f0 : std_logic_vector(7 downto 0);
-	signal s_char_zaxis_f1 : std_logic_vector(7 downto 0);
-	signal s_char_zaxis_f2 : std_logic_vector(7 downto 0);
-
-	signal s_dat_temp_m3 : std_logic_vector(15 downto 0);
-	signal s_dat_temp_m2 : std_logic_vector(15 downto 0);
-	signal s_dat_temp_m1 : std_logic_vector(15 downto 0);
-	signal s_dat_temp_m0 : std_logic_vector(15 downto 0);
-
-	signal s_char_temp_m3 : std_logic_vector(7 downto 0);
-	signal s_char_temp_m2 : std_logic_vector(7 downto 0);
-	signal s_char_temp_m1 : std_logic_vector(7 downto 0);
-	signal s_char_temp_m0 : std_logic_vector(7 downto 0);
 
 	-- Extra MMCM signals for full port map to the MMCM primative, where
 	-- these signals will remain disconnected.
@@ -803,155 +698,18 @@ begin
 			i_dat_ascii_line2      => s_cls_txt_ascii_line2
 		);
 
-	-- Parse out the hexadecimal reading of mg force and temperature from the
-	-- PMOD ACL2 data register readings. This partsing is done to display the
-	-- measurement readings at a slower refresh rate on the PMOD CLS.
-	s_hex_xaxis_lsb <= s_hex_3axis_temp_measurements_display((8*8-1) downto (7*8));
-	s_hex_xaxis_msb <= s_hex_3axis_temp_measurements_display((7*8-1) downto (6*8));
-	s_hex_yaxis_lsb <= s_hex_3axis_temp_measurements_display((6*8-1) downto (5*8));
-	s_hex_yaxis_msb <= s_hex_3axis_temp_measurements_display((5*8-1) downto (4*8));
-	s_hex_zaxis_lsb <= s_hex_3axis_temp_measurements_display((4*8-1) downto (3*8));
-	s_hex_zaxis_msb <= s_hex_3axis_temp_measurements_display((3*8-1) downto (2*8));
-	s_hex_temp_lsb  <= s_hex_3axis_temp_measurements_display((2*8-1) downto (1*8));
-	s_hex_temp_msb  <= s_hex_3axis_temp_measurements_display((1*8-1) downto 0);
-
-	s_hex_xaxis_16  <= std_logic_vector(s_hex_xaxis_msb) & std_logic_vector(s_hex_xaxis_lsb);
-	s_txt_xaxis_s16 <= signed(s_hex_xaxis_16);
-	s_hex_yaxis_16  <= s_hex_yaxis_msb & s_hex_yaxis_lsb;
-	s_txt_yaxis_s16 <= signed(s_hex_yaxis_16);
-	s_hex_zaxis_16  <= s_hex_zaxis_msb & s_hex_zaxis_lsb;
-	s_txt_zaxis_s16 <= signed(s_hex_zaxis_16);
-	s_hex_temp_16   <= s_hex_temp_msb & s_hex_temp_lsb;
-	s_txt_temp_s16  <= signed(s_hex_temp_16);
-
-	s_txt_xaxis_u16 <= unsigned(c_signed_zero - s_txt_xaxis_s16) when (s_txt_xaxis_s16(15) = '1') else unsigned(s_txt_xaxis_s16);
-	s_txt_yaxis_u16 <= unsigned(c_signed_zero - s_txt_yaxis_s16) when (s_txt_yaxis_s16(15) = '1') else unsigned(s_txt_yaxis_s16);
-	s_txt_zaxis_u16 <= unsigned(c_signed_zero - s_txt_zaxis_s16) when (s_txt_zaxis_s16(15) = '1') else unsigned(s_txt_zaxis_s16);
-	s_txt_temp_u16  <= unsigned(c_signed_zero - s_txt_temp_s16)  when (s_txt_temp_s16(15) = '1') else unsigned(s_txt_temp_s16);
-
-	-- ASCII parse-out of the X-Axis measurement reading.
-	s_char_xaxis_msb_3 <= ascii_of_hdigit(s_hex_xaxis_msb(7 downto 4));
-	s_char_xaxis_msb_2 <= ascii_of_hdigit(s_hex_xaxis_msb(3 downto 0));
-	s_char_xaxis_lsb_1 <= ascii_of_hdigit(s_hex_xaxis_lsb(7 downto 4));
-	s_char_xaxis_lsb_0 <= ascii_of_hdigit(s_hex_xaxis_lsb(3 downto 0));
-
-	s_dat_xaxis_m0 <= std_logic_vector((s_txt_xaxis_u16 / 1000) mod 10);
-	s_dat_xaxis_f0 <= std_logic_vector((s_txt_xaxis_u16 / 100) mod 10);
-	s_dat_xaxis_f1 <= std_logic_vector((s_txt_xaxis_u16 / 10) mod 10);
-	s_dat_xaxis_f2 <= std_logic_vector(s_txt_xaxis_u16 mod 10);
-
-	s_char_xaxis_sg <= x"2D" when (s_txt_xaxis_s16(15) = '1') else x"20";
-	s_char_xaxis_m0 <= ascii_of_hdigit(s_dat_xaxis_m0(3 downto 0));
-	s_char_xaxis_f0 <= ascii_of_hdigit(s_dat_xaxis_f0(3 downto 0));
-	s_char_xaxis_f1 <= ascii_of_hdigit(s_dat_xaxis_f1(3 downto 0));
-	s_char_xaxis_f2 <= ascii_of_hdigit(s_dat_xaxis_f2(3 downto 0));
-
-	-- ASCII parse-out of the Y-Axis measurement reading.
-	s_char_yaxis_msb_3 <= ascii_of_hdigit(s_hex_yaxis_msb(7 downto 4));
-	s_char_yaxis_msb_2 <= ascii_of_hdigit(s_hex_yaxis_msb(3 downto 0));
-	s_char_yaxis_lsb_1 <= ascii_of_hdigit(s_hex_yaxis_lsb(7 downto 4));
-	s_char_yaxis_lsb_0 <= ascii_of_hdigit(s_hex_yaxis_lsb(3 downto 0));
-
-	s_dat_yaxis_m0 <= std_logic_vector((s_txt_yaxis_u16 / 1000) mod 10);
-	s_dat_yaxis_f0 <= std_logic_vector((s_txt_yaxis_u16 / 100) mod 10);
-	s_dat_yaxis_f1 <= std_logic_vector((s_txt_yaxis_u16 / 10) mod 10);
-	s_dat_yaxis_f2 <= std_logic_vector(s_txt_yaxis_u16 mod 10);
-
-	s_char_yaxis_sg <= x"2D" when (s_txt_yaxis_s16(15) = '1') else x"20";
-	s_char_yaxis_m0 <= ascii_of_hdigit(s_dat_yaxis_m0(3 downto 0));
-	s_char_yaxis_f0 <= ascii_of_hdigit(s_dat_yaxis_f0(3 downto 0));
-	s_char_yaxis_f1 <= ascii_of_hdigit(s_dat_yaxis_f1(3 downto 0));
-	s_char_yaxis_f2 <= ascii_of_hdigit(s_dat_yaxis_f2(3 downto 0));
-
-	-- ASCII parse-out of the Z-Axis measurement reading.
-	s_char_zaxis_msb_3 <= ascii_of_hdigit(s_hex_zaxis_msb(7 downto 4));
-	s_char_zaxis_msb_2 <= ascii_of_hdigit(s_hex_zaxis_msb(3 downto 0));
-	s_char_zaxis_lsb_1 <= ascii_of_hdigit(s_hex_zaxis_lsb(7 downto 4));
-	s_char_zaxis_lsb_0 <= ascii_of_hdigit(s_hex_zaxis_lsb(3 downto 0));
-
-	s_dat_zaxis_m0 <= std_logic_vector((s_txt_zaxis_u16 / 1000) mod 10);
-	s_dat_zaxis_f0 <= std_logic_vector((s_txt_zaxis_u16 / 100) mod 10);
-	s_dat_zaxis_f1 <= std_logic_vector((s_txt_zaxis_u16 / 10) mod 10);
-	s_dat_zaxis_f2 <= std_logic_vector(s_txt_zaxis_u16 mod 10);
-
-	s_char_zaxis_sg <= x"2D" when (s_txt_zaxis_s16(15) = '1') else x"20";
-	s_char_zaxis_m0 <= ascii_of_hdigit(s_dat_zaxis_m0(3 downto 0));
-	s_char_zaxis_f0 <= ascii_of_hdigit(s_dat_zaxis_f0(3 downto 0));
-	s_char_zaxis_f1 <= ascii_of_hdigit(s_dat_zaxis_f1(3 downto 0));
-	s_char_zaxis_f2 <= ascii_of_hdigit(s_dat_zaxis_f2(3 downto 0));
-
-	-- ASCII parse-out of the Compensating Temperature measurement reading.
-	s_char_temp_msb_3 <= ascii_of_hdigit(s_hex_temp_msb(7 downto 4));
-	s_char_temp_msb_2 <= ascii_of_hdigit(s_hex_temp_msb(3 downto 0));
-	s_char_temp_lsb_1 <= ascii_of_hdigit(s_hex_temp_lsb(7 downto 4));
-	s_char_temp_lsb_0 <= ascii_of_hdigit(s_hex_temp_lsb(3 downto 0));
-
-	s_dat_temp_m3 <= std_logic_vector((s_txt_temp_u16 / 1000) mod 10);
-	s_dat_temp_m2 <= std_logic_vector((s_txt_temp_u16 / 100) mod 10);
-	s_dat_temp_m1 <= std_logic_vector((s_txt_temp_u16 / 10) mod 10);
-	s_dat_temp_m0 <= std_logic_vector(s_txt_temp_u16 mod 10);
-
-	s_char_temp_m3 <= ascii_of_hdigit(s_dat_temp_m3(3 downto 0));
-	s_char_temp_m2 <= ascii_of_hdigit(s_dat_temp_m2(3 downto 0));
-	s_char_temp_m1 <= ascii_of_hdigit(s_dat_temp_m1(3 downto 0));
-	s_char_temp_m0 <= ascii_of_hdigit(s_dat_temp_m0(3 downto 0));
-
-	-- Assemblly of ASCII Line 1 to display on the PMOD CLS and UART TX.
-	-- ASCII Line:  "X:____  Y:____  " or "X:0123  Y:ABCD  "
-	s_cls_dat_ascii_line1 <= (x"58" & x"3A" &
-			x"5F" & x"5F" & x"5F" & x"5F" &
-			x"20" & x"20" & x"59" & x"3A" &
-			x"5F" & x"5F" & x"5F" & x"5F" &
-			x"20" & x"20")
-	when (s_tester_pr_state = ST_0) else
-		(x"58" & x"3A" & s_char_xaxis_msb_3 &
-			s_char_xaxis_msb_2 & s_char_xaxis_lsb_1 &
-			s_char_xaxis_lsb_0 & x"20" & x"20" &
-			x"59" & x"3A" & s_char_yaxis_msb_3 &
-			s_char_yaxis_msb_2 & s_char_yaxis_lsb_1 &
-			s_char_yaxis_lsb_0 & x"20" & x"20");
-
-	-- ASCII line: "X______ Y______ " or "X-0.123 Y 0.345 "
-	s_cls_txt_ascii_line1 <= (x"58" & x"5F" &
-			x"5F" & x"5F" & x"5F" & x"5F" &
-			x"5F" & x"20" & x"59" & x"5F" &
-			x"5F" & x"5F" & x"5F" & x"5F" &
-			x"5F" & x"20")
-	when (s_tester_pr_state = ST_0) else
-		(x"58" & s_char_xaxis_sg &
-			s_char_xaxis_m0 & x"2E" & s_char_xaxis_f0 &
-			s_char_xaxis_f1 & s_char_xaxis_f2 & x"20" &
-			x"59" & s_char_yaxis_sg &
-			s_char_yaxis_m0 & x"2E" & s_char_yaxis_f0 &
-			s_char_yaxis_f1 & s_char_yaxis_f2 & x"20");
-
-	-- Assemblly of ASCII Line 2 to display on the PMOD CLS.
-	-- ASCII Line:  "Z:____  T:____  " or "Z:0123  T:ABCD  "
-	s_cls_dat_ascii_line2 <= (x"5A" & x"3A" &
-			x"5F" & x"5F" & x"5F" & x"5F" &
-			x"20" & x"20" & x"54" & x"3A" &
-			x"5F" & x"5F" & x"5F" & x"5F" &
-			x"20" & x"20")
-	when (s_tester_pr_state = ST_0) else
-		(x"5A" & x"3A" & s_char_zaxis_msb_3 &
-			s_char_zaxis_msb_2 & s_char_zaxis_lsb_1 &
-			s_char_zaxis_lsb_0 & x"20" & x"20" &
-			x"54" & x"3A" & s_char_temp_msb_3 &
-			s_char_temp_msb_2 & s_char_temp_lsb_1 &
-			s_char_temp_lsb_0 & x"20" & x"20");
-
-	-- ASCII line: "Z______ T______ " or "Z 1.123 T5201   "
-	s_cls_txt_ascii_line2 <= (x"5A" & x"5F" &
-			x"5F" & x"5F" & x"5F" & x"5F" &
-			x"5F" & x"20" & x"54" & x"5F" &
-			x"5F" & x"5F" & x"5F" & x"5F" &
-			x"20" & x"20")
-	when (s_tester_pr_state = ST_0) else
-		(x"5A" & s_char_zaxis_sg &
-			s_char_zaxis_m0 & x"2E" & s_char_zaxis_f0 &
-			s_char_zaxis_f1 & s_char_zaxis_f2 & x"20" &
-			x"54" & s_char_temp_m3 & s_char_temp_m2 &
-			s_char_temp_m1 & s_char_temp_m0 & x"20" & x"20" & x"20");
+	-- Measurement Readings to ASCII conversion
+	s_reading_inactive <= '1' when (s_tester_pr_state = ST_0) else '0';
+	
+	u_adxl362_readings_to_ascii : entity work.adxl362_readings_to_ascii
+		port map (
+			i_3axis_temp       => s_hex_3axis_temp_measurements_display,
+			i_reading_inactive => s_reading_inactive,
+			o_dat_ascii_line1  => s_cls_dat_ascii_line1,
+			o_dat_ascii_line2  => s_cls_dat_ascii_line2,
+			o_txt_ascii_line1  => s_cls_txt_ascii_line1,
+			o_txt_ascii_line2  => s_cls_txt_ascii_line2
+		);
 
 	-- Timer (strategy #1) for timing the PMOD CLS display update
 	p_fsm_timer_run_display_update : process(s_clk_20mhz)
