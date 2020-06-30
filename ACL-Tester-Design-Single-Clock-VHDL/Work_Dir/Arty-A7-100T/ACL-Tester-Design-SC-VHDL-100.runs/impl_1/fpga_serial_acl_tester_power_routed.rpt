@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
-| Date             : Tue Jun 30 14:22:03 2020
+| Date             : Tue Jun 30 15:35:56 2020
 | Host             : ubuntu running 64-bit Ubuntu 18.04.4 LTS
 | Command          : report_power -file fpga_serial_acl_tester_power_routed.rpt -pb fpga_serial_acl_tester_power_summary_routed.pb -rpx fpga_serial_acl_tester_power_routed.rpx
 | Design           : fpga_serial_acl_tester
@@ -53,13 +53,13 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |     0.002 |       12 |       --- |             --- |
-| Slice Logic    |    <0.001 |     6083 |       --- |             --- |
-|   LUT as Logic |    <0.001 |     3144 |     63400 |            4.96 |
+| Slice Logic    |     0.001 |     6455 |       --- |             --- |
+|   LUT as Logic |    <0.001 |     3210 |     63400 |            5.06 |
 |   CARRY4       |    <0.001 |      408 |     15850 |            2.57 |
-|   Register     |    <0.001 |     1645 |    126800 |            1.30 |
-|   F7/F8 Muxes  |    <0.001 |       23 |     63400 |            0.04 |
-|   Others       |     0.000 |       58 |       --- |             --- |
-| Signals        |    <0.001 |     4595 |       --- |             --- |
+|   Register     |    <0.001 |     2093 |    126800 |            1.65 |
+|   F7/F8 Muxes  |    <0.001 |       20 |     63400 |            0.03 |
+|   Others       |     0.000 |       60 |       --- |             --- |
+| Signals        |    <0.001 |     4761 |       --- |             --- |
 | Block RAM      |    <0.001 |        2 |       135 |            1.48 |
 | MMCM           |     0.102 |        1 |         6 |           16.67 |
 | DSPs           |     0.001 |       16 |       240 |            6.67 |
@@ -75,7 +75,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) |
 +-----------+-------------+-----------+-------------+------------+
-| Vccint    |       0.950 |     0.015 |       0.005 |      0.009 |
+| Vccint    |       0.950 |     0.015 |       0.006 |      0.009 |
 | Vccaux    |       1.800 |     0.073 |       0.057 |      0.016 |
 | Vcco33    |       3.300 |     0.004 |       0.000 |      0.004 |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |
