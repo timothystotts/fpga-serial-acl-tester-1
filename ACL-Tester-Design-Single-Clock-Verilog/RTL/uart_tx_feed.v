@@ -95,7 +95,7 @@ begin: p_uartfeed_fsm_nx_out
 			o_tx_data = s_uart_line_aux[((8*s_uart_k_aux)-1)-:8];
 			o_tx_valid = 1'b1;
 			s_uart_k_val = s_uart_k_aux - 1;
-			s_uart_line_val <= s_uart_line_aux;
+			s_uart_line_val = s_uart_line_aux;
 
 			if (s_uart_k_aux <= 1)
 				s_uartfeed_nx_state = ST_UARTFEED_WAIT;
