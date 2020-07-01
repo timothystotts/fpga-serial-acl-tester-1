@@ -394,7 +394,7 @@ reg [5:0] s_ld3_led_pulse;
 /* UART TX signals to connect \ref uart_tx_only and \ref uart_tx_feed */
 reg [(34*8-1):0] s_uart_dat_ascii_line;
 wire s_uart_tx_go;
-wire s_uart_txdata;
+wire [7:0] s_uart_txdata;
 wire s_uart_txvalid;
 wire s_uart_txready;
 
@@ -1253,7 +1253,7 @@ end
 
 /* Select the text to display on the UART Terminal based om whether button 2
    is or is not depressed. */
-always @(s_clk_20mhz)
+always @(posedge s_clk_20mhz)
 begin: p_reg_uart_line
   if (s_btn_deb == 4'b0100)
     s_uart_dat_ascii_line <= {s_cls_txt_ascii_line1, s_cls_txt_ascii_line2,
