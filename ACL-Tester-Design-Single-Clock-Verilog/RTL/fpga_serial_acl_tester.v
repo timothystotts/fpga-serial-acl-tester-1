@@ -392,7 +392,7 @@ reg s_ld3_dir_pulse;
 reg [5:0] s_ld3_led_pulse;
 
 /* UART TX signals to connect \ref uart_tx_only and \ref uart_tx_feed */
-wire [(34*8-1):0] s_uart_dat_ascii_line;
+reg [(34*8-1):0] s_uart_dat_ascii_line;
 wire s_uart_tx_go;
 wire s_uart_txdata;
 wire s_uart_txvalid;
@@ -509,7 +509,7 @@ multi_input_debounce #(.FCLK(c_FCLK)
 // Synchronize and debounce the four input buttons on the Arty A7 to be
 // debounced and exclusive of each other (ignored if more than one
 // selected at the same time).
-assign si_buttons = {ei_btn3, ei_bttn2, ei_btn1, ei_btn0};
+assign si_buttons = {ei_btn3, ei_btn2, ei_btn1, ei_btn0};
 
 multi_input_debounce #(.FCLK(c_FCLK)
   ) u_buttons_deb_0123 (
@@ -1259,7 +1259,7 @@ begin: p_reg_uart_line
     s_uart_dat_ascii_line <= {s_cls_txt_ascii_line1, s_cls_txt_ascii_line2,
                 8'h0D, 8'h0A};
   else
-    s_uart_dat_ascii_line = {s_cls_dat_ascii_line1, s_cls_dat_ascii_line2,
+    s_uart_dat_ascii_line <= {s_cls_dat_ascii_line1, s_cls_dat_ascii_line2,
                 8'h0D, 8'h0A};
 end
 
@@ -1279,8 +1279,8 @@ u_uart_tx_only (
 	);
 
 uart_tx_feed #() u_uart_tx_feed (
-  .i_clk_20mhz(i_clk_20mhz),
-  .i_rst_20mhz(i_rst_20mhz),
+  .i_clk_20mhz(s_clk_20mhz),
+  .i_rst_20mhz(s_rst_20mhz),
   .o_tx_data(s_uart_txdata),
   .o_tx_valid(s_uart_txvalid),
   .i_tx_ready(s_uart_txready),
