@@ -50,6 +50,8 @@ module fpga_serial_acl_tester (
 	eo_led4, eo_led5, eo_led6, eo_led7,
 	/* four switches */
 	ei_sw0, ei_sw1, ei_sw2, ei_sw3,
+  /* four buttons */
+  ei_btn0, ei_btn1, ei_btn2, ei_btn3,
 	/* PMOD CLS SPI bus 4-wire */
 	eo_pmod_cls_ssn, eo_pmod_cls_sck, eo_pmod_cls_dq0,
 	ei_pmod_cls_dq1,
@@ -94,6 +96,11 @@ input wire ei_sw0;
 input wire ei_sw1;
 input wire ei_sw2;
 input wire ei_sw3;
+
+input wire ei_btn0;
+input wire ei_btn1;
+input wire ei_btn2;
+input wire ei_btn3;
 
 output wire eo_pmod_cls_ssn;
 output wire eo_pmod_cls_sck;
@@ -185,6 +192,10 @@ reg s_mode_is_linked_aux;
 wire [3:0] si_switches;
 wire [3:0] s_sw_deb;
 
+/* switch inputs debounced */
+wire [3:0] si_buttons;
+wire [3:0] s_btn_deb;
+
 /* Connections and variables for instance of the PMOD CLS SPI SOLO driver. */
 `define c_cls_update_fsm_bits 2
 localparam [(`c_cls_update_fsm_bits - 1):0] ST_CLS_IDLE = 0;
@@ -226,26 +237,6 @@ wire [(16*8-1):0] s_cls_dat_ascii_line1;
 wire [(16*8-1):0] s_cls_dat_ascii_line2;
 wire [(16*8-1):0] s_cls_txt_ascii_line1;
 wire [(16*8-1):0] s_cls_txt_ascii_line2;
-
-/* UART TX update FSM state declarations */
-`define c_uarttx_feed_fsm_bits 2
-localparam [(`c_uarttx_feed_fsm_bits - 1):0] ST_UARTFEED_IDLE = 0;
-localparam [(`c_uarttx_feed_fsm_bits - 1):0] ST_UARTFEED_DATA = 1;
-localparam [(`c_uarttx_feed_fsm_bits - 1):0] ST_UARTFEED_WAIT = 2;
-
-reg [(`c_uarttx_feed_fsm_bits - 1):0] s_uartfeed_pr_state;
-reg [(`c_uarttx_feed_fsm_bits - 1):0] s_uartfeed_nx_state;
-
-localparam [5:0] c_uart_k_preset = 34;
-
-/* UART TX signals for UART TX update FSM */
-wire [(34*8-1):0] s_uart_dat_ascii_line;
-wire s_uart_tx_go;
-reg [7:0] s_uart_txdata;
-reg s_uart_txvalid;
-wire s_uart_txready;
-reg [5:0] s_uart_k_val;
-reg [5:0] s_uart_k_aux;
 
 /* Connections for inferring tri-state buffer for CLS SPI bus outputs. */
 wire so_pmod_cls_sck_o;
@@ -400,6 +391,13 @@ reg [5:0] s_ld3_blue_pulse;
 reg s_ld3_dir_pulse;
 reg [5:0] s_ld3_led_pulse;
 
+/* UART TX signals to connect \ref uart_tx_only and \ref uart_tx_feed */
+wire [(34*8-1):0] s_uart_dat_ascii_line;
+wire s_uart_tx_go;
+wire s_uart_txdata;
+wire s_uart_txvalid;
+wire s_uart_txready;
+
 //Part 3: Statements------------------------------------------------------------
 assign s_clk_pwrdwn = 1'b0;
 assign s_clk_resetin = (~i_resetn);
@@ -506,6 +504,19 @@ multi_input_debounce #(.FCLK(c_FCLK)
     .i_rst_mhz(s_rst_20mhz),
     .ei_buttons(si_switches),
     .o_btns_deb(s_sw_deb)
+    );
+
+// Synchronize and debounce the four input buttons on the Arty A7 to be
+// debounced and exclusive of each other (ignored if more than one
+// selected at the same time).
+assign si_buttons = {ei_btn3, ei_bttn2, ei_btn1, ei_btn0};
+
+multi_input_debounce #(.FCLK(c_FCLK)
+  ) u_buttons_deb_0123 (
+    .i_clk_mhz(s_clk_20mhz),
+    .i_rst_mhz(s_rst_20mhz),
+    .ei_buttons(si_buttons),
+    .o_btns_deb(s_btn_deb)
     );
 
 /* LED PWM driver for color-mixed LED driving with variable intensity. */
@@ -1156,11 +1167,6 @@ assign s_cls_txt_ascii_line2 = (s_tester_pr_state == ST_0)
 								s_char_temp_m1, s_char_temp_m0, 8'h20, 8'h20, 8'h20}
 								;
 
-/* Assembly of UART text line. */
-assign s_uart_dat_ascii_line = {s_cls_dat_ascii_line1,
-								s_cls_dat_ascii_line2,
-								8'h0D, 8'h0A};
-
 /* Timer (strategy #1) for timing the PMOD CLS display update */
 always @(posedge s_clk_20mhz)
 begin: p_fsm_timer_run_display_update
@@ -1243,6 +1249,20 @@ end
 
 /* TX ONLY UART function to print the two lines of the PMOD CLS output as a
    single line on the dumb terminal, at the same rate as the PMOD CLS updates. */
+/* Assembly of UART text line. */
+
+/* Select the text to display on the UART Terminal based om whether button 2
+   is or is not depressed. */
+always @(s_clk_20mhz)
+begin: p_reg_uart_line
+  if (s_btn_deb == 4'b0100)
+    s_uart_dat_ascii_line <= {s_cls_txt_ascii_line1, s_cls_txt_ascii_line2,
+                8'h0D, 8'h0A};
+  else
+    s_uart_dat_ascii_line = {s_cls_dat_ascii_line1, s_cls_dat_ascii_line2,
+                8'h0D, 8'h0A};
+end
+
 assign s_uart_tx_go = s_cls_wr_clear_display;
 
 uart_tx_only #(
@@ -1258,66 +1278,15 @@ u_uart_tx_only (
 	.o_tx_ready   (s_uart_txready)
 	);
 
-/* UART TX machine, the 34 bytes of \ref s_uart_dat_ascii_line
-   are feed into the UART TX ONLY FIFO upon every pulse of the
-   \ref s_uart_tx_go signal. The UART TX ONLY FIFO machine will
-   automatically dequeue any bytes present in the queue and quickly
-   transmit them, one-at-a-time at the \ref parm_BAUD baudrate. */
-
-/* UART TX machine, synchronous state and auxiliary counting register. */
-always @(posedge s_clk_20mhz)
-begin: p_uartfeed_fsm_state_aux
-	if (s_rst_20mhz) begin
-		s_uartfeed_pr_state <= ST_UARTFEED_IDLE;
-		s_uart_k_aux <= 0;
-	end else begin
-		s_uartfeed_pr_state <= s_uartfeed_nx_state;
-		s_uart_k_aux <= s_uart_k_val;
-	end
-end
-
-/* UART TX machine, combinatorial next state and auxiliary counting register. */
-always @(s_uartfeed_pr_state, s_uart_k_aux, s_uart_tx_go,
-	s_uart_dat_ascii_line, s_uart_txready)
-begin: p_uartfeed_fsm_nx_out
-	case (s_uartfeed_pr_state)
-		ST_UARTFEED_DATA: begin
-			/* Enqueue the \ref c_uart_k_preset count of bytes from signal
-			   \ref s_uart_dat_ascii_line. Then transition to the WAIT state. */
-			s_uart_txdata = s_uart_dat_ascii_line[((8*s_uart_k_aux)-1)-:8];
-			s_uart_txvalid = 1'b1;
-			s_uart_k_val = s_uart_k_aux - 1;
-
-			if (s_uart_k_aux <= 1)
-				s_uartfeed_nx_state = ST_UARTFEED_WAIT;
-			else s_uartfeed_nx_state = ST_UARTFEED_DATA;
-		end
-		ST_UARTFEED_WAIT: begin
-			/* Wait for the \ref s_uart_tx_go pulse to be idle, and then
-			   transition to the IDLE state. */
-			s_uart_txdata = 8'h00;
-			s_uart_txvalid = 1'b0;
-			s_uart_k_val = s_uart_k_aux;
-
-			if (~s_uart_tx_go)
-				s_uartfeed_nx_state = ST_UARTFEED_IDLE;
-			else s_uartfeed_nx_state = ST_UARTFEED_WAIT;
-		end
-		default: begin // ST_UARTFEED_IDLE
-			/* IDLE the FSM while waiting for a pulse on s_uart_tx_go.
-			   The value of \ref s_uart_txready is also checked as to
-			   not overflow the UART TX buffer. If both signals are a
-			   TRUE value, then transition to enqueueing data. */
-			s_uart_txdata = 8'h00;
-			s_uart_txvalid = 1'b0;
-			s_uart_k_val = c_uart_k_preset;
-
-			if (s_uart_tx_go && s_uart_txready)
-				s_uartfeed_nx_state = ST_UARTFEED_DATA;
-			else s_uartfeed_nx_state = ST_UARTFEED_IDLE;
-		end
-	endcase
-end
+uart_tx_feed #() u_uart_tx_feed (
+  .i_clk_20mhz(i_clk_20mhz),
+  .i_rst_20mhz(i_rst_20mhz),
+  .o_tx_data(s_uart_txdata),
+  .o_tx_valid(s_uart_txvalid),
+  .i_tx_ready(s_uart_txready),
+  .i_tx_go(s_uart_tx_go),
+  .i_dat_ascii_line(s_uart_dat_ascii_line)
+  );
 
 endmodule
 //------------------------------------------------------------------------------
