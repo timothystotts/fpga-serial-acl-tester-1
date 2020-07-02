@@ -167,45 +167,14 @@ wire [3:0] s_sw_deb;
 wire [3:0] si_buttons;
 wire [3:0] s_btn_deb;
 
-/* Connections and variables for instance of the PMOD CLS SPI SOLO driver. */
-`define c_cls_update_fsm_bits 2
-localparam [(`c_cls_update_fsm_bits - 1):0] ST_CLS_IDLE = 0;
-localparam [(`c_cls_update_fsm_bits - 1):0] ST_CLS_CLEAR = 1;
-localparam [(`c_cls_update_fsm_bits - 1):0] ST_CLS_LINE1 = 2;
-localparam [(`c_cls_update_fsm_bits - 1):0] ST_CLS_LINE2 = 3;
-
-reg [(`c_cls_update_fsm_bits - 1):0] s_cls_upd_pr_state;
-reg [(`c_cls_update_fsm_bits - 1):0] s_cls_upd_nx_state;
-
-/* Timer steps for the continuous refresh of the PMOD CLS display:
-   Wait 0.2 seconds
-   Clear Display
-   Wait 1.0 milliseconds
-   Write Line 1
-   Wait 1.0 milliseconds
-   Write Line 2
-   Repeat the above. */
-`define c_cls_update_timer_bits 24
-/* The one-second refresh is actually 1/5 of a second to have a 5 Hz refresh,
-   approximately. If \ref parm_fast_simulation is defined, then tne once
-   second refresh is actually 1/100 of a second to have a 100 Hz refresh
-   for waveform viewing. */
-localparam [(`c_cls_update_timer_bits - 1):0] c_i_subsecond =
-	parm_fast_simulation ? (2500000 / 100 - 1) : (2500000 / 5 - 1);
-localparam [(`c_cls_update_timer_bits - 1):0] c_i_one_ms =
-	parm_fast_simulation ? (2500 - 1) : (2500 - 1);
-localparam [(`c_cls_update_timer_bits - 1):0] c_i_step = 4 - 1;
-localparam [(`c_cls_update_timer_bits - 1):0] c_i_max = c_i_subsecond;
-
-reg [(`c_cls_update_timer_bits - 1):0] s_i;
-
 /* Connections and variables for controlling the PMOD CLS custom driver. */
 wire s_cls_command_ready;
-reg s_cls_wr_clear_display;
-reg s_cls_wr_text_line1;
-reg s_cls_wr_text_line2;
+wire s_cls_wr_clear_display;
+wire s_cls_wr_text_line1;
+wire s_cls_wr_text_line2;
 reg [(16*8-1):0] s_cls_txt_ascii_line1;
 reg [(16*8-1):0] s_cls_txt_ascii_line2;
+wire s_cls_feed_is_idle;
 
 /* Signals for text and data ASCII lines */
 wire [(16*8-1):0] s_adxl_dat_ascii_line1;
@@ -453,6 +422,7 @@ pmod_acl2_custom_driver #(
 	.o_data_valid(s_hex_3axis_temp_measurements_valid),
 	.o_reg_status(s_acl2_reg_status));
 
+/* Tester FSM to operate the states of the Pmod ACL2 based on switch input */
 acl_tester_fsm #(
   ) u_acl_tester_fsm (
   .i_clk_20mhz(s_clk_20mhz),
@@ -480,15 +450,10 @@ always @(posedge s_clk_20mhz)
 begin: p_hold_measurements
 	if (s_rst_20mhz) s_hex_3axis_temp_measurements_display <= 64'd0;
 	else
-		if ((s_hex_3axis_temp_measurements_valid) &&
-		    (s_cls_upd_pr_state == ST_CLS_IDLE)) begin
-
-			s_hex_3axis_temp_measurements_display <=
-				s_hex_3axis_temp_measurements_final;
+		if (s_hex_3axis_temp_measurements_valid && s_cls_feed_is_idle) begin
+			s_hex_3axis_temp_measurements_display <= s_hex_3axis_temp_measurements_final;
 		end
 end
-
-
 
 /* Stretch the Activity indication so it can be displayed as color LED 2. */
 pulse_stretcher_synch #(
@@ -541,6 +506,8 @@ pmod_cls_custom_driver #(
 	.i_dat_ascii_line1(s_cls_txt_ascii_line1),
 	.i_dat_ascii_line2(s_cls_txt_ascii_line2));
 
+/* Select the text to display on the Pmod CLS based om whether button 3
+   is or is not depressed. */
 always @(posedge s_clk_20mhz)
 begin: p_reg_cls_line
   if (s_btn_deb == 4'b1000) begin
@@ -552,86 +519,21 @@ begin: p_reg_cls_line
   end
 end
 
-/* Timer (strategy #1) for timing the PMOD CLS display update */
-always @(posedge s_clk_20mhz)
-begin: p_fsm_timer_run_display_update
-	if (s_rst_20mhz) s_i <= 0;
-	else
-		if (s_ce_2_5mhz)
-			if (s_cls_upd_pr_state != s_cls_upd_nx_state) begin
-				s_i <= 0;
-			end else if (s_i != c_i_max) begin
-				s_i <= s_i + 1;
-			end
-end
+/* LCD Update FSM */
+lcd_text_feed #(
+  .parm_fast_simulation(parm_fast_simulation)
+  ) u_lcd_text_feed (
+  .i_clk_20mhz(s_clk_20mhz),
+  .i_rst_20mhz(s_rst_20mhz),
+  .i_ce_2_5mhz(s_ce_2_5mhz),
+  .i_lcd_command_ready(s_cls_command_ready),
+  .o_lcd_wr_clear_display(s_cls_wr_clear_display),
+  .o_lcd_wr_text_line1(s_cls_wr_text_line1),
+  .o_lcd_wr_text_line2(s_cls_wr_text_line2),
+  .o_lcd_feed_is_idle(s_cls_feed_is_idle)
+  );
 
-/* FSM state transition for timing the PMOD CLS display udpate */
-always @(posedge s_clk_20mhz)
-begin: p_fsm_state_run_display_update
-	if (s_rst_20mhz) s_cls_upd_pr_state <= ST_CLS_IDLE;
-	else 
-		if (s_ce_2_5mhz)
-			s_cls_upd_pr_state <= s_cls_upd_nx_state;
-end
-
-/* FSM combinatorial logic for timing the PMOD CLS display udpate */
-always @(s_cls_upd_pr_state, s_cls_command_ready, s_i)
-begin: p_fsm_comb_run_display_update
-	case (s_cls_upd_pr_state)
-		ST_CLS_CLEAR: begin /* Step CLEAR: clear the display
-							   and then pause until display ready and
-							   minimum of \ref c_i_one_ms time delay. */
-			if (s_i <= c_i_step) s_cls_wr_clear_display = 1'b1;
-			else s_cls_wr_clear_display = 1'b0;
-
-			s_cls_wr_text_line1 = 1'b0;
-			s_cls_wr_text_line2 = 1'b0;
-
-			if ((s_i >= c_i_one_ms) && (s_cls_command_ready))
-				s_cls_upd_nx_state = ST_CLS_LINE1;
-			else s_cls_upd_nx_state = ST_CLS_CLEAR;
-		end
-		ST_CLS_LINE1: begin /* Step LINE1: write the top line of the LCD
-							   and then pause until display ready and
-							   minimum of \ref c_i_one_ms time delay. */
-			s_cls_wr_clear_display = 1'b0;
-
-			if (s_i <= c_i_step) s_cls_wr_text_line1 = 1'b1;
-			else s_cls_wr_text_line1 = 1'b0;
-
-			s_cls_wr_text_line2 = 1'b0;
-
-			if ((s_i >= c_i_one_ms) && (s_cls_command_ready))
-				s_cls_upd_nx_state = ST_CLS_LINE2;
-			else s_cls_upd_nx_state = ST_CLS_LINE1;
-		end
-		ST_CLS_LINE2: begin /* Step LINE2: write the bottom line of the LCD
-							   and then pause until display ready and
-							   minimum of \ref c_i_one_ms time delay. */
-			s_cls_wr_clear_display = 1'b0;
-			s_cls_wr_text_line1 = 1'b0;
-
-			if (s_i <= c_i_step) s_cls_wr_text_line2 = 1'b1;
-			else s_cls_wr_text_line2 = 1'b0;
-
-			if ((s_i >= c_i_one_ms) && (s_cls_command_ready))
-				s_cls_upd_nx_state = ST_CLS_IDLE;
-			else s_cls_upd_nx_state = ST_CLS_LINE2;
-		end
-		default: begin // ST_CLS_IDLE
-					   /* Step IDLE, wait until display ready to write again
-						  and minimum of \ref c_i_subsecond time has elapsed. */
-			s_cls_wr_clear_display = 1'b0;
-			s_cls_wr_text_line1 = 1'b0;
-			s_cls_wr_text_line2 = 1'b0;
-
-			if ((s_i >= c_i_subsecond) && (s_cls_command_ready))
-				s_cls_upd_nx_state = ST_CLS_CLEAR;
-			else s_cls_upd_nx_state = ST_CLS_IDLE;
-		end
-	endcase
-end
-
+/* Measurement Readings to ASCII conversion */
 adxl362_readings_to_ascii #(
   ) u_adxl362_readings_to_ascii (
     .i_3axis_temp(s_hex_3axis_temp_measurements_display),
