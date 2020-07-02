@@ -112,25 +112,6 @@ input wire ei_uart_rx;
 
 //Part 2: Declarations----------------------------------------------------------
 
-/* Tester FSM state declarations */
-`define c_tester_state_bits 4
-localparam [(`c_tester_state_bits - 1):0] ST_0 = 0;
-localparam [(`c_tester_state_bits - 1):0] ST_1 = 1;
-localparam [(`c_tester_state_bits - 1):0] ST_2 = 2;
-localparam [(`c_tester_state_bits - 1):0] ST_3 = 3;
-localparam [(`c_tester_state_bits - 1):0] ST_4 = 4;
-localparam [(`c_tester_state_bits - 1):0] ST_5 = 5;
-localparam [(`c_tester_state_bits - 1):0] ST_6 = 6;
-localparam [(`c_tester_state_bits - 1):0] ST_7 = 7;
-localparam [(`c_tester_state_bits - 1):0] ST_8 = 8;
-localparam [(`c_tester_state_bits - 1):0] ST_9 = 9;
-localparam [(`c_tester_state_bits - 1):0] ST_A = 10;
-localparam [(`c_tester_state_bits - 1):0] ST_B = 11;
-
-
-reg [(`c_tester_state_bits - 1):0] s_tester_pr_state = ST_0;
-reg [(`c_tester_state_bits - 1):0] s_tester_nx_state = ST_0;
-
 
 /* MMCM and Processor System Reset signals for PLL clock generation from the
    Clocking Wizard and Synchronous Reset generation from the Processor System
@@ -155,14 +136,6 @@ wire so_pmod_acl2_ssn_t;
 wire so_pmod_acl2_mosi_o;
 wire so_pmod_acl2_mosi_t;
 
-/* Command to Operating Mode variables for the Tester FSM. */
-wire s_acl2_command_ready;
-reg s_acl2_cmd_init_linked_mode;
-reg s_acl2_cmd_start_linked_mode;
-reg s_acl2_cmd_init_measur_mode;
-reg s_acl2_cmd_start_measur_mode;
-reg s_acl2_cmd_soft_reset_acl2;
-
 /* Data and indications to be displayed on the LEDs and CLS. */
 wire [7:0] s_acl2_reg_status;
 wire s_acl2_reg_status_activity_stretched;
@@ -172,13 +145,19 @@ wire s_hex_3axis_temp_measurements_valid;
 reg [63:0] s_hex_3axis_temp_measurements_display;
 wire s_reading_inactive;
 
+/* Command to Operating Mode variables for the Tester FSM. */
+wire s_acl2_command_ready;
+wire s_acl2_cmd_init_linked_mode;
+wire s_acl2_cmd_start_linked_mode;
+wire s_acl2_cmd_init_measur_mode;
+wire s_acl2_cmd_start_measur_mode;
+wire s_acl2_cmd_soft_reset_acl2;
+
 /* Tester FSM general outputs that translate to LED color display. */
-reg s_active_init_display;
-reg s_active_run_display;
-reg s_mode_is_measur_val;
-reg s_mode_is_measur_aux;
-reg s_mode_is_linked_val;
-reg s_mode_is_linked_aux;
+wire s_active_init_display;
+wire s_active_run_display;
+wire s_mode_is_measur;
+wire s_mode_is_linked;
 
 /* switch inputs debounced */
 wire [3:0] si_switches;
@@ -361,7 +340,9 @@ arty_reset_synchronizer #() u_reset_synch_7_37mhz (
    generated clock constraint. The 20 MHz clock is divided
    down to 2.5 MHz; and later divided down to 625 KHz on
    the PMOD CLS bus. */
-clock_enable_divider #(.par_ce_divisor(8)) u_2_5mhz_ce_divider (
+clock_enable_divider #(
+  .par_ce_divisor(8)
+  ) u_2_5mhz_ce_divider (
 	.o_ce_div(s_ce_2_5mhz),
 	.i_clk_mhz(s_clk_20mhz),
 	.i_rst_mhz(s_rst_20mhz),
@@ -372,7 +353,8 @@ clock_enable_divider #(.par_ce_divisor(8)) u_2_5mhz_ce_divider (
 // selected at the same time).
 assign si_switches = {ei_sw3, ei_sw2, ei_sw1, ei_sw0};
 
-multi_input_debounce #(.FCLK(c_FCLK)
+multi_input_debounce #(
+  .FCLK(c_FCLK)
   ) u_switches_deb_0123 (
     .i_clk_mhz(s_clk_20mhz),
     .i_rst_mhz(s_rst_20mhz),
@@ -385,7 +367,8 @@ multi_input_debounce #(.FCLK(c_FCLK)
 // selected at the same time).
 assign si_buttons = {ei_btn3, ei_btn2, ei_btn1, ei_btn0};
 
-multi_input_debounce #(.FCLK(c_FCLK)
+multi_input_debounce #(
+  .FCLK(c_FCLK)
   ) u_buttons_deb_0123 (
     .i_clk_mhz(s_clk_20mhz),
     .i_rst_mhz(s_rst_20mhz),
@@ -397,7 +380,8 @@ multi_input_debounce #(.FCLK(c_FCLK)
 led_pwm_driver #(
     .parm_color_led_count(4),
     .parm_basic_led_count(4),
-    .parm_FCLK(c_FCLK)
+    .parm_FCLK(c_FCLK),
+    .parm_pwm_period_milliseconds(10)
     ) u_led_pwm_driver (
     .i_clk(s_clk_20mhz),
     .i_srst(s_rst_20mhz),
@@ -426,8 +410,8 @@ led_palette_pulser #(
   .o_basic_led_lumin_value(s_basic_led_lumin_value),
   .i_active_init_display(s_active_init_display),
   .i_active_run_display(s_active_run_display),
-  .i_mode_is_measur_aux(s_mode_is_measur_aux),
-  .i_mode_is_linked_aux(s_mode_is_linked_aux),
+  .i_mode_is_measur_aux(s_mode_is_measur),
+  .i_mode_is_linked_aux(s_mode_is_linked),
   .i_acl2_activity_stretched(s_acl2_reg_status_activity_stretched),
   .i_acl2_inactivity_stretched(s_acl2_reg_status_inactivity_stretched),
   .i_acl2_awake_status(s_acl2_reg_status[6]),
@@ -469,6 +453,24 @@ pmod_acl2_custom_driver #(
 	.o_data_valid(s_hex_3axis_temp_measurements_valid),
 	.o_reg_status(s_acl2_reg_status));
 
+acl_tester_fsm #(
+  ) u_acl_tester_fsm (
+  .i_clk_20mhz(s_clk_20mhz),
+  .i_rst_20mhz(s_rst_20mhz),
+  .i_acl_command_ready(s_acl2_command_ready),
+  .i_switches_debounced(s_sw_deb),
+  .o_reading_inactive(s_reading_inactive),
+  .o_active_init_display(s_active_init_display),
+  .o_active_run_display(s_active_run_display),
+  .o_mode_is_measur(s_mode_is_measur),
+  .o_mode_is_linked(s_mode_is_linked),
+  .o_acl_cmd_init_measur_mode(s_acl2_cmd_init_measur_mode),
+  .o_acl_cmd_start_measur_mode(s_acl2_cmd_start_measur_mode),
+  .o_acl_cmd_init_linked_mode(s_acl2_cmd_init_linked_mode),
+  .o_acl_cmd_start_linked_mode(s_acl2_cmd_start_linked_mode),
+  .o_acl_cmd_soft_reset(s_acl2_cmd_soft_reset_acl2)
+  );
+
 /* Capture the latest measurement value on VALID pulse and when the display is
    idling in preparation of the next value to be displayed. When the display
    stops idling, then hold the value for display so that the display does not
@@ -487,218 +489,22 @@ begin: p_hold_measurements
 end
 
 
-/* The top-level Tester FSM State Transition register on the system clock,
-   for state and auxiliary of the FSM that sends operation mode commands to
-   the PMOD ACL2 custom driver. */
-always @(posedge s_clk_20mhz)
-begin: p_tester_fsm_state_aux
-	if (s_rst_20mhz) begin
-		s_tester_pr_state <= ST_0;
-
-		s_mode_is_measur_aux <= 1'b0;
-		s_mode_is_linked_aux <= 1'b0;
-	end else begin
-		s_tester_pr_state <= s_tester_nx_state;
-
-		s_mode_is_measur_aux <= s_mode_is_measur_val;
-		s_mode_is_linked_aux <= s_mode_is_linked_val;
-	end
-end
-
-/* Tester FSM Combinatorial logic for initializing and starting PMOD ACL2
-   according to the position of Switch 0 and the position of Switch 1. If
-   Switch 0 and Not Switch 1, then Mode Measurement is executed. If Switch 1
-   and Not Switch 0, then Mode Linked is executed. */
-always @(s_tester_pr_state, s_acl2_command_ready,
-	s_sw_deb,
-	s_mode_is_measur_aux, s_mode_is_linked_aux)
-begin: p_tester_fsm_comb
-	case (s_tester_pr_state)
-		ST_1: begin /* Step one to command initialize the ACL2 to measurement mode */
-			s_acl2_cmd_init_measur_mode = 1'b1;
-			s_acl2_cmd_init_linked_mode = 1'b0;
-			s_acl2_cmd_start_measur_mode = 1'b0;
-			s_acl2_cmd_start_linked_mode = 1'b0;
-			s_acl2_cmd_soft_reset_acl2 = 1'b0;
-			s_active_init_display = 1'b1;
-			s_active_run_display = 1'b0;
-			s_mode_is_measur_val = 1'b1;
-			s_mode_is_linked_val = 1'b0;
-
-			if (s_acl2_command_ready) s_tester_nx_state = ST_1;
-			else s_tester_nx_state = ST_2;
-		end
-		ST_2: begin /* Step two to wait for ACL2 to start its MM initialization */
-			s_acl2_cmd_init_measur_mode = 1'b0;
-			s_acl2_cmd_init_linked_mode = 1'b0;
-			s_acl2_cmd_start_measur_mode = 1'b0;
-			s_acl2_cmd_start_linked_mode = 1'b0;
-			s_acl2_cmd_soft_reset_acl2 = 1'b0;
-			s_active_init_display = 1'b1;
-			s_active_run_display = 1'b0;
-			s_mode_is_measur_val = s_mode_is_measur_aux;
-			s_mode_is_linked_val = s_mode_is_linked_aux;
-			
-			if (~ s_acl2_command_ready) s_tester_nx_state = ST_2;
-			else s_tester_nx_state = ST_3;
-		end
-		ST_3: begin /* Step three to command start the ACL2 to measurement mode */
-			s_acl2_cmd_init_measur_mode = 1'b0;
-			s_acl2_cmd_init_linked_mode = 1'b0;
-			s_acl2_cmd_start_measur_mode = 1'b1;
-			s_acl2_cmd_start_linked_mode = 1'b0;
-			s_acl2_cmd_soft_reset_acl2 = 1'b0;
-			s_active_init_display = 1'b1;
-			s_active_run_display = 1'b0;
-			s_mode_is_measur_val = s_mode_is_measur_aux;
-			s_mode_is_linked_val = s_mode_is_linked_aux;
-
-			if (s_acl2_command_ready) s_tester_nx_state = ST_3;
-			else s_tester_nx_state = ST_4;
-		end
-		ST_4: begin /* Step four to stop issuing commands and transition to IDLE
-					   (place holder for other steps) */
-			s_acl2_cmd_init_measur_mode = 1'b0;
-			s_acl2_cmd_init_linked_mode = 1'b0;
-			s_acl2_cmd_start_measur_mode = 1'b0;
-			s_acl2_cmd_start_linked_mode = 1'b0;
-			s_acl2_cmd_soft_reset_acl2 = 1'b0;
-			s_active_init_display = 1'b1;
-			s_active_run_display = 1'b0;
-			s_mode_is_measur_val = s_mode_is_measur_aux;
-			s_mode_is_linked_val = s_mode_is_linked_aux;
-			
-			s_tester_nx_state = ST_9;
-		end
-		ST_5: begin /* Step one to command initialize the ACL2 to linked mode */
-			s_acl2_cmd_init_measur_mode = 1'b0;
-			s_acl2_cmd_init_linked_mode = 1'b1;
-			s_acl2_cmd_start_measur_mode = 1'b0;
-			s_acl2_cmd_start_linked_mode = 1'b0;
-			s_acl2_cmd_soft_reset_acl2 = 1'b0;
-			s_active_init_display = 1'b1;
-			s_active_run_display = 1'b0;
-			s_mode_is_measur_val = 1'b0;
-			s_mode_is_linked_val = 1'b1;
-
-			if (s_acl2_command_ready) s_tester_nx_state = ST_5;
-			else s_tester_nx_state = ST_6;
-		end
-		ST_6: begin /* Step two to wait for ACL2 to start its LM initialization */
-			s_acl2_cmd_init_measur_mode = 1'b0;
-			s_acl2_cmd_init_linked_mode = 1'b0;
-			s_acl2_cmd_start_measur_mode = 1'b0;
-			s_acl2_cmd_start_linked_mode = 1'b0;
-			s_acl2_cmd_soft_reset_acl2 = 1'b0;
-			s_active_init_display = 1'b1;
-			s_active_run_display = 1'b0;
-			s_mode_is_measur_val = s_mode_is_measur_aux;
-			s_mode_is_linked_val = s_mode_is_linked_aux;
-			
-			if (~ s_acl2_command_ready) s_tester_nx_state = ST_6;
-			else s_tester_nx_state = ST_7;
-		end
-		ST_7: begin /* Step three to command start the ACL2 to linked mode */
-			s_acl2_cmd_init_measur_mode = 1'b0;
-			s_acl2_cmd_init_linked_mode = 1'b0;
-			s_acl2_cmd_start_measur_mode = 1'b0;
-			s_acl2_cmd_start_linked_mode = 1'b1;
-			s_acl2_cmd_soft_reset_acl2 = 1'b0;
-			s_active_init_display = 1'b1;
-			s_active_run_display = 1'b0;
-			s_mode_is_measur_val = s_mode_is_measur_aux;
-			s_mode_is_linked_val = s_mode_is_linked_aux;
-
-			if (s_acl2_command_ready) s_tester_nx_state = ST_7;
-			else s_tester_nx_state = ST_8;
-		end
-		ST_8: begin /* Step four to stop issuing commands and transition to IDLE
-					   (place holder for other steps) */
-			s_acl2_cmd_init_measur_mode = 1'b0;
-			s_acl2_cmd_init_linked_mode = 1'b0;
-			s_acl2_cmd_start_measur_mode = 1'b0;
-			s_acl2_cmd_start_linked_mode = 1'b0;
-			s_acl2_cmd_soft_reset_acl2 = 1'b0;
-			s_active_init_display = 1'b1;
-			s_active_run_display = 1'b0;
-			s_mode_is_measur_val = s_mode_is_measur_aux;
-			s_mode_is_linked_val = s_mode_is_linked_aux;
-			
-			s_tester_nx_state = ST_9;
-		end
-		ST_9: begin /* State nine is RUNNING IDLE and waits for switches 0,1
-					   to entera equal an non-exclusive state to then transition
-					   to State A which in turn will reset the PMOD ACL2 and wait
-					   for an exclusive command on the switches 0,1. */
-			s_acl2_cmd_init_measur_mode = 1'b0;
-			s_acl2_cmd_init_linked_mode = 1'b0;
-			s_acl2_cmd_start_measur_mode = 1'b0;
-			s_acl2_cmd_start_linked_mode = 1'b0;
-			s_acl2_cmd_soft_reset_acl2 = 1'b0;
-			s_active_init_display = 1'b0;
-			s_active_run_display = 1'b1;
-			s_mode_is_measur_val = s_mode_is_measur_aux;
-			s_mode_is_linked_val = s_mode_is_linked_aux;
-
-			if (s_sw_deb == 4'b0000)
-				s_tester_nx_state = ST_A;
-			else s_tester_nx_state = ST_9;
-		end
-		ST_A: begin /* Step A to issue the Soft Reset command to the PMOD ACL2
-					   Then transition to Step Zero for INIT IDLE and waiting
-					   for exclusive switch position. */
-			s_acl2_cmd_init_measur_mode = 1'b0;
-			s_acl2_cmd_init_linked_mode = 1'b0;
-			s_acl2_cmd_start_measur_mode = 1'b0;
-			s_acl2_cmd_start_linked_mode = 1'b0;
-			s_acl2_cmd_soft_reset_acl2 = 1'b1;
-			s_active_init_display = 1'b0;
-			s_active_run_display = 1'b0;
-			s_mode_is_measur_val = 1'b0;
-			s_mode_is_linked_val = 1'b0;
-
-			if (s_acl2_command_ready) s_tester_nx_state = ST_0;
-			else s_tester_nx_state = ST_A;
-		end
-
-		default: begin // ST_0
-					   /* Step Zero is INIT IDLE, waiting for exclusive switch
-						  position to then transition to INIT Measure Mode or
-						  INIT Linked Mode. */
-
-			s_acl2_cmd_init_measur_mode = 1'b0;
-			s_acl2_cmd_init_linked_mode = 1'b0;
-			s_acl2_cmd_start_measur_mode = 1'b0;
-			s_acl2_cmd_start_linked_mode = 1'b0;
-			s_acl2_cmd_soft_reset_acl2 = 1'b0;
-			s_active_init_display = 1'b0;
-			s_active_run_display = 1'b0;
-			s_mode_is_measur_val = s_mode_is_measur_aux;
-			s_mode_is_linked_val = s_mode_is_linked_aux;
-
-			if (s_acl2_command_ready)
-				if (s_sw_deb == 4'b0001)
-					s_tester_nx_state = ST_1;
-				else if (s_sw_deb == 4'b0010)
-					s_tester_nx_state = ST_5;
-				else
-					s_tester_nx_state = ST_0;
-			else s_tester_nx_state = ST_0;
-		end
-	endcase
-end
 
 /* Stretch the Activity indication so it can be displayed as color LED 2. */
-pulse_stretcher_synch #(.par_T_stretch_bits(25), .par_T_stretch_val(20000000))
-	u_pulse_stretcher_activity(
+pulse_stretcher_synch #(
+  .par_T_stretch_bits(25),
+  .par_T_stretch_val(c_FCLK)
+  )	u_pulse_stretcher_activity (
 		.o_y(s_acl2_reg_status_activity_stretched),
 		.i_clk(s_clk_20mhz),
 		.i_rst(s_rst_20mhz),
 		.i_x(s_acl2_reg_status[4]));
 
 /* Stretch the Inactivity indication so it can be displayed as color LED 3. */
-pulse_stretcher_synch #(.par_T_stretch_bits(25), .par_T_stretch_val(20000000))
-	u_pulse_stretcher_inactivity(
+pulse_stretcher_synch #(
+  .par_T_stretch_bits(25),
+  .par_T_stretch_val(c_FCLK)
+  ) u_pulse_stretcher_inactivity (
 		.o_y(s_acl2_reg_status_inactivity_stretched),
 		.i_clk(s_clk_20mhz),
 		.i_rst(s_rst_20mhz),
@@ -826,11 +632,8 @@ begin: p_fsm_comb_run_display_update
 	endcase
 end
 
-/* Measurement Readings to ASCII conversion */
-assign s_reading_inactive = (s_tester_pr_state == ST_0) ? 1'b1 : 1'b0;
-
-adxl362_readings_to_ascii #()
-  u_adxl362_readings_to_ascii (
+adxl362_readings_to_ascii #(
+  ) u_adxl362_readings_to_ascii (
     .i_3axis_temp(s_hex_3axis_temp_measurements_display),
     .i_reading_inactive(s_reading_inactive),
     .o_dat_ascii_line1(s_adxl_dat_ascii_line1),
@@ -858,8 +661,8 @@ end
 assign s_uart_tx_go = s_cls_wr_clear_display;
 
 uart_tx_only #(
-	.BAUD(115200))
-u_uart_tx_only (
+	.BAUD(115200)
+  ) u_uart_tx_only (
 	.i_clk_20mhz  (s_clk_20mhz),
 	.i_rst_20mhz  (s_rst_20mhz),
 	.i_clk_7_37mhz(s_clk_7_37mhz),
@@ -870,7 +673,8 @@ u_uart_tx_only (
 	.o_tx_ready   (s_uart_txready)
 	);
 
-uart_tx_feed #() u_uart_tx_feed (
+uart_tx_feed #(
+  ) u_uart_tx_feed (
   .i_clk_20mhz(s_clk_20mhz),
   .i_rst_20mhz(s_rst_20mhz),
   .o_tx_data(s_uart_txdata),
