@@ -112,15 +112,6 @@ input wire ei_uart_rx;
 
 //Part 2: Declarations----------------------------------------------------------
 
-/* A re-entrant function that converts a 4-bit part-select to an 8-bit ASCII
-   hexadecimal character. */
-function automatic [7:0] ascii_of_hdigit(input [3:0] bchex_val);
-	begin
-		if (bchex_val < 10) ascii_of_hdigit = 8'h30 + {4'h0, bchex_val};
-		else ascii_of_hdigit = 8'h37 + {4'h0, bchex_val};
-	end
-endfunction
-
 /* Tester FSM state declarations */
 `define c_tester_state_bits 4
 localparam [(`c_tester_state_bits - 1):0] ST_0 = 0;
@@ -179,6 +170,7 @@ wire s_acl2_reg_status_inactivity_stretched;
 wire [63:0] s_hex_3axis_temp_measurements_final;
 wire s_hex_3axis_temp_measurements_valid;
 reg [63:0] s_hex_3axis_temp_measurements_display;
+wire s_reading_inactive;
 
 /* Tester FSM general outputs that translate to LED color display. */
 reg s_active_init_display;
@@ -249,91 +241,6 @@ wire so_pmod_cls_ssn_o;
 wire so_pmod_cls_ssn_t;
 wire so_pmod_cls_mosi_o;
 wire so_pmod_cls_mosi_t;
-
-/* Connections for reparse of the eight PMOD ACL2 measurement reading bytes */
-wire [7:0] s_hex_xaxis_msb;
-wire [7:0] s_hex_xaxis_lsb;
-wire [7:0] s_hex_yaxis_msb;
-wire [7:0] s_hex_yaxis_lsb;
-wire [7:0] s_hex_zaxis_msb;
-wire [7:0] s_hex_zaxis_lsb;
-wire [7:0] s_hex_temp_msb;
-wire [7:0] s_hex_temp_lsb;
-
-/* Connections for reparse of the eight PMOD ACL2 measurement reading bytes */
-localparam signed [15:0] c_signed_zero = 0;
-wire signed [15:0] s_txt_xaxis_s16;
-wire signed [15:0] s_txt_yaxis_s16;
-wire signed [15:0] s_txt_zaxis_s16;
-wire signed [15:0] s_txt_temp_s16;
-wire [15:0] s_txt_xaxis_u16;
-wire [15:0] s_txt_yaxis_u16;
-wire [15:0] s_txt_zaxis_u16;
-wire [15:0] s_txt_temp_u16;
-
-/* Connections for Hex to ASCII reparse of the sixteen digits of the eight
-   PMOD ACL2 measurement reading bytes */
-wire [7:0] s_char_xaxis_msb_3;
-wire [7:0] s_char_xaxis_msb_2;
-wire [7:0] s_char_xaxis_lsb_1;
-wire [7:0] s_char_xaxis_lsb_0;
-wire [7:0] s_char_yaxis_msb_3;
-wire [7:0] s_char_yaxis_msb_2;
-wire [7:0] s_char_yaxis_lsb_1;
-wire [7:0] s_char_yaxis_lsb_0;
-wire [7:0] s_char_zaxis_msb_3;
-wire [7:0] s_char_zaxis_msb_2;
-wire [7:0] s_char_zaxis_lsb_1;
-wire [7:0] s_char_zaxis_lsb_0;
-wire [7:0] s_char_temp_msb_3;
-wire [7:0] s_char_temp_msb_2;
-wire [7:0] s_char_temp_lsb_1;
-wire [7:0] s_char_temp_lsb_0;
-
-/* Signals for Decimal to ASCII reparse of the sixteen digits of the eight
-   PMOD ACL2 measurement reading bytes */
-wire [15:0] s_dat_xaxis_m0;
-wire [15:0] s_dat_xaxis_f0;
-wire [15:0] s_dat_xaxis_f1;
-wire [15:0] s_dat_xaxis_f2;
-
-wire [7:0] s_char_xaxis_sg;
-wire [7:0] s_char_xaxis_m0;
-wire [7:0] s_char_xaxis_f0;
-wire [7:0] s_char_xaxis_f1;
-wire [7:0] s_char_xaxis_f2;
-
-wire [15:0] s_dat_yaxis_m0;
-wire [15:0] s_dat_yaxis_f0;
-wire [15:0] s_dat_yaxis_f1;
-wire [15:0] s_dat_yaxis_f2;
-
-wire [7:0] s_char_yaxis_sg;
-wire [7:0] s_char_yaxis_m0;
-wire [7:0] s_char_yaxis_f0;
-wire [7:0] s_char_yaxis_f1;
-wire [7:0] s_char_yaxis_f2;
-
-wire [15:0] s_dat_zaxis_m0;
-wire [15:0] s_dat_zaxis_f0;
-wire [15:0] s_dat_zaxis_f1;
-wire [15:0] s_dat_zaxis_f2;
-
-wire [7:0] s_char_zaxis_sg;
-wire [7:0] s_char_zaxis_m0;
-wire [7:0] s_char_zaxis_f0;
-wire [7:0] s_char_zaxis_f1;
-wire [7:0] s_char_zaxis_f2;
-
-wire [15:0] s_dat_temp_m3;
-wire [15:0] s_dat_temp_m2;
-wire [15:0] s_dat_temp_m1;
-wire [15:0] s_dat_temp_m0;
-
-wire [7:0] s_char_temp_m3;
-wire [7:0] s_char_temp_m2;
-wire [7:0] s_char_temp_m1;
-wire [7:0] s_char_temp_m0;
 
 /* Extra MMCM signals for full port map to the MMCM primative,
    where these signals will remain disconnected. */
@@ -839,164 +746,6 @@ begin: p_reg_cls_line
   end
 end
 
-/* Parse out the hexadecimal reading of mg force and temperature from the
-   PMOD ACL2 data register readings. This partsing is done to display the
-   measurement readings at a slower refresh rate on the PMOD CLS. */
-assign s_hex_xaxis_lsb = s_hex_3axis_temp_measurements_display[(8*8-1)-:8];
-assign s_hex_xaxis_msb = s_hex_3axis_temp_measurements_display[(7*8-1)-:8];
-assign s_hex_yaxis_lsb = s_hex_3axis_temp_measurements_display[(6*8-1)-:8];
-assign s_hex_yaxis_msb = s_hex_3axis_temp_measurements_display[(5*8-1)-:8];
-assign s_hex_zaxis_lsb = s_hex_3axis_temp_measurements_display[(4*8-1)-:8];
-assign s_hex_zaxis_msb = s_hex_3axis_temp_measurements_display[(3*8-1)-:8];
-assign s_hex_temp_lsb = s_hex_3axis_temp_measurements_display[(2*8-1)-:8];
-assign s_hex_temp_msb = s_hex_3axis_temp_measurements_display[(1*8-1)-:8];
-
-assign s_txt_xaxis_s16 = {s_hex_xaxis_msb, s_hex_xaxis_lsb};
-assign s_txt_yaxis_s16 = {s_hex_yaxis_msb, s_hex_yaxis_lsb};
-assign s_txt_zaxis_s16 = {s_hex_zaxis_msb, s_hex_zaxis_lsb};
-assign s_txt_temp_s16 = {s_hex_temp_msb, s_hex_temp_lsb};
-
-assign s_txt_xaxis_u16 = (s_txt_xaxis_s16 < 0) ? (c_signed_zero - s_txt_xaxis_s16) : s_txt_xaxis_s16;
-assign s_txt_yaxis_u16 = (s_txt_yaxis_s16 < 0) ? (c_signed_zero - s_txt_yaxis_s16) : s_txt_yaxis_s16;
-assign s_txt_zaxis_u16 = (s_txt_zaxis_s16 < 0) ? (c_signed_zero - s_txt_zaxis_s16) : s_txt_zaxis_s16;
-assign s_txt_temp_u16 = (s_txt_temp_s16 < 0) ? (c_signed_zero - s_txt_temp_s16) : s_txt_temp_s16;
-
-/* ASCII parse-out of the X-Axis measurement reading. */
-assign s_char_xaxis_msb_3 = ascii_of_hdigit(s_hex_xaxis_msb[7-:4]);
-assign s_char_xaxis_msb_2 = ascii_of_hdigit(s_hex_xaxis_msb[3-:4]);
-assign s_char_xaxis_lsb_1 = ascii_of_hdigit(s_hex_xaxis_lsb[7-:4]);
-assign s_char_xaxis_lsb_0 = ascii_of_hdigit(s_hex_xaxis_lsb[3-:4]);
-
-assign s_dat_xaxis_m0 = (s_txt_xaxis_u16 / 1000) % 10;
-assign s_dat_xaxis_f0 = (s_txt_xaxis_u16 / 100) % 10;
-assign s_dat_xaxis_f1 = (s_txt_xaxis_u16 / 10) % 10;
-assign s_dat_xaxis_f2 = s_txt_xaxis_u16 % 10;
-
-assign s_char_xaxis_sg = (s_txt_xaxis_s16[15] == 1'b1) ? 8'h2D : 8'h20;
-assign s_char_xaxis_m0 = ascii_of_hdigit(s_dat_xaxis_m0[3-:4]);
-assign s_char_xaxis_f0 = ascii_of_hdigit(s_dat_xaxis_f0[3-:4]);
-assign s_char_xaxis_f1 = ascii_of_hdigit(s_dat_xaxis_f1[3-:4]);
-assign s_char_xaxis_f2 = ascii_of_hdigit(s_dat_xaxis_f2[3-:4]);
-
-/* ASCII parse-out of the Y-Axis measurement reading. */
-assign s_char_yaxis_msb_3 = ascii_of_hdigit(s_hex_yaxis_msb[7-:4]);
-assign s_char_yaxis_msb_2 = ascii_of_hdigit(s_hex_yaxis_msb[3-:4]);
-assign s_char_yaxis_lsb_1 = ascii_of_hdigit(s_hex_yaxis_lsb[7-:4]);
-assign s_char_yaxis_lsb_0 = ascii_of_hdigit(s_hex_yaxis_lsb[3-:4]);
-
-assign s_dat_yaxis_m0 = (s_txt_yaxis_u16 / 1000) % 10;
-assign s_dat_yaxis_f0 = (s_txt_yaxis_u16 / 100) % 10;
-assign s_dat_yaxis_f1 = (s_txt_yaxis_u16 / 10) % 10;
-assign s_dat_yaxis_f2 = s_txt_yaxis_u16 % 10;
-
-assign s_char_yaxis_sg = (s_txt_yaxis_s16[15] == 1'b1) ? 8'h2D : 8'h20;
-assign s_char_yaxis_m0 = ascii_of_hdigit(s_dat_yaxis_m0[3-:4]);
-assign s_char_yaxis_f0 = ascii_of_hdigit(s_dat_yaxis_f0[3-:4]);
-assign s_char_yaxis_f1 = ascii_of_hdigit(s_dat_yaxis_f1[3-:4]);
-assign s_char_yaxis_f2 = ascii_of_hdigit(s_dat_yaxis_f2[3-:4]);
-
-/* ASCII parse-out of the Z-Axis measurement reading. */
-assign s_char_zaxis_msb_3 = ascii_of_hdigit(s_hex_zaxis_msb[7-:4]);
-assign s_char_zaxis_msb_2 = ascii_of_hdigit(s_hex_zaxis_msb[3-:4]);
-assign s_char_zaxis_lsb_1 = ascii_of_hdigit(s_hex_zaxis_lsb[7-:4]);
-assign s_char_zaxis_lsb_0 = ascii_of_hdigit(s_hex_zaxis_lsb[3-:4]);
-
-assign s_dat_zaxis_m0 = (s_txt_zaxis_u16 / 1000) % 10;
-assign s_dat_zaxis_f0 = (s_txt_zaxis_u16 / 100) % 10;
-assign s_dat_zaxis_f1 = (s_txt_zaxis_u16 / 10) % 10;
-assign s_dat_zaxis_f2 = s_txt_zaxis_u16 % 10;
-
-assign s_char_zaxis_sg = (s_txt_zaxis_s16[15] == 1'b1) ? 8'h2D : 8'h20;
-assign s_char_zaxis_m0 = ascii_of_hdigit(s_dat_zaxis_m0[3-:4]);
-assign s_char_zaxis_f0 = ascii_of_hdigit(s_dat_zaxis_f0[3-:4]);
-assign s_char_zaxis_f1 = ascii_of_hdigit(s_dat_zaxis_f1[3-:4]);
-assign s_char_zaxis_f2 = ascii_of_hdigit(s_dat_zaxis_f2[3-:4]);
-
-/* ASCII parse-out of the Compensating Temperature measurement reading. */
-assign s_char_temp_msb_3 = ascii_of_hdigit(s_hex_temp_msb[7-:4]);
-assign s_char_temp_msb_2 = ascii_of_hdigit(s_hex_temp_msb[3-:4]);
-assign s_char_temp_lsb_1 = ascii_of_hdigit(s_hex_temp_lsb[7-:4]);
-assign s_char_temp_lsb_0 = ascii_of_hdigit(s_hex_temp_lsb[3-:4]);
-
-assign s_dat_temp_m3 = (s_txt_temp_u16 / 1000) % 10;
-assign s_dat_temp_m2 = (s_txt_temp_u16 / 100) % 10;
-assign s_dat_temp_m1 = (s_txt_temp_u16 / 10) % 10;
-assign s_dat_temp_m0 = s_txt_temp_u16 % 10;
-
-assign s_char_temp_m3 = ascii_of_hdigit(s_dat_temp_m3[3-:4]);
-assign s_char_temp_m2 = ascii_of_hdigit(s_dat_temp_m2[3-:4]);
-assign s_char_temp_m1 = ascii_of_hdigit(s_dat_temp_m1[3-:4]);
-assign s_char_temp_m0 = ascii_of_hdigit(s_dat_temp_m0[3-:4]);
-
-/* Assemblly of ASCII Line 1 to display on the PMOD CLS. */
-/* ASCII Line:  "X:____  Y:____  " or "X:0123  Y:ABCD  " */
-assign s_adxl_dat_ascii_line1 = (s_tester_pr_state == ST_0)
-								?
-								{8'h58, 8'h3A,
-								8'h5F, 8'h5F, 8'h5F, 8'h5F,
-								8'h20, 8'h20, 8'h59, 8'h3A, 
-								8'h5F, 8'h5F, 8'h5F, 8'h5F,
-							    8'h20, 8'h20}
-								:
-								{8'h58, 8'h3A, s_char_xaxis_msb_3,
-								s_char_xaxis_msb_2, s_char_xaxis_lsb_1,
-								s_char_xaxis_lsb_0, 8'h20, 8'h20,
-								8'h59, 8'h3A, s_char_yaxis_msb_3,
-								s_char_yaxis_msb_2, s_char_yaxis_lsb_1,
-								s_char_yaxis_lsb_0, 8'h20, 8'h20}
-								;
-
-/* ASCII line: "X______ Y______ " or "X-0.123 Y 0.345 " */
-assign s_adxl_txt_ascii_line1 = (s_tester_pr_state == ST_0)
-								?
-								{8'h58, 8'h5F,
-								8'h5F, 8'h5F, 8'h5F, 8'h5F,
-								8'h5F, 8'h20, 8'h59, 8'h5F, 
-								8'h5F, 8'h5F, 8'h5F, 8'h5F,
-							    8'h5F, 8'h20}
-								:
-								{8'h58, s_char_xaxis_sg,
-								s_char_xaxis_m0, 8'h2E, s_char_xaxis_f0,
-								s_char_xaxis_f1, s_char_xaxis_f2, 8'h20,
-								8'h59, s_char_yaxis_sg,
-								s_char_yaxis_m0, 8'h2E, s_char_yaxis_f0,
-								s_char_yaxis_f1, s_char_yaxis_f2, 8'h20}
-								;
-
-/* Assemblly of ASCII Line 2 to display on the PMOD CLS. */
-/* ASCII Line:  "Z:____  T:____  " or "Z:0123  T:ABCD  " */
-assign s_adxl_dat_ascii_line2 = (s_tester_pr_state == ST_0)
-								?
-								{8'h5A, 8'h3A,
-								8'h5F, 8'h5F, 8'h5F, 8'h5F,
-								8'h20, 8'h20, 8'h54, 8'h3A,
-								8'h5F, 8'h5F, 8'h5F, 8'h5F,
-								8'h20, 8'h20}
-								:
-								{8'h5A, 8'h3A, s_char_zaxis_msb_3,
-								s_char_zaxis_msb_2, s_char_zaxis_lsb_1,
-								s_char_zaxis_lsb_0, 8'h20, 8'h20,
-								8'h54, 8'h3A, s_char_temp_msb_3,
-								s_char_temp_msb_2, s_char_temp_lsb_1,
-								s_char_temp_lsb_0, 8'h20, 8'h20}
-								;
-
-/* ASCII line: "Z______ T______ " or "Z 1.123 T5201   " */
-assign s_adxl_txt_ascii_line2 = (s_tester_pr_state == ST_0)
-								?
-								{8'h5A, 8'h5F,
-								8'h5F, 8'h5F, 8'h5F, 8'h5F,
-								8'h5F, 8'h20, 8'h54, 8'h5F, 
-								8'h5F, 8'h5F, 8'h5F, 8'h5F,
-							    8'h20, 8'h20}
-								:
-								{8'h5A, s_char_zaxis_sg,
-								s_char_zaxis_m0, 8'h2E, s_char_zaxis_f0,
-								s_char_zaxis_f1, s_char_zaxis_f2, 8'h20,
-								8'h54, s_char_temp_m3, s_char_temp_m2,
-								s_char_temp_m1, s_char_temp_m0, 8'h20, 8'h20, 8'h20}
-								;
-
 /* Timer (strategy #1) for timing the PMOD CLS display update */
 always @(posedge s_clk_20mhz)
 begin: p_fsm_timer_run_display_update
@@ -1076,6 +825,19 @@ begin: p_fsm_comb_run_display_update
 		end
 	endcase
 end
+
+/* Measurement Readings to ASCII conversion */
+assign s_reading_inactive = (s_tester_pr_state == ST_0) ? 1'b1 : 1'b0;
+
+adxl362_readings_to_ascii #()
+  u_adxl362_readings_to_ascii (
+    .i_3axis_temp(s_hex_3axis_temp_measurements_display),
+    .i_reading_inactive(s_reading_inactive),
+    .o_dat_ascii_line1(s_adxl_dat_ascii_line1),
+    .o_dat_ascii_line2(s_adxl_dat_ascii_line2),
+    .o_txt_ascii_line1(s_adxl_txt_ascii_line1),
+    .o_txt_ascii_line2(s_adxl_txt_ascii_line2)
+    );
 
 /* TX ONLY UART function to print the two lines of the PMOD CLS output as a
    single line on the dumb terminal, at the same rate as the PMOD CLS updates. */
