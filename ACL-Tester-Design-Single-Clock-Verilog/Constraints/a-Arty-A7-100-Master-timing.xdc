@@ -52,6 +52,20 @@ set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -min 5.000 [get_ports {ei_
 set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -max 20.000 [get_ports {ei_sw3}];
 set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -min 5.000 [get_ports {ei_sw3}];
 
+## Buttons
+## The inpout of two-position switches is synchronized into the design at the MMCM
+## 20 MHz clock. A virtual clock is used to allow the tool to automatically compute
+## jitter and other metrics. Note that the input delay is set to a max of 40% the
+## clock period and a min of 10% the clock period.
+set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -max 20.000 [get_ports {ei_btn0}];
+set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -min 5.000 [get_ports {ei_btn0}];
+set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -max 20.000 [get_ports {ei_btn1}];
+set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -min 5.000 [get_ports {ei_btn1}];
+set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -max 20.000 [get_ports {ei_btn2}];
+set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -min 5.000 [get_ports {ei_btn2}];
+set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -max 20.000 [get_ports {ei_btn3}];
+set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -min 5.000 [get_ports {ei_btn3}];
+
 ## RGB LEDs
 ## The output of RGB LEDs is synchronized out of the design at the MMCM 20 MHz clock.
 ## A virtual clock is used to allow the tool to automatically compute jitter and other metrics.

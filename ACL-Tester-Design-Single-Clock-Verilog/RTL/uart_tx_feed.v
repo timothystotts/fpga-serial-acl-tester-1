@@ -22,12 +22,9 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file uart_tx_only.v
+-- \file uart_tx_feed.v
 --
--- \brief A simplified UART function to drive TX characters on a UART board
---        connection, independent of any RX function (presumed to be ingored).
---        Maximum baudrate is 115200; input clock is 7.37 MHz to support divison
---        to modem clock rates.
+-- \brief A simple text byte feeder to the UART TX module.
 ------------------------------------------------------------------------------*/
 //Recursive Moore Machine-------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------

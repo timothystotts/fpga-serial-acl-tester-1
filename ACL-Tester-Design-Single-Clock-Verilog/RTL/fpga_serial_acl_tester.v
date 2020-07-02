@@ -233,10 +233,14 @@ wire s_cls_command_ready;
 reg s_cls_wr_clear_display;
 reg s_cls_wr_text_line1;
 reg s_cls_wr_text_line2;
-wire [(16*8-1):0] s_cls_dat_ascii_line1;
-wire [(16*8-1):0] s_cls_dat_ascii_line2;
-wire [(16*8-1):0] s_cls_txt_ascii_line1;
-wire [(16*8-1):0] s_cls_txt_ascii_line2;
+reg [(16*8-1):0] s_cls_txt_ascii_line1;
+reg [(16*8-1):0] s_cls_txt_ascii_line2;
+
+/* Signals for text and data ASCII lines */
+wire [(16*8-1):0] s_adxl_dat_ascii_line1;
+wire [(16*8-1):0] s_adxl_dat_ascii_line2;
+wire [(16*8-1):0] s_adxl_txt_ascii_line1;
+wire [(16*8-1):0] s_adxl_txt_ascii_line2;
 
 /* Connections for inferring tri-state buffer for CLS SPI bus outputs. */
 wire so_pmod_cls_sck_o;
@@ -347,49 +351,12 @@ wire s_clk_clkfbout;
 wire s_clk_pwrdwn;
 wire s_clk_resetin;
 
-/* Color LED PWM driver signals for 8-bit color mixing. */
-wire s_tester_led_ce;
-
-wire [7:0] s_ld0_red_value;
-wire [7:0] s_ld1_red_value;
-wire [7:0] s_ld2_red_value;
-wire [7:0] s_ld3_red_value;
-wire [7:0] s_ld0_green_value;
-wire [7:0] s_ld1_green_value;
-wire [7:0] s_ld2_green_value;
-wire [7:0] s_ld3_green_value;
-wire [7:0] s_ld0_blue_value;
-wire [7:0] s_ld1_blue_value;
-wire [7:0] s_ld2_blue_value;
-wire [7:0] s_ld3_blue_value;
-reg [7:0] s_ld4_basic_value;
-reg [7:0] s_ld5_basic_value;
-reg [7:0] s_ld6_basic_value;
-reg [7:0] s_ld7_basic_value;
-
-reg [5:0] s_ld0_red_pulse;
-reg [5:0] s_ld0_green_pulse;
-reg [5:0] s_ld0_blue_pulse;
-reg s_ld0_dir_pulse;
-reg [5:0] s_ld0_led_pulse;
-
-reg [5:0] s_ld1_red_pulse;
-reg [5:0] s_ld1_green_pulse;
-reg [5:0] s_ld1_blue_pulse;
-reg s_ld1_dir_pulse;
-reg [5:0] s_ld1_led_pulse;
-
-reg [5:0] s_ld2_red_pulse;
-reg [5:0] s_ld2_green_pulse;
-reg [5:0] s_ld2_blue_pulse;
-reg s_ld2_dir_pulse;
-reg [5:0] s_ld2_led_pulse;
-
-reg [5:0] s_ld3_red_pulse;
-reg [5:0] s_ld3_green_pulse;
-reg [5:0] s_ld3_blue_pulse;
-reg s_ld3_dir_pulse;
-reg [5:0] s_ld3_led_pulse;
+/* Color palette signals to connect \ref led_palette_pulser to \ref
+   led_pwm_driver . */
+wire [(4*8-1):0] s_color_led_red_value;
+wire [(4*8-1):0] s_color_led_green_value;
+wire [(4*8-1):0] s_color_led_blue_value;
+wire [(4*8-1):0] s_basic_led_lumin_value;
 
 /* UART TX signals to connect \ref uart_tx_only and \ref uart_tx_feed */
 reg [(34*8-1):0] s_uart_dat_ascii_line;
@@ -527,16 +494,40 @@ led_pwm_driver #(
     ) u_led_pwm_driver (
     .i_clk(s_clk_20mhz),
     .i_srst(s_rst_20mhz),
-    .i_color_led_red_value({s_ld3_red_value, s_ld2_red_value, s_ld1_red_value, s_ld0_red_value}),
-    .i_color_led_green_value({s_ld3_green_value, s_ld2_green_value, s_ld1_green_value, s_ld0_green_value}),
-    .i_color_led_blue_value({s_ld3_blue_value, s_ld2_blue_value, s_ld1_blue_value, s_ld0_blue_value}),
-    .i_basic_led_lumin_value({s_ld7_basic_value, s_ld6_basic_value, s_ld5_basic_value, s_ld4_basic_value}),
+    .i_color_led_red_value(s_color_led_red_value),
+    .i_color_led_green_value(s_color_led_green_value),
+    .i_color_led_blue_value(s_color_led_blue_value),
+    .i_basic_led_lumin_value(s_basic_led_lumin_value),
     .eo_color_leds_r({eo_led3_r, eo_led2_r, eo_led1_r, eo_led0_r}),
     .eo_color_leds_g({eo_led3_g, eo_led2_g, eo_led1_g, eo_led0_g}),
     .eo_color_leds_b({eo_led3_b, eo_led2_b, eo_led1_b, eo_led0_b}),
     .eo_basic_leds_l({eo_led7, eo_led6, eo_led5, eo_led4})
     );
-    
+
+/* LED palette pulser to manage the display of the LEDs */
+led_palette_pulser #(
+  .parm_color_led_count(4),
+  .parm_basic_led_count(4),
+  .parm_FCLK(c_FCLK),
+  .parm_adjustments_per_second(85)
+  ) u_led_palette_pulser (
+  .i_clk(s_clk_20mhz),
+  .i_srst(s_rst_20mhz),
+  .o_color_led_red_value(s_color_led_red_value),
+  .o_color_led_green_value(s_color_led_green_value),
+  .o_color_led_blue_value(s_color_led_blue_value),
+  .o_basic_led_lumin_value(s_basic_led_lumin_value),
+  .i_active_init_display(s_active_init_display),
+  .i_active_run_display(s_active_run_display),
+  .i_mode_is_measur_aux(s_mode_is_measur_aux),
+  .i_mode_is_linked_aux(s_mode_is_linked_aux),
+  .i_acl2_activity_stretched(s_acl2_reg_status_activity_stretched),
+  .i_acl2_inactivity_stretched(s_acl2_reg_status_inactivity_stretched),
+  .i_acl2_awake_status(s_acl2_reg_status[6]),
+  .i_sw0_selected(s_sw_deb[0]),
+  .i_sw1_selected(s_sw_deb[1])
+  );
+
 /* Provide possible tri-state for later design revision for the PMOD ACL2 SPI
    output ports. */
 assign eo_pmod_acl2_sck = so_pmod_acl2_sck_t ? 1'bz : so_pmod_acl2_sck_o;
@@ -806,178 +797,6 @@ pulse_stretcher_synch #(.par_T_stretch_bits(25), .par_T_stretch_val(20000000))
 		.i_rst(s_rst_20mhz),
 		.i_x(s_acl2_reg_status[5]));
 
-/* A clock enable divider for the process \ref p_tester_fsm_display .
-   Divides the 20 MHz clock down to 128 enables per 1.5 seconds. */
-clock_enable_divider #(.par_ce_divisor(c_FCLK / 85)
-  ) u_clock_enable_led_pulse (
-  .o_ce_div(s_tester_led_ce),
-  .i_clk_mhz(s_clk_20mhz),
-  .i_rst_mhz(s_rst_20mhz),
-  .i_ce_mhz(1'b1)
-  );
-
-/* Tester FSM registered outputs to multicolor LED 0:3 to indicate the
-   execution state of \ref p_tester_fsm_state and \ref p_tester_comb and also
-   the status register Activity and Inactivity. Also displayed on LED 4
-   is the AWAKE state of the PMOD ACL2; and on LED 6,7 the Switch 0
-   and Switch 1 debounced positions. */
-assign s_ld0_red_value = {s_ld0_red_pulse, 2'b11};
-assign s_ld0_green_value = {s_ld0_green_pulse, 2'b11};
-assign s_ld0_blue_value = {s_ld0_blue_pulse, 2'b11};
-
-assign s_ld1_red_value = {1'b0, s_ld1_red_pulse, 1'b1};
-assign s_ld1_green_value = {1'b0, s_ld1_green_pulse, 1'b1};
-assign s_ld1_blue_value = {1'b0, s_ld1_blue_pulse, 1'b1};
-
-assign s_ld2_red_value = {s_ld2_red_pulse, 2'b11};
-assign s_ld2_green_value = {s_ld2_green_pulse, 2'b11};
-assign s_ld2_blue_value = {s_ld2_blue_pulse, 2'b11};
-
-assign s_ld3_red_value = {s_ld3_red_pulse, 2'b11};
-assign s_ld3_green_value = {s_ld3_green_pulse, 2'b11};
-assign s_ld3_blue_value = {s_ld3_blue_pulse, 2'b11};
-
-always @(posedge s_clk_20mhz)
-begin: p_tester_led_pulse
-  if (s_rst_20mhz) begin
-    s_ld0_dir_pulse <= 1'b0;
-    s_ld0_led_pulse <= 6'b000001;
-    s_ld1_dir_pulse <= 1'b0;
-    s_ld1_led_pulse <= 6'b010101;
-    s_ld2_dir_pulse <= 1'b0;
-    s_ld2_led_pulse <= 6'b101010;
-    s_ld3_dir_pulse <= 1'b0;
-    s_ld3_led_pulse <= 6'b111111;
-
-  end else if (s_tester_led_ce) begin
-
-    // Rotate up and down a pulse value to be used for LD0
-    if (s_ld0_dir_pulse)
-      if (s_ld0_led_pulse == 6'b111111)
-        s_ld0_dir_pulse <= 1'b0;
-      else
-        s_ld0_led_pulse <= s_ld0_led_pulse + 1;
-    else
-      if (s_ld0_led_pulse == 6'b000001)
-        s_ld0_dir_pulse <= 1'b1;
-      else
-        s_ld0_led_pulse <= s_ld0_led_pulse - 1;
-    // Rotate up and down a pulse value to be used for LD1
-    if (s_ld1_dir_pulse)
-      if (s_ld1_led_pulse == 6'b111111)
-        s_ld1_dir_pulse <= 1'b0;
-      else
-        s_ld1_led_pulse <= s_ld1_led_pulse + 1;
-    else
-      if (s_ld1_led_pulse == 6'b000001)
-        s_ld1_dir_pulse <= 1'b1;
-      else
-        s_ld1_led_pulse <= s_ld1_led_pulse - 1;
-    // Rotate up and down a pulse value to be used for LD2
-    if (s_ld2_dir_pulse)
-      if (s_ld2_led_pulse == 6'b111111)
-        s_ld2_dir_pulse <= 1'b0;
-      else
-        s_ld2_led_pulse <= s_ld2_led_pulse + 1;
-    else
-      if (s_ld2_led_pulse == 6'b000001)
-        s_ld2_dir_pulse <= 1'b1;
-      else
-        s_ld2_led_pulse <= s_ld2_led_pulse - 1;
-    // Rotate up and down a pulse value to be used for LD3
-    if (s_ld3_dir_pulse)
-      if (s_ld3_led_pulse == 6'b111111)
-        s_ld3_dir_pulse <= 1'b0;
-      else
-        s_ld3_led_pulse <= s_ld3_led_pulse + 1;
-    else
-      if (s_ld3_led_pulse == 6'b000001)
-        s_ld3_dir_pulse <= 1'b1;
-      else
-        s_ld3_led_pulse <= s_ld3_led_pulse - 1;
-
-  end
-end
-
-always @(posedge s_clk_20mhz)
-begin: p_tester_led_display
-	if (s_active_init_display) begin
-		/* LED 0 will be red when tester is initializing. */
-		s_ld0_red_pulse   <= s_ld0_led_pulse;
-    s_ld0_green_pulse <= 6'b000001;
-    s_ld0_blue_pulse  <= 6'b000001;
-	end else if (s_active_run_display) begin
-		/* LED 0 will be green when tester is running. */
-		s_ld0_red_pulse   <= 6'b000001;
-    s_ld0_green_pulse <= s_ld0_led_pulse;
-    s_ld0_blue_pulse  <= 6'b000001;
-	end else begin
-		/* LED 0 will be blue when tester is not working at all. */
-    s_ld0_red_pulse   <= 6'b000001;
-    s_ld0_green_pulse <= 6'b000001;
-    s_ld0_blue_pulse  <= s_ld0_led_pulse;
-	end
-
-	/* LED 1 will be red when tester is not working at all. */
-	/* LED 1 will be white when tester is measuring continuously. */
-	/* LED 1 will be purple when tester is only detecting motion toggle. */
-	if (s_mode_is_measur_aux) begin
-    s_ld1_red_pulse   <= s_ld1_led_pulse;
-    s_ld1_green_pulse <= s_ld1_led_pulse;
-    s_ld1_blue_pulse  <= s_ld1_led_pulse;
-	end else if (s_mode_is_linked_aux) begin
-    s_ld1_red_pulse   <= s_ld1_led_pulse;
-    s_ld1_green_pulse <= 6'b000001;
-    s_ld1_blue_pulse  <= s_ld1_led_pulse;
-	end else begin
-    s_ld1_red_pulse   <= s_ld1_led_pulse;
-    s_ld1_green_pulse <= 6'b000001;
-    s_ld1_blue_pulse  <= 6'b000001;
-	end
-
-	/* LED 2 is Red when no Activity detect, Green when Activity detect. */
-	if (s_acl2_reg_status_activity_stretched) begin
-    s_ld2_red_pulse   <= 6'b000001;
-    s_ld2_green_pulse <= 6'b111111;
-    s_ld2_blue_pulse  <= 6'b000001;
-	end else begin
-    s_ld2_red_pulse   <= s_ld2_led_pulse;
-    s_ld2_green_pulse <= {4'b0000, s_ld2_led_pulse[1-:2]};
-    s_ld2_blue_pulse  <= 6'b000000;
-	end
-
-	/* LED 3 is Red when no Inactivity detect, Green when Inactivity detect. */
-	if (s_acl2_reg_status_inactivity_stretched) begin
-    s_ld3_red_pulse   <= 6'b000001;
-    s_ld3_green_pulse <= 6'b111111;
-    s_ld3_blue_pulse  <= 6'b000001;
-	end else begin
-    s_ld3_red_pulse   <= s_ld3_led_pulse;
-    s_ld3_green_pulse <= {4'b0000, s_ld3_led_pulse[1-:2]};
-    s_ld3_blue_pulse  <= 6'b000000;
-	end
-
-	/* LED4 is AWAKE status from the status register. */
-	if (s_acl2_reg_status[6])
-	   s_ld4_basic_value <= 8'hFF;
-	else
-	   s_ld4_basic_value <= 8'h00;
-
-	/* LED 5 */
-    s_ld5_basic_value <= 8'h00;
-
-	/* LED 6, LED 7, indicate the debounced switch positions. */
-	if (s_sw_deb[0])
-	   s_ld6_basic_value <= 8'hFF;
-	else
-	   s_ld6_basic_value <= 8'h00;
-	
-	if (s_sw_deb[1])
-	   s_ld7_basic_value <= 8'hFF;
-	else
-	   s_ld7_basic_value <= 8'h00;
-end
-
 /* Tri-state outputs of PMOD CLS custom driver. */
 assign eo_pmod_cls_sck = so_pmod_cls_sck_t ? 1'bz : so_pmod_cls_sck_o;
 assign eo_pmod_cls_ssn = so_pmod_cls_ssn_t ? 1'bz : so_pmod_cls_ssn_o;
@@ -1008,6 +827,17 @@ pmod_cls_custom_driver #(
 	.i_cmd_wr_text_line2(s_cls_wr_text_line2),
 	.i_dat_ascii_line1(s_cls_txt_ascii_line1),
 	.i_dat_ascii_line2(s_cls_txt_ascii_line2));
+
+always @(posedge s_clk_20mhz)
+begin: p_reg_cls_line
+  if (s_btn_deb == 4'b1000) begin
+    s_cls_txt_ascii_line1 <= s_adxl_dat_ascii_line1;
+    s_cls_txt_ascii_line2 <= s_adxl_dat_ascii_line2;
+  end else begin
+    s_cls_txt_ascii_line1 <= s_adxl_txt_ascii_line1;
+    s_cls_txt_ascii_line2 <= s_adxl_txt_ascii_line2;
+  end
+end
 
 /* Parse out the hexadecimal reading of mg force and temperature from the
    PMOD ACL2 data register readings. This partsing is done to display the
@@ -1100,7 +930,7 @@ assign s_char_temp_m0 = ascii_of_hdigit(s_dat_temp_m0[3-:4]);
 
 /* Assemblly of ASCII Line 1 to display on the PMOD CLS. */
 /* ASCII Line:  "X:____  Y:____  " or "X:0123  Y:ABCD  " */
-assign s_cls_dat_ascii_line1 = (s_tester_pr_state == ST_0)
+assign s_adxl_dat_ascii_line1 = (s_tester_pr_state == ST_0)
 								?
 								{8'h58, 8'h3A,
 								8'h5F, 8'h5F, 8'h5F, 8'h5F,
@@ -1117,7 +947,7 @@ assign s_cls_dat_ascii_line1 = (s_tester_pr_state == ST_0)
 								;
 
 /* ASCII line: "X______ Y______ " or "X-0.123 Y 0.345 " */
-assign s_cls_txt_ascii_line1 = (s_tester_pr_state == ST_0)
+assign s_adxl_txt_ascii_line1 = (s_tester_pr_state == ST_0)
 								?
 								{8'h58, 8'h5F,
 								8'h5F, 8'h5F, 8'h5F, 8'h5F,
@@ -1135,7 +965,7 @@ assign s_cls_txt_ascii_line1 = (s_tester_pr_state == ST_0)
 
 /* Assemblly of ASCII Line 2 to display on the PMOD CLS. */
 /* ASCII Line:  "Z:____  T:____  " or "Z:0123  T:ABCD  " */
-assign s_cls_dat_ascii_line2 = (s_tester_pr_state == ST_0)
+assign s_adxl_dat_ascii_line2 = (s_tester_pr_state == ST_0)
 								?
 								{8'h5A, 8'h3A,
 								8'h5F, 8'h5F, 8'h5F, 8'h5F,
@@ -1152,7 +982,7 @@ assign s_cls_dat_ascii_line2 = (s_tester_pr_state == ST_0)
 								;
 
 /* ASCII line: "Z______ T______ " or "Z 1.123 T5201   " */
-assign s_cls_txt_ascii_line2 = (s_tester_pr_state == ST_0)
+assign s_adxl_txt_ascii_line2 = (s_tester_pr_state == ST_0)
 								?
 								{8'h5A, 8'h5F,
 								8'h5F, 8'h5F, 8'h5F, 8'h5F,
@@ -1256,10 +1086,10 @@ end
 always @(posedge s_clk_20mhz)
 begin: p_reg_uart_line
   if (s_btn_deb == 4'b0100)
-    s_uart_dat_ascii_line <= {s_cls_txt_ascii_line1, s_cls_txt_ascii_line2,
+    s_uart_dat_ascii_line <= {s_adxl_txt_ascii_line1, s_adxl_txt_ascii_line2,
                 8'h0D, 8'h0A};
   else
-    s_uart_dat_ascii_line <= {s_cls_dat_ascii_line1, s_cls_dat_ascii_line2,
+    s_uart_dat_ascii_line <= {s_adxl_dat_ascii_line1, s_adxl_dat_ascii_line2,
                 8'h0D, 8'h0A};
 end
 
