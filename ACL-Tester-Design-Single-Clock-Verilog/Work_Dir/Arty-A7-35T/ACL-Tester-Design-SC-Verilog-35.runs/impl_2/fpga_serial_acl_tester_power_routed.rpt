@@ -1,8 +1,8 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| Tool Version     : Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
-| Date             : Wed Jun 24 18:36:56 2020
-| Host             : J1STUDY running 64-bit major release  (build 9200)
+| Tool Version     : Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
+| Date             : Thu Jul  2 16:22:16 2020
+| Host             : ubuntu running 64-bit Ubuntu 18.04.4 LTS
 | Command          : report_power -file fpga_serial_acl_tester_power_routed.rpt -pb fpga_serial_acl_tester_power_summary_routed.pb -rpx fpga_serial_acl_tester_power_routed.rpx
 | Design           : fpga_serial_acl_tester
 | Device           : xc7a35ticsg324-1L
@@ -30,10 +30,10 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.177        |
+| Total On-Chip Power (W)  | 0.174        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.115        |
+| Dynamic (W)              | 0.112        |
 | Device Static (W)        | 0.062        |
 | Effective TJA (C/W)      | 4.8          |
 | Max Ambient (C)          | 99.2         |
@@ -53,19 +53,19 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |     0.002 |       12 |       --- |             --- |
-| Slice Logic    |     0.004 |    10405 |       --- |             --- |
-|   LUT as Logic |     0.003 |     5918 |     20800 |           28.45 |
-|   CARRY4       |    <0.001 |     1167 |      8150 |           14.32 |
-|   Register     |    <0.001 |     1701 |     41600 |            4.09 |
-|   F7/F8 Muxes  |    <0.001 |       11 |     32600 |            0.03 |
-|   Others       |     0.000 |       47 |       --- |             --- |
-| Signals        |     0.003 |     7448 |       --- |             --- |
+| Slice Logic    |     0.001 |     7446 |       --- |             --- |
+|   LUT as Logic |     0.001 |     3512 |     20800 |           16.88 |
+|   CARRY4       |    <0.001 |      559 |      8150 |            6.86 |
+|   Register     |    <0.001 |     2317 |     41600 |            5.57 |
+|   F7/F8 Muxes  |    <0.001 |       19 |     32600 |            0.06 |
+|   Others       |     0.000 |       60 |       --- |             --- |
+| Signals        |     0.001 |     5200 |       --- |             --- |
 | Block RAM      |    <0.001 |        2 |        50 |            4.00 |
 | MMCM           |     0.102 |        1 |         5 |           20.00 |
 | DSPs           |    <0.001 |       16 |        90 |           17.78 |
-| I/O            |     0.004 |       32 |       210 |           15.24 |
+| I/O            |     0.004 |       36 |       210 |           17.14 |
 | Static Power   |     0.062 |          |           |                 |
-| Total          |     0.177 |          |           |                 |
+| Total          |     0.174 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 
@@ -75,7 +75,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) |
 +-----------+-------------+-----------+-------------+------------+
-| Vccint    |       0.950 |     0.016 |       0.010 |      0.006 |
+| Vccint    |       0.950 |     0.013 |       0.007 |      0.006 |
 | Vccaux    |       1.800 |     0.068 |       0.057 |      0.011 |
 | Vcco33    |       3.300 |     0.002 |       0.001 |      0.001 |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |
@@ -149,8 +149,8 @@ Table of Contents
 +-----------------------------+-----------+
 | Name                        | Power (W) |
 +-----------------------------+-----------+
-| fpga_serial_acl_tester      |     0.115 |
-|   u_led_pwm_driver          |     0.007 |
+| fpga_serial_acl_tester      |     0.112 |
+|   u_led_pwm_driver          |     0.003 |
 |   u_pmod_acl2_custom_driver |     0.001 |
 +-----------------------------+-----------+
 
