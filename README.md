@@ -10,3 +10,6 @@ Refer to:
 
 and:
 ./ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams.pdf
+
+BLock diagram architecture of the HDL designs:
+![ACL Tester Architecture Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-Architecture%201.png)
