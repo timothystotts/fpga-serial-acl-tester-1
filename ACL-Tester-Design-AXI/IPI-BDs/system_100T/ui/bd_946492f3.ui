@@ -55,38 +55,38 @@ preplace netloc clk_wiz_0_clk_out4 1 5 1 1980 360n
 preplace netloc axi_quad_spi_0_ip2intc_irpt 1 1 6 420 1010 860J 940 NJ 940 NJ 940 1950J 900 2330
 preplace netloc axi_uartlite_0_interrupt 1 1 6 430 1030 870J 970 NJ 970 NJ 970 2020J 920 2330
 preplace netloc PmodACL2_0_GPIO_Interrupt 1 1 6 440 990 840J 960 NJ 960 NJ 960 1940J 890 2340
-preplace netloc microblaze_0_ilmb_1 1 4 1 1660 660n
-preplace netloc axi_quad_spi_0_SPI_0 1 6 1 NJ 720
-preplace netloc mig_7series_0_DDR3 1 6 1 NJ 1540
-preplace netloc microblaze_0_M_AXI_DC 1 4 1 N 810
-preplace netloc axi_smc_M00_AXI 1 5 1 1920 840n
-preplace netloc microblaze_0_M_AXI_IC 1 4 1 N 830
-preplace netloc microblaze_0_dlmb_1 1 4 1 1620 640n
-preplace netloc axi_ethernetlite_0_MDIO 1 6 1 2360J 1240n
-preplace netloc microblaze_0_axi_periph_M05_AXI 1 2 4 720 60 NJ 60 NJ 60 NJ
-preplace netloc microblaze_0_intc_axi 1 2 1 810 320n
-preplace netloc microblaze_0_axi_periph_M02_AXI 1 2 4 850 450 NJ 450 NJ 450 2040J
 preplace netloc axi_ethernetlite_0_MII 1 6 1 NJ 1220
-preplace netloc microblaze_0_axi_periph_M01_AXI 1 2 4 N 340 NJ 340 NJ 340 1930J
+preplace netloc axi_quad_spi_0_SPI_0 1 6 1 NJ 720
+preplace netloc microblaze_0_ilmb_1 1 4 1 1660 660n
 preplace netloc microblaze_0_interrupt 1 3 1 1140 760n
+preplace netloc microblaze_0_M_AXI_DC 1 4 1 N 810
+preplace netloc microblaze_0_axi_periph_M02_AXI 1 2 4 850 450 NJ 450 NJ 450 2040J
+preplace netloc microblaze_0_dlmb_1 1 4 1 1620 640n
+preplace netloc microblaze_0_axi_periph_M05_AXI 1 2 4 720 60 NJ 60 NJ 60 NJ
+preplace netloc microblaze_0_M_AXI_IC 1 4 1 N 830
+preplace netloc axi_smc_M00_AXI 1 5 1 1920 840n
 preplace netloc axi_uartlite_0_UART 1 6 1 NJ 990
-preplace netloc microblaze_0_axi_periph_M04_AXI 1 2 4 730 200 NJ 200 NJ 200 NJ
-preplace netloc microblaze_0_axi_periph_M03_AXI 1 2 1 780 380n
-preplace netloc microblaze_0_axi_periph_M07_AXI 1 2 4 790 470 NJ 470 NJ 470 2030J
 preplace netloc axi_gpio_0_GPIO 1 6 1 NJ 1400
+preplace netloc axi_ethernetlite_0_MDIO 1 6 1 2360J 1240n
+preplace netloc microblaze_0_axi_periph_M07_AXI 1 2 4 790 470 NJ 470 NJ 470 2030J
+preplace netloc microblaze_0_axi_periph_M03_AXI 1 2 1 780 380n
+preplace netloc microblaze_0_intc_axi 1 2 1 810 320n
+preplace netloc mig_7series_0_DDR3 1 6 1 NJ 1540
+preplace netloc microblaze_0_axi_periph_M04_AXI 1 2 4 730 200 NJ 200 NJ 200 NJ
+preplace netloc microblaze_0_axi_periph_M01_AXI 1 2 4 N 340 NJ 340 NJ 340 1930J
+preplace netloc microblaze_0_debug 1 3 1 1150 590n
 preplace netloc microblaze_0_axi_periph_M06_AXI 1 2 4 800 460 NJ 460 NJ 460 1970J
 preplace netloc microblaze_0_axi_dp 1 1 4 380 100 NJ 100 NJ 100 1610
-preplace netloc microblaze_0_debug 1 3 1 1150 590n
 preplace netloc PmodCLS_0_Pmod_out 1 6 1 NJ 370
-preplace netloc microblaze_0_axi_periph_M08_AXI 1 2 4 740 350 NJ 350 NJ 350 1980J
 preplace netloc PmodACL2_0_Pmod_out 1 6 1 NJ 530
-preplace netloc microblaze_0_axi_periph_M09_AXI 1 2 4 N 500 NJ 500 NJ 500 NJ
+preplace netloc microblaze_0_axi_periph_M08_AXI 1 2 4 740 350 NJ 350 NJ 350 1980J
 preplace netloc microblaze_0_axi_periph_M10_AXI 1 2 4 N 520 NJ 520 NJ 520 NJ
+preplace netloc microblaze_0_axi_periph_M09_AXI 1 2 4 N 500 NJ 500 NJ 500 NJ
 levelinfo -pg 1 0 210 580 1000 1380 1790 2190 2380
 pagesize -pg 1 -db -bbox -sgen -110 0 2550 1760
 "
 }
 {
-   "da_axi4_cnt":"6",
-   "da_clkrst_cnt":"4"
+   "da_axi4_cnt":"16",
+   "da_clkrst_cnt":"11"
 }

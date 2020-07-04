@@ -1,8 +1,8 @@
 --Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
---Date        : Sun Jun 21 17:12:38 2020
---Host        : M3ENGINEERING running 64-bit major release  (build 9200)
+--Date        : Sat Jul  4 14:57:06 2020
+--Host        : J1STUDY running 64-bit major release  (build 9200)
 --Command     : generate_target system_100T_wrapper.bd
 --Design      : system_100T_wrapper
 --Purpose     : IP block netlist
@@ -81,6 +81,56 @@ architecture STRUCTURE of system_100T_wrapper is
     eth_ref_clk : out STD_LOGIC;
     led03_rgb : out STD_LOGIC_VECTOR ( 11 downto 0 );
     led47 : out STD_LOGIC_VECTOR ( 3 downto 0 );
+    eth_mii_col : in STD_LOGIC;
+    eth_mii_crs : in STD_LOGIC;
+    eth_mii_rst_n : out STD_LOGIC;
+    eth_mii_rx_clk : in STD_LOGIC;
+    eth_mii_rx_dv : in STD_LOGIC;
+    eth_mii_rx_er : in STD_LOGIC;
+    eth_mii_rxd : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    eth_mii_tx_clk : in STD_LOGIC;
+    eth_mii_tx_en : out STD_LOGIC;
+    eth_mii_txd : out STD_LOGIC_VECTOR ( 3 downto 0 );
+    qspi_flash_io0_i : in STD_LOGIC;
+    qspi_flash_io0_o : out STD_LOGIC;
+    qspi_flash_io0_t : out STD_LOGIC;
+    qspi_flash_io1_i : in STD_LOGIC;
+    qspi_flash_io1_o : out STD_LOGIC;
+    qspi_flash_io1_t : out STD_LOGIC;
+    qspi_flash_io2_i : in STD_LOGIC;
+    qspi_flash_io2_o : out STD_LOGIC;
+    qspi_flash_io2_t : out STD_LOGIC;
+    qspi_flash_io3_i : in STD_LOGIC;
+    qspi_flash_io3_o : out STD_LOGIC;
+    qspi_flash_io3_t : out STD_LOGIC;
+    qspi_flash_sck_i : in STD_LOGIC;
+    qspi_flash_sck_o : out STD_LOGIC;
+    qspi_flash_sck_t : out STD_LOGIC;
+    qspi_flash_ss_i : in STD_LOGIC;
+    qspi_flash_ss_o : out STD_LOGIC;
+    qspi_flash_ss_t : out STD_LOGIC;
+    usb_uart_rxd : in STD_LOGIC;
+    usb_uart_txd : out STD_LOGIC;
+    dip_switches_4bits_tri_i : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    eth_mdio_mdc_mdc : out STD_LOGIC;
+    eth_mdio_mdc_mdio_i : in STD_LOGIC;
+    eth_mdio_mdc_mdio_o : out STD_LOGIC;
+    eth_mdio_mdc_mdio_t : out STD_LOGIC;
+    ddr3_sdram_dq : inout STD_LOGIC_VECTOR ( 15 downto 0 );
+    ddr3_sdram_dqs_p : inout STD_LOGIC_VECTOR ( 1 downto 0 );
+    ddr3_sdram_dqs_n : inout STD_LOGIC_VECTOR ( 1 downto 0 );
+    ddr3_sdram_addr : out STD_LOGIC_VECTOR ( 13 downto 0 );
+    ddr3_sdram_ba : out STD_LOGIC_VECTOR ( 2 downto 0 );
+    ddr3_sdram_ras_n : out STD_LOGIC;
+    ddr3_sdram_cas_n : out STD_LOGIC;
+    ddr3_sdram_we_n : out STD_LOGIC;
+    ddr3_sdram_reset_n : out STD_LOGIC;
+    ddr3_sdram_ck_p : out STD_LOGIC_VECTOR ( 0 to 0 );
+    ddr3_sdram_ck_n : out STD_LOGIC_VECTOR ( 0 to 0 );
+    ddr3_sdram_cke : out STD_LOGIC_VECTOR ( 0 to 0 );
+    ddr3_sdram_cs_n : out STD_LOGIC_VECTOR ( 0 to 0 );
+    ddr3_sdram_dm : out STD_LOGIC_VECTOR ( 1 downto 0 );
+    ddr3_sdram_odt : out STD_LOGIC_VECTOR ( 0 to 0 );
     jb_pin1_o : out STD_LOGIC;
     jb_pin7_i : in STD_LOGIC;
     jb_pin2_o : out STD_LOGIC;
@@ -128,57 +178,7 @@ architecture STRUCTURE of system_100T_wrapper is
     jc_pin2_t : out STD_LOGIC;
     jc_pin7_o : out STD_LOGIC;
     jc_pin3_t : out STD_LOGIC;
-    jc_pin8_o : out STD_LOGIC;
-    qspi_flash_io0_i : in STD_LOGIC;
-    qspi_flash_io0_o : out STD_LOGIC;
-    qspi_flash_io0_t : out STD_LOGIC;
-    qspi_flash_io1_i : in STD_LOGIC;
-    qspi_flash_io1_o : out STD_LOGIC;
-    qspi_flash_io1_t : out STD_LOGIC;
-    qspi_flash_io2_i : in STD_LOGIC;
-    qspi_flash_io2_o : out STD_LOGIC;
-    qspi_flash_io2_t : out STD_LOGIC;
-    qspi_flash_io3_i : in STD_LOGIC;
-    qspi_flash_io3_o : out STD_LOGIC;
-    qspi_flash_io3_t : out STD_LOGIC;
-    qspi_flash_sck_i : in STD_LOGIC;
-    qspi_flash_sck_o : out STD_LOGIC;
-    qspi_flash_sck_t : out STD_LOGIC;
-    qspi_flash_ss_i : in STD_LOGIC;
-    qspi_flash_ss_o : out STD_LOGIC;
-    qspi_flash_ss_t : out STD_LOGIC;
-    ddr3_sdram_dq : inout STD_LOGIC_VECTOR ( 15 downto 0 );
-    ddr3_sdram_dqs_p : inout STD_LOGIC_VECTOR ( 1 downto 0 );
-    ddr3_sdram_dqs_n : inout STD_LOGIC_VECTOR ( 1 downto 0 );
-    ddr3_sdram_addr : out STD_LOGIC_VECTOR ( 13 downto 0 );
-    ddr3_sdram_ba : out STD_LOGIC_VECTOR ( 2 downto 0 );
-    ddr3_sdram_ras_n : out STD_LOGIC;
-    ddr3_sdram_cas_n : out STD_LOGIC;
-    ddr3_sdram_we_n : out STD_LOGIC;
-    ddr3_sdram_reset_n : out STD_LOGIC;
-    ddr3_sdram_ck_p : out STD_LOGIC_VECTOR ( 0 to 0 );
-    ddr3_sdram_ck_n : out STD_LOGIC_VECTOR ( 0 to 0 );
-    ddr3_sdram_cke : out STD_LOGIC_VECTOR ( 0 to 0 );
-    ddr3_sdram_cs_n : out STD_LOGIC_VECTOR ( 0 to 0 );
-    ddr3_sdram_dm : out STD_LOGIC_VECTOR ( 1 downto 0 );
-    ddr3_sdram_odt : out STD_LOGIC_VECTOR ( 0 to 0 );
-    eth_mdio_mdc_mdc : out STD_LOGIC;
-    eth_mdio_mdc_mdio_i : in STD_LOGIC;
-    eth_mdio_mdc_mdio_o : out STD_LOGIC;
-    eth_mdio_mdc_mdio_t : out STD_LOGIC;
-    eth_mii_col : in STD_LOGIC;
-    eth_mii_crs : in STD_LOGIC;
-    eth_mii_rst_n : out STD_LOGIC;
-    eth_mii_rx_clk : in STD_LOGIC;
-    eth_mii_rx_dv : in STD_LOGIC;
-    eth_mii_rx_er : in STD_LOGIC;
-    eth_mii_rxd : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    eth_mii_tx_clk : in STD_LOGIC;
-    eth_mii_tx_en : out STD_LOGIC;
-    eth_mii_txd : out STD_LOGIC_VECTOR ( 3 downto 0 );
-    usb_uart_rxd : in STD_LOGIC;
-    usb_uart_txd : out STD_LOGIC;
-    dip_switches_4bits_tri_i : in STD_LOGIC_VECTOR ( 3 downto 0 )
+    jc_pin8_o : out STD_LOGIC
   );
   end component system_100T;
   component IOBUF is
