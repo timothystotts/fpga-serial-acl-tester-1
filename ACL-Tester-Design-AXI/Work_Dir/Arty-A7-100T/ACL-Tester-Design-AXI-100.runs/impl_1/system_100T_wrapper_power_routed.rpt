@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
-| Date             : Sat Jul  4 15:05:44 2020
+| Date             : Mon Jul  6 13:35:28 2020
 | Host             : J1STUDY running 64-bit major release  (build 9200)
 | Command          : report_power -file system_100T_wrapper_power_routed.rpt -pb system_100T_wrapper_power_summary_routed.pb -rpx system_100T_wrapper_power_routed.rpx
 | Design           : system_100T_wrapper
@@ -53,19 +53,19 @@ Table of Contents
 | On-Chip                  | Power (W) | Used     | Available | Utilization (%) |
 +--------------------------+-----------+----------+-----------+-----------------+
 | Clocks                   |     0.052 |       30 |       --- |             --- |
-| Slice Logic              |     0.021 |    34662 |       --- |             --- |
-|   LUT as Logic           |     0.017 |    11725 |     63400 |           18.49 |
+| Slice Logic              |     0.021 |    34695 |       --- |             --- |
+|   LUT as Logic           |     0.017 |    11726 |     63400 |           18.50 |
 |   LUT as Distributed RAM |     0.002 |     1414 |     19000 |            7.44 |
-|   Register               |     0.001 |    14836 |    126800 |           11.70 |
+|   Register               |     0.001 |    14864 |    126800 |           11.72 |
 |   CARRY4                 |    <0.001 |      330 |     15850 |            2.08 |
 |   LUT as Shift Register  |    <0.001 |      419 |     19000 |            2.21 |
 |   F7/F8 Muxes            |    <0.001 |      177 |     63400 |            0.28 |
-|   Others                 |    <0.001 |     1519 |       --- |             --- |
-| Signals                  |     0.027 |    24290 |       --- |             --- |
+|   Others                 |    <0.001 |     1521 |       --- |             --- |
+| Signals                  |     0.027 |    24332 |       --- |             --- |
 | Block RAM                |     0.025 |     22.5 |       135 |           16.67 |
 | MMCM                     |     0.195 |        2 |         6 |           33.33 |
 | PLL                      |     0.116 |        1 |         6 |           16.67 |
-| I/O                      |     0.268 |      112 |       210 |           53.33 |
+| I/O                      |     0.268 |      116 |       210 |           55.24 |
 | PHASER                   |     0.111 |       14 |       --- |             --- |
 | XADC                     |     0.004 |        1 |       --- |             --- |
 | Static Power             |     0.092 |          |           |                 |
@@ -177,8 +177,8 @@ Table of Contents
 +-----------------------------------------+-----------+
 | system_100T_wrapper                     |     0.819 |
 |   system_100T_i                         |     0.811 |
-|     PWM_0                               |     0.003 |
-|       inst                              |     0.003 |
+|     PWM_0                               |     0.002 |
+|       inst                              |     0.002 |
 |     PWM_1                               |     0.001 |
 |       inst                              |     0.001 |
 |     PmodACL2_0                          |     0.003 |
@@ -202,7 +202,7 @@ Table of Contents
 |     microblaze_0_local_memory           |     0.003 |
 |       lmb_bram                          |     0.003 |
 |     mig_7series_0                       |     0.611 |
-|       u_system_100T_mig_7series_0_0_mig |     0.609 |
+|       u_system_100T_mig_7series_0_0_mig |     0.610 |
 +-----------------------------------------+-----------+
 
 

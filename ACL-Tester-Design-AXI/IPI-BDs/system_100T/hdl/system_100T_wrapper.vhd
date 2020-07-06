@@ -1,7 +1,7 @@
 --Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
---Date        : Sat Jul  4 14:57:06 2020
+--Date        : Mon Jul  6 13:26:55 2020
 --Host        : J1STUDY running 64-bit major release  (build 9200)
 --Command     : generate_target system_100T_wrapper.bd
 --Design      : system_100T_wrapper
@@ -60,6 +60,7 @@ entity system_100T_wrapper is
     jc_pin9_io : inout STD_LOGIC;
     led03_rgb : out STD_LOGIC_VECTOR ( 11 downto 0 );
     led47 : out STD_LOGIC_VECTOR ( 3 downto 0 );
+    push_buttons_4bits_tri_i : in STD_LOGIC_VECTOR ( 3 downto 0 );
     qspi_flash_io0_io : inout STD_LOGIC;
     qspi_flash_io1_io : inout STD_LOGIC;
     qspi_flash_io2_io : inout STD_LOGIC;
@@ -178,7 +179,8 @@ architecture STRUCTURE of system_100T_wrapper is
     jc_pin2_t : out STD_LOGIC;
     jc_pin7_o : out STD_LOGIC;
     jc_pin3_t : out STD_LOGIC;
-    jc_pin8_o : out STD_LOGIC
+    jc_pin8_o : out STD_LOGIC;
+    push_buttons_4bits_tri_i : in STD_LOGIC_VECTOR ( 3 downto 0 )
   );
   end component system_100T;
   component IOBUF is
@@ -503,6 +505,7 @@ system_100T_i: component system_100T
       jc_pin9_t => jc_pin9_t,
       led03_rgb(11 downto 0) => led03_rgb(11 downto 0),
       led47(3 downto 0) => led47(3 downto 0),
+      push_buttons_4bits_tri_i(3 downto 0) => push_buttons_4bits_tri_i(3 downto 0),
       qspi_flash_io0_i => qspi_flash_io0_i,
       qspi_flash_io0_o => qspi_flash_io0_o,
       qspi_flash_io0_t => qspi_flash_io0_t,

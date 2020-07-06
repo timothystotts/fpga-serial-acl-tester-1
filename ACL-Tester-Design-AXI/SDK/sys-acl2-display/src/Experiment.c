@@ -76,240 +76,170 @@ extern QueueHandle_t xQueueClsDispl;
 #define SWTCH_SW_CHANNEL 1
 #define SWTCH0_MASK 0x01
 #define SWTCH1_MASK 0x02
+#define SWTCH2_MASK 0x04
+#define SWTCH3_MASK 0x08
+#define BTNS_SWS_MASK 0x0F
+#define BTNS_SW_CHANNEL 2
+#define BTN0_MASK 0x01
+#define BTN1_MASK 0x02
+#define BTN2_MASK 0x04
+#define BTN3_MASK 0x08
 #define CLS_PRINTF_BLANK_TXT_XY "X______ Y______ "
 #define CLS_PRINTF_BLANK_TXT_ZT "Z______ T______ "
 #define CLS_PRINTF_BLANK_DAT_XY "X:____  Y:____  "
 #define CLS_PRINTF_BLANK_DAT_ZT "Z:____  T:____  "
 
-/*-----------------------------------------------------------*/
+/*------------------ Module Type Definitions ----------------*/
+typedef struct EXPERIMENT_DATA_TAG {
+	/* Driver objects */
+	XGpio axGpio;
+	PmodACL2c acl2Device;
+	/* LED driver palettes stored */
+	t_rgb_led_palette_silk ledUpdate[8];
+	/* Print QUEUE string line exchange */
+	char comString[PRINTF_BUF_SZ];
+	/* CLS QUEUE string lines exchange */
+	t_cls_lines clsUpdate;
+	/* Operating mode enumerations */
+	int operatingMode;
+	int operatingModePrev;
+	int acl2IsConfigured;
+	/* GPIO reading values at this point in the execution */
+	u32 switchesRead;
+	u32 buttonsRead;
+	/* Timer count T for delay interval of the real-time task */
+	uint32_t cnt_t;
+	uint32_t cnt_t_freerun;
+	/* Statuses */
+	u8 statusReg;
+	u8 cntActive;
+	u8 cntInactive;
+	/* raw data */
+	ACL2c_SamplePacket acl2Data;
+} t_experiment_data;
 
-/* Event tracking for LED display, helper functions for prvAcl2Task */
-static void updateLedsDisplayMode(int mode);
-static void trackEventBasicLedDisplay(u8* count, const int ledIdx);
-static void trackEventRgbLedDisplay(u8* count, const int ledIdx);
+t_experiment_data experiData; // Global as that the object is always in scope, including interrupt handler.
 
-static t_rgb_led_palette_silk ledUpdate[8] = {
-		{{0, 0, 0}, 0},
-		{{0, 0, 0}, 1},
-		{{0, 0, 0}, 2},
-		{{0, 0, 0}, 3},
-		{{0, 0, 0}, 4},
-		{{0, 0, 0}, 5},
-		{{0, 0, 0}, 6},
-		{{0, 0, 0}, 7}
-};
+static const uint32_t cnt_t_max = 40 * 3;
+
+/*------------------ Private Module Functions Prototypes ----*/
+static void Experiment_InitData(t_experiment_data* expData);
+static void Experiment_SetLedUpdate(t_experiment_data* expData,
+		uint8_t silk, uint8_t red, uint8_t green, uint8_t blue);
+static void Experiment_SendLedUpdate(t_experiment_data* expData,
+		uint8_t silk);
+static void Experiment_updateLedsStatuses(t_experiment_data* expData);
+static void Experiment_updateLedsDisplayMode(t_experiment_data* expData);
+static void Experiment_updateLedsEvents(t_experiment_data* expData);
+static void Experiment_timeEvent(u8* count);
+static bool Experiment_generateTextLines(t_experiment_data* expData);
+static void Experiment_updateClsDisplayAndTerminal(t_experiment_data* expData);
+static void Experiment_readUserInputs(t_experiment_data* expData);
+static void Experiment_operateFSM(t_experiment_data* expData);
+static void Experiment_iterationTimer(t_experiment_data* expData);
 
 /*-----------------------------------------------------------*/
 void Experiment_prvAcl2Task( void *pvParameters )
 {
 	const TickType_t x200millisecond = pdMS_TO_TICKS( DELAY_1_SECOND / 5 );
-	const TickType_t x100millisecond = pdMS_TO_TICKS( DELAY_1_SECOND / 10 );
-	static XGpio axGpio;
-	PmodACL2c acl2Device;
-	int status;
-	u8 cntAwake = CNT_PAST_DONE;
-	u8 cntActive = CNT_PAST_DONE;
-	u8 cntInactive = CNT_PAST_DONE;
-	u32 switchesRead = 0;
-	int ledIdx = 0;
-	int acl2IsConfigured = ACL2_NEVERCONFIGURED;
-	char comString[PRINTF_BUF_SZ] = "";
-	u8 mode = OPERATING_MODE_BOOT;
 
-	ACL2c_SamplePacket data = {0, 0, 0, 0};
-	t_cls_lines clsUpdate = {CLS_PRINTF_BLANK_TXT_XY, CLS_PRINTF_BLANK_TXT_ZT};
+	Experiment_InitData(&experiData);
 
-	/* Initialize the display to blanked value display. */
-	xQueueSend(xQueueClsDispl, &clsUpdate, 0UL);
-
-	/* Initialize the ACL2 driver device */
-	ACL2c_begin(&acl2Device, XPAR_PMODACL2_0_AXI_LITE_GPIO_BASEADDR,
+	/* Initialize the ACL2 driver */
+	ACL2c_begin(&(experiData.acl2Device), XPAR_PMODACL2_0_AXI_LITE_GPIO_BASEADDR,
 		 XPAR_PMODACL2_0_AXI_LITE_SPI_BASEADDR);
 
-	/* Initialize the GPIO device for inputting switches 0,1,2,3. */
-	XGpio_Initialize(&axGpio, USERIO_DEVICE_ID);
-	XGpio_SelfTest(&axGpio);
-	XGpio_SetDataDirection(&axGpio, SWTCH_SW_CHANNEL, SWTCHS_SWS_MASK);
+	/* Initialize the GPIO device for inputting switches 0,1,2,3 and buttons 0,1,2,3.
+	 * This corresponds to the two channels set in the single AXI GPIO driver of
+	 * the FPGA system block design. */
+	taskENTER_CRITICAL();
+	XGpio_Initialize(&(experiData.axGpio), USERIO_DEVICE_ID);
+	XGpio_SelfTest(&(experiData.axGpio));
+	XGpio_SetDataDirection(&(experiData.axGpio), SWTCH_SW_CHANNEL, SWTCHS_SWS_MASK);
+	XGpio_SetDataDirection(&(experiData.axGpio), BTNS_SW_CHANNEL, BTNS_SWS_MASK);
+	taskEXIT_CRITICAL();
 
-	/* Update the RGB LEDs to solid red for initial value at boot-up. */
-	for (ledIdx = 0; ledIdx < 4; ledIdx++) {
-		ledUpdate[ledIdx].rgb.paletteBlue = 0;
-		ledUpdate[ledIdx].rgb.paletteRed = 255;
-		ledUpdate[ledIdx].rgb.paletteGreen = 0;
-		xQueueSend( xQueueLedConfig, &ledUpdate[ledIdx], 0UL);
-	}
+	/* Initialize the four color LEDs and four basic LEDs to all PWM periods set
+	 * and PWM duty cycles set to zero, causing all sixteen emitters to be turned
+	 * off by outputting a holding low PWM signal.
+	 */
+	taskENTER_CRITICAL();
+	InitAllLedsOff();
+	taskEXIT_CRITICAL();
 
 	/* Main execution loop. Change in switches 0,1 cause change of mode. */
 	for(;;) {
+		/* Update the color LEDs based on the current operating mode. */
+		Experiment_updateLedsDisplayMode(&experiData);
+
+		/* Update the basic LEDs based on current global statuses. */
+		Experiment_updateLedsStatuses(&experiData);
+
+		/* Update the color LEDs based on the activity/inactivity events */
+		Experiment_updateLedsEvents(&experiData);
+
+		/* Update the Pmod CLS display based upon current state machine state and other variables */
+		Experiment_updateClsDisplayAndTerminal(&experiData);
+
 		/* Delay for 200 milliseconds. */
 		vTaskDelay( x200millisecond );
 
-		/* Read the AXI GPIO for switch positions. */
-		switchesRead = XGpio_DiscreteRead(&axGpio, SWTCH_SW_CHANNEL);
+		/* Read the user inputs */
+		Experiment_readUserInputs(&experiData);
 
-		if (switchesRead == SWTCH0_MASK) {
-			if (acl2IsConfigured != ACL2_CONFIGURED) {
-				/* Reset the ACL2 */
-				ACL2c_reset(&acl2Device);
+		/* Operate a single step of the Experiment FSM */
+		Experiment_operateFSM(&experiData);
 
-				/* Delay for 100 milliseconds. */
-				vTaskDelay( x100millisecond );
-
-				/* Set ACL2 configuration data */
-				ACL2c_configureMeasureMode(&acl2Device);
-				acl2IsConfigured = ACL2_CONFIGURED;
-				mode = OPERATING_MODE_MEAS;
-				updateLedsDisplayMode(mode);
-			}
-		} else if (switchesRead == SWTCH1_MASK) {
-			if (acl2IsConfigured != ACL2_CONFIGURED) {
-				/* Reset the ACL2 */
-				ACL2c_reset(&acl2Device);
-
-				/* Delay for 100 milliseconds. */
-				vTaskDelay( x100millisecond );
-
-				/* Set ACL2 configuration data */
-				ACL2c_configureLinkedMode(&acl2Device);
-				acl2IsConfigured = ACL2_CONFIGURED;
-				mode = OPERATING_MODE_LINK;
-				updateLedsDisplayMode(mode);
-			}
-		} else if (acl2IsConfigured != ACL2_NEVERCONFIGURED) {
-			acl2IsConfigured = ACL2_NOTCONFIGURED;
-			mode = OPERATING_MODE_NONE;
-			updateLedsDisplayMode(mode);
-		} else {
-			mode = OPERATING_MODE_BOOT;
-			updateLedsDisplayMode(mode);
-		}
-
-		while (acl2IsConfigured == ACL2_CONFIGURED) {
-			status = ACL2c_getStatus(&acl2Device);
-
-			/* Capture Awake, Activity, and Inactivity statuses to display as LED update. */
-			if ((ACL2c_STATUS_ACT_MASK & status) != 0) {
-				cntActive = CNT_START;
-			}
-
-			if ((ACL2c_STATUS_INACT_MASK & status) != 0) {
-				cntInactive = CNT_START;
-			}
-
-			if ((ACL2c_STATUS_AWAKE_MASK & status) != 0) {
-				cntAwake = CNT_START;
-			}
-
-			// Capture data only when there is data available
-			if ((ACL2c_STATUS_DATA_READY_MASK & status) != 0) {
-				data = ACL2c_getSample(&acl2Device);
-			} else {
-				break;
-			}
-		}
-
-		/* Print results if in an operating mode. */
-		if (acl2IsConfigured && ((mode == OPERATING_MODE_MEAS) ||
-								 (mode == OPERATING_MODE_LINK))) {
-
-			// Print results always if operating mode is MEASURE,
-			// Print results only on events if operating mode is LINK.
-
-			if ((mode == OPERATING_MODE_MEAS) ||
-				((mode == OPERATING_MODE_LINK) && ((CNT_START == cntActive) || (CNT_START == cntInactive)))
-				) {
-
-				snprintf(clsUpdate.line1, sizeof(clsUpdate.line1),
-						"X% .3f Y% .3f",
-						ACL2c_DataToG(&acl2Device, (s16)data.XData),
-						ACL2c_DataToG(&acl2Device, (s16)data.YData));
-				snprintf(clsUpdate.line2, sizeof(clsUpdate.line2),
-						"Z% .3f T%04hd",
-						ACL2c_DataToG(&acl2Device, (s16)data.ZData),
-						(u16)data.Temp);
-				snprintf(comString, sizeof(comString),
-						("X:%04hX  Y:%04hX  " "Z:%04hX  T:%04hX  "),
-						(u16)data.XData, (u16)data.YData,
-						(u16)data.ZData, (u16)data.Temp);
-			}
-
-		} else {
-			snprintf(clsUpdate.line1, sizeof(clsUpdate.line1),
-					CLS_PRINTF_BLANK_TXT_XY);
-			snprintf(clsUpdate.line2, sizeof(clsUpdate.line2),
-					CLS_PRINTF_BLANK_TXT_ZT);
-			snprintf(comString, sizeof(comString), "%s",
-					(CLS_PRINTF_BLANK_DAT_XY CLS_PRINTF_BLANK_DAT_ZT));
-		}
-
-		/* Update the CLS display to either a measurement or a blank. */
-		xQueueSend(xQueueClsDispl, &clsUpdate, 0UL);
-
-		/* Transmit the same data via Serial COM as an update string. */
-		xQueueSend(xQueuePrint, comString, 0UL);
-
-		/* Track the AWAKE status on basic LED, AWAKE_LED_IDX . */
-		trackEventBasicLedDisplay(&cntAwake, AWAKE_LED_IDX);
-
-		/* Track the ACTIVE status on RGB LED, ACTIVE_LED_IDX. */
-		trackEventRgbLedDisplay(&cntActive, ACTIVE_LED_IDX);
-
-		/* Track the INACTIVE status on RGB LED, INACTIVE_LED_IDX . */
-		trackEventRgbLedDisplay(&cntInactive, INACTIVE_LED_IDX);
+		/* State change timer, wrapping at 3 seconds. */
+		Experiment_iterationTimer(&experiData);
 	}
 }
 
 /*------------------ Private Module Functions ----------------*/
+
 /*-----------------------------------------------------------*/
-/* Helper function for displaying LEDs 0,1 based on Operating Mode. */
-static void updateLedsDisplayMode(int mode)
+/* Helper function to initialize the state of the \ref t_experiment_data object
+ * belonging to this module's real-time task.
+ */
+static void Experiment_InitData(t_experiment_data* expData) {
+	for (int iSilk = 0; iSilk < 8; ++iSilk) {
+		Experiment_SetLedUpdate(expData, iSilk, 0x00, 0x00, 0x00);
+	}
+
+	memset(expData->comString, 0x00, PRINTF_BUF_SZ);
+
+	expData->operatingMode = OPERATING_MODE_NONE;
+	expData->operatingModePrev = OPERATING_MODE_NONE;
+	expData->acl2IsConfigured = ACL2_NEVERCONFIGURED;
+	expData->switchesRead = 0x00000000;
+	expData->buttonsRead = 0x00000000;
+	expData->cnt_t = 0;
+	expData->cnt_t_freerun = 0;
+	expData->statusReg = 0;
+	expData->cntActive = CNT_DONE;
+	expData->cntInactive = CNT_DONE;
+}
+
+/*-----------------------------------------------------------*/
+/* Helper function to set an updated state to one of the 8 LEDs. */
+static void Experiment_SetLedUpdate(t_experiment_data* expData,
+		uint8_t silk, uint8_t red, uint8_t green, uint8_t blue)
 {
-	switch (mode) {
-	case OPERATING_MODE_MEAS:
-		/* LED pattern to indicate running Operating Mode Measurement. */
-		ledUpdate[0].rgb.paletteBlue = 0;
-		ledUpdate[0].rgb.paletteRed = 0;
-		ledUpdate[0].rgb.paletteGreen = 255;
-		xQueueSend( xQueueLedConfig, &ledUpdate[0], 0UL);
-		ledUpdate[1].rgb.paletteBlue = 255;
-		ledUpdate[1].rgb.paletteRed = 255;
-		ledUpdate[1].rgb.paletteGreen = 255;
-		xQueueSend( xQueueLedConfig, &ledUpdate[1], 0UL);
-		break;
-	case OPERATING_MODE_LINK:
-		/* LED pattern to indicate running Operating Mode Linked. */
-		ledUpdate[0].rgb.paletteBlue = 0;
-		ledUpdate[0].rgb.paletteRed = 0;
-		ledUpdate[0].rgb.paletteGreen = 255;
-		xQueueSend( xQueueLedConfig, &ledUpdate[0], 0UL);
-		ledUpdate[1].rgb.paletteBlue = 255;
-		ledUpdate[1].rgb.paletteRed = 255;
-		ledUpdate[1].rgb.paletteGreen = 0;
-		xQueueSend( xQueueLedConfig, &ledUpdate[1], 0UL);
-		break;
-	case OPERATING_MODE_BOOT:
-		/* LED pattern to indicate running Operating Mode booting. */
-		ledUpdate[0].rgb.paletteBlue = 0;
-		ledUpdate[0].rgb.paletteRed = 255;
-		ledUpdate[0].rgb.paletteGreen = 0;
-		xQueueSend( xQueueLedConfig, &ledUpdate[0], 0UL);
-		ledUpdate[1].rgb.paletteBlue = 0;
-		ledUpdate[1].rgb.paletteRed = 255;
-		ledUpdate[1].rgb.paletteGreen = 0;
-		xQueueSend( xQueueLedConfig, &ledUpdate[1], 0UL);
-		break;
-	case OPERATING_MODE_NONE:
-		/* no break */
-	default: /* OPERATING_MODE_NONE */
-		ledUpdate[0].rgb.paletteBlue = 255;
-		ledUpdate[0].rgb.paletteRed = 0;
-		ledUpdate[0].rgb.paletteGreen = 0;
-		xQueueSend( xQueueLedConfig, &ledUpdate[0], 0UL);
-		ledUpdate[1].rgb.paletteBlue = 0;
-		ledUpdate[1].rgb.paletteRed = 255;
-		ledUpdate[1].rgb.paletteGreen = 0;
-		xQueueSend( xQueueLedConfig, &ledUpdate[1], 0UL);
-		break;
+	if (silk < 8) {
+		expData->ledUpdate[silk].ledSilk = silk;
+		expData->ledUpdate[silk].rgb.paletteRed = red;
+		expData->ledUpdate[silk].rgb.paletteGreen = green;
+		expData->ledUpdate[silk].rgb.paletteBlue = blue;
+	}
+}
+
+/*-----------------------------------------------------------*/
+/* Helper function to send via queue a request for LED state update */
+static void Experiment_SendLedUpdate(t_experiment_data* expData,
+		uint8_t silk)
+{
+	if (silk < 8) {
+		xQueueSend( xQueueLedConfig, &(expData->ledUpdate[silk]), 0UL);
 	}
 }
 
@@ -317,53 +247,226 @@ static void updateLedsDisplayMode(int mode)
 /* Helper function for displaying LEDs 4,5,6,7 based on event count
  * and holding the LED display for a set interval of time.
  */
-static void trackEventBasicLedDisplay(u8* count, const int ledIdx) {
-	if (*count == CNT_START) {
-		/* Set LED status of Awake to ON. */
-		ledUpdate[ledIdx].rgb.paletteBlue = 0;
-		ledUpdate[ledIdx].rgb.paletteRed = 0;
-		ledUpdate[ledIdx].rgb.paletteGreen = 100;
-		xQueueSend( xQueueLedConfig, &ledUpdate[ledIdx], 0UL);
-		*count += 1;
-	} else if (*count < CNT_DONE) {
-		/* Wait to change LED status */
-		*count += 1;
-	} else if (*count == CNT_DONE) {
-		/* Set LED status of Awake to ON. */
-		ledUpdate[ledIdx].rgb.paletteBlue = 0;
-		ledUpdate[ledIdx].rgb.paletteRed = 0;
-		ledUpdate[ledIdx].rgb.paletteGreen = 0;
-		xQueueSend( xQueueLedConfig, &ledUpdate[ledIdx], 0UL);
-		*count += 1;
-	} else { /* CNT_PAST_DONE */
-		/* do nothing with Awake display, it is off and waiting for event. */
+static void Experiment_updateLedsStatuses(t_experiment_data* expData) {
+	/* Set LED status of LED0 to track test passing and test done. */
+	Experiment_SetLedUpdate(expData, 4, 0, ((expData->statusReg & ACL2c_STATUS_AWAKE_MASK) ? 100 : 0), 0);
+	Experiment_SetLedUpdate(expData, 5, 0, 0, 0);
+	Experiment_SetLedUpdate(expData, 6, 0, ((expData->switchesRead & SWTCH0_MASK) ? 100 : 0), 0);
+	Experiment_SetLedUpdate(expData, 7, 0, ((expData->switchesRead & SWTCH1_MASK) ? 100 : 0), 0);
+
+	for (int iSilk = 4; iSilk < 8; ++iSilk) {
+		Experiment_SendLedUpdate(expData, iSilk);
 	}
 }
 
 /*-----------------------------------------------------------*/
-/* Helper function for displaying LEDs 2, 3 based on event count
- * and holding the LED display for a set interval of time.
- */
-static void trackEventRgbLedDisplay(u8* count, const int ledIdx) {
-	if (*count == CNT_START) {
-		/* Set LED status of Awake to ON. */
-		ledUpdate[ledIdx].rgb.paletteBlue = 0;
-		ledUpdate[ledIdx].rgb.paletteRed = 0;
-		ledUpdate[ledIdx].rgb.paletteGreen = 255;
-		xQueueSend( xQueueLedConfig, &ledUpdate[ledIdx], 0UL);
-		*count += 1;
-	} else if (*count < CNT_DONE) {
-		/* Wait to change LED status */
-		*count += 1;
-	} else if (*count == CNT_DONE) {
-		/* Set LED status of Awake to ON. */
-		ledUpdate[ledIdx].rgb.paletteBlue = 0;
-		ledUpdate[ledIdx].rgb.paletteRed = 255;
-		ledUpdate[ledIdx].rgb.paletteGreen = 0;
-		xQueueSend( xQueueLedConfig, &ledUpdate[ledIdx], 0UL);
-		*count += 1;
-	} else { /* CNT_PAST_DONE */
-		/* do nothing with Awake display, it is off and waiting for event. */
+/* Helper function for displaying LEDs 0,1 based on Operating Mode. */
+static void Experiment_updateLedsDisplayMode(t_experiment_data* expData)
+{
+	switch (expData->operatingMode) {
+	case OPERATING_MODE_MEAS:
+		/* LED pattern to indicate running Operating Mode Measurement. */
+		Experiment_SetLedUpdate(expData, 0, 0x00, 0xFF, 0x00);
+		Experiment_SetLedUpdate(expData, 1, 0x7F, 0x7F, 0x7F);
+		break;
+	case OPERATING_MODE_LINK:
+		/* LED pattern to indicate running Operating Mode Linked. */
+		Experiment_SetLedUpdate(expData, 0, 0x00, 0xFF, 0x00);
+		Experiment_SetLedUpdate(expData, 1, 0x7F, 0x00, 0x7F);
+		break;
+	case OPERATING_MODE_BOOT:
+		/* LED pattern to indicate running Operating Mode booting. */
+		Experiment_SetLedUpdate(expData, 0, 0xFF, 0x00, 0x00);
+		Experiment_SetLedUpdate(expData, 1, 0x7F, 0x00, 0x00);
+		break;
+	case OPERATING_MODE_NONE:
+		/* no break */
+	default: /* OPERATING_MODE_NONE */
+		Experiment_SetLedUpdate(expData, 0, 0x00, 0x00, 0xFF);
+		Experiment_SetLedUpdate(expData, 1, 0x7F, 0x00, 0x00);
+		break;
+	}
+
+	for (int iSilk = 0; iSilk <= 1; ++iSilk) {
+		Experiment_SendLedUpdate(expData, iSilk);
 	}
 }
 
+/*-----------------------------------------------------------*/
+/* Helper function for displaying LEDs 2,3 based on activity events. */
+static void Experiment_updateLedsEvents(t_experiment_data* expData) {
+	static bool ld2Green = false;
+	static bool ld3Green = false;
+
+	Experiment_timeEvent(&(expData->cntActive));
+	Experiment_timeEvent(&(expData->cntInactive));
+
+	ld2Green = (expData->cntActive < CNT_DONE) ? true : false;
+	ld3Green = (expData->cntInactive < CNT_DONE) ? true : false;
+
+	Experiment_SetLedUpdate(expData, 2, 
+		ld2Green ? 0x00 : 0xFF,
+		ld2Green ? 0xFF : 0x00,
+		0x00);
+	Experiment_SetLedUpdate(expData, 3, 
+		ld3Green ? 0x00 : 0xFF,
+		ld3Green ? 0xFF : 0x00,
+		0x00);
+
+	for (int iSilk = 2; iSilk <= 3; ++iSilk) {
+		Experiment_SendLedUpdate(expData, iSilk);
+	}	
+}
+
+/*-----------------------------------------------------------*/
+/* Helper function for timing events */
+static void Experiment_timeEvent(u8* count) {
+	if (*count < CNT_DONE) {
+		*count += 1;
+	}
+}
+
+/*-----------------------------------------------------------*/
+/* Helper function to generate the first text line for updating Pmod CLS. */
+static bool Experiment_generateTextLines(t_experiment_data* expData) {
+
+	bool modeIsMeasure = (expData->operatingMode == OPERATING_MODE_MEAS);
+	bool modeIsLink = (expData->operatingMode == OPERATING_MODE_LINK);
+	bool activeIsStarting = (CNT_START == expData->cntActive);
+	bool inactiveIsStarting = (CNT_START == expData->cntInactive);
+	bool modeIsBoot = (expData->operatingMode == OPERATING_MODE_BOOT);
+	bool modeIsNone = (expData->operatingMode == OPERATING_MODE_NONE);
+
+	if (modeIsMeasure || (modeIsLink && (activeIsStarting || inactiveIsStarting))) {
+		snprintf(expData->clsUpdate.line1, sizeof(expData->clsUpdate.line1),
+				"X% .3f Y% .3f",
+				ACL2c_DataToG(&(expData->acl2Device), (s16)(expData->acl2Data.XData)),
+				ACL2c_DataToG(&(expData->acl2Device), (s16)(expData->acl2Data.YData)));
+
+		snprintf(expData->clsUpdate.line2, sizeof(expData->clsUpdate.line2),
+				"Z% .3f T%04hd",
+				ACL2c_DataToG(&(expData->acl2Device), (s16)(expData->acl2Data.ZData)),
+				(u16)(expData->acl2Data.Temp));
+
+		snprintf(expData->comString, PRINTF_BUF_SZ,
+				("X:%04hX  Y:%04hX  " "Z:%04hX  T:%04hX  "),
+				(u16)(expData->acl2Data.XData), (u16)(expData->acl2Data.YData),
+				(u16)(expData->acl2Data.ZData), (u16)(expData->acl2Data.Temp));
+
+		return true;
+
+	} else if (modeIsBoot || modeIsNone) {
+		snprintf(expData->clsUpdate.line1, sizeof(expData->clsUpdate.line1),
+				CLS_PRINTF_BLANK_TXT_XY);
+		snprintf(expData->clsUpdate.line2, sizeof(expData->clsUpdate.line2),
+				CLS_PRINTF_BLANK_TXT_ZT);
+		snprintf(expData->comString, PRINTF_BUF_SZ, "%s",
+				(CLS_PRINTF_BLANK_DAT_XY CLS_PRINTF_BLANK_DAT_ZT));
+
+		return true;
+	}
+
+	return false;
+}
+
+/*-----------------------------------------------------------*/
+/* Helper function for displaying ACL2 state machine progress on Pmod CLS */
+static void Experiment_updateClsDisplayAndTerminal(t_experiment_data* expData) {
+	bool doUpdate;
+
+	/* Only refresh display at approximately 5 Hz */
+	/*
+	if (expData->cnt_t_freerun % (cnt_t_max / 15) != 0) {
+		return;
+	}
+	*/
+
+	doUpdate = Experiment_generateTextLines(expData);
+
+	if (doUpdate) {
+		/* Update the display to two lines of custom text to indicate
+		 * SF3 Testing Progress
+		 */
+		xQueueSend(xQueueClsDispl, &(expData->clsUpdate), 0UL);
+
+		/* Update the Terminal to display an additional text line with the same information as the Pmod CLS. */
+		xQueueSend(xQueuePrint, expData->comString, 0UL);
+	}
+}
+
+/*-----------------------------------------------------------*/
+/* Helper function to read user inputs at this time. */
+static void Experiment_readUserInputs(t_experiment_data* expData) {
+	expData->switchesRead = XGpio_DiscreteRead(&(expData->axGpio), SWTCH_SW_CHANNEL);
+	expData->buttonsRead = XGpio_DiscreteRead(&(expData->axGpio), BTNS_SW_CHANNEL);
+}
+
+/*-----------------------------------------------------------*/
+/* Main FSM function to operate the modes of the experiment. */
+static void Experiment_operateFSM(t_experiment_data* expData) {
+	const TickType_t x100millisecond = pdMS_TO_TICKS( DELAY_1_SECOND / 10 );
+
+	if (expData->switchesRead == SWTCH0_MASK) {
+		if (expData->acl2IsConfigured != ACL2_CONFIGURED) {
+			/* Reset the ACL2 */
+			ACL2c_reset(&(expData->acl2Device));
+
+			/* Delay for 100 milliseconds */
+			vTaskDelay(x100millisecond);
+
+			/* Set ACL2 configuration data */
+			ACL2c_configureMeasureMode(&(expData->acl2Device));
+			expData->acl2IsConfigured = ACL2_CONFIGURED;
+			expData->operatingMode = OPERATING_MODE_MEAS;
+		}
+	}
+	else if (expData->switchesRead == SWTCH1_MASK) {
+		if (expData->acl2IsConfigured != ACL2_CONFIGURED) {
+			/* Reset the ACL2 */
+			ACL2c_reset(&(expData->acl2Device));
+
+			/* Delay for 100 milliseconds. */
+			vTaskDelay( x100millisecond );
+
+			/* Set ACL2 configuration data */
+			ACL2c_configureLinkedMode(&(expData->acl2Device));
+			expData->acl2IsConfigured = ACL2_CONFIGURED;
+			expData->operatingMode = OPERATING_MODE_LINK;
+		}
+	}
+	else if (expData->acl2IsConfigured != ACL2_NEVERCONFIGURED) {
+		expData->acl2IsConfigured = ACL2_NOTCONFIGURED;
+		expData->operatingMode = OPERATING_MODE_NONE;
+	}
+	else {
+		expData->operatingMode = OPERATING_MODE_BOOT;
+	}
+
+	expData->statusReg = ACL2c_getStatus(&(expData->acl2Device));
+
+	if (expData->statusReg & ACL2c_STATUS_ACT_MASK) {
+		expData->cntActive = CNT_START;
+	}
+	if (expData->statusReg & ACL2c_STATUS_INACT_MASK) {
+		expData->cntInactive = CNT_START;
+	}
+	if (expData->statusReg & ACL2c_STATUS_DATA_READY_MASK) {
+		expData->acl2Data = ACL2c_getSample(&(expData->acl2Device));
+	}
+}
+
+/*-----------------------------------------------------------*/
+/* Timer function similar to VHDL/Verilog FSM Timer strategy #1. */
+static void Experiment_iterationTimer(t_experiment_data* expData) {
+	/* Reset timer on 15 iterations or change in operating mode */
+	if (expData->operatingMode != expData->operatingModePrev) {
+		expData->cnt_t = 0;
+	} else {
+		expData->cnt_t = (expData->cnt_t + 1) % cnt_t_max; /* 3 seconds of counting on 25ms timer */
+	}
+
+	expData->cnt_t_freerun = (expData->cnt_t_freerun + 1) % cnt_t_max; /* 3 seconds of counting on 25ms timer */
+
+	/* Track operating mode history (only one step back) */
+	expData->operatingModePrev = expData->operatingMode;
+}
