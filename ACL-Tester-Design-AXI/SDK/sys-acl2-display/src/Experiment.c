@@ -340,7 +340,7 @@ static bool Experiment_generateTextLines(t_experiment_data* expData) {
 	bool modeIsBoot = (expData->operatingMode == OPERATING_MODE_BOOT);
 	bool modeIsNone = (expData->operatingMode == OPERATING_MODE_NONE);
 
-	if (modeIsMeasure || (modeIsLink && (activeIsStarting || inactiveIsStarting))) {
+	if (modeIsMeasure || modeIsLink) {
 		snprintf(expData->clsUpdate.line1, sizeof(expData->clsUpdate.line1),
 				"X% .3f Y% .3f",
 				ACL2c_DataToG(&(expData->acl2Device), (s16)(expData->acl2Data.XData)),
