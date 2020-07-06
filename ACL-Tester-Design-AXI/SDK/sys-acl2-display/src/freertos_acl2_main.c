@@ -154,7 +154,9 @@ static void prvLedTask( void *pvParameters )
 		if (currLedConfig.ledSilk < 4) {
 			SetRgbPaletteLed(currLedConfig.ledSilk, &(currLedConfig.rgb));
 		} else if (currLedConfig.ledSilk < 8) {
-			SetBasicLedPercent(currLedConfig.ledSilk, currLedConfig.rgb.paletteGreen);
+			if (currLedConfig.rgb.paletteGreen <= 100) {
+				SetBasicLedPercent(currLedConfig.ledSilk, 10 * currLedConfig.rgb.paletteGreen);
+			}
 		}
 	}
 }
