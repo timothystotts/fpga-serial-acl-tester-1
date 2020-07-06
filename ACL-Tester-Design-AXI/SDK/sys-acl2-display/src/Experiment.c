@@ -175,11 +175,14 @@ void Experiment_prvAcl2Task( void *pvParameters )
 		/* Update the basic LEDs based on current global statuses. */
 		Experiment_updateLedsStatuses(&experiData);
 
-		/* Update the color LEDs based on the activity/inactivity events */
-		Experiment_updateLedsEvents(&experiData);
-
 		/* Update the Pmod CLS display based upon current state machine state and other variables */
 		Experiment_updateClsDisplayAndTerminal(&experiData);
+
+		/* Update the color LEDs based on the activity/inactivity events.
+		 * This is updated after the CLS and Terminal so that the display
+		 * update can track the beginning value CNT_START of cntActive and
+		 * cntInactive. */
+		Experiment_updateLedsEvents(&experiData);
 
 		/* Delay for 200 milliseconds. */
 		vTaskDelay( x200millisecond );
@@ -444,14 +447,20 @@ static void Experiment_operateFSM(t_experiment_data* expData) {
 
 	expData->statusReg = ACL2c_getStatus(&(expData->acl2Device));
 
-	if (expData->statusReg & ACL2c_STATUS_ACT_MASK) {
-		expData->cntActive = CNT_START;
+	if (expData->operatingMode == OPERATING_MODE_LINK) {
+		if (expData->statusReg & ACL2c_STATUS_ACT_MASK) {
+			expData->cntActive = CNT_START;
+			expData->acl2Data = ACL2c_getSample(&(expData->acl2Device));
+		}
+		if (expData->statusReg & ACL2c_STATUS_INACT_MASK) {
+			expData->cntInactive = CNT_START;
+			expData->acl2Data = ACL2c_getSample(&(expData->acl2Device));
+		}
 	}
-	if (expData->statusReg & ACL2c_STATUS_INACT_MASK) {
-		expData->cntInactive = CNT_START;
-	}
-	if (expData->statusReg & ACL2c_STATUS_DATA_READY_MASK) {
-		expData->acl2Data = ACL2c_getSample(&(expData->acl2Device));
+	else {
+		if (expData->statusReg & ACL2c_STATUS_DATA_READY_MASK) {
+			expData->acl2Data = ACL2c_getSample(&(expData->acl2Device));
+		}
 	}
 }
 
