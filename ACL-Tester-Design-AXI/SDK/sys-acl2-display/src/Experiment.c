@@ -194,7 +194,7 @@ void Experiment_prvAcl2Task( void *pvParameters )
 		Experiment_operateFSM(&experiData);
 
 		/* State change timer, wrapping at 3 seconds. */
-		Experiment_iterationTimer(&experiData);
+		//FIXME: unused: Experiment_iterationTimer(&experiData);
 	}
 }
 
@@ -332,57 +332,72 @@ static void Experiment_timeEvent(u8* count) {
 /*-----------------------------------------------------------*/
 /* Helper function to generate the first text line for updating Pmod CLS. */
 static bool Experiment_generateTextLines(t_experiment_data* expData) {
+	static char line1Txt[sizeof(expData->clsUpdate.line1)];
+	static char line2Txt[sizeof(expData->clsUpdate.line2)];
+	static char line1Dat[sizeof(expData->clsUpdate.line1)];
+	static char line2Dat[sizeof(expData->clsUpdate.line2)];
 
 	bool modeIsMeasure = (expData->operatingMode == OPERATING_MODE_MEAS);
 	bool modeIsLink = (expData->operatingMode == OPERATING_MODE_LINK);
-	bool activeIsStarting = (CNT_START == expData->cntActive);
-	bool inactiveIsStarting = (CNT_START == expData->cntInactive);
 	bool modeIsBoot = (expData->operatingMode == OPERATING_MODE_BOOT);
 	bool modeIsNone = (expData->operatingMode == OPERATING_MODE_NONE);
+	bool doUpdate = false;
 
 	if (modeIsMeasure || modeIsLink) {
-		snprintf(expData->clsUpdate.line1, sizeof(expData->clsUpdate.line1),
+		snprintf(line1Txt, sizeof(line1Txt),
 				"X% .3f Y% .3f",
 				ACL2c_DataToG(&(expData->acl2Device), (s16)(expData->acl2Data.XData)),
 				ACL2c_DataToG(&(expData->acl2Device), (s16)(expData->acl2Data.YData)));
 
-		snprintf(expData->clsUpdate.line2, sizeof(expData->clsUpdate.line2),
+		snprintf(line2Txt, sizeof(line2Txt),
 				"Z% .3f T%04hd",
 				ACL2c_DataToG(&(expData->acl2Device), (s16)(expData->acl2Data.ZData)),
 				(u16)(expData->acl2Data.Temp));
 
-		snprintf(expData->comString, PRINTF_BUF_SZ,
-				("X:%04hX  Y:%04hX  " "Z:%04hX  T:%04hX  "),
-				(u16)(expData->acl2Data.XData), (u16)(expData->acl2Data.YData),
+		snprintf(line1Dat, sizeof(line1Dat),
+				"X:%04hX  Y:%04hX  ",
+				(u16)(expData->acl2Data.XData), (u16)(expData->acl2Data.YData));
+
+		snprintf(line2Dat, sizeof(line2Dat),
+				"Z:%04hX  T:%04hX  ",
 				(u16)(expData->acl2Data.ZData), (u16)(expData->acl2Data.Temp));
 
-		return true;
+		doUpdate = true;
 
 	} else if (modeIsBoot || modeIsNone) {
-		snprintf(expData->clsUpdate.line1, sizeof(expData->clsUpdate.line1),
-				CLS_PRINTF_BLANK_TXT_XY);
-		snprintf(expData->clsUpdate.line2, sizeof(expData->clsUpdate.line2),
-				CLS_PRINTF_BLANK_TXT_ZT);
-		snprintf(expData->comString, PRINTF_BUF_SZ, "%s",
-				(CLS_PRINTF_BLANK_DAT_XY CLS_PRINTF_BLANK_DAT_ZT));
+		strcpy(line1Txt, CLS_PRINTF_BLANK_TXT_XY);
+		strcpy(line2Txt, CLS_PRINTF_BLANK_TXT_ZT);
+		strcpy(line1Dat, CLS_PRINTF_BLANK_DAT_XY);
+		strcpy(line2Dat, CLS_PRINTF_BLANK_DAT_ZT);
 
-		return true;
+		doUpdate = true;
 	}
 
-	return false;
+	if (doUpdate) {
+		if (expData->buttonsRead == BTN2_MASK) {
+			snprintf(expData->comString, PRINTF_BUF_SZ, "%s%s", line1Txt, line2Txt);
+		}
+		else {
+			snprintf(expData->comString, PRINTF_BUF_SZ, "%s%s", line1Dat, line2Dat);
+		}
+
+		if (expData->buttonsRead == BTN3_MASK) {
+			strcpy(expData->clsUpdate.line1, line1Dat);
+			strcpy(expData->clsUpdate.line2, line2Dat);
+		}
+		else {
+			strcpy(expData->clsUpdate.line1, line1Txt);
+			strcpy(expData->clsUpdate.line2, line2Txt);
+		}
+	}
+
+	return doUpdate;
 }
 
 /*-----------------------------------------------------------*/
 /* Helper function for displaying ACL2 state machine progress on Pmod CLS */
 static void Experiment_updateClsDisplayAndTerminal(t_experiment_data* expData) {
 	bool doUpdate;
-
-	/* Only refresh display at approximately 5 Hz */
-	/*
-	if (expData->cnt_t_freerun % (cnt_t_max / 15) != 0) {
-		return;
-	}
-	*/
 
 	doUpdate = Experiment_generateTextLines(expData);
 
