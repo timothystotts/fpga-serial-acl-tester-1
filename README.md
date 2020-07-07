@@ -27,6 +27,9 @@ and:
 # LCD FSM diagram of the HDL designs:
 ![LCD FSM Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-LCD-FSM.svg)
 
+# UART Feed FSM diagram of the HDL designs:
+![LCD FSM Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-UARTfeed.svg)
+
 # ACL2 Custom Driver Ports diagram of the HDL designs:
 ![ACL2 Custom Driver Ports](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-ACL2-ports.svg)
 
