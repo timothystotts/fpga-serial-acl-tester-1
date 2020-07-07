@@ -46,6 +46,11 @@ architecture simultation of fpga_serial_acl_tester_tb is
 			ei_sw1          : in  std_logic;
 			ei_sw2          : in  std_logic;
 			ei_sw3          : in  std_logic;
+			ei_btn0         : in  std_logic;
+			ei_btn1         : in  std_logic;
+			ei_btn2         : in  std_logic;
+			ei_btn3         : in  std_logic;
+			
 			eo_pmod_cls_ssn : out std_logic;
 			eo_pmod_cls_sck : out std_logic;
 			eo_pmod_cls_dq0 : out std_logic;
@@ -127,6 +132,10 @@ begin
 			ei_sw1            => si_sw1,
 			ei_sw2            => si_sw2,
 			ei_sw3            => si_sw3,
+			ei_btn0           => '0',
+			ei_btn1           => '0',
+			ei_btn2           => '0',
+			ei_btn3           => '0',
 			eo_pmod_cls_ssn   => so_pmod_cls_ssn,
 			eo_pmod_cls_sck   => so_pmod_cls_sck,
 			eo_pmod_cls_dq0   => so_pmod_cls_dq0,

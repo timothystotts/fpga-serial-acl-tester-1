@@ -46,25 +46,30 @@ output wire o_lcd_feed_is_idle;
 
 //Part 2: Declarations----------------------------------------------------------
 /* Connections and variables for instance of the PMOD CLS SPI SOLO driver. */
-`define c_lcd_update_fsm_bits 2
-localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_IDLE = 0;
-localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_CLEAR = 1;
-localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_LINE1 = 2;
-localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_LINE2 = 3;
+`define c_lcd_update_fsm_bits 4
+localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_PAUSE = 0;
+localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_CLEAR_RUN = 1;
+localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_CLEAR_DLY = 2;
+localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_CLEAR_WAIT = 3;
+localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_LINE1_RUN = 4;
+localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_LINE1_DLY = 5;
+localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_LINE1_WAIT = 6;
+localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_LINE2_RUN = 7;
+localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_LINE2_DLY = 8;
 
 reg [(`c_lcd_update_fsm_bits - 1):0] s_lcd_upd_pr_state;
 reg [(`c_lcd_update_fsm_bits - 1):0] s_lcd_upd_nx_state;
 
 /* Timer steps for the continuous refresh of the PMOD CLS display:
-   Wait 0.2 seconds
    Clear Display
    Wait 1.0 milliseconds
    Write Line 1
    Wait 1.0 milliseconds
    Write Line 2
+   Wait 0.2 seconds
    Repeat the above. */
 `define c_lcd_update_timer_bits 24
-/* The one-second refresh is actually 1/5 of a second to have a 5 Hz refresh,
+/* The sub-second refresh is actually 1/5 of a second to have a 5 Hz refresh,
    approximately. If \ref parm_fast_simulation is defined, then tne once
    second refresh is actually 1/100 of a second to have a 100 Hz refresh
    for waveform viewing. */
@@ -94,7 +99,7 @@ end
 /* FSM state transition for timing the PMOD CLS display udpate */
 always @(posedge i_clk_20mhz)
 begin: p_fsm_state_run_display_update
-	if (i_rst_20mhz) s_lcd_upd_pr_state <= ST_LCD_IDLE;
+	if (i_rst_20mhz) s_lcd_upd_pr_state <= ST_LCD_PAUSE;
 	else 
 		if (i_ce_2_5mhz)
 			s_lcd_upd_pr_state <= s_lcd_upd_nx_state;
@@ -104,62 +109,96 @@ end
 always @(s_lcd_upd_pr_state, i_lcd_command_ready, s_i)
 begin: p_fsm_comb_run_display_update
 	case (s_lcd_upd_pr_state)
-		ST_LCD_CLEAR: begin /* Step CLEAR: clear the display
-							   and then pause until display ready and
-							   minimum of \ref c_i_one_ms time delay. */
-			if (s_i <= c_i_step) o_lcd_wr_clear_display = 1'b1;
-			else o_lcd_wr_clear_display = 1'b0;
-
+		ST_LCD_CLEAR_RUN: begin /* Issue a clear command and wait for
+								   the LCD driver to acknowledge a
+								   command in progress. */
+			o_lcd_wr_clear_display = 1'b1;
 			o_lcd_wr_text_line1 = 1'b0;
 			o_lcd_wr_text_line2 = 1'b0;
 
-			if ((s_i >= c_i_one_ms) && (i_lcd_command_ready))
-				s_lcd_upd_nx_state = ST_LCD_LINE1;
-			else s_lcd_upd_nx_state = ST_LCD_CLEAR;
+			if (~ i_lcd_command_ready) s_lcd_upd_nx_state = ST_LCD_CLEAR_DLY;
+			else s_lcd_upd_nx_state = ST_LCD_CLEAR_RUN;
 		end
-		ST_LCD_LINE1: begin /* Step LINE1: write the top line of the LCD
-							   and then pause until display ready and
-							   minimum of \ref c_i_one_ms time delay. */
-			o_lcd_wr_clear_display = 1'b0;
-
-			if (s_i <= c_i_step) o_lcd_wr_text_line1 = 1'b1;
-			else o_lcd_wr_text_line1 = 1'b0;
-
-			o_lcd_wr_text_line2 = 1'b0;
-
-			if ((s_i >= c_i_one_ms) && (i_lcd_command_ready))
-				s_lcd_upd_nx_state = ST_LCD_LINE2;
-			else s_lcd_upd_nx_state = ST_LCD_LINE1;
-		end
-		ST_LCD_LINE2: begin /* Step LINE2: write the bottom line of the LCD
-							   and then pause until display ready and
-							   minimum of \ref c_i_one_ms time delay. */
+		ST_LCD_CLEAR_DLY: begin /* Now that the Clear command is running,
+								   wait for one millisecond. */
 			o_lcd_wr_clear_display = 1'b0;
 			o_lcd_wr_text_line1 = 1'b0;
+			o_lcd_wr_text_line2 = 1'b0;
 
-			if (s_i <= c_i_step) o_lcd_wr_text_line2 = 1'b1;
-			else o_lcd_wr_text_line2 = 1'b0;
+			if (s_i >= c_i_one_ms) s_lcd_upd_nx_state = ST_LCD_CLEAR_WAIT;
+			else s_lcd_upd_nx_state = ST_LCD_CLEAR_DLY;
+		end			
+		ST_LCD_CLEAR_WAIT: begin /* Advance to writing LINE 1 when the
+								   LCD driver is ready for input. */
+			o_lcd_wr_clear_display = 1'b0;
+			o_lcd_wr_text_line1 = 1'b0;
+			o_lcd_wr_text_line2 = 1'b0;
 
-			if ((s_i >= c_i_one_ms) && (i_lcd_command_ready))
-				s_lcd_upd_nx_state = ST_LCD_IDLE;
-			else s_lcd_upd_nx_state = ST_LCD_LINE2;
+			if (i_lcd_command_ready) s_lcd_upd_nx_state = ST_LCD_LINE1_RUN;
+			else s_lcd_upd_nx_state = ST_LCD_CLEAR_WAIT;
+		end			
+		ST_LCD_LINE1_RUN: begin /* Issue a write Line 1 command and wait for
+								   the LCD driver to acknowledge a
+								   command in progress. */
+			o_lcd_wr_clear_display = 1'b0;
+			o_lcd_wr_text_line1 = 1'b1;
+			o_lcd_wr_text_line2 = 1'b0;
+
+			if (~ i_lcd_command_ready) s_lcd_upd_nx_state = ST_LCD_LINE1_DLY;
+			else s_lcd_upd_nx_state = ST_LCD_LINE1_RUN;
 		end
-		default: begin // ST_LCD_IDLE
-					   /* Step IDLE, wait until display ready to write again
+		ST_LCD_LINE1_DLY: begin /* Now that the write Line 1 command is running,
+								   wait for one millisecond. */
+			o_lcd_wr_clear_display = 1'b0;
+			o_lcd_wr_text_line1 = 1'b0;
+			o_lcd_wr_text_line2 = 1'b0;
+
+			if (s_i >= c_i_one_ms) s_lcd_upd_nx_state = ST_LCD_LINE1_WAIT;
+			else s_lcd_upd_nx_state = ST_LCD_LINE1_DLY;
+		end
+		ST_LCD_LINE1_WAIT: begin /* Advance to writing LINE 2 when the
+								   LCD driver is ready for input. */
+			o_lcd_wr_clear_display = 1'b0;
+			o_lcd_wr_text_line1 = 1'b0;
+			o_lcd_wr_text_line2 = 1'b0;
+
+			if (i_lcd_command_ready) s_lcd_upd_nx_state = ST_LCD_LINE2_RUN;
+			else s_lcd_upd_nx_state = ST_LCD_LINE1_WAIT;
+		end			
+		ST_LCD_LINE2_RUN: begin /* Issue a write Line 2 command and wait for
+								   the LCD driver to acknowledge a
+								   command in progress. */
+			o_lcd_wr_clear_display = 1'b0;
+			o_lcd_wr_text_line1 = 1'b0;
+			o_lcd_wr_text_line2 = 1'b1;
+
+			if (~ i_lcd_command_ready) s_lcd_upd_nx_state = ST_LCD_LINE2_DLY;
+			else s_lcd_upd_nx_state = ST_LCD_LINE2_RUN;
+		end
+		ST_LCD_LINE2_DLY: begin /* Now that the write Line 2 command is running,
+								   wait for one millisecond. */
+			o_lcd_wr_clear_display = 1'b0;
+			o_lcd_wr_text_line1 = 1'b0;
+			o_lcd_wr_text_line2 = 1'b0;
+
+			if (s_i >= c_i_subsecond) s_lcd_upd_nx_state = ST_LCD_PAUSE;
+			else s_lcd_upd_nx_state = ST_LCD_LINE2_DLY;
+		end
+		default: begin // ST_LCD_PAUSE
+					   /* Step PAUSE, wait until display ready to write again
 						  and minimum of \ref c_i_subsecond time has elapsed. */
 			o_lcd_wr_clear_display = 1'b0;
 			o_lcd_wr_text_line1 = 1'b0;
 			o_lcd_wr_text_line2 = 1'b0;
 
-			if ((s_i >= c_i_subsecond) && (i_lcd_command_ready))
-				s_lcd_upd_nx_state = ST_LCD_CLEAR;
-			else s_lcd_upd_nx_state = ST_LCD_IDLE;
+			if (i_lcd_command_ready) s_lcd_upd_nx_state = ST_LCD_CLEAR_RUN;
+			else s_lcd_upd_nx_state = ST_LCD_PAUSE;
 		end
 	endcase
 end
 
 // Indicate when the FSM is idle
-assign o_lcd_feed_is_idle = (s_lcd_upd_pr_state == ST_LCD_IDLE) ? 1'b1 : 1'b0;
+assign o_lcd_feed_is_idle = (s_lcd_upd_pr_state == ST_LCD_LINE2_DLY) ? 1'b1 : 1'b0;
 
 endmodule
 //------------------------------------------------------------------------------
