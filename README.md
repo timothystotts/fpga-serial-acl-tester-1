@@ -19,3 +19,6 @@ Top Port diagram architecture of the HDL designs:
 
 Tester FSM diagram of the HDL designs:
 ![ACL Tester FSM Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-Tester-FSM.png)
+
+Project information document:
+![Serial ACL Readings Tester info](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/Serial%20ACL%20Readings%20Tester.pdf)
