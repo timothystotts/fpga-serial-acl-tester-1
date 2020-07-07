@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
-| Date         : Tue Jul  7 17:10:19 2020
+| Date         : Tue Jul  7 19:48:55 2020
 | Host         : ubuntu running 64-bit Ubuntu 18.04.4 LTS
 | Command      : report_utilization -file fpga_serial_acl_tester_utilization_synth.rpt -pb fpga_serial_acl_tester_utilization_synth.pb
 | Design       : fpga_serial_acl_tester
@@ -30,14 +30,14 @@ Table of Contents
 +-------------------------+------+-------+-----------+-------+
 |        Site Type        | Used | Fixed | Available | Util% |
 +-------------------------+------+-------+-----------+-------+
-| Slice LUTs*             | 3547 |     0 |     63400 |  5.59 |
-|   LUT as Logic          | 3547 |     0 |     63400 |  5.59 |
+| Slice LUTs*             | 3629 |     0 |     63400 |  5.72 |
+|   LUT as Logic          | 3629 |     0 |     63400 |  5.72 |
 |   LUT as Memory         |    0 |     0 |     19000 |  0.00 |
-| Slice Registers         | 2382 |     0 |    126800 |  1.88 |
-|   Register as Flip Flop | 2382 |     0 |    126800 |  1.88 |
+| Slice Registers         | 2448 |     0 |    126800 |  1.93 |
+|   Register as Flip Flop | 2448 |     0 |    126800 |  1.93 |
 |   Register as Latch     |    0 |     0 |    126800 |  0.00 |
-| F7 Muxes                |   13 |     0 |     31700 |  0.04 |
-| F8 Muxes                |    6 |     0 |     15850 |  0.04 |
+| F7 Muxes                |    1 |     0 |     31700 | <0.01 |
+| F8 Muxes                |    0 |     0 |     15850 |  0.00 |
 +-------------------------+------+-------+-----------+-------+
 * Warning! The Final LUT count, after physical optimizations and full implementation, is typically lower. Run opt_design after synthesis, if not already completed, for a more realistic count.
 
@@ -57,7 +57,7 @@ Table of Contents
 | 28    |          Yes |           - |          Set |
 | 0     |          Yes |           - |        Reset |
 | 261   |          Yes |         Set |            - |
-| 2093  |          Yes |       Reset |            - |
+| 2159  |          Yes |       Reset |            - |
 +-------+--------------+-------------+--------------+
 
 
@@ -148,22 +148,21 @@ Table of Contents
 +------------+------+---------------------+
 |  Ref Name  | Used | Functional Category |
 +------------+------+---------------------+
-| FDRE       | 2093 |        Flop & Latch |
-| LUT4       |  932 |                 LUT |
-| LUT2       |  901 |                 LUT |
-| LUT6       |  895 |                 LUT |
-| LUT5       |  710 |                 LUT |
-| LUT1       |  616 |                 LUT |
+| FDRE       | 2159 |        Flop & Latch |
+| LUT2       |  959 |                 LUT |
+| LUT4       |  955 |                 LUT |
+| LUT6       |  849 |                 LUT |
+| LUT5       |  723 |                 LUT |
+| LUT3       |  638 |                 LUT |
+| LUT1       |  617 |                 LUT |
 | CARRY4     |  561 |          CarryLogic |
-| LUT3       |  474 |                 LUT |
 | FDSE       |  261 |        Flop & Latch |
 | FDPE       |   28 |        Flop & Latch |
 | OBUF       |   23 |                  IO |
 | DSP48E1    |   16 |    Block Arithmetic |
 | IBUF       |   14 |                  IO |
-| MUXF7      |   13 |               MuxFx |
-| MUXF8      |    6 |               MuxFx |
 | FIFO18E1   |    5 |        Block Memory |
+| MUXF7      |    1 |               MuxFx |
 | MMCME2_ADV |    1 |               Clock |
 | BUFG       |    1 |               Clock |
 +------------+------+---------------------+
