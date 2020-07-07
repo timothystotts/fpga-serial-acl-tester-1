@@ -16,3 +16,6 @@ Block diagram architecture of the HDL designs:
 
 Top Port diagram architecture of the HDL designs:
 ![ACL Tester Top Ports Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-Top-Ports.png)
+
+Tester FSM diagram of the HDL designs:
+![ACL Tester FSM Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-Tester-FSM.png)
