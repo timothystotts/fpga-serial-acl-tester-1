@@ -64,12 +64,11 @@ architecture rtl of lcd_text_feed is
 	-- Write Line 1
 	-- Wait 1.0 milliseconds
 	-- Write Line 2
-	-- Wait 0.2 seconds
+	-- Wait 0.198 seconds
 	-- Repeat the above.
-	constant c_i_subsecond_fast : natural := (2500000 / 100 - 1);
-	constant c_i_subsecond      : natural := (2500000 / 5 - 1);
-	constant c_i_one_ms         : natural := 2500 - 1;
-	constant c_i_step           : natural := 4 - 1;
+	constant c_i_one_ms         : natural := 2500;
+	constant c_i_subsecond_fast : natural := (2500000 / 100) - (2 * c_i_one_ms);
+	constant c_i_subsecond      : natural := (2500000 / 5) - (2 * c_i_one_ms);
 	constant c_i_max            : natural := c_i_subsecond;
 
 	signal s_i : natural range 0 to c_i_max;
@@ -126,7 +125,7 @@ begin
 				o_lcd_wr_text_line1    <= '0';
 				o_lcd_wr_text_line2    <= '0';
 
-				if (s_i >= c_i_one_ms) then
+				if (s_i = c_i_one_ms - 1) then
 					s_lcd_upd_nx_state <= ST_LCD_CLEAR_WAIT;
 				else
 					s_lcd_upd_nx_state <= ST_LCD_CLEAR_DLY;
@@ -163,7 +162,7 @@ begin
 				o_lcd_wr_text_line1    <= '0';
 				o_lcd_wr_text_line2    <= '0';
 
-				if (s_i >= c_i_one_ms) then
+				if (s_i = c_i_one_ms - 1) then
 					s_lcd_upd_nx_state <= ST_LCD_LINE1_WAIT;
 				else
 					s_lcd_upd_nx_state <= ST_LCD_LINE1_DLY;
@@ -201,13 +200,13 @@ begin
 				o_lcd_wr_text_line2    <= '0';
 
 				if (parm_fast_simulation = 0) then
-					if (s_i >= c_i_subsecond) then
+					if (s_i = c_i_subsecond - 1) then
 						s_lcd_upd_nx_state <= ST_LCD_PAUSE;
 					else
 						s_lcd_upd_nx_state <= ST_LCD_LINE2_DLY;
 					end if;
 				else
-					if (s_i >= c_i_subsecond_fast) then
+					if (s_i = c_i_subsecond_fast - 1) then
 						s_lcd_upd_nx_state <= ST_LCD_PAUSE;
 					else
 						s_lcd_upd_nx_state <= ST_LCD_LINE2_DLY;

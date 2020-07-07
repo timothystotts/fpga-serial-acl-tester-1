@@ -73,11 +73,10 @@ reg [(`c_lcd_update_fsm_bits - 1):0] s_lcd_upd_nx_state;
    approximately. If \ref parm_fast_simulation is defined, then tne once
    second refresh is actually 1/100 of a second to have a 100 Hz refresh
    for waveform viewing. */
-localparam [(`c_lcd_update_timer_bits - 1):0] c_i_subsecond =
-	parm_fast_simulation ? (2500000 / 100 - 1) : (2500000 / 5 - 1);
 localparam [(`c_lcd_update_timer_bits - 1):0] c_i_one_ms =
-	parm_fast_simulation ? (2500 - 1) : (2500 - 1);
-localparam [(`c_lcd_update_timer_bits - 1):0] c_i_step = 4 - 1;
+	parm_fast_simulation ? 2500 : 2500;
+localparam [(`c_lcd_update_timer_bits - 1):0] c_i_subsecond =
+	parm_fast_simulation ? (2500000 / 100 - (2 * c_i_one_ms)) : (2500000 / 5 - (2 * c_i_one_ms));
 localparam [(`c_lcd_update_timer_bits - 1):0] c_i_max = c_i_subsecond;
 
 reg [(`c_lcd_update_timer_bits - 1):0] s_i;
@@ -125,7 +124,7 @@ begin: p_fsm_comb_run_display_update
 			o_lcd_wr_text_line1 = 1'b0;
 			o_lcd_wr_text_line2 = 1'b0;
 
-			if (s_i >= c_i_one_ms) s_lcd_upd_nx_state = ST_LCD_CLEAR_WAIT;
+			if (s_i == c_i_one_ms - 1) s_lcd_upd_nx_state = ST_LCD_CLEAR_WAIT;
 			else s_lcd_upd_nx_state = ST_LCD_CLEAR_DLY;
 		end			
 		ST_LCD_CLEAR_WAIT: begin /* Advance to writing LINE 1 when the
@@ -153,7 +152,7 @@ begin: p_fsm_comb_run_display_update
 			o_lcd_wr_text_line1 = 1'b0;
 			o_lcd_wr_text_line2 = 1'b0;
 
-			if (s_i >= c_i_one_ms) s_lcd_upd_nx_state = ST_LCD_LINE1_WAIT;
+			if (s_i == c_i_one_ms - 1) s_lcd_upd_nx_state = ST_LCD_LINE1_WAIT;
 			else s_lcd_upd_nx_state = ST_LCD_LINE1_DLY;
 		end
 		ST_LCD_LINE1_WAIT: begin /* Advance to writing LINE 2 when the
@@ -181,12 +180,11 @@ begin: p_fsm_comb_run_display_update
 			o_lcd_wr_text_line1 = 1'b0;
 			o_lcd_wr_text_line2 = 1'b0;
 
-			if (s_i >= c_i_subsecond) s_lcd_upd_nx_state = ST_LCD_PAUSE;
+			if (s_i == c_i_subsecond - 1) s_lcd_upd_nx_state = ST_LCD_PAUSE;
 			else s_lcd_upd_nx_state = ST_LCD_LINE2_DLY;
 		end
 		default: begin // ST_LCD_PAUSE
-					   /* Step PAUSE, wait until display ready to write again
-						  and minimum of \ref c_i_subsecond time has elapsed. */
+					   /* Step PAUSE, wait until display ready to write again */
 			o_lcd_wr_clear_display = 1'b0;
 			o_lcd_wr_text_line1 = 1'b0;
 			o_lcd_wr_text_line2 = 1'b0;
