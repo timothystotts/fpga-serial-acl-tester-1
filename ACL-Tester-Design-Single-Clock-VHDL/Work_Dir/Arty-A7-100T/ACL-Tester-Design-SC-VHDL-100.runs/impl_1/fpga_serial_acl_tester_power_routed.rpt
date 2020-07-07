@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
-| Date             : Tue Jun 30 15:35:56 2020
+| Date             : Tue Jul  7 16:05:25 2020
 | Host             : ubuntu running 64-bit Ubuntu 18.04.4 LTS
 | Command          : report_power -file fpga_serial_acl_tester_power_routed.rpt -pb fpga_serial_acl_tester_power_summary_routed.pb -rpx fpga_serial_acl_tester_power_routed.rpx
 | Design           : fpga_serial_acl_tester
@@ -30,7 +30,7 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.192        |
+| Total On-Chip Power (W)  | 0.193        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
 | Dynamic (W)              | 0.108        |
@@ -53,19 +53,19 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |     0.002 |       12 |       --- |             --- |
-| Slice Logic    |     0.001 |     6455 |       --- |             --- |
+| Slice Logic    |     0.001 |     6456 |       --- |             --- |
 |   LUT as Logic |    <0.001 |     3210 |     63400 |            5.06 |
 |   CARRY4       |    <0.001 |      408 |     15850 |            2.57 |
-|   Register     |    <0.001 |     2093 |    126800 |            1.65 |
+|   Register     |    <0.001 |     2095 |    126800 |            1.65 |
 |   F7/F8 Muxes  |    <0.001 |       20 |     63400 |            0.03 |
 |   Others       |     0.000 |       60 |       --- |             --- |
-| Signals        |    <0.001 |     4761 |       --- |             --- |
+| Signals        |    <0.001 |     4763 |       --- |             --- |
 | Block RAM      |    <0.001 |        2 |       135 |            1.48 |
 | MMCM           |     0.102 |        1 |         6 |           16.67 |
 | DSPs           |     0.001 |       16 |       240 |            6.67 |
 | I/O            |    <0.001 |       36 |       210 |           17.14 |
 | Static Power   |     0.084 |          |           |                 |
-| Total          |     0.192 |          |           |                 |
+| Total          |     0.193 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 

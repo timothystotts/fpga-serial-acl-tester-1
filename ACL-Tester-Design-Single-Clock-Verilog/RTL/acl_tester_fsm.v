@@ -247,7 +247,8 @@ begin: p_tester_fsm_comb
 
 			if (i_switches_debounced == 4'b0000)
 				s_tester_nx_state = ST_A;
-			else s_tester_nx_state = ST_9;
+			else
+				s_tester_nx_state = ST_9;
 		end
 		ST_A: begin /* Step A to issue the Soft Reset command to the PMOD ACL2
 					   Then transition to Step Zero for INIT IDLE and waiting
@@ -257,7 +258,7 @@ begin: p_tester_fsm_comb
 			o_acl_cmd_init_linked_mode = 1'b0;
 			o_acl_cmd_start_measur_mode = 1'b0;
 			o_acl_cmd_start_linked_mode = 1'b0;
-			o_acl_cmd_soft_reset = 1'b1;
+			o_acl_cmd_soft_reset = 1'b1; /* acts as a level interrupt instead of command */
 			o_active_init_display = 1'b0;
 			o_active_run_display = 1'b0;
 			s_mode_is_measur_val = 1'b0;
