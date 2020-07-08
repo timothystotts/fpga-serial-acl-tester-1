@@ -43,8 +43,9 @@ input wire [(34*8-1):0] i_dat_ascii_line;
 /* UART TX update FSM state declarations */
 `define c_uarttx_feed_fsm_bits 2
 localparam [(`c_uarttx_feed_fsm_bits - 1):0] ST_UARTFEED_IDLE = 0;
-localparam [(`c_uarttx_feed_fsm_bits - 1):0] ST_UARTFEED_DATA = 1;
-localparam [(`c_uarttx_feed_fsm_bits - 1):0] ST_UARTFEED_WAIT = 2;
+localparam [(`c_uarttx_feed_fsm_bits - 1):0] ST_UARTFEED_CAPT = 1;
+localparam [(`c_uarttx_feed_fsm_bits - 1):0] ST_UARTFEED_DATA = 2;
+localparam [(`c_uarttx_feed_fsm_bits - 1):0] ST_UARTFEED_WAIT = 3;
 
 reg [(`c_uarttx_feed_fsm_bits - 1):0] s_uartfeed_pr_state;
 reg [(`c_uarttx_feed_fsm_bits - 1):0] s_uartfeed_nx_state;
@@ -86,16 +87,30 @@ always @(s_uartfeed_pr_state, s_uart_k_aux, s_uart_line_aux,
 	i_tx_go, i_dat_ascii_line, i_tx_ready)
 begin: p_uartfeed_fsm_nx_out
 	case (s_uartfeed_pr_state)
+			/* Capture the input ASCII line and the index K.
+			   The value of \ref i_tx_ready is also checked as to
+			   not overflow the UART TX buffer. Once TX is ready,
+			   begin the enqueue of outgoing data. */
+		ST_UARTFEED_CAPT: begin
+			o_tx_data = 8'h00;
+			o_tx_valid = 1'b0;
+			s_uart_k_val = c_uart_k_preset;
+			s_uart_line_val = i_dat_ascii_line;
+
+			if (i_tx_ready) s_uartfeed_nx_state = ST_UARTFEED_DATA;
+			else s_uartfeed_nx_state = ST_UARTFEED_CAPT;
+		end
 		ST_UARTFEED_DATA: begin
 			/* Enqueue the \ref c_uart_k_preset count of bytes from register
-			   \ref s_uart_line_aux. Then transition to the WAIT state. */
-			o_tx_data = s_uart_line_aux[((8*s_uart_k_aux)-1)-:8];
+			   \ref s_uart_line_aux. Then transition to the WAIT state.
+			   To accomplish this, s_uart_line_aux is shifted left, one byte
+			   at-a-time. */
+			o_tx_data = s_uart_line_aux[((8*c_uart_k_preset)-1)-:8];
 			o_tx_valid = 1'b1;
 			s_uart_k_val = s_uart_k_aux - 1;
-			s_uart_line_val = s_uart_line_aux;
+			s_uart_line_val = {s_uart_line_aux[(8*(c_uart_k_preset-1)-1)-:(8*(c_uart_k_preset-1))],8'h00};
 
-			if (s_uart_k_aux <= 1)
-				s_uartfeed_nx_state = ST_UARTFEED_WAIT;
+			if (s_uart_k_aux == 1) s_uartfeed_nx_state = ST_UARTFEED_WAIT;
 			else s_uartfeed_nx_state = ST_UARTFEED_DATA;
 		end
 		ST_UARTFEED_WAIT: begin
@@ -106,30 +121,20 @@ begin: p_uartfeed_fsm_nx_out
 			s_uart_k_val = s_uart_k_aux;
 			s_uart_line_val = s_uart_line_aux;
 
-			if (~i_tx_go)
-				s_uartfeed_nx_state = ST_UARTFEED_IDLE;
+			if (~ i_tx_go) s_uartfeed_nx_state = ST_UARTFEED_IDLE;
 			else s_uartfeed_nx_state = ST_UARTFEED_WAIT;
 		end
 		default: begin // ST_UARTFEED_IDLE
-			/* IDLE the FSM while waiting for a pulse on \ref i_tx_go .
-			   The value of \ref i_tx_ready is also checked as to
-			   not overflow the UART TX buffer. If both signals are a
-			   TRUE value, then transition to enqueueing data. */
+			/* IDLE the FSM while waiting for a pulse on \ref i_tx_go . */
 			o_tx_data = 8'h00;
 			o_tx_valid = 1'b0;
 			s_uart_k_val = c_uart_k_preset;
-
-			if (i_tx_go && i_tx_ready) begin
-				s_uartfeed_nx_state = ST_UARTFEED_DATA;
-				s_uart_line_val = i_dat_ascii_line;
-			end else begin
-				s_uartfeed_nx_state = ST_UARTFEED_IDLE;
-				s_uart_line_val = s_uart_line_aux;
-			end
+			s_uart_line_val = s_uart_line_aux;
+			if (i_tx_go) s_uartfeed_nx_state = ST_UARTFEED_CAPT;
+			else s_uartfeed_nx_state = ST_UARTFEED_IDLE;
 		end
 	endcase
 end
 
 endmodule
 //------------------------------------------------------------------------------
-	
