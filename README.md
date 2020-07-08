@@ -15,6 +15,10 @@ and:
 
 [Serial ACL Readings Tester info](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/Serial%20ACL%20Readings%20Tester.pdf)
 
+# Diagrams design document:
+
+[Serial ACL Design Diagrams info](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams.pdf)
+
 # Block diagram architecture of the HDL designs:
 ![ACL Tester Architecture Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-Architecture%201.svg)
 
