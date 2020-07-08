@@ -82,16 +82,17 @@ begin: p_uartfeed_fsm_state_aux
 	end
 end
 
-/* UART TX machine, combinatorial next state and auxiliary counting register. */
+/* UART TX machine, combinatorial next state and auxiliary counting register, and
+   auxiliary 34 8-bit character line register. */
 always @(s_uartfeed_pr_state, s_uart_k_aux, s_uart_line_aux,
 	i_tx_go, i_dat_ascii_line, i_tx_ready)
 begin: p_uartfeed_fsm_nx_out
 	case (s_uartfeed_pr_state)
+		ST_UARTFEED_CAPT: begin
 			/* Capture the input ASCII line and the index K.
 			   The value of \ref i_tx_ready is also checked as to
 			   not overflow the UART TX buffer. Once TX is ready,
 			   begin the enqueue of outgoing data. */
-		ST_UARTFEED_CAPT: begin
 			o_tx_data = 8'h00;
 			o_tx_valid = 1'b0;
 			s_uart_k_val = c_uart_k_preset;
@@ -114,7 +115,7 @@ begin: p_uartfeed_fsm_nx_out
 			else s_uartfeed_nx_state = ST_UARTFEED_DATA;
 		end
 		ST_UARTFEED_WAIT: begin
-			/* Wait for the \ref i_tx_go pulse to be idle, and then
+			/* Wait for the \ref i_tx_go pulse to be low, and then
 			   transition to the IDLE state. */
 			o_tx_data = 8'h00;
 			o_tx_valid = 1'b0;
@@ -128,7 +129,7 @@ begin: p_uartfeed_fsm_nx_out
 			/* IDLE the FSM while waiting for a pulse on \ref i_tx_go . */
 			o_tx_data = 8'h00;
 			o_tx_valid = 1'b0;
-			s_uart_k_val = c_uart_k_preset;
+			s_uart_k_val = s_uart_k_aux;
 			s_uart_line_val = s_uart_line_aux;
 			if (i_tx_go) s_uartfeed_nx_state = ST_UARTFEED_CAPT;
 			else s_uartfeed_nx_state = ST_UARTFEED_IDLE;

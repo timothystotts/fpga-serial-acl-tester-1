@@ -47,7 +47,8 @@ end entity uart_tx_feed;
 --------------------------------------------------------------------------------
 architecture rtl of uart_tx_feed is
 	-- UART TX update FSM state declarations
-	type t_uarttx_feed_state is (ST_UARTFEED_IDLE, ST_UARTFEED_DATA, ST_UARTFEED_WAIT);
+	type t_uarttx_feed_state is (ST_UARTFEED_IDLE, ST_UARTFEED_CAPT,
+			ST_UARTFEED_DATA, ST_UARTFEED_WAIT);
 
 	signal s_uartfeed_pr_state : t_uarttx_feed_state;
 	signal s_uartfeed_nx_state : t_uarttx_feed_state;
@@ -90,22 +91,40 @@ begin
 			i_tx_go, i_dat_ascii_line, i_tx_ready)
 	begin
 		case (s_uartfeed_pr_state) is
+			when ST_UARTFEED_CAPT =>
+				-- Capture the input ASCII line and the index K.
+				-- The value of \ref i_tx_ready is also checked as to
+				-- not overflow the UART TX buffer. Once TX is ready,
+				-- begin the enqueue of outgoing data.
+				o_tx_data       <= x"00";
+				o_tx_valid      <= '0';
+				s_uart_k_val    <= c_uart_k_preset;
+				s_uart_line_val <= i_dat_ascii_line;
+
+				if (i_tx_ready = '1') then
+					s_uartfeed_nx_state <= ST_UARTFEED_DATA;
+				else
+					s_uartfeed_nx_state <= ST_UARTFEED_CAPT;
+				end if;
+
 			when ST_UARTFEED_DATA =>
-				-- Enqueue the \ref c_uart_k_preset count of bytes from signal
-				-- \ref i_dat_ascii_line. Then transition to the WAIT state.
-				o_tx_data       <= s_uart_line_aux(((8 * s_uart_k_aux) - 1) downto (8 * (s_uart_k_aux - 1)));
+				-- Enqueue the \ref c_uart_k_preset count of bytes from register
+				-- \ref s_uart_line_aux. Then transition to the WAIT state.
+				-- To accomplish this, s_uart_line_aux is shifted left, one byte
+				-- at-a-time.
+				o_tx_data       <= s_uart_line_aux(((8 * c_uart_k_preset) - 1) downto (8 * (c_uart_k_preset - 1)));
 				o_tx_valid      <= '1';
 				s_uart_k_val    <= s_uart_k_aux - 1;
-				s_uart_line_val <= s_uart_line_aux;
+				s_uart_line_val <= s_uart_line_aux((8 * (c_uart_k_preset - 1) - 1) downto 0) & x"00";
 
-				if (s_uart_k_aux <= 1) then
+				if (s_uart_k_aux = 1) then
 					s_uartfeed_nx_state <= ST_UARTFEED_WAIT;
 				else
 					s_uartfeed_nx_state <= ST_UARTFEED_DATA;
 				end if;
 
 			when ST_UARTFEED_WAIT =>
-				-- Wait for the \ref i_tx_go pulse to be idle, and then
+				-- Wait for the \ref i_tx_go pulse to be low, and then
 				-- transition to the IDLE state.
 				o_tx_data       <= x"00";
 				o_tx_valid      <= '0';
@@ -119,18 +138,14 @@ begin
 				end if;
 
 			when others => -- ST_UARTFEED_IDLE
-				           -- IDLE the FSM while waiting for a pulse on i_tx_go.
-				           -- The value of \ref i_tx_ready is also checked as to
-				           -- not overflow the UART TX buffer. If both signals are a
-				           -- TRUE value, then transition to enqueueing data.
+				           -- IDLE the FSM while waiting for a pulse on \ref i_tx_go 
 				o_tx_data       <= x"00";
 				o_tx_valid      <= '0';
-				s_uart_k_val    <= c_uart_k_preset;
+				s_uart_k_val    <= s_uart_k_aux;
 				s_uart_line_val <= s_uart_line_aux;
 
-				if ((i_tx_go = '1') and (i_tx_ready = '1')) then
-					s_uartfeed_nx_state <= ST_UARTFEED_DATA;
-					s_uart_line_val     <= i_dat_ascii_line;
+				if (i_tx_go = '1') then
+					s_uartfeed_nx_state <= ST_UARTFEED_CAPT;
 				else
 					s_uartfeed_nx_state <= ST_UARTFEED_IDLE;
 				end if;
