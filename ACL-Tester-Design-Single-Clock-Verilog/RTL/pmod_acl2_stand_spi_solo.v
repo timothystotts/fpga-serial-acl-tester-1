@@ -442,6 +442,7 @@ begin: p_fsm_comb
 			/* Load first byte, command WRITE, to TX FIFO. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_cmd_write;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_cfg0_length;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
@@ -460,10 +461,8 @@ begin: p_fsm_comb
 			s_reg_status_val = s_reg_status_aux;
 
 			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
 				s_drv_nx_state = ST_DRV_WR_AX_CFG0_ADDR;
 			end else begin
-				o_tx_enqueue = 1'b0;
 				s_drv_nx_state = ST_DRV_WR_AX_CFG0_CMD;
 			end
 		end
@@ -472,6 +471,7 @@ begin: p_fsm_comb
 			/* Load second byte, starting address for Configuration 0 byte sequence, to TX FIFO */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_addr_cfg0;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_cfg0_length;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
@@ -490,10 +490,8 @@ begin: p_fsm_comb
 			s_reg_status_val = s_reg_status_aux;
 
 			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
 				s_drv_nx_state = ST_DRV_WR_AX_CFG0_DATA;
 			end else begin
-				o_tx_enqueue = 1'b0;
 				s_drv_nx_state = ST_DRV_WR_AX_CFG0_ADDR;
 			end
 		end
@@ -504,9 +502,11 @@ begin: p_fsm_comb
 			o_command_ready = 1'b0;
 			o_tx_len = c_tx_ax_cfg0_length;
 			o_tx_data = s_tx_ax_cfg0_aux[((s_byte_index_aux * 8) - 1) -: 8];
+			o_tx_enqueue = i_tx_ready;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
 			o_rx_dequeue = 1'b0;
+			o_go_stand = (s_byte_index_aux > 1) ? 1'b0 : (i_tx_ready ? 1'b1 : 1'b0);
 			o_rd_data_stream = 8'h00;
 			o_rd_data_byte_valid = 1'b0;
 			o_rd_data_group_valid = 1'b0;
@@ -516,25 +516,16 @@ begin: p_fsm_comb
 			s_tx_ax_cfg3_val = s_tx_ax_cfg3_aux;
 			s_tx_ax_cfg4_val = s_tx_ax_cfg4_aux;
 			s_tx_ax_cfg5_val = s_tx_ax_cfg5_aux;
+			s_byte_index_val = (i_tx_ready) ? (s_byte_index_aux - 1) : (s_byte_index_aux);
 			s_reg_status_val = s_reg_status_aux;			
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
-				s_byte_index_val = (s_byte_index_aux - 1);
-
-				if (s_byte_index_aux > 1) begin
-					o_go_stand = 1'b0;
+			if (i_tx_ready)
+				if (s_byte_index_aux > 1)
 					s_drv_nx_state = ST_DRV_WR_AX_CFG0_DATA;
-				end else begin
-					o_go_stand = 1'b1;
+				else
 					s_drv_nx_state = ST_DRV_WAIT_AX_CFG0;
-				end
-			end else begin
-				o_tx_enqueue = 1'b0;
-				s_byte_index_val = s_byte_index_aux;
-				o_go_stand = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG0_DATA;
-			end
 		end
 
 		ST_DRV_WAIT_AX_CFG0: begin
@@ -567,6 +558,7 @@ begin: p_fsm_comb
 			/* Refer to the comments in the Configuration 0 sequence. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_cmd_write;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_cfg1_length;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
@@ -584,19 +576,17 @@ begin: p_fsm_comb
 			s_byte_index_val = s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_WR_AX_CFG1_ADDR;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG1_CMD;
-			end
 		end
 
 		ST_DRV_WR_AX_CFG1_ADDR: begin
 			/* Refer to the comments in the Configuration 0 sequence. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_addr_cfg1;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_cfg1_length;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
@@ -614,23 +604,22 @@ begin: p_fsm_comb
 			s_byte_index_val = (c_tx_ax_cfg1_length - 2);
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_WR_AX_CFG1_DATA;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG1_ADDR;
-			end
 		end
 
 		ST_DRV_WR_AX_CFG1_DATA: begin
 			/* Refer to the comments in the Configuration 0 sequence. */
 			o_command_ready = 1'b0;
-			o_tx_len = c_tx_ax_cfg1_length;
 			o_tx_data = s_tx_ax_cfg1_aux[((s_byte_index_aux * 8) - 1) -: 8];
+			o_tx_enqueue = i_tx_ready;
+			o_tx_len = c_tx_ax_cfg1_length;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
 			o_rx_dequeue = 1'b0;
+			o_go_stand = (s_byte_index_aux > 1) ? 1'b0 : (i_tx_ready ? 1'b1 : 1'b0);
 			o_rd_data_stream = 8'h00;
 			o_rd_data_byte_valid = 1'b0;
 			o_rd_data_group_valid = 1'b0;
@@ -640,25 +629,16 @@ begin: p_fsm_comb
 			s_tx_ax_cfg3_val = s_tx_ax_cfg3_aux;
 			s_tx_ax_cfg4_val = s_tx_ax_cfg4_aux;
 			s_tx_ax_cfg5_val = s_tx_ax_cfg5_aux;
+			s_byte_index_val = i_tx_ready ? (s_byte_index_aux - 1) : s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
-				s_byte_index_val = (s_byte_index_aux - 1);
-
-				if (s_byte_index_aux > 1) begin
-					o_go_stand = 1'b0;
+			if (i_tx_ready) 
+				if (s_byte_index_aux > 1)
 					s_drv_nx_state = ST_DRV_WR_AX_CFG1_DATA;
-				end else begin
-					o_go_stand = 1'b1;
+				else
 					s_drv_nx_state = ST_DRV_WAIT_AX_CFG1;
-				end
-			end else begin
-				o_tx_enqueue = 1'b0;
-				s_byte_index_val = s_byte_index_aux;
-				o_go_stand = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG1_DATA;
-			end
 		end
 
 		ST_DRV_WAIT_AX_CFG1: begin
@@ -691,6 +671,7 @@ begin: p_fsm_comb
 			/* Refer to the comments in the Configuration 0 sequence. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_cmd_write;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_cfg2_length;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
@@ -708,19 +689,17 @@ begin: p_fsm_comb
 			s_byte_index_val = s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_WR_AX_CFG2_ADDR;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG2_CMD;
-			end
 		end
 
 		ST_DRV_WR_AX_CFG2_ADDR: begin
 			/* Refer to the comments in the Configuration 0 sequence. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_addr_cfg2;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_cfg2_length;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
@@ -738,13 +717,10 @@ begin: p_fsm_comb
 			s_byte_index_val = (c_tx_ax_cfg2_length - 2);
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_WR_AX_CFG2_DATA;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG2_ADDR;
-			end
 		end
 
 		ST_DRV_WR_AX_CFG2_DATA: begin
@@ -752,9 +728,11 @@ begin: p_fsm_comb
 			o_command_ready = 1'b0;
 			o_tx_len = c_tx_ax_cfg2_length;
 			o_tx_data = s_tx_ax_cfg2_aux[((s_byte_index_aux * 8) - 1) -: 8];
+			o_tx_enqueue = i_tx_ready;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
 			o_rx_dequeue = 1'b0;
+			o_go_stand = (s_byte_index_aux > 1) ? 1'b0 : (i_tx_ready ? 1'b1 : 1'b0);
 			o_rd_data_stream = 8'h00;
 			o_rd_data_byte_valid = 1'b0;
 			o_rd_data_group_valid = 1'b0;
@@ -764,26 +742,16 @@ begin: p_fsm_comb
 			s_tx_ax_cfg3_val = s_tx_ax_cfg3_aux;
 			s_tx_ax_cfg4_val = s_tx_ax_cfg4_aux;
 			s_tx_ax_cfg5_val = s_tx_ax_cfg5_aux;
-			
+			s_byte_index_val = i_tx_ready ? (s_byte_index_aux - 1) : s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
-				s_byte_index_val = (s_byte_index_aux - 1);
-
-				if (s_byte_index_aux > 1) begin
-					o_go_stand = 1'b0;
+			if (i_tx_ready)
+				if (s_byte_index_aux > 1)
 					s_drv_nx_state = ST_DRV_WR_AX_CFG2_DATA;
-				end else begin
-					o_go_stand = 1'b1;
+				else
 					s_drv_nx_state = ST_DRV_WAIT_AX_CFG2;
-				end
-			end else begin
-				o_tx_enqueue = 1'b0;
-				s_byte_index_val = s_byte_index_aux;
-				o_go_stand = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG2_DATA;
-			end
 		end
 
 		ST_DRV_WAIT_AX_CFG2: begin
@@ -816,6 +784,7 @@ begin: p_fsm_comb
 			/* Refer to the comments in the Configuration 0 sequence. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_cmd_write;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_cfg3_length;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
@@ -833,19 +802,17 @@ begin: p_fsm_comb
 			s_byte_index_val = s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_WR_AX_CFG3_ADDR;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG3_CMD;
-			end
 		end
 
 		ST_DRV_WR_AX_CFG3_ADDR: begin
 			/* Refer to the comments in the Configuration 0 sequence. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_addr_cfg3;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_cfg3_length;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
@@ -863,13 +830,10 @@ begin: p_fsm_comb
 			s_byte_index_val = (c_tx_ax_cfg3_length - 2);
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_WR_AX_CFG3_DATA;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG3_ADDR;
-			end
 		end
 
 		ST_DRV_WR_AX_CFG3_DATA: begin
@@ -877,9 +841,11 @@ begin: p_fsm_comb
 			o_command_ready = 1'b0;
 			o_tx_len = c_tx_ax_cfg3_length;
 			o_tx_data = s_tx_ax_cfg3_aux[((s_byte_index_aux * 8) - 1) -: 8];
+			o_tx_enqueue = i_tx_ready;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
 			o_rx_dequeue = 1'b0;
+			o_go_stand = (s_byte_index_aux > 1) ? 1'b0 : (i_tx_ready ? 1'b1 : 1'b0);
 			o_rd_data_stream = 8'h00;
 			o_rd_data_byte_valid = 1'b0;
 			o_rd_data_group_valid = 1'b0;
@@ -889,26 +855,16 @@ begin: p_fsm_comb
 			s_tx_ax_cfg3_val = s_tx_ax_cfg3_aux;
 			s_tx_ax_cfg4_val = s_tx_ax_cfg4_aux;
 			s_tx_ax_cfg5_val = s_tx_ax_cfg5_aux;
-			
+			s_byte_index_val = i_tx_ready ? (s_byte_index_aux - 1) : s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
-				s_byte_index_val = (s_byte_index_aux - 1);
-
-				if (s_byte_index_aux > 1) begin
-					o_go_stand = 1'b0;
+			if (i_tx_ready)
+				if (s_byte_index_aux > 1)
 					s_drv_nx_state = ST_DRV_WR_AX_CFG3_DATA;
-				end else begin
-					o_go_stand = 1'b1;
+				else
 					s_drv_nx_state = ST_DRV_WAIT_AX_CFG3;
-				end
-			end else begin
-				o_tx_enqueue = 1'b0;
-				s_byte_index_val = s_byte_index_aux;
-				o_go_stand = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG3_DATA;
-			end
 		end
 
 		ST_DRV_WAIT_AX_CFG3: begin
@@ -941,6 +897,7 @@ begin: p_fsm_comb
 			/* Refer to the comments in the Configuration 0 sequence. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_cmd_write;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_cfg4_length;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
@@ -958,19 +915,17 @@ begin: p_fsm_comb
 			s_byte_index_val = s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_WR_AX_CFG4_ADDR;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG4_CMD;
-			end
 		end
 
 		ST_DRV_WR_AX_CFG4_ADDR: begin
 			/* Refer to the comments in the Configuration 0 sequence. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_addr_cfg4;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_cfg4_length;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
@@ -988,23 +943,22 @@ begin: p_fsm_comb
 			s_byte_index_val = (c_tx_ax_cfg4_length - 2);
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_WR_AX_CFG4_DATA;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG4_ADDR;
-			end
 		end
 
 		ST_DRV_WR_AX_CFG4_DATA: begin
 			/* Refer to the comments in the Configuration 0 sequence. */
 			o_command_ready = 1'b0;
-			o_tx_len = c_tx_ax_cfg4_length;
 			o_tx_data = s_tx_ax_cfg4_aux[((s_byte_index_aux * 8) - 1) -: 8];
+			o_tx_enqueue = i_tx_ready;
+			o_tx_len = c_tx_ax_cfg4_length;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
 			o_rx_dequeue = 1'b0;
+			o_go_stand = (s_byte_index_aux > 1) ? 1'b0 : (i_tx_ready ? 1'b1 : 1'b0);
 			o_rd_data_stream = 8'h00;
 			o_rd_data_byte_valid = 1'b0;
 			o_rd_data_group_valid = 1'b0;
@@ -1014,25 +968,16 @@ begin: p_fsm_comb
 			s_tx_ax_cfg3_val = s_tx_ax_cfg3_aux;
 			s_tx_ax_cfg4_val = s_tx_ax_cfg4_aux;
 			s_tx_ax_cfg5_val = s_tx_ax_cfg5_aux;
+			s_byte_index_val = i_tx_ready ? (s_byte_index_aux - 1) : s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
-				s_byte_index_val = (s_byte_index_aux - 1);
-
-				if (s_byte_index_aux > 1) begin
-					o_go_stand = 1'b0;
+			if (i_tx_ready)
+				if (s_byte_index_aux > 1)
 					s_drv_nx_state = ST_DRV_WR_AX_CFG4_DATA;
-				end else begin
-					o_go_stand = 1'b1;
+				else
 					s_drv_nx_state = ST_DRV_WAIT_AX_CFG4;
-				end
-			end else begin
-				o_tx_enqueue = 1'b0;
-				s_byte_index_val = s_byte_index_aux;
-				o_go_stand = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG4_DATA;
-			end
 		end
 
 		ST_DRV_WAIT_AX_CFG4: begin
@@ -1065,6 +1010,7 @@ begin: p_fsm_comb
 			/* Refer to the comments in the Configuration 0 sequence. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_cmd_write;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_cfg5_length;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
@@ -1082,19 +1028,17 @@ begin: p_fsm_comb
 			s_byte_index_val = s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_WR_AX_CFG5_ADDR;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG5_CMD;
-			end
 		end
 
 		ST_DRV_WR_AX_CFG5_ADDR: begin
 			/* Refer to the comments in the Configuration 0 sequence. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_addr_cfg5;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_cfg5_length;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
@@ -1109,16 +1053,13 @@ begin: p_fsm_comb
 			s_tx_ax_cfg3_val = s_tx_ax_cfg3_aux;
 			s_tx_ax_cfg4_val = s_tx_ax_cfg4_aux;
 			s_tx_ax_cfg5_val = s_tx_ax_cfg5_aux;
-			s_byte_index_val = (c_tx_ax_cfg4_length - 2);
+			s_byte_index_val = (c_tx_ax_cfg5_length - 2);
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_WR_AX_CFG5_DATA;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG5_ADDR;
-			end
 		end
 
 		ST_DRV_WR_AX_CFG5_DATA: begin
@@ -1126,9 +1067,11 @@ begin: p_fsm_comb
 			o_command_ready = 1'b0;
 			o_tx_len = c_tx_ax_cfg5_length;
 			o_tx_data = s_tx_ax_cfg5_aux[((s_byte_index_aux * 8) - 1) -: 8];
+			o_tx_enqueue = i_tx_ready;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
 			o_rx_dequeue = 1'b0;
+			o_go_stand = (s_byte_index_aux > 1) ? 1'b0 : (i_tx_ready ? 1'b1 : 1'b0);
 			o_rd_data_stream = 8'h00;
 			o_rd_data_byte_valid = 1'b0;
 			o_rd_data_group_valid = 1'b0;
@@ -1138,25 +1081,16 @@ begin: p_fsm_comb
 			s_tx_ax_cfg3_val = s_tx_ax_cfg3_aux;
 			s_tx_ax_cfg4_val = s_tx_ax_cfg4_aux;
 			s_tx_ax_cfg5_val = s_tx_ax_cfg5_aux;
+			s_byte_index_val = i_tx_ready ? (s_byte_index_aux - 1) : s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
-				s_byte_index_val = (s_byte_index_aux - 1);
-
-				if (s_byte_index_aux > 1) begin
-					o_go_stand = 1'b0;
+			if (i_tx_ready)
+				if (s_byte_index_aux > 1)
 					s_drv_nx_state = ST_DRV_WR_AX_CFG5_DATA;
-				end else begin
-					o_go_stand = 1'b1;
+				else
 					s_drv_nx_state = ST_DRV_WAIT_AX_CFG5;
-				end
-			end else begin
-				o_tx_enqueue = 1'b0;
-				s_byte_index_val = s_byte_index_aux;
-				o_go_stand = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG5_DATA;
-			end
 		end
 
 		ST_DRV_WAIT_AX_CFG5: begin
@@ -1219,6 +1153,7 @@ begin: p_fsm_comb
 			/* Load first byte, command READ, to TX FIFO. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_cmd_read;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_readmm_length;
 			o_rx_len = c_rx_ax_readmm_length;
 			o_wait_cyc = 0;
@@ -1236,13 +1171,10 @@ begin: p_fsm_comb
 			s_byte_index_val = s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_READ_MEASU_ADDR;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_READ_MEASU_CMD;
-			end
 		end
 
 		ST_DRV_READ_MEASU_ADDR: begin
@@ -1250,10 +1182,12 @@ begin: p_fsm_comb
 			   Then trigger the SPI bus operation. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_addr_8reg;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_readmm_length;
 			o_rx_len = c_rx_ax_readmm_length;
 			o_wait_cyc = 0;
 			o_rx_dequeue = 1'b0;
+			o_go_stand = i_tx_ready;
 			o_rd_data_stream = 8'h00;
 			o_rd_data_byte_valid = 1'b0;
 			o_rd_data_group_valid = 1'b1;
@@ -1266,24 +1200,19 @@ begin: p_fsm_comb
 			s_byte_index_val = c_rx_ax_readmm_length;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
-				o_go_stand = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_READ_MEASU_DATA;
-			end else begin
-				o_tx_enqueue = 1'b0;
-				o_go_stand = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_READ_MEASU_ADDR;
-			end
 		end
 
 		ST_DRV_READ_MEASU_DATA: begin
 			/* Receive the eight bytes of measurment data from the SPI bus operation,
 			   and output the bytes one-at-a-time in a streaming pattern. */
 			o_command_ready = 1'b0;
-			o_tx_len = c_tx_ax_readmm_length;
 			o_tx_data = 8'h00;
 			o_tx_enqueue = 1'b0;
+			o_tx_len = c_tx_ax_readmm_length;
 			o_rx_len = c_rx_ax_readmm_length;
 			o_wait_cyc = 0;
 			o_rx_dequeue = i_rx_avail;
@@ -1297,21 +1226,16 @@ begin: p_fsm_comb
 			s_tx_ax_cfg3_val = s_tx_ax_cfg3_aux;
 			s_tx_ax_cfg4_val = s_tx_ax_cfg4_aux;
 			s_tx_ax_cfg5_val = s_tx_ax_cfg5_aux;
+			s_byte_index_val = i_rx_valid ? (s_byte_index_aux - 1) : s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;			
 
-			if (i_rx_valid) begin
-				s_byte_index_val = (s_byte_index_aux - 1);
-
-				if (s_byte_index_aux > 1) begin
+			if (i_rx_valid)
+				if (s_byte_index_aux > 1)
 					s_drv_nx_state = ST_DRV_READ_MEASU_DATA;
-				end else begin
+				else
 					s_drv_nx_state = ST_DRV_READ_WAIT0;
-				end
-			end else begin
-				s_byte_index_val = s_byte_index_aux;
-
+			else
 				s_drv_nx_state = ST_DRV_READ_MEASU_DATA;
-			end
 		end
 
 		ST_DRV_READ_WAIT0: begin
@@ -1347,6 +1271,7 @@ begin: p_fsm_comb
 			   Load the READ command first. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_cmd_read;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_clearmm_length;
 			o_rx_len = c_rx_ax_clearmm_length;
 			o_wait_cyc = 0;
@@ -1364,13 +1289,10 @@ begin: p_fsm_comb
 			s_byte_index_val = s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_CLEAR_MEASU_ADDR;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_CLEAR_MEASU_CMD;
-			end
 		end
 
 		ST_DRV_CLEAR_MEASU_ADDR: begin
@@ -1378,10 +1300,12 @@ begin: p_fsm_comb
 			   bus operation. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_addr_stat;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_clearmm_length;
 			o_rx_len = c_rx_ax_clearmm_length;
 			o_wait_cyc = 0;
 			o_rx_dequeue = 1'b0;
+			o_go_stand = i_tx_ready;
 			o_rd_data_stream = 8'h00;
 			o_rd_data_byte_valid = 1'b0;
 			o_rd_data_group_valid = 1'b0;
@@ -1394,15 +1318,10 @@ begin: p_fsm_comb
 			s_byte_index_val = c_rx_ax_clearmm_length;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
-				o_go_stand = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_CLEAR_MEASU_DATA;
-			end else begin
-				o_tx_enqueue = 1'b0;
-				o_go_stand = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_CLEAR_MEASU_ADDR;
-			end
 		end
 
 		ST_DRV_CLEAR_MEASU_DATA: begin
@@ -1424,18 +1343,13 @@ begin: p_fsm_comb
 			s_tx_ax_cfg3_val = s_tx_ax_cfg3_aux;
 			s_tx_ax_cfg4_val = s_tx_ax_cfg4_aux;
 			s_tx_ax_cfg5_val = s_tx_ax_cfg5_aux;
+			s_byte_index_val = i_rx_valid ? (s_byte_index_aux - 1) : s_byte_index_aux;
+			s_reg_status_val = i_rx_valid ? i_rx_data : s_reg_status_aux;
 
-			if (i_rx_valid) begin
-				s_byte_index_val = (s_byte_index_aux - 1);
-				s_reg_status_val = i_rx_data;
-
+			if (i_rx_valid)
 				s_drv_nx_state = ST_DRV_READ_WAIT1;
-			end else begin
-				s_reg_status_val = s_reg_status_aux;
-				s_byte_index_val = s_byte_index_aux;
-
+			else
 				s_drv_nx_state = ST_DRV_CLEAR_MEASU_DATA;
-			end
 		end
 
 		ST_DRV_READ_WAIT1: begin
@@ -1530,6 +1444,7 @@ begin: p_fsm_comb
 			/* Load first byte, command READ, to TX FIFO. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_cmd_read;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_readlm_length;
 			o_rx_len = c_rx_ax_readlm_length;
 			o_wait_cyc = 0;
@@ -1547,13 +1462,10 @@ begin: p_fsm_comb
 			s_byte_index_val = s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_READ_INACT0_ADDR;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_READ_INACT0_CMD;
-			end
 		end
 
 		ST_DRV_READ_INACT0_ADDR: begin
@@ -1561,10 +1473,12 @@ begin: p_fsm_comb
 			   Then trigger the SPI bus operation. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_addr_8reg;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_readlm_length;
 			o_rx_len = c_rx_ax_readlm_length;
 			o_wait_cyc = 0;
 			o_rx_dequeue = 1'b0;
+			o_go_stand = i_tx_ready;
 			o_rd_data_stream = 8'h00;
 			o_rd_data_byte_valid = 1'b0;
 			o_rd_data_group_valid = 1'b1;
@@ -1577,15 +1491,10 @@ begin: p_fsm_comb
 			s_byte_index_val = c_rx_ax_readlm_length;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
-				o_go_stand = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_READ_INACT0_DATA;
-			end else begin
-				o_tx_enqueue = 1'b0;
-				o_go_stand = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_READ_INACT0_ADDR;
-			end
 		end
 
 		ST_DRV_READ_INACT0_DATA: begin
@@ -1608,21 +1517,16 @@ begin: p_fsm_comb
 			s_tx_ax_cfg3_val = s_tx_ax_cfg3_aux;
 			s_tx_ax_cfg4_val = s_tx_ax_cfg4_aux;
 			s_tx_ax_cfg5_val = s_tx_ax_cfg5_aux;
+			s_byte_index_val = i_rx_valid ? (s_byte_index_aux - 1) : s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;			
 
-			if (i_rx_valid) begin
-				s_byte_index_val = (s_byte_index_aux - 1);
-
-				if (s_byte_index_aux > 1) begin
+			if (i_rx_valid)
+				if (s_byte_index_aux > 1)
 					s_drv_nx_state = ST_DRV_READ_INACT0_DATA;
-				end else begin
+				else
 					s_drv_nx_state = ST_DRV_READ_WAIT3;
-				end
-			end else begin
-				s_byte_index_val = s_byte_index_aux;
-
+			else
 				s_drv_nx_state = ST_DRV_READ_INACT0_DATA;
-			end
 		end
 
 		ST_DRV_READ_WAIT3: begin
@@ -1658,6 +1562,7 @@ begin: p_fsm_comb
 			   Load the READ command first. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_cmd_read;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_clearlm_length;
 			o_rx_len = c_rx_ax_clearlm_length;
 			o_wait_cyc = 0;
@@ -1675,13 +1580,10 @@ begin: p_fsm_comb
 			s_byte_index_val = s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_CLEAR_AWAKE0_ADDR;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_CLEAR_AWAKE0_CMD;
-			end
 		end
 
 		ST_DRV_CLEAR_AWAKE0_ADDR: begin
@@ -1689,10 +1591,12 @@ begin: p_fsm_comb
 			   bus operation. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_addr_stat;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_clearlm_length;
 			o_rx_len = c_rx_ax_clearlm_length;
 			o_wait_cyc = 0;
 			o_rx_dequeue = 1'b0;
+			o_go_stand = i_tx_ready;
 			o_rd_data_stream = 8'h00;
 			o_rd_data_byte_valid = 1'b0;
 			o_rd_data_group_valid = 1'b0;
@@ -1702,18 +1606,13 @@ begin: p_fsm_comb
 			s_tx_ax_cfg3_val = s_tx_ax_cfg3_aux;
 			s_tx_ax_cfg4_val = s_tx_ax_cfg4_aux;
 			s_tx_ax_cfg5_val = s_tx_ax_cfg5_aux;
-			s_byte_index_val = c_rx_ax_clearmm_length;
+			s_byte_index_val = c_rx_ax_clearlm_length;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
-				o_go_stand = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_CLEAR_AWAKE0_DATA;
-			end else begin
-				o_tx_enqueue = 1'b0;
-				o_go_stand = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_CLEAR_AWAKE0_ADDR;
-			end
 		end
 
 		ST_DRV_CLEAR_AWAKE0_DATA: begin
@@ -1735,18 +1634,13 @@ begin: p_fsm_comb
 			s_tx_ax_cfg3_val = s_tx_ax_cfg3_aux;
 			s_tx_ax_cfg4_val = s_tx_ax_cfg4_aux;
 			s_tx_ax_cfg5_val = s_tx_ax_cfg5_aux;
+			s_byte_index_val = i_rx_valid ? (s_byte_index_aux - 1) : s_byte_index_aux;
+			s_reg_status_val = i_rx_valid ? i_rx_data : s_reg_status_aux;
 
-			if (i_rx_valid) begin
-				s_byte_index_val = (s_byte_index_aux - 1);
-				s_reg_status_val = i_rx_data;
-
+			if (i_rx_valid) 
 				s_drv_nx_state = ST_DRV_READ_WAIT4;
-			end else begin
-				s_reg_status_val = s_reg_status_aux;
-				s_byte_index_val = s_byte_index_aux;
-
+			else
 				s_drv_nx_state = ST_DRV_CLEAR_AWAKE0_DATA;
-			end
 		end
 
 		ST_DRV_READ_WAIT4: begin
@@ -1841,6 +1735,7 @@ begin: p_fsm_comb
 			/* Load first byte, command READ, to TX FIFO. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_cmd_read;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_readlm_length;
 			o_rx_len = c_rx_ax_readlm_length;
 			o_wait_cyc = 0;
@@ -1858,13 +1753,10 @@ begin: p_fsm_comb
 			s_byte_index_val = s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_READ_ACT0_ADDR;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_READ_ACT0_CMD;
-			end
 		end
 
 		ST_DRV_READ_ACT0_ADDR: begin
@@ -1872,10 +1764,12 @@ begin: p_fsm_comb
 			   At the same time, trigger the SPI bus operation. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_addr_8reg;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_readlm_length;
 			o_rx_len = c_rx_ax_readlm_length;
 			o_wait_cyc = 0;
 			o_rx_dequeue = 1'b0;
+			o_go_stand = i_tx_ready;
 			o_rd_data_stream = 8'h00;
 			o_rd_data_byte_valid = 1'b0;
 			o_rd_data_group_valid = 1'b1;
@@ -1888,15 +1782,10 @@ begin: p_fsm_comb
 			s_byte_index_val = c_rx_ax_readlm_length;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
-				o_go_stand = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_READ_ACT0_DATA;
-			end else begin
-				o_tx_enqueue = 1'b0;
-				o_go_stand = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_READ_ACT0_ADDR;
-			end
 		end
 
 		ST_DRV_READ_ACT0_DATA: begin
@@ -1919,21 +1808,16 @@ begin: p_fsm_comb
 			s_tx_ax_cfg3_val = s_tx_ax_cfg3_aux;
 			s_tx_ax_cfg4_val = s_tx_ax_cfg4_aux;
 			s_tx_ax_cfg5_val = s_tx_ax_cfg5_aux;
+			s_byte_index_val = i_rx_valid ? (s_byte_index_aux - 1) : s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;			
 
-			if (i_rx_valid) begin
-				s_byte_index_val = (s_byte_index_aux - 1);
-
-				if (s_byte_index_aux > 1) begin
+			if (i_rx_valid)
+				if (s_byte_index_aux > 1)
 					s_drv_nx_state = ST_DRV_READ_ACT0_DATA;
-				end else begin
+				else
 					s_drv_nx_state = ST_DRV_READ_WAIT6;
-				end
-			end else begin
-				s_byte_index_val = s_byte_index_aux;
-
+			else
 				s_drv_nx_state = ST_DRV_READ_ACT0_DATA;
-			end
 		end
 
 		ST_DRV_READ_WAIT6: begin
@@ -1969,6 +1853,7 @@ begin: p_fsm_comb
 			   Load the READ command first. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_cmd_read;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_clearlm_length;
 			o_rx_len = c_rx_ax_clearlm_length;
 			o_wait_cyc = 0;
@@ -1986,13 +1871,10 @@ begin: p_fsm_comb
 			s_byte_index_val = s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_CLEAR_AWAKE1_ADDR;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_CLEAR_AWAKE1_CMD;
-			end
 		end
 
 		ST_DRV_CLEAR_AWAKE1_ADDR: begin
@@ -2000,10 +1882,12 @@ begin: p_fsm_comb
 			   bus operation. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_addr_stat;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_clearlm_length;
 			o_rx_len = c_rx_ax_clearlm_length;
 			o_wait_cyc = 0;
 			o_rx_dequeue = 1'b0;
+			o_go_stand = i_tx_ready;
 			o_rd_data_stream = 8'h00;
 			o_rd_data_byte_valid = 1'b0;
 			o_rd_data_group_valid = 1'b0;
@@ -2013,18 +1897,13 @@ begin: p_fsm_comb
 			s_tx_ax_cfg3_val = s_tx_ax_cfg3_aux;
 			s_tx_ax_cfg4_val = s_tx_ax_cfg4_aux;
 			s_tx_ax_cfg5_val = s_tx_ax_cfg5_aux;
-			s_byte_index_val = c_rx_ax_clearmm_length;
+			s_byte_index_val = c_rx_ax_clearlm_length;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
-				o_go_stand = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_CLEAR_AWAKE1_DATA;
-			end else begin
-				o_tx_enqueue = 1'b0;
-				o_go_stand = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_CLEAR_AWAKE1_ADDR;
-			end
 		end
 
 		ST_DRV_CLEAR_AWAKE1_DATA: begin
@@ -2046,18 +1925,13 @@ begin: p_fsm_comb
 			s_tx_ax_cfg3_val = s_tx_ax_cfg3_aux;
 			s_tx_ax_cfg4_val = s_tx_ax_cfg4_aux;
 			s_tx_ax_cfg5_val = s_tx_ax_cfg5_aux;
+			s_byte_index_val = i_rx_valid ? (s_byte_index_aux - 1) : s_byte_index_aux;
+			s_reg_status_val = i_rx_valid ? i_rx_data : s_reg_status_aux;
 
-			if (i_rx_valid) begin
-				s_byte_index_val = (s_byte_index_aux - 1);
-				s_reg_status_val = i_rx_data;
-
+			if (i_rx_valid)
 				s_drv_nx_state = ST_DRV_READ_WAIT7;
-			end else begin
-				s_reg_status_val = s_reg_status_aux;
-				s_byte_index_val = s_byte_index_aux;
-
+			else
 				s_drv_nx_state = ST_DRV_CLEAR_AWAKE1_DATA;
-			end
 		end
 
 		ST_DRV_READ_WAIT7: begin
@@ -2120,6 +1994,7 @@ begin: p_fsm_comb
 			   First, load the WRITE command. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_cmd_write;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_sr_length;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
@@ -2137,19 +2012,17 @@ begin: p_fsm_comb
 			s_byte_index_val = s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_SOFTRESET_ADDR;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_SOFTRESET_CMD;
-			end
 		end
 
 		ST_DRV_SOFTRESET_ADDR: begin
 			/* Next, load the address of the SOFT RESET REGISTER. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_addr_sr;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_sr_length;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
@@ -2167,13 +2040,10 @@ begin: p_fsm_comb
 			s_byte_index_val = c_tx_ax_sr_length - 2;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_SOFTRESET_DATA;
-			end else begin
-				o_tx_enqueue = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_SOFTRESET_ADDR;
-			end
 		end
 
 		ST_DRV_SOFTRESET_DATA: begin
@@ -2181,10 +2051,12 @@ begin: p_fsm_comb
 			   and at the same time trigger the SPI operation to start. */
 			o_command_ready = 1'b0;
 			o_tx_data = c_adxl362_data_sr;
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = c_tx_ax_sr_length;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
 			o_rx_dequeue = 1'b0;
+			o_go_stand = i_tx_ready;
 			o_rd_data_stream = 8'h00;
 			o_rd_data_byte_valid = 1'b0;
 			o_rd_data_group_valid = 1'b0;
@@ -2194,19 +2066,13 @@ begin: p_fsm_comb
 			s_tx_ax_cfg3_val = s_tx_ax_cfg3_aux;
 			s_tx_ax_cfg4_val = s_tx_ax_cfg4_aux;
 			s_tx_ax_cfg5_val = s_tx_ax_cfg5_aux;
+			s_byte_index_val = i_tx_ready ? (s_byte_index_aux - 1) : s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;			
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
-				s_byte_index_val = (s_byte_index_aux - 1);
-				o_go_stand = 1'b1;
+			if (i_tx_ready)
 				s_drv_nx_state = ST_DRV_SOFTRESET_WAIT9;
-			end else begin
-				o_tx_enqueue = 1'b0;
-				s_byte_index_val = s_byte_index_aux;
-				o_go_stand = 1'b0;
+			else
 				s_drv_nx_state = ST_DRV_SOFTRESET_DATA;
-			end
 		end
 
 		ST_DRV_SOFTRESET_WAIT9: begin

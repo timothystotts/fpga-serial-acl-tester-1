@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
-| Date         : Tue Jul  7 22:16:27 2020
+| Date         : Thu Jul  9 12:43:46 2020
 | Host         : ubuntu running 64-bit Ubuntu 18.04.4 LTS
 | Command      : report_bus_skew -warn_on_violation -file fpga_serial_acl_tester_bus_skew_routed.rpt -pb fpga_serial_acl_tester_bus_skew_routed.pb -rpx fpga_serial_acl_tester_bus_skew_routed.rpx
 | Design       : fpga_serial_acl_tester
