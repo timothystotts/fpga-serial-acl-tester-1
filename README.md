@@ -15,6 +15,10 @@ and:
 
 [Serial ACL Readings Tester info](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/Serial%20ACL%20Readings%20Tester.pdf)
 
+# Diagrams design document:
+
+[Serial ACL Design Diagrams info](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams.pdf)
+
 # Block diagram architecture of the HDL designs:
 ![ACL Tester Architecture Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-Architecture%201.svg)
 
@@ -35,6 +39,9 @@ and:
 
 # ACL2 Custom Driver readings Stream FSM:
 ![ACL2 Custom Driver readings Stream FSM](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-StreamFSM.svg)
+
+# Pmod ACL2 Standard SPI custom driver FSM for operating the standard SPI driver to configuration and operate the modes of the ADXL362 accelerometer chip of the Pmod ACL2:
+![ACL2 Custom Driver readings Stream FSM](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-ADXL362-driver-FSM.svg)
 
 # CLS Custom Driver Ports diagram of the HDL designs:
 ![CLS Custom Driver Ports](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-CLS-ports.svg)
