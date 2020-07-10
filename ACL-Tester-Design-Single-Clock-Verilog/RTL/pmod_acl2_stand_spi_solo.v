@@ -519,11 +519,8 @@ begin: p_fsm_comb
 			s_byte_index_val = (i_tx_ready) ? (s_byte_index_aux - 1) : (s_byte_index_aux);
 			s_reg_status_val = s_reg_status_aux;			
 
-			if (i_tx_ready)
-				if (s_byte_index_aux > 1)
-					s_drv_nx_state = ST_DRV_WR_AX_CFG0_DATA;
-				else
-					s_drv_nx_state = ST_DRV_WAIT_AX_CFG0;
+			if ((i_tx_ready == 1'b1) && (s_byte_index_aux <= 1))
+				s_drv_nx_state = ST_DRV_WAIT_AX_CFG0;
 			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG0_DATA;
 		end
@@ -632,11 +629,8 @@ begin: p_fsm_comb
 			s_byte_index_val = i_tx_ready ? (s_byte_index_aux - 1) : s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (i_tx_ready) 
-				if (s_byte_index_aux > 1)
-					s_drv_nx_state = ST_DRV_WR_AX_CFG1_DATA;
-				else
-					s_drv_nx_state = ST_DRV_WAIT_AX_CFG1;
+			if ((i_tx_ready == 1'b1)  && (s_byte_index_aux <= 1))
+				s_drv_nx_state = ST_DRV_WAIT_AX_CFG1;
 			else
 				s_drv_nx_state = ST_DRV_WR_AX_CFG1_DATA;
 		end
@@ -1229,11 +1223,8 @@ begin: p_fsm_comb
 			s_byte_index_val = i_rx_valid ? (s_byte_index_aux - 1) : s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;			
 
-			if (i_rx_valid)
-				if (s_byte_index_aux > 1)
-					s_drv_nx_state = ST_DRV_READ_MEASU_DATA;
-				else
-					s_drv_nx_state = ST_DRV_READ_WAIT0;
+			if ((i_rx_valid == 1'b1) && (s_byte_index_aux <= 1))
+				s_drv_nx_state = ST_DRV_READ_WAIT0;
 			else
 				s_drv_nx_state = ST_DRV_READ_MEASU_DATA;
 		end
@@ -1520,11 +1511,8 @@ begin: p_fsm_comb
 			s_byte_index_val = i_rx_valid ? (s_byte_index_aux - 1) : s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;			
 
-			if (i_rx_valid)
-				if (s_byte_index_aux > 1)
-					s_drv_nx_state = ST_DRV_READ_INACT0_DATA;
-				else
-					s_drv_nx_state = ST_DRV_READ_WAIT3;
+			if ((i_rx_valid == 1'b1) && (s_byte_index_aux <= 1))
+				s_drv_nx_state = ST_DRV_READ_WAIT3;
 			else
 				s_drv_nx_state = ST_DRV_READ_INACT0_DATA;
 		end
@@ -1811,11 +1799,8 @@ begin: p_fsm_comb
 			s_byte_index_val = i_rx_valid ? (s_byte_index_aux - 1) : s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;			
 
-			if (i_rx_valid)
-				if (s_byte_index_aux > 1)
-					s_drv_nx_state = ST_DRV_READ_ACT0_DATA;
-				else
-					s_drv_nx_state = ST_DRV_READ_WAIT6;
+			if ((i_rx_valid == 1'b1) && (s_byte_index_aux <= 1))
+				s_drv_nx_state = ST_DRV_READ_WAIT6;
 			else
 				s_drv_nx_state = ST_DRV_READ_ACT0_DATA;
 		end
