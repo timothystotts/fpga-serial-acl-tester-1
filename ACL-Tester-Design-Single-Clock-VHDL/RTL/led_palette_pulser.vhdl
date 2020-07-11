@@ -262,7 +262,7 @@ begin
 			end if;
 
 			-- LED 2 is Red when no Activity detect, Green when Activity detect.
-			if (i_acl2_activity_stretched = '1') then
+			if ((i_acl2_activity_stretched = '1') and (i_mode_is_linked_aux = '1')) then
 				s_ld2_red_pulse   <= "000001";
 				s_ld2_green_pulse <= "111111";
 				s_ld2_blue_pulse  <= "000001";
@@ -273,7 +273,7 @@ begin
 			end if;
 
 			-- LED 3 is Red when no Inactivity detect, Green when Inactivity detect.
-			if (i_acl2_inactivity_stretched = '1') then
+			if ((i_acl2_inactivity_stretched = '1') and (i_mode_is_linked_aux = '1')) then
 				s_ld3_red_pulse   <= "000001";
 				s_ld3_green_pulse <= "111111";
 				s_ld3_blue_pulse  <= "000001";

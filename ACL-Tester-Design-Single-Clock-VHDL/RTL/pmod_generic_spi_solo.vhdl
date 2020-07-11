@@ -542,18 +542,13 @@ begin
 				eo_mosi_o <= '0';
 				eo_mosi_t <= '0';
 				-- hold not reading the TX FIFO
-				s_data_fifo_tx_re <= '0';
+				s_data_fifo_tx_re <= s_spi_clk_ce3 when ((s_t = c_t_stand_wait_ss - c_t_inc) and 
+					(s_data_fifo_tx_empty = '0')) else '0';
 				-- machine is not idle
 				s_spi_idle <= '0';
 
 				-- time the slave not selected start time
 				if (s_t = c_t_stand_wait_ss - c_t_inc) then
-					if (s_data_fifo_tx_empty = '0') then
-						s_data_fifo_tx_re <= s_spi_clk_ce3;
-					else
-						s_data_fifo_tx_re <= '0';
-					end if;
-
 					s_spi_nx_state <= ST_STAND_TX;
 				else
 					s_spi_nx_state <= ST_STAND_START_S;
@@ -567,19 +562,19 @@ begin
 				eo_ssn_o <= '0';
 				eo_ssn_t <= '0';
 				-- data value for MOSI
-				if (s_t < 8 * s_tx_len_aux) then
-					eo_mosi_o <= s_data_fifo_tx_out(7 - (s_t mod 8));
-				else
-					eo_mosi_o <= '0';
-				end if;
+				eo_mosi_o <= s_data_fifo_tx_out(7 - (s_t mod 8)) when (s_t < 8 * s_tx_len_aux) else '0';
 				eo_mosi_t <= '0';
 
 				-- machine is not idle
 				s_spi_idle <= '0';
 
+				-- read byte by byte from the TX FIFO
+				-- only if on last bit, dequeue another byte
+				s_data_fifo_tx_re <= s_spi_clk_ce2 when ((s_t /= (8 * s_tx_len_aux) - c_t_inc) and
+					(s_t mod 8 = 7) and (s_data_fifo_tx_empty = '0')) else '0';
+
 				-- If every bit from the FIFO according to i_tx_len value captured
 				-- in s_tx_len_aux, then move to either WAIT, RX, or STOP.
-
 				if (s_t = (8 * s_tx_len_aux) - c_t_inc) then
 					if (s_rx_len_aux > 0) then
 						if (s_wait_cyc_aux > 0) then
@@ -590,20 +585,7 @@ begin
 					else
 						s_spi_nx_state <= ST_STAND_STOP_S;
 					end if;
-
-					s_data_fifo_tx_re <= '0';
 				else
-					-- only if on last bit, dequeue another byte
-					if (s_t mod 8 = 7) then
-						if (s_data_fifo_tx_empty = '0') then
-							s_data_fifo_tx_re <= s_spi_clk_ce2;
-						else
-							s_data_fifo_tx_re <= '0';
-						end if;
-					else
-						s_data_fifo_tx_re <= '0';
-					end if;
-
 					s_spi_nx_state <= ST_STAND_TX;
 				end if;
 
@@ -731,25 +713,14 @@ begin
 			else
 				if (s_spi_clk_ce3 = '1') then
 					if (s_spi_pr_state_delayed3 = ST_STAND_RX) then
-						-- input current byte to enqueue
-
-						if (s_t_delayed3 < (8 * s_rx_len_aux)) then
-							s_data_fifo_rx_in <= s_data_fifo_rx_in(6 downto 0) & ei_miso_i;
-						else
-							s_data_fifo_rx_in <= x"00";
-						end if;
-
+						-- input current byte to enqueue, one bit at a time, shifting
+						s_data_fifo_rx_in <= s_data_fifo_rx_in(6 downto 0) & ei_miso_i when
+							(s_t_delayed3 < (8 * s_rx_len_aux)) else x"00";
+						
 						-- only if on last bit, enqueue another byte
-						if (s_t_delayed3 mod 8 = 7) then
-							-- only if RX FIFO is not full, enqueue another byte
-							if (s_data_fifo_rx_full = '0') then
-								s_data_fifo_rx_we <= '1';
-							else
-								s_data_fifo_rx_we <= '0';
-							end if;
-						else
-							s_data_fifo_rx_we <= '0';
-						end if;
+						-- only if RX FIFO is not full, enqueue another byte
+						s_data_fifo_rx_we <= '1' when ((s_t_delayed3 mod 8 = 7) and
+							(s_data_fifo_rx_full = '0')) else '0';
 					else
 						s_data_fifo_rx_we <= '0';
 						s_data_fifo_rx_in <= x"00";

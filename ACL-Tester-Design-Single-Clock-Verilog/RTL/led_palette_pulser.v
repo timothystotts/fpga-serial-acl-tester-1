@@ -246,7 +246,7 @@ begin: p_tester_led_display
 	end
 
 	// LED 2 is Red when no Activity detect, Green when Activity detect.
-	if (i_acl2_activity_stretched) begin
+	if (i_acl2_activity_stretched & i_mode_is_linked_aux) begin
 		s_ld2_red_pulse <= 6'b000001;
 		s_ld2_green_pulse <= 6'b111111;
 		s_ld2_blue_pulse <= 6'b000001;
@@ -257,7 +257,7 @@ begin: p_tester_led_display
 	end
 
 	// LED 3 is Red when no Inactivity detect, Green when Inactivity detect.
-	if (i_acl2_inactivity_stretched) begin
+	if (i_acl2_inactivity_stretched & i_mode_is_linked_aux) begin
 		s_ld3_red_pulse <= 6'b000001;
 		s_ld3_green_pulse <= 6'b111111;
 		s_ld3_blue_pulse <= 6'b000001;
