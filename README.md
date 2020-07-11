@@ -5,7 +5,9 @@ by Timothy Stotts
 
 
 ## Description
-A small FPGA project of different implementations for testing Measurement and Activity Events of a SPI accelerometer
+A small FPGA project of different implementations for testing Measurement and Activity Events of a SPI accelerometer.
+The design targets the Digilent Inc. Arty-A7-100T FPGA development board containing a Xilinx Artix-7 FPGA.
+Two peripherals are used: Digilent Inc. Pmod ACL2, Digilent Inc. Pmod CLS.
 
 Refer to:
 ./Serial ACL Readings Tester.pdf
