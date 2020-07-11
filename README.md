@@ -9,17 +9,35 @@ A small FPGA project of different implementations for testing Measurement and Ac
 The design targets the Digilent Inc. Arty-A7-100T FPGA development board containing a Xilinx Artix-7 FPGA.
 Two peripherals are used: Digilent Inc. Pmod ACL2, Digilent Inc. Pmod CLS.
 
-Refer to:
-./Serial ACL Readings Tester.pdf
+The design is broken into three groupings.
 
-and:
-./ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams.pdf
+The folder ACL-Tester-Design-AXI contains a Xilinx Vivado IP Integrator plus
+Xilinx SDK design. A microblaze soft CPU is instantiated to talk with board components, an acceleromter peripheral,
+and a 16x2 character LCD peripheral.
+
+The folder ACL-Tester-Design-Single-Clock-Verilog contains a Xilinx Vivado project with sources
+containing only Verilog-2001 modules. Plain HDL without a soft CPU or C code is authored to
+talk with board compThe project is named "Single Clock" as clock enable pulses are used instead of clock dividers
+as much as possible throughout the design.
+
+The folder ACL-Tester-Design-Single-Clock-VHDL contains a Xilinx Vivado project with sources
+containing only VHDL-2002 and VHDL-2008 modules. Plain HDL without a soft CPU or C code is authored to
+talk with board components, an accelerometer peripheral, and a 16x2 character LCD peripheral.
+The project is named "Single Clock" as clock enable pulses are used instead of clock dividers
+as much as possible throughout the design.
+
+These three groupings of design provide equivalent functionality, excepting that the HDL designs provide
+additional animation effect of the board's three-emitter RGB LEDs.
 
 ### Project information document:
+
+./Serial ACL Readings Tester.pdf
 
 [Serial ACL Readings Tester info](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/Serial%20ACL%20Readings%20Tester.pdf)
 
 ### Diagrams design document:
+
+./ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams.pdf
 
 [Serial ACL Design Diagrams info](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams.pdf)
 
