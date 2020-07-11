@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
-| Date         : Fri Jul 10 16:13:52 2020
+| Date         : Fri Jul 10 21:22:50 2020
 | Host         : l2study running 64-bit Ubuntu 18.04.4 LTS
 | Command      : report_utilization -file fpga_serial_acl_tester_utilization_synth.rpt -pb fpga_serial_acl_tester_utilization_synth.pb
 | Design       : fpga_serial_acl_tester
@@ -30,8 +30,8 @@ Table of Contents
 +-------------------------+------+-------+-----------+-------+
 |        Site Type        | Used | Fixed | Available | Util% |
 +-------------------------+------+-------+-----------+-------+
-| Slice LUTs*             | 3320 |     0 |     63400 |  5.24 |
-|   LUT as Logic          | 3320 |     0 |     63400 |  5.24 |
+| Slice LUTs*             | 3318 |     0 |     63400 |  5.23 |
+|   LUT as Logic          | 3318 |     0 |     63400 |  5.23 |
 |   LUT as Memory         |    0 |     0 |     19000 |  0.00 |
 | Slice Registers         | 2224 |     0 |    126800 |  1.75 |
 |   Register as Flip Flop | 2224 |     0 |    126800 |  1.75 |
@@ -149,13 +149,13 @@ Table of Contents
 |  Ref Name  | Used | Functional Category |
 +------------+------+---------------------+
 | FDRE       | 1935 |        Flop & Latch |
-| LUT6       | 1064 |                 LUT |
-| LUT4       |  910 |                 LUT |
-| LUT3       |  643 |                 LUT |
+| LUT6       | 1062 |                 LUT |
+| LUT4       |  914 |                 LUT |
+| LUT3       |  644 |                 LUT |
 | LUT1       |  619 |                 LUT |
-| LUT5       |  510 |                 LUT |
+| LUT5       |  509 |                 LUT |
 | CARRY4     |  410 |          CarryLogic |
-| LUT2       |  370 |                 LUT |
+| LUT2       |  372 |                 LUT |
 | FDSE       |  261 |        Flop & Latch |
 | FDPE       |   28 |        Flop & Latch |
 | OBUF       |   23 |                  IO |

@@ -287,33 +287,23 @@ begin: p_fsm_comb
 			   loading of the last byte, command the SPI operation to start. */
 			o_command_ready = 1'b0;
 			o_tx_data = s_cls_cmd_tx_aux[((s_cls_cmd_len_aux * 8) - 1) -: 8];
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = s_cls_cmd_txlen_aux;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
 			o_rx_dequeue = 1'b0;
+			o_go_stand = (s_cls_cmd_len_aux > 1) ? 1'b0 : (i_tx_ready ? 1'b1 : 1'b0);
+			s_cls_cmd_len_val = i_tx_ready ? (s_cls_cmd_len_aux - 1) : s_cls_cmd_len_aux;
 			s_cls_cmd_tx_val = s_cls_cmd_tx_aux;
 			s_cls_dat_len_val = s_cls_dat_len_aux;
 			s_cls_dat_tx_val = s_cls_dat_tx_aux;
 			s_cls_cmd_txlen_val = s_cls_cmd_txlen_aux;
 			s_cls_dat_txlen_val = s_cls_dat_txlen_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
-				s_cls_cmd_len_val = (s_cls_cmd_len_aux - 1);
-
-				if (s_cls_cmd_len_aux > 1) begin
-					o_go_stand = 1'b0;
-					s_cls_drv_nx_state = ST_CLS_CMD_RUN;
-				end else begin
-					o_go_stand = 1'b1;
-					s_cls_drv_nx_state = ST_CLS_CMD_WAIT;
-				end
-			end else begin
-				o_tx_enqueue = 1'b0;
-				s_cls_cmd_len_val = s_cls_cmd_len_aux;
-				o_go_stand = 1'b0;
+			if ((i_tx_ready == 1'b1) && (s_cls_cmd_len_aux <= 1))
+				s_cls_drv_nx_state = ST_CLS_CMD_WAIT;
+			else
 				s_cls_drv_nx_state = ST_CLS_CMD_RUN;
-			end
 		end
 
 		ST_CLS_CMD_WAIT: begin
@@ -334,15 +324,13 @@ begin: p_fsm_comb
 			s_cls_cmd_txlen_val = s_cls_cmd_txlen_aux;
 			s_cls_dat_txlen_val = s_cls_dat_txlen_aux;
 
-			if (i_spi_idle) begin
-				if (s_cls_dat_len_aux > 0) begin 
+			if (i_spi_idle)
+				if (s_cls_dat_txlen_aux > 0)
 					s_cls_drv_nx_state = ST_CLS_DAT_RUN;
-				end else begin
+				else
 					s_cls_drv_nx_state = ST_CLS_IDLE;
-				end
-			end else begin
+			else
 				s_cls_drv_nx_state = ST_CLS_CMD_WAIT;
-			end
 		end
 
 		ST_CLS_DAT_RUN: begin
@@ -351,33 +339,23 @@ begin: p_fsm_comb
 			   loading of the last byte, command the SPI operation to start. */
 			o_command_ready = 1'b0;
 			o_tx_data = s_cls_dat_tx_aux[((s_cls_dat_len_aux * 8) - 1) -: 8];
+			o_tx_enqueue = i_tx_ready;
 			o_tx_len = s_cls_dat_txlen_aux;
 			o_rx_len = 0;
 			o_wait_cyc = 0;
 			o_rx_dequeue = 1'b0;
+			o_go_stand = (s_cls_dat_len_aux > 1) ? 1'b0 : (i_tx_ready ? 1'b1 : 1'b0);
 			s_cls_cmd_len_val = s_cls_cmd_len_aux;
+			s_cls_dat_len_val = i_tx_ready ? (s_cls_dat_len_aux - 1) : s_cls_dat_len_aux;
 			s_cls_cmd_tx_val = s_cls_cmd_tx_aux;
 			s_cls_dat_tx_val = s_cls_dat_tx_aux;
 			s_cls_cmd_txlen_val = s_cls_cmd_txlen_aux;
 			s_cls_dat_txlen_val = s_cls_dat_txlen_aux;
 
-			if (i_tx_ready) begin
-				o_tx_enqueue = 1'b1;
-				s_cls_dat_len_val = (s_cls_dat_len_aux - 1);
-
-				if (s_cls_dat_len_aux > 1) begin
-					o_go_stand = 1'b0;
-					s_cls_drv_nx_state = ST_CLS_DAT_RUN;
-				end else begin
-					o_go_stand = 1'b1;
-					s_cls_drv_nx_state = ST_CLS_DAT_WAIT;
-				end
-			end else begin
-				o_tx_enqueue = 1'b0;
-				s_cls_dat_len_val = s_cls_dat_len_aux;
-				o_go_stand = 1'b0;
+			if ((i_tx_ready == 1'b1) && (s_cls_dat_len_aux <= 1))
+				s_cls_drv_nx_state = ST_CLS_DAT_WAIT;
+			else
 				s_cls_drv_nx_state = ST_CLS_DAT_RUN;
-			end
 		end
 
 		ST_CLS_DAT_WAIT: begin
