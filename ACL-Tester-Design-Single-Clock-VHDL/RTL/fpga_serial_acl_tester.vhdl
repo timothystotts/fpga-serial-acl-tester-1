@@ -95,7 +95,9 @@ entity fpga_serial_acl_tester is
 		ei_pmod_cls_dq1 : in  std_logic;
 		-- Arty A7-100T UART TX and RX signals
 		eo_uart_tx : out std_logic;
-		ei_uart_rx : in  std_logic
+		ei_uart_rx : in  std_logic;
+		-- PMOD SSD direct GPIO
+		eo_ssd_pmod0 : out std_logic_vector(7 downto 0)
 	);
 end entity fpga_serial_acl_tester;
 --------------------------------------------------------------------------------
@@ -211,6 +213,10 @@ architecture rtl of fpga_serial_acl_tester is
 	signal s_uart_txdata         : std_logic_vector(7 downto 0);
 	signal s_uart_txvalid        : std_logic;
 	signal s_uart_txready        : std_logic;
+
+	-- Values for display on the Pmod SSD
+	signal s_thresh_value0 : std_logic_vector(3 downto 0);
+	signal s_thresh_value1 : std_logic_vector(3 downto 0);
 begin
 
 	s_clk_pwrdwn  <= '0';
@@ -439,7 +445,10 @@ begin
 			i_cmd_soft_reset_acl2   => s_acl2_cmd_soft_reset_acl2,
 			o_data_3axis_temp       => s_hex_3axis_temp_measurements_final,
 			o_data_valid            => s_hex_3axis_temp_measurements_valid,
-			o_reg_status            => s_acl2_reg_status
+			o_reg_status            => s_acl2_reg_status,
+			i_btn_deb               => s_btn_deb(1 downto 0),
+			o_enum_active           => s_thresh_value1,
+			o_enum_inactive         => s_thresh_value0
 		);
 
 	-- Tester FSM to operate the states of the Pmod ACL2 based on switch input
@@ -621,6 +630,16 @@ begin
 			i_tx_ready       => s_uart_txready,
 			i_tx_go          => s_uart_tx_go,
 			i_dat_ascii_line => s_uart_dat_ascii_line
+		);
+
+	-- A single PMOD SSD, two digit seven segment display
+	u_one_pmod_ssd_display : entity work.one_pmod_ssd_display(rtl)
+		port map (
+			i_clk_20mhz => s_clk_20mhz,
+			i_rst_20mhz => s_rst_20mhz,
+			i_value0    => s_thresh_value0,
+			i_value1    => s_thresh_value1,
+			o_ssd_pmod0 => eo_ssd_pmod0
 		);
 
 end architecture rtl;

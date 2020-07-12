@@ -13,6 +13,7 @@ create_clock -add -name sys_clk_pin -period 10.00 -waveform {0 5} [get_ports { C
 # clock.
 create_generated_clock -name genclk5mhz -source [get_pins MMCME2_BASE_inst/CLKOUT0] -divide_by 4 [get_pins u_pmod_acl2_custom_driver/u_pmod_generic_spi_solo/u_spi_1x_clock_divider/s_clk_out_reg/Q]
 create_generated_clock -name genclk625khz -source [get_pins MMCME2_BASE_inst/CLKOUT0] -divide_by 32 [get_pins u_pmod_cls_custom_driver/u_pmod_generic_spi_solo/u_spi_1x_clock_divider/s_clk_out_reg/Q]
+create_generated_clock -name clk100hz_ssd -source [get_pins MMCME2_BASE_inst/CLKOUT0] -divide_by 200000 [get_pins { u_one_pmod_ssd_display/u_pmod_ssd_out/u_clock_divider/s_clk_out_reg/Q }]
 
 # The following are input and output virtual clocks for constaining the estimated input
 # and output delays of the top ports of the FPGA design. By constraining with virtual
@@ -96,6 +97,14 @@ set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports {eo_le
 ## Buttons
 
 ## Pmod Header JA
+set_output_delay -clock [get_clocks clk100hz_ssd] 60.000 [get_ports {eo_ssd_pmod0[0]}];
+set_output_delay -clock [get_clocks clk100hz_ssd] 60.000 [get_ports {eo_ssd_pmod0[1]}];
+set_output_delay -clock [get_clocks clk100hz_ssd] 60.000 [get_ports {eo_ssd_pmod0[2]}];
+set_output_delay -clock [get_clocks clk100hz_ssd] 60.000 [get_ports {eo_ssd_pmod0[3]}];
+set_output_delay -clock [get_clocks clk100hz_ssd] 60.000 [get_ports {eo_ssd_pmod0[4]}];
+set_output_delay -clock [get_clocks clk100hz_ssd] 60.000 [get_ports {eo_ssd_pmod0[5]}];
+set_output_delay -clock [get_clocks clk100hz_ssd] 60.000 [get_ports {eo_ssd_pmod0[6]}];
+set_output_delay -clock [get_clocks clk100hz_ssd] 60.000 [get_ports {eo_ssd_pmod0[7]}];
 
 ## Pmod Header JB
 ## The inpout of full duplex SPI bus with the PMOD CLS peripheral is synchronized into

@@ -191,7 +191,9 @@ entity pmod_acl2_stand_spi_solo is
 		o_rd_data_byte_valid  : out std_logic;
 		o_rd_data_group_valid : out std_logic;
 		-- data status of accelerometer
-		o_reg_status : out std_logic_vector(7 downto 0)
+		o_reg_status : out std_logic_vector(7 downto 0);
+		-- run-time dynamic configuration
+		i_tx_ax_cfg0_lm : in std_logic_vector(c_tx_ax_cfg0_lm'range)
 	);
 end entity pmod_acl2_stand_spi_solo;
 --------------------------------------------------------------------------------
@@ -317,7 +319,8 @@ begin
 			i_cmd_init_measur_mode, i_cmd_init_linked_mode,
 			i_cmd_soft_reset_acl2,
 			i_tx_ready, i_rx_avail, i_rx_valid, i_rx_data,
-			i_spi_idle, s_t)
+			i_spi_idle, s_t,
+			i_tx_ax_cfg0_lm)
 	begin
 		-- default values for all signals
 		o_command_ready       <= '0';
@@ -343,7 +346,7 @@ begin
 		case (s_acl2_drv_pr_state) is
 			when ST_DRV_INIT_LM =>
 				-- Load auxiliary registers with Linked Mode configuration.
-				s_tx_ax_cfg0_val <= c_tx_ax_cfg0_lm;
+				s_tx_ax_cfg0_val <= i_tx_ax_cfg0_lm;
 				s_tx_ax_cfg1_val <= c_tx_ax_cfg1_lm;
 				s_tx_ax_cfg2_val <= c_tx_ax_cfg2_lm;
 				s_tx_ax_cfg3_val <= c_tx_ax_cfg3_lm;

@@ -34,6 +34,8 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 library work;
+use work.pmod_acl2_stand_spi_solo_pkg.c_tx_ax_cfg0_lm;
+use work.thresh_presets_pkg.all;
 --------------------------------------------------------------------------------
 entity pmod_acl2_custom_driver is
 	generic(
@@ -76,7 +78,12 @@ entity pmod_acl2_custom_driver is
 		o_data_valid      : out std_logic;
 		-- Output of the most recently read single byte status register,
 		-- without a valid pualse.
-		o_reg_status : out std_logic_vector(7 downto 0)
+		o_reg_status : out std_logic_vector(7 downto 0);
+		-- Debounced buttons input
+		i_btn_deb : in std_logic_vector(1 downto 0);
+		-- Active and Inactive preset enumeration value
+		o_enum_active   : out std_logic_vector(3 downto 0);
+		o_enum_inactive : out std_logic_vector(3 downto 0)
 	);
 end entity pmod_acl2_custom_driver;
 --------------------------------------------------------------------------------
@@ -138,7 +145,64 @@ architecture rtl of pmod_acl2_custom_driver is
 	signal s_j_val   : natural range 0 to 15;
 	signal s_j_aux   : natural range 0 to 15;
 
+	-- One-shot conversion of button levels
+	signal s_btn0_one_shot : std_logic;
+	signal s_btn1_one_shot : std_logic;
+
+	-- Presets binary encoding for the seven registers on the ADXL362 chip
+	signal s_tx_ax_cfg0_lm : std_logic_vector(c_tx_ax_cfg0_lm'range);
+	signal s_tx_ax_cfg0_discard : std_logic_vector(7 downto 0);
 begin
+
+	-- One shot generation of Button 0
+	u_one_shot_fsm_btn0 : entity work.one_shot_fsm(rtl)
+		port map (
+			x   => i_btn_deb(0),
+			clk => i_clk_20mhz,
+			rst => i_rst_20mhz,
+			y   => s_btn0_one_shot
+		);
+
+	-- One shot generation of Button 1
+	u_one_shot_fsm_btn1 : entity work.one_shot_fsm(rtl)
+		port map (
+			x   => i_btn_deb(1),
+			clk => i_clk_20mhz,
+			rst => i_rst_20mhz,
+			y   => s_btn1_one_shot
+		);
+
+	-- Presets seletor for the Activity detection thresholds and timers
+	u_thresh_presets_selector_active : entity work.thresh_presets_selector(rtl)
+		generic map (
+			parm_presets_config => c_thresh_presets_active_a
+		)
+		port map (
+			i_clk_20mhz                 => i_clk_20mhz,
+			i_rst_20mhz                 => i_rst_20mhz,
+			i_btn_chg_preset            => s_btn0_one_shot,
+			o_value_enum                => o_enum_active,
+			o_value_thresh(7 downto 0)  => s_tx_ax_cfg0_lm((7*8-1) downto (6*8)),
+			o_value_thresh(15 downto 8) => s_tx_ax_cfg0_lm((6*8-1) downto (5*8)),
+			o_value_timer(7 downto 0)   => s_tx_ax_cfg0_lm((5*8-1) downto (4*8)),
+			o_value_timer(15 downto 8)  => s_tx_ax_cfg0_discard
+		);
+
+	-- Presets seletor for the Activity detection thresholds and timers
+	u_thresh_presets_selector_inactive : entity work.thresh_presets_selector(rtl)
+		generic map (
+			parm_presets_config => c_thresh_presets_inactive_a
+		)
+		port map (
+			i_clk_20mhz                 => i_clk_20mhz,
+			i_rst_20mhz                 => i_rst_20mhz,
+			i_btn_chg_preset            => s_btn1_one_shot,
+			o_value_enum                => o_enum_inactive,
+			o_value_thresh(7 downto 0)  => s_tx_ax_cfg0_lm((4*8-1) downto (3*8)),
+			o_value_thresh(15 downto 8) => s_tx_ax_cfg0_lm((3*8-1) downto (2*8)),
+			o_value_timer(7 downto 0)   => s_tx_ax_cfg0_lm((2*8-1) downto (1*8)),
+			o_value_timer(15 downto 8)  => s_tx_ax_cfg0_lm((1*8-1) downto (0*8))
+		);
 
 	-- Register the SPI output an extra 4x-SPI-clock clock cycle.
 	p_reg_spi_fsm_out : process(i_clk_20mhz)
@@ -200,7 +264,8 @@ begin
 			o_rd_data_stream        => s_acl2_rd_data_stream,
 			o_rd_data_byte_valid    => s_acl2_rd_data_byte_valid,
 			o_rd_data_group_valid   => s_acl2_rd_data_group_valid,
-			o_reg_status            => o_reg_status
+			o_reg_status            => o_reg_status,
+			i_tx_ax_cfg0_lm         => s_tx_ax_cfg0_lm
 		);
 
 	-- Stand-alone SPI bus driver for a single bus-slave.
