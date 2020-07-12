@@ -29,7 +29,11 @@ The project is named "Single Clock" as clock enable pulses are used instead of c
 as much as possible throughout the design.
 
 These three groupings of design provide equivalent functionality, excepting that the HDL designs provide
-additional animation effect of the board's three-emitter RGB LEDs.
+additional animation effect of the board's three-emitter RGB LEDs. Additionally, work is in-progress in
+the feature/ssd_with_presets branch to add a single Pmod SSD to the Pmod Jack A for the purpose of
+selecting among ten ADXL362 configuration preset values for each of Activity Detection threshold/timer
+and Inactivity Detection threshold/timer. The VHDL code is complete for this feature, but is not yet
+release ready.
 
 ### Project information document:
 
