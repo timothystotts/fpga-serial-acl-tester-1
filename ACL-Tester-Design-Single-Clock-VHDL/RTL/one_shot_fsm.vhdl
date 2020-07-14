@@ -43,54 +43,57 @@ end entity one_shot_fsm;
 --------------------------------------------------------------------------------
 architecture rtl of one_shot_fsm is
 	type t_os_state is (ST_A, ST_B, ST_C);
-	signal pr_state : t_os_state;
-	signal nx_state : t_os_state;
+	signal s_pr_state : t_os_state;
+	signal s_nx_state : t_os_state;
 	signal s_y_out : std_logic;
 
 	attribute fsm_encoding : string;
-	attribute fsm_encoding of pr_state: signal is "gray";
+	attribute fsm_encoding of s_pr_state: signal is "gray";
 	attribute fsm_safe_state : string;
-	attribute fsm_safe_state of pr_state: signal is "reset_state";
+	attribute fsm_safe_state of s_pr_state: signal is "reset_state";
 begin
 
-	p_fsm_nx_state : process(pr_state, x)
-	begin
-		case pr_state is
-		when ST_B =>
-			s_y_out <= '1';
-			if (x = '1') then
-				nx_state <= ST_C;
-			else
-				nx_state <= ST_A;
-			end if;
-		when ST_C =>
-			s_y_out <= '0';
-			if (x = '0') then
-				nx_state <= ST_A;
-			else
-				nx_state <= ST_C;
-			end if;
-		when others => -- ST_A
-			s_y_out <= '0';
-			if (x = '1') then
-				nx_state <= ST_B;
-			else
-				nx_state <= ST_A;
-			end if;
-		end case;
-	end process p_fsm_nx_state;
-
+	-- State register
 	p_fsm_pr_state : process(clk)
 	begin
 		if rising_edge(clk) then
 			if (rst = '1') then
-				pr_state <= ST_A;
+				s_pr_state <= ST_A;
 			else
-				pr_state <= nx_state;
+				s_pr_state <= s_nx_state;
 			end if;
 		end if;
 	end process p_fsm_pr_state;
 
+	-- Next state assignment and output
+	p_fsm_nx_state_out : process(s_pr_state, x)
+	begin
+		case s_pr_state is
+		when ST_B =>
+			s_y_out <= '1';
+			if (x = '1') then
+				s_nx_state <= ST_C;
+			else
+				s_nx_state <= ST_A;
+			end if;
+		when ST_C =>
+			s_y_out <= '0';
+			if (x = '0') then
+				s_nx_state <= ST_A;
+			else
+				s_nx_state <= ST_C;
+			end if;
+		when others => -- ST_A
+			s_y_out <= '0';
+			if (x = '1') then
+				s_nx_state <= ST_B;
+			else
+				s_nx_state <= ST_A;
+			end if;
+		end case;
+	end process p_fsm_nx_state_out;
+
+	-- Register output to prevent possible FSM output glitch
 	p_fsm_glitch_free : process(clk)
 	begin
 		if rising_edge(clk) then

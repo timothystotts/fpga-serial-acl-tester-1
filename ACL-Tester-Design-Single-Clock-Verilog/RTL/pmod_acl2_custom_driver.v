@@ -31,6 +31,7 @@
 --        input from the PMOD ACL2.
 ------------------------------------------------------------------------------*/
 //------------------------------------------------------------------------------
+//Part 1: Module header:--------------------------------------------------------
 module pmod_acl2_custom_driver (
 	/* Clock and reset, with clock at 4 times the frequency of the SPI bus */
 	i_clk_20mhz, i_rst_20mhz,
@@ -50,7 +51,12 @@ module pmod_acl2_custom_driver (
 	o_data_valid,
 	/* Output of the most recently read single byte status register,
 	   without a valid pualse. */
-	o_reg_status);
+	o_reg_status,
+	/* Debounced buttons input */
+	i_btn_deb,
+	/* Active and Inactive preset enumeration value */
+	o_enum_active,
+	o_enum_inactive);
 
 /* Disable or enable fast FSM delays for simulation instead of impelementation. */
 parameter integer parm_fast_simulation = 0;
@@ -90,7 +96,16 @@ output reg [63:0] o_data_3axis_temp; /* Eight bytes of measurement data. */
 output reg o_data_valid;
 output wire [7:0] o_reg_status; /* Status register is one byte. */
 
+input wire [1:0] i_btn_deb;
+output wire [3:0] o_enum_active;
+output wire [3:0] o_enum_inactive;
+
 //Part 2: Declarations----------------------------------------------------------
+
+/* Include the threshold presets to define parameter values for the threshold
+   preset selectors. */
+`include "thresh_presets_include.vh"
+
 /* ACL2 SPI driver wiring to the Generic SPI driver. */
 wire s_acl2_clk_spi_4x;
 wire s_acl2_rst_spi_4x;
@@ -149,7 +164,54 @@ localparam [3:0] c_j_max = 8;
 reg [3:0] s_j_val;
 reg [3:0] s_j_aux;
 
+/* One-shot conversion of button levels */
+wire s_btn0_one_shot;
+wire s_btn1_one_shot;
+
+/* Presets binary encoding for the seven registers on the ADXL362 chip */
+wire [7*8-1:0] s_tx_ax_cfg0_lm;
+wire [7:0] s_tx_ax_cfg0_discard;
+
 //Part 3: Statements------------------------------------------------------------
+/* One shot generation of Button 0 */
+one_shot_fsm #() u_one_shot_fsm_btn0 (
+	.x(i_btn_deb[0]),
+	.clk(i_clk_20mhz),
+	.rst(i_rst_20mhz),
+	.y(s_btn0_one_shot));
+
+/* One shot generation of Button 1 */
+one_shot_fsm #() u_one_shot_fsm_btn1 (
+	.x(i_btn_deb[1]),
+	.clk(i_clk_20mhz),
+	.rst(i_rst_20mhz),
+	.y(s_btn1_one_shot));
+
+/* Presets seletor for the Activity detection thresholds and timers */
+thresh_presets_selector #(
+	.parm_presets_config_thresholds(`c_thresh_presets_active_a_thresholds),
+	.parm_presets_config_timers(`c_thresh_presets_active_a_timers)
+	) u_thresh_presets_selector_active (
+	.i_clk_20mhz(i_clk_20mhz),
+	.i_rst_20mhz(i_rst_20mhz),
+	.i_btn_chg_preset(s_btn0_one_shot),
+	.o_value_enum(o_enum_active),
+	.o_value_thresh({s_tx_ax_cfg0_lm[6*8-1-:8], s_tx_ax_cfg0_lm[7*8-1-:8]}),
+	.o_value_timer({s_tx_ax_cfg0_discard, s_tx_ax_cfg0_lm[5*8-1-:8]})
+	);
+
+/* Presets seletor for the Activity detection thresholds and timers */
+thresh_presets_selector #(
+	.parm_presets_config_thresholds(`c_thresh_presets_inactive_a_thresholds),
+	.parm_presets_config_timers(`c_thresh_presets_inactive_a_timers)
+	) u_thresh_presets_selector_inactive (
+	.i_clk_20mhz(i_clk_20mhz),
+	.i_rst_20mhz(i_rst_20mhz),
+	.i_btn_chg_preset(s_btn1_one_shot),
+	.o_value_enum(o_enum_inactive),
+	.o_value_thresh({s_tx_ax_cfg0_lm[3*8-1-:8], s_tx_ax_cfg0_lm[4*8-1-:8]}),
+	.o_value_timer({s_tx_ax_cfg0_lm[1*8-1-:8], s_tx_ax_cfg0_lm[2*8-1-:8]})
+	);
 
 /* Register the SPI output an extra 4x-SPI-clock clock cycle. */
 always @(posedge i_clk_20mhz)
@@ -211,7 +273,9 @@ pmod_acl2_stand_spi_solo #(
 	.o_rd_data_byte_valid(s_acl2_rd_data_byte_valid),
 	.o_rd_data_group_valid(s_acl2_rd_data_group_valid),
 
-	.o_reg_status(o_reg_status));
+	.o_reg_status(o_reg_status),
+
+	.i_tx_ax_cfg0_lm(s_tx_ax_cfg0_lm));
 
 /* Stand-alone SPI bus driver for a single bus-slave. */
 pmod_generic_spi_solo #(

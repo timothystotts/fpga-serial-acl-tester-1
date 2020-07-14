@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
-| Date             : Sat Jul 11 15:28:14 2020
+| Date             : Tue Jul 14 17:34:27 2020
 | Host             : l2study running 64-bit Ubuntu 18.04.4 LTS
 | Command          : report_power -file fpga_serial_acl_tester_power_routed.rpt -pb fpga_serial_acl_tester_power_summary_routed.pb -rpx fpga_serial_acl_tester_power_routed.rpx
 | Design           : fpga_serial_acl_tester
@@ -52,18 +52,17 @@ Table of Contents
 +----------------+-----------+----------+-----------+-----------------+
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
-| Clocks         |     0.003 |       12 |       --- |             --- |
-| Slice Logic    |     0.001 |     7758 |       --- |             --- |
-|   LUT as Logic |     0.001 |     3630 |     63400 |            5.73 |
-|   CARRY4       |    <0.001 |      565 |     15850 |            3.56 |
-|   Register     |    <0.001 |     2389 |    126800 |            1.88 |
-|   F7/F8 Muxes  |    <0.001 |        1 |     63400 |           <0.01 |
-|   Others       |     0.000 |       59 |       --- |             --- |
-| Signals        |    <0.001 |     5243 |       --- |             --- |
+| Clocks         |     0.003 |       13 |       --- |             --- |
+| Slice Logic    |     0.001 |     7978 |       --- |             --- |
+|   LUT as Logic |     0.001 |     3712 |     63400 |            5.85 |
+|   CARRY4       |    <0.001 |      573 |     15850 |            3.62 |
+|   Register     |    <0.001 |     2481 |    126800 |            1.96 |
+|   Others       |     0.000 |       70 |       --- |             --- |
+| Signals        |    <0.001 |     5412 |       --- |             --- |
 | Block RAM      |    <0.001 |        2 |       135 |            1.48 |
 | MMCM           |     0.102 |        1 |         6 |           16.67 |
 | DSPs           |    <0.001 |       16 |       240 |            6.67 |
-| I/O            |     0.004 |       36 |       210 |           17.14 |
+| I/O            |     0.004 |       44 |       210 |           20.95 |
 | Static Power   |     0.084 |          |           |                 |
 | Total          |     0.195 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
@@ -75,7 +74,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) |
 +-----------+-------------+-----------+-------------+------------+
-| Vccint    |       0.950 |     0.015 |       0.006 |      0.009 |
+| Vccint    |       0.950 |     0.016 |       0.006 |      0.009 |
 | Vccaux    |       1.800 |     0.073 |       0.057 |      0.016 |
 | Vcco33    |       3.300 |     0.005 |       0.001 |      0.004 |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |
@@ -131,6 +130,7 @@ Table of Contents
 +----------------+------------------------------------------------------------------------------------+-----------------+
 | Clock          | Domain                                                                             | Constraint (ns) |
 +----------------+------------------------------------------------------------------------------------+-----------------+
+| clk100hz_ssd   | u_one_pmod_ssd_display/u_pmod_ssd_out/u_clock_divider/o_clk_div                    |      10000000.0 |
 | genclk5mhz     | u_pmod_acl2_custom_driver/u_pmod_generic_spi_solo/u_spi_1x_clock_divider/o_clk_div |           200.0 |
 | genclk625khz   | u_pmod_cls_custom_driver/u_pmod_generic_spi_solo/u_spi_1x_clock_divider/o_clk_div  |          1600.0 |
 | s_clk_20mhz    | s_clk_20mhz                                                                        |            50.0 |

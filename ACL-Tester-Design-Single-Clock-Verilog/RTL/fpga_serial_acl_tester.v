@@ -56,7 +56,9 @@ module fpga_serial_acl_tester (
 	eo_pmod_cls_ssn, eo_pmod_cls_sck, eo_pmod_cls_dq0,
 	ei_pmod_cls_dq1,
 	/* Arty A7-100T UART TX and RX signals */
-	eo_uart_tx, ei_uart_rx);
+	eo_uart_tx, ei_uart_rx,
+  /* PMOD SSD direct GPIO */
+  eo_ssd_pmod0);
 
 /* Disable or enable fast FSM delays for simulation instead of impelementation. */
 parameter integer parm_fast_simulation = 0;
@@ -109,6 +111,8 @@ input wire ei_pmod_cls_dq1;
 
 output wire eo_uart_tx;
 input wire ei_uart_rx;
+
+output wire [7:0] eo_ssd_pmod0;
 
 //Part 2: Declarations----------------------------------------------------------
 
@@ -219,6 +223,10 @@ wire s_uart_tx_go;
 wire [7:0] s_uart_txdata;
 wire s_uart_txvalid;
 wire s_uart_txready;
+
+/* Values for display on the Pmod SSD */
+wire [3:0] s_thresh_value0;
+wire [3:0] s_thresh_value1;
 
 //Part 3: Statements------------------------------------------------------------
 assign s_clk_pwrdwn = 1'b0;
@@ -420,7 +428,11 @@ pmod_acl2_custom_driver #(
 	.i_cmd_soft_reset_acl2(s_acl2_cmd_soft_reset_acl2),
 	.o_data_3axis_temp(s_hex_3axis_temp_measurements_final),
 	.o_data_valid(s_hex_3axis_temp_measurements_valid),
-	.o_reg_status(s_acl2_reg_status));
+	.o_reg_status(s_acl2_reg_status),
+  .i_btn_deb(s_btn_deb[1-:2]),
+  .o_enum_active(s_thresh_value1),
+  .o_enum_inactive(s_thresh_value0)
+  );
 
 /* Tester FSM to operate the states of the Pmod ACL2 based on switch input */
 acl_tester_fsm #(
@@ -584,6 +596,15 @@ uart_tx_feed #(
   .i_tx_ready(s_uart_txready),
   .i_tx_go(s_uart_tx_go),
   .i_dat_ascii_line(s_uart_dat_ascii_line)
+  );
+
+/* A single PMOD SSD, two digit seven segment display */
+one_pmod_ssd_display #() u_one_pmod_ssd_display (
+  .i_clk_20mhz(s_clk_20mhz),
+  .i_rst_20mhz(s_rst_20mhz),
+  .i_value0(s_thresh_value0),
+  .i_value1(s_thresh_value1),
+  .o_ssd_pmod0(eo_ssd_pmod0)
   );
 
 endmodule
