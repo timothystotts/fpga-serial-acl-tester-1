@@ -103,6 +103,15 @@ begin
 end architecture rtl;
 --------------------------------------------------------------------------------
 --------------------------------------------------------------------------------
+-- \module pmod_ssd_out
+--
+-- \brief A two digit synchronous multiplexer to drive the Digilent PmodSSD with
+-- two unique digit values. The 20 MHz input clock is divided to a multiplexing
+-- of the PmodSSD at 100 Hz.
+--
+-- \description None
+--------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -159,6 +168,13 @@ begin
 	o_selA  <= s_curr_sel;
 end architecture rtl;
 --------------------------------------------------------------------------------
+-- \module one_pmod_ssd_display
+--
+-- \brief A top-level display for one PmodSSD device. The top-level display
+-- driver is configured to input two 4-bit hexadecimal values, and output them
+-- with a PmodSSD driver to one PmodSSD via the 8-bit PMOD interface.
+--
+-- \description None
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
@@ -180,6 +196,10 @@ architecture rtl of one_pmod_ssd_display is
 	signal s_disp0 : std_logic_vector(6 downto 0);
 	signal s_disp1 : std_logic_vector(6 downto 0);
 begin
+	-- An instance of \ref two_digit_ssd_out that converts two hexadecimal bytes
+	-- into two discrete active-high 7-segment emitter values.
+	-- This instance controls the emitters for a single two-digit Pmod SSD.
+	-- u_two_digit_ssd_out : entity work.two_digit_ssd_out
 	u_two_digit_ssd_out : entity work.two_digit_ssd_out
 		port map (
 			i_clk_20mhz         => i_clk_20mhz,
@@ -190,6 +210,10 @@ begin
 			o_disp1             => s_disp1
 		);
 
+	-- An instance of \ref pmod_ssd_out that multiplexes two discrete 7-segment
+	-- emitter values to a single emitter value with single bit multiplexer
+	-- select line, as per the PmodSSD by Digilent Inc. This instance is connected
+	-- to drive the single Pmod SSD.
 	u_pmod_ssd_out : entity work.pmod_ssd_out
 		port map (
 			i_clk_20mhz => i_clk_20mhz,

@@ -69,7 +69,7 @@ architecture rtl of thresh_presets_selector is
 	signal s_nx_state : t_state;
 begin
 	-- FSM state register:
-	p_fsm_state : process(i_clk_20mhz, i_rst_20mhz)
+	p_fsm_state : process(i_clk_20mhz)
 	begin
 		if rising_edge(i_clk_20mhz) then
 			if (i_rst_20mhz = '1') then

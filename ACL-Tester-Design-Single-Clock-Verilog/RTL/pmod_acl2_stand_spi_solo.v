@@ -52,7 +52,9 @@ module pmod_acl2_stand_spi_solo (
 	/* measurement data streaming output of the accelerometer */
 	o_rd_data_stream, o_rd_data_byte_valid, o_rd_data_group_valid,
 	/* data status of accelerometer */
-	o_reg_status);
+	o_reg_status,
+	/* run-time dynamic configuration */
+	i_tx_ax_cfg0_lm);
 
 /* Disable or enable fast FSM delays for simulation instead of impelementation. */
 parameter integer parm_fast_simulation = 0;
@@ -99,6 +101,8 @@ output reg o_rd_data_byte_valid;
 output reg o_rd_data_group_valid;
 
 output wire [7:0] o_reg_status;
+
+input wire [7*8-1:0] i_tx_ax_cfg0_lm;
 
 // Part 2: Declarations---------------------------------------------------------
 /* Timer signals and constants */
@@ -376,7 +380,8 @@ always @(s_drv_pr_state,
 	i_cmd_init_measur_mode, i_cmd_init_linked_mode,
 	i_cmd_soft_reset_acl2,
 	i_tx_ready, i_rx_avail, i_rx_valid, i_rx_data,
-	i_spi_idle, s_t
+	i_spi_idle, s_t,
+	i_tx_ax_cfg0_lm
 	)
 begin: p_fsm_comb
 	/* default values were not set here with blocking assignment,
@@ -401,7 +406,7 @@ begin: p_fsm_comb
 			o_rd_data_stream = 8'h00;
 			o_rd_data_byte_valid = 1'b0;
 			o_rd_data_group_valid = 1'b0;
-			s_tx_ax_cfg0_val = c_tx_ax_cfg0_lm;
+			s_tx_ax_cfg0_val = i_tx_ax_cfg0_lm;
 			s_tx_ax_cfg1_val = c_tx_ax_cfg1_lm;
 			s_tx_ax_cfg2_val = c_tx_ax_cfg2_lm;
 			s_tx_ax_cfg3_val = c_tx_ax_cfg3_lm;
