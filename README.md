@@ -33,7 +33,7 @@ additional animation effect of the board's three-emitter RGB LEDs. Additionally,
 the feature/ssd_with_presets branch to add a single Pmod SSD to the Pmod Jack A for the purpose of
 selecting among ten ADXL362 configuration preset values for each of Activity Detection threshold/timer
 and Inactivity Detection threshold/timer. The VHDL code is complete for this feature, but is not yet
-release ready.
+release ready. The Verilog code is also complete for this feature, but is not yet release ready.
 
 ### Project information document:
 
