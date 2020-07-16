@@ -109,7 +109,7 @@ set_input_delay -clock [get_clocks wiz_20mhz_virt_out] -min 5.000 [get_ports {ei
 ## The output of PMOD CLS at SPI is synchronized into the design at the MMCM 20 MHz clock.
 ## A virtual clock is used to allow the tool to automatically compute jitter and other metrics.
 ## Note that the Output Delay is set to 60% the period.
-set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports {eo_pmod_cls_ssn}];
+set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports {eo_pmod_cls_csn}];
 set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports {eo_pmod_cls_dq0}];
 set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports {eo_pmod_cls_sck}];
 
@@ -117,8 +117,8 @@ set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports {eo_pm
 ## The inputs of PMOD ACL2 are all synchronized into the design at the 20 MHz MMCM clock.
 ## A virtual clock is used to allow the tool to automatically compute jitter and other metrics.
 ## Note that the MAX is set to 40% the period, and the MIN is set to 10% the period.
-set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -max 20.000 [get_ports {ei_pmod_acl2_miso}];
-set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -min 5.000 [get_ports {ei_pmod_acl2_miso}];
+set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -max 20.000 [get_ports {ei_pmod_acl2_cipo}];
+set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -min 5.000 [get_ports {ei_pmod_acl2_cipo}];
 set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -max 20.000 [get_ports {ei_pmod_acl2_int1}];
 set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -min 5.000 [get_ports {ei_pmod_acl2_int1}];
 set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -max 20.000 [get_ports {ei_pmod_acl2_int2}];
@@ -127,8 +127,8 @@ set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -min 5.000 [get_ports {ei_
 ## The output of PMOD ACL2 at SPI is synchronized out of the design at the MMCM 20 MHz clock.
 ## A virtual clock is used to allow the tool to automatically compute jitter and other metrics.
 ## Note that the Output Delay is set to 60% the period.
-set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports {eo_pmod_acl2_ssn}];
-set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports {eo_pmod_acl2_mosi}];
+set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports {eo_pmod_acl2_csn}];
+set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports {eo_pmod_acl2_copi}];
 set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports {eo_pmod_acl2_sck}];
 
 ## Pmod Header JD

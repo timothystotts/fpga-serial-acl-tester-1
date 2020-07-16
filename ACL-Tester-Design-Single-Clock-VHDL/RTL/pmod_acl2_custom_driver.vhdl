@@ -23,7 +23,7 @@
 --------------------------------------------------------------------------------
 -- \file pmod_acl2_custom_driver.vhdl
 --
--- \brief A wrapper for the single Slave Select, Standard SPI modules
+-- \brief A wrapper for the single Chip Select, Standard SPI modules
 --        \ref pmod_acl2_stand_spi_solo and \ref pmod_generic_spi_solo ,
 --        implementing a custom multi-mode operation of the PMOD ACL2 by
 --        Digilent Inc with SPI bus communication and two GPIO level interrupts
@@ -59,11 +59,11 @@ entity pmod_acl2_custom_driver is
 		-- Outputs and inputs from the single SPI peripheral
 		eo_sck_t  : out std_logic;
 		eo_sck_o  : out std_logic;
-		eo_ssn_t  : out std_logic;
-		eo_ssn_o  : out std_logic;
-		eo_mosi_t : out std_logic;
-		eo_mosi_o : out std_logic;
-		ei_miso   : in  std_logic;
+		eo_csn_t  : out std_logic;
+		eo_csn_o  : out std_logic;
+		eo_copi_t : out std_logic;
+		eo_copi_o : out std_logic;
+		ei_cipo   : in  std_logic;
 		ei_int1   : in  std_logic;
 		ei_int2   : in  std_logic;
 		-- Command ready indication and five possible commands to the driver
@@ -115,15 +115,15 @@ architecture rtl of pmod_acl2_custom_driver is
 	-- optimal timing closure and glitch minimization.
 	signal sio_acl2_sck_fsm_o  : std_logic;
 	signal sio_acl2_sck_fsm_t  : std_logic;
-	signal sio_acl2_ssn_fsm_o  : std_logic;
-	signal sio_acl2_ssn_fsm_t  : std_logic;
-	signal sio_acl2_mosi_fsm_o : std_logic;
-	signal sio_acl2_mosi_fsm_t : std_logic;
+	signal sio_acl2_csn_fsm_o  : std_logic;
+	signal sio_acl2_csn_fsm_t  : std_logic;
+	signal sio_acl2_copi_fsm_o : std_logic;
+	signal sio_acl2_copi_fsm_t : std_logic;
 
 	-- ACL2 SPI input synchronizer signals, where the synchronizer is used to
 	-- mitigate metastability.
-	signal sio_acl2_miso_meta_i : std_logic;
-	signal sio_acl2_miso_sync_i : std_logic;
+	signal sio_acl2_cipo_meta_i : std_logic;
+	signal sio_acl2_cipo_sync_i : std_logic;
 
 	-- Debounced external interrupts.
 	signal si_int1_debounced : std_logic;
@@ -211,11 +211,11 @@ begin
 			eo_sck_o <= sio_acl2_sck_fsm_o;
 			eo_sck_t <= sio_acl2_sck_fsm_t;
 
-			eo_ssn_o <= sio_acl2_ssn_fsm_o;
-			eo_ssn_t <= sio_acl2_ssn_fsm_t;
+			eo_csn_o <= sio_acl2_csn_fsm_o;
+			eo_csn_t <= sio_acl2_csn_fsm_t;
 
-			eo_mosi_o <= sio_acl2_mosi_fsm_o;
-			eo_mosi_t <= sio_acl2_mosi_fsm_t;
+			eo_copi_o <= sio_acl2_copi_fsm_o;
+			eo_copi_t <= sio_acl2_copi_fsm_t;
 		end if;
 	end process p_reg_spi_fsm_out;
 
@@ -223,8 +223,8 @@ begin
 	p_sync_spi_in : process(i_clk_20mhz)
 	begin
 		if rising_edge(i_clk_20mhz) then
-			sio_acl2_miso_sync_i <= sio_acl2_miso_meta_i;
-			sio_acl2_miso_meta_i <= ei_miso;
+			sio_acl2_cipo_sync_i <= sio_acl2_cipo_meta_i;
+			sio_acl2_cipo_meta_i <= ei_cipo;
 		end if;
 	end process p_sync_spi_in;
 
@@ -268,7 +268,7 @@ begin
 			i_tx_ax_cfg0_lm         => s_tx_ax_cfg0_lm
 		);
 
-	-- Stand-alone SPI bus driver for a single bus-slave.
+	-- Stand-alone SPI bus driver for a single bus-peripheral.
 	u_pmod_generic_spi_solo : entity work.pmod_generic_spi_solo(moore_fsm_recursive)
 		generic map (
 			parm_ext_spi_clk_ratio => parm_ext_spi_clk_ratio,
@@ -279,11 +279,11 @@ begin
 		port map (
 			eo_sck_o        => sio_acl2_sck_fsm_o,
 			eo_sck_t        => sio_acl2_sck_fsm_t,
-			eo_ssn_o        => sio_acl2_ssn_fsm_o,
-			eo_ssn_t        => sio_acl2_ssn_fsm_t,
-			eo_mosi_o       => sio_acl2_mosi_fsm_o,
-			eo_mosi_t       => sio_acl2_mosi_fsm_t,
-			ei_miso_i       => sio_acl2_miso_sync_i,
+			eo_csn_o        => sio_acl2_csn_fsm_o,
+			eo_csn_t        => sio_acl2_csn_fsm_t,
+			eo_copi_o       => sio_acl2_copi_fsm_o,
+			eo_copi_t       => sio_acl2_copi_fsm_t,
+			ei_cipo_i       => sio_acl2_cipo_sync_i,
 			i_ext_spi_clk_x => i_clk_20mhz,
 			i_srst          => i_rst_20mhz,
 			i_spi_ce_4x     => '1', -- 20 MHz is 4x the SPI speed, so CE is held '1'

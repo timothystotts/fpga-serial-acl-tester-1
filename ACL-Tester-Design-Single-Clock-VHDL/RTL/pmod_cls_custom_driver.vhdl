@@ -23,7 +23,7 @@
 --------------------------------------------------------------------------------
 -- \file pmod_cls_custom_driver.vhdl
 --
--- \brief A wrapper for the single Slave Select, Standard SPI modules
+-- \brief A wrapper for the single Chip Select, Standard SPI modules
 --        \ref pmod_cls_stand_spi_solo and \ref pmod_generic_spi_solo ,
 --        implementing a custom single-mode operation of the PMOD CLS by
 --        Digilent Inc.
@@ -59,11 +59,11 @@ entity pmod_cls_custom_driver is
 		                            -- Outputs and inputs from the single SPI peripheral
 		eo_sck_t  : out std_logic;
 		eo_sck_o  : out std_logic;
-		eo_ssn_t  : out std_logic;
-		eo_ssn_o  : out std_logic;
-		eo_mosi_t : out std_logic;
-		eo_mosi_o : out std_logic;
-		ei_miso   : in  std_logic;
+		eo_csn_t  : out std_logic;
+		eo_csn_o  : out std_logic;
+		eo_copi_t : out std_logic;
+		eo_copi_o : out std_logic;
+		ei_cipo   : in  std_logic;
 		-- Command ready indication and three possible commands with data to
 		-- the driver
 		o_command_ready        : out std_logic;
@@ -96,15 +96,15 @@ architecture rtl of pmod_cls_custom_driver is
 	-- optimal timing closure and glitch minimization.
 	signal sio_cls_sck_fsm_o  : std_logic;
 	signal sio_cls_sck_fsm_t  : std_logic;
-	signal sio_cls_ssn_fsm_o  : std_logic;
-	signal sio_cls_ssn_fsm_t  : std_logic;
-	signal sio_cls_mosi_fsm_o : std_logic;
-	signal sio_cls_mosi_fsm_t : std_logic;
+	signal sio_cls_csn_fsm_o  : std_logic;
+	signal sio_cls_csn_fsm_t  : std_logic;
+	signal sio_cls_copi_fsm_o : std_logic;
+	signal sio_cls_copi_fsm_t : std_logic;
 
 	-- CLS SPI input synchronizer signals, where the synchronizer is used to
 	-- mitigate metastability.
-	signal sio_cls_miso_meta_i : std_logic;
-	signal sio_cls_miso_sync_i : std_logic;
+	signal sio_cls_cipo_meta_i : std_logic;
+	signal sio_cls_cipo_sync_i : std_logic;
 begin
 
 	-- Register the SPI output an extra 4x-SPI-clock clock cycle for better
@@ -116,11 +116,11 @@ begin
 				eo_sck_o <= sio_cls_sck_fsm_o;
 				eo_sck_t <= sio_cls_sck_fsm_t;
 
-				eo_ssn_o <= sio_cls_ssn_fsm_o;
-				eo_ssn_t <= sio_cls_ssn_fsm_t;
+				eo_csn_o <= sio_cls_csn_fsm_o;
+				eo_csn_t <= sio_cls_csn_fsm_t;
 
-				eo_mosi_o <= sio_cls_mosi_fsm_o;
-				eo_mosi_t <= sio_cls_mosi_fsm_t;
+				eo_copi_o <= sio_cls_copi_fsm_o;
+				eo_copi_t <= sio_cls_copi_fsm_t;
 			end if;
 		end if;
 	end process p_reg_spi_fsm_out;
@@ -130,8 +130,8 @@ begin
 	begin
 		if rising_edge(i_clk_20mhz) then
 			if (i_ce_2_5mhz = '1') then
-				sio_cls_miso_sync_i <= sio_cls_miso_meta_i;
-				sio_cls_miso_meta_i <= ei_miso;
+				sio_cls_cipo_sync_i <= sio_cls_cipo_meta_i;
+				sio_cls_cipo_meta_i <= ei_cipo;
 			end if;
 		end if;
 	end process p_sync_spi_in;
@@ -170,7 +170,7 @@ begin
 			i_dat_ascii_line2      => i_dat_ascii_line2
 		);
 
-	-- Stand-alone SPI bus driver for a single bus-slave.
+	-- Stand-alone SPI bus driver for a single bus-peripheral.
 	u_pmod_generic_spi_solo : entity work.pmod_generic_spi_solo(moore_fsm_recursive)
 		generic map (
 			parm_ext_spi_clk_ratio => parm_ext_spi_clk_ratio,
@@ -181,11 +181,11 @@ begin
 		port map (
 			eo_sck_o        => sio_cls_sck_fsm_o,
 			eo_sck_t        => sio_cls_sck_fsm_t,
-			eo_ssn_o        => sio_cls_ssn_fsm_o,
-			eo_ssn_t        => sio_cls_ssn_fsm_t,
-			eo_mosi_o       => sio_cls_mosi_fsm_o,
-			eo_mosi_t       => sio_cls_mosi_fsm_t,
-			ei_miso_i       => sio_cls_miso_sync_i,
+			eo_csn_o        => sio_cls_csn_fsm_o,
+			eo_csn_t        => sio_cls_csn_fsm_t,
+			eo_copi_o       => sio_cls_copi_fsm_o,
+			eo_copi_t       => sio_cls_copi_fsm_t,
+			ei_cipo_i       => sio_cls_cipo_sync_i,
 			i_ext_spi_clk_x => i_clk_20mhz,
 			i_srst          => i_rst_20mhz,
 			i_spi_ce_4x     => i_ce_2_5mhz,

@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
-| Date             : Tue Jul 14 17:44:36 2020
+| Date             : Thu Jul 16 13:32:50 2020
 | Host             : l2study running 64-bit Ubuntu 18.04.4 LTS
 | Command          : report_power -file fpga_serial_acl_tester_power_routed.rpt -pb fpga_serial_acl_tester_power_summary_routed.pb -rpx fpga_serial_acl_tester_power_routed.rpx
 | Design           : fpga_serial_acl_tester
@@ -58,7 +58,7 @@ Table of Contents
 |   CARRY4       |    <0.001 |      416 |     15850 |            2.62 |
 |   Register     |    <0.001 |     2242 |    126800 |            1.77 |
 |   Others       |     0.000 |       70 |       --- |             --- |
-| Signals        |    <0.001 |     4973 |       --- |             --- |
+| Signals        |    <0.001 |     4969 |       --- |             --- |
 | Block RAM      |    <0.001 |        2 |       135 |            1.48 |
 | MMCM           |     0.102 |        1 |         6 |           16.67 |
 | DSPs           |    <0.001 |       16 |       240 |            6.67 |

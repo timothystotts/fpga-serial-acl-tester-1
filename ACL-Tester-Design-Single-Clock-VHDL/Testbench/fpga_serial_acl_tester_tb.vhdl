@@ -20,9 +20,9 @@ architecture simultation of fpga_serial_acl_tester_tb is
 			CLK100MHZ         : in  std_logic;
 			i_resetn          : in  std_logic;
 			eo_pmod_acl2_sck  : out std_logic;
-			eo_pmod_acl2_ssn  : out std_logic;
-			eo_pmod_acl2_mosi : out std_logic;
-			ei_pmod_acl2_miso : in  std_logic;
+			eo_pmod_acl2_csn  : out std_logic;
+			eo_pmod_acl2_copi : out std_logic;
+			ei_pmod_acl2_cipo : in  std_logic;
 			ei_pmod_acl2_int1 : in  std_logic;
 			ei_pmod_acl2_int2 : in  std_logic;
 			eo_led0_b         : out std_logic;
@@ -50,8 +50,8 @@ architecture simultation of fpga_serial_acl_tester_tb is
 			ei_btn1         : in  std_logic;
 			ei_btn2         : in  std_logic;
 			ei_btn3         : in  std_logic;
-			
-			eo_pmod_cls_ssn : out std_logic;
+
+			eo_pmod_cls_csn : out std_logic;
 			eo_pmod_cls_sck : out std_logic;
 			eo_pmod_cls_dq0 : out std_logic;
 			ei_pmod_cls_dq1 : in  std_logic;
@@ -66,9 +66,9 @@ architecture simultation of fpga_serial_acl_tester_tb is
 	signal CLK100MHZ         : std_logic;
 	signal si_resetn         : std_logic;
 	signal so_pmod_acl2_sck  : std_logic;
-	signal so_pmod_acl2_ssn  : std_logic;
-	signal so_pmod_acl2_mosi : std_logic;
-	signal si_pmod_acl2_miso : std_logic;
+	signal so_pmod_acl2_csn  : std_logic;
+	signal so_pmod_acl2_copi : std_logic;
+	signal si_pmod_acl2_cipo : std_logic;
 	signal si_pmod_acl2_int1 : std_logic;
 	signal si_pmod_acl2_int2 : std_logic;
 	signal so_led0_b         : std_logic;
@@ -91,7 +91,7 @@ architecture simultation of fpga_serial_acl_tester_tb is
 	signal si_sw1            : std_logic;
 	signal si_sw2            : std_logic;
 	signal si_sw3            : std_logic;
-	signal so_pmod_cls_ssn   : std_logic;
+	signal so_pmod_cls_csn   : std_logic;
 	signal so_pmod_cls_sck   : std_logic;
 	signal so_pmod_cls_dq0   : std_logic;
 	signal si_pmod_cls_dq1   : std_logic;
@@ -107,9 +107,9 @@ begin
 			CLK100MHZ         => CLK100MHZ,
 			i_resetn          => si_resetn,
 			eo_pmod_acl2_sck  => so_pmod_acl2_sck,
-			eo_pmod_acl2_ssn  => so_pmod_acl2_ssn,
-			eo_pmod_acl2_mosi => so_pmod_acl2_mosi,
-			ei_pmod_acl2_miso => si_pmod_acl2_miso,
+			eo_pmod_acl2_csn  => so_pmod_acl2_csn,
+			eo_pmod_acl2_copi => so_pmod_acl2_copi,
+			ei_pmod_acl2_cipo => si_pmod_acl2_cipo,
 			ei_pmod_acl2_int1 => si_pmod_acl2_int1,
 			ei_pmod_acl2_int2 => si_pmod_acl2_int2,
 			eo_led0_b         => so_led0_b,
@@ -136,7 +136,7 @@ begin
 			ei_btn1           => '0',
 			ei_btn2           => '0',
 			ei_btn3           => '0',
-			eo_pmod_cls_ssn   => so_pmod_cls_ssn,
+			eo_pmod_cls_csn   => so_pmod_cls_csn,
 			eo_pmod_cls_sck   => so_pmod_cls_sck,
 			eo_pmod_cls_dq0   => so_pmod_cls_dq0,
 			ei_pmod_cls_dq1   => si_pmod_cls_dq1,
@@ -153,38 +153,38 @@ begin
 		variable v_cnt_msb   : natural range 0 to 7 := 0;
 		variable v_track_cmd : std_logic            := '1';
 	begin
-		si_pmod_acl2_miso <= 'Z';
+		si_pmod_acl2_cipo <= 'Z';
 
 		loop_forever : loop
-			wait on so_pmod_acl2_ssn, so_pmod_acl2_sck;
+			wait on so_pmod_acl2_csn, so_pmod_acl2_sck;
 
 			-- on the falling edge of SCK, setup and hold a reply value on the
 			-- SPI quad i/o to simulate answers back from the SPI Flash
 			if so_pmod_acl2_sck'event and (so_pmod_acl2_sck = '0') then
-				if (so_pmod_acl2_ssn = '0') then
+				if (so_pmod_acl2_csn = '0') then
 					wait for 10 ns;
 
 					if (v_cnt_msb > 0) then
 						v_cnt_msb := v_cnt_msb - 1;
 						if (v_track_cmd = '0') then
-							si_pmod_acl2_miso <= std_logic(v_seq(v_cnt_msb));
+							si_pmod_acl2_cipo <= std_logic(v_seq(v_cnt_msb));
 						else
-							si_pmod_acl2_miso <= 'Z';
+							si_pmod_acl2_cipo <= 'Z';
 						end if;
 					else
 						v_cnt_msb         := 7;
 						v_track_cmd       := '0';
 						v_seq             := v_seq + unsigned'(x"01");
-						si_pmod_acl2_miso <= std_logic(v_seq(v_cnt_msb));
+						si_pmod_acl2_cipo <= std_logic(v_seq(v_cnt_msb));
 					end if;
 				end if;
-			-- on the event of s_sck 4x clock or change of slave select, test if
+			-- on the event of s_sck 4x clock or change of chip select, test if
 			-- necessary to High-Z the Quad I/O bus.
-			elsif so_pmod_acl2_sck'event or so_pmod_acl2_ssn'event then
-				if (so_pmod_acl2_ssn = '1') then
+			elsif so_pmod_acl2_sck'event or so_pmod_acl2_csn'event then
+				if (so_pmod_acl2_csn = '1') then
 					wait for 10 ns;
 
-					si_pmod_acl2_miso <= 'Z';
+					si_pmod_acl2_cipo <= 'Z';
 					v_track_cmd       := '1';
 					-- start one nibble before 0x00 as to simulate a working Flash
 					-- chip response for a Quad I/O READ command reponse with a

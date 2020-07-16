@@ -23,9 +23,9 @@
 --------------------------------------------------------------------------------
 -- \filepmod_generic_spi_solo.vhdl
 --
--- \brief A custom SPI driver for generic usage, implementing onlyStandard
+-- \brief A custom SPI driver for generic usage, implementing only Standard
 -- SPI operating in Mode 0, without Extended data transfer of more than the
--- standard MOSI and MISO data signals.
+-- standard COPI and CIPO data signals.
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
@@ -54,11 +54,11 @@ entity pmod_generic_spi_solo is
 		-- SPI bus outputs and input totop-level
 		eo_sck_o  : out std_logic;
 		eo_sck_t  : out std_logic;
-		eo_ssn_o  : out std_logic;
-		eo_ssn_t  : out std_logic;
-		eo_mosi_o : out std_logic;
-		eo_mosi_t : out std_logic;
-		ei_miso_i : in  std_logic;
+		eo_csn_o  : out std_logic;
+		eo_csn_t  : out std_logic;
+		eo_copi_o : out std_logic;
+		eo_copi_t : out std_logic;
+		ei_cipo_i : in  std_logic;
 		-- SPI state machine clock at 4x the SPI bus clock speed, with
 		-- synchronous reset
 		i_ext_spi_clk_x : in std_logic;
@@ -499,7 +499,7 @@ begin
 	end process p_spi_fsm_state;
 
 	-- SPI bus control state machine assignments for combinatorial assignmentto
-	-- SPI bus outputs, timing of slave select, transmission of TXdata,
+	-- SPI bus outputs, timing of chip select, transmission of TXdata,
 	-- holding for wait cycles, and timing for RX data where RX data iscaptured
 	-- in a different synchronous state machine delayed from the state ofthis
 	-- machine.
@@ -515,17 +515,17 @@ begin
 				eo_sck_o <= '0';
 				eo_sck_t <= '0';
 				-- no chipselect
-				eo_ssn_o <= '1';
-				eo_ssn_t <= '0';
-				-- zero value forMOSI
-				eo_mosi_o <= '0';
-				eo_mosi_t <= '0';
+				eo_csn_o <= '1';
+				eo_csn_t <= '0';
+				-- zero value for COPI
+				eo_copi_o <= '0';
+				eo_copi_t <= '0';
 				-- hold not reading the TXFIFO
 				s_data_fifo_tx_re <= '0';
 				-- machine is notidle
 				s_spi_idle <= '0';
 
-				-- time the slave not selected starttime
+				-- time the chip not selected starttime
 				if (s_t = c_t_stand_wait_ss - c_t_inc) then
 					s_spi_nx_state <= ST_STAND_START_S;
 				else
@@ -536,18 +536,18 @@ begin
 				eo_sck_o <= '0';
 				eo_sck_t <= '0';
 				-- assert chip select
-				eo_ssn_o <= '0';
-				eo_ssn_t <= '0';
-				-- zero value for MOSI
-				eo_mosi_o <= '0';
-				eo_mosi_t <= '0';
+				eo_csn_o <= '0';
+				eo_csn_t <= '0';
+				-- zero value for COPI
+				eo_copi_o <= '0';
+				eo_copi_t <= '0';
 				-- hold not reading the TX FIFO
 				s_data_fifo_tx_re <= s_spi_clk_ce3 when ((s_t = c_t_stand_wait_ss - c_t_inc) and 
 					(s_data_fifo_tx_empty = '0')) else '0';
 				-- machine is not idle
 				s_spi_idle <= '0';
 
-				-- time the slave not selected start time
+				-- time the chip selected start time
 				if (s_t = c_t_stand_wait_ss - c_t_inc) then
 					s_spi_nx_state <= ST_STAND_TX;
 				else
@@ -559,11 +559,11 @@ begin
 				eo_sck_o <= s_spi_clk_1x;
 				eo_sck_t <= '0';
 				-- assert chip select
-				eo_ssn_o <= '0';
-				eo_ssn_t <= '0';
-				-- data value for MOSI
-				eo_mosi_o <= s_data_fifo_tx_out(7 - (s_t mod 8)) when (s_t < 8 * s_tx_len_aux) else '0';
-				eo_mosi_t <= '0';
+				eo_csn_o <= '0';
+				eo_csn_t <= '0';
+				-- data value for COPI
+				eo_copi_o <= s_data_fifo_tx_out(7 - (s_t mod 8)) when (s_t < 8 * s_tx_len_aux) else '0';
+				eo_copi_t <= '0';
 
 				-- machine is not idle
 				s_spi_idle <= '0';
@@ -594,11 +594,11 @@ begin
 				eo_sck_o <= s_spi_clk_1x;
 				eo_sck_t <= '0';
 				-- assert chip select
-				eo_ssn_o <= '0';
-				eo_ssn_t <= '0';
-				-- zero value for MOSI
-				eo_mosi_o <= '0';
-				eo_mosi_t <= '0';
+				eo_csn_o <= '0';
+				eo_csn_t <= '0';
+				-- zero value for COPI
+				eo_copi_o <= '0';
+				eo_copi_t <= '0';
 				-- hold not reading the TX FIFO
 				s_data_fifo_tx_re <= '0';
 				-- machine is not idle
@@ -615,11 +615,11 @@ begin
 				eo_sck_o <= s_spi_clk_1x;
 				eo_sck_t <= '0';
 				-- assert chip select
-				eo_ssn_o <= '0';
-				eo_ssn_t <= '0';
-				-- zero value for MOSI
-				eo_mosi_o <= '0';
-				eo_mosi_t <= '0';
+				eo_csn_o <= '0';
+				eo_csn_t <= '0';
+				-- zero value for COPI
+				eo_copi_o <= '0';
+				eo_copi_t <= '0';
 				-- hold not reading the TX FIFO
 				s_data_fifo_tx_re <= '0';
 				-- machine is not idle
@@ -636,16 +636,17 @@ begin
 				eo_sck_o <= '0';
 				eo_sck_t <= '0';
 				-- assert chip select
-				eo_ssn_o <= '0';
-				eo_ssn_t <= '0';
-				-- zero value for MOSI
-				eo_mosi_o <= '0';
-				eo_mosi_t <= '0';
+				eo_csn_o <= '0';
+				eo_csn_t <= '0';
+				-- zero value for COPI
+				eo_copi_o <= '0';
+				eo_copi_t <= '0';
 				-- hold not reading the TX FIFO
 				s_data_fifo_tx_re <= '0';
 				-- machine is not idle
 				s_spi_idle <= '0';
 
+				-- the chip selected stop time
 				if (s_t = c_t_stand_wait_ss - c_t_inc) then
 					s_spi_nx_state <= ST_STAND_STOP_D;
 				else
@@ -657,16 +658,17 @@ begin
 				eo_sck_o <= '0';
 				eo_sck_t <= '0';
 				-- no chip select
-				eo_ssn_o <= '1';
-				eo_ssn_t <= '0';
-				-- zero value for MOSI
-				eo_mosi_o <= '0';
-				eo_mosi_t <= '0';
+				eo_csn_o <= '1';
+				eo_csn_t <= '0';
+				-- zero value for COPI
+				eo_copi_o <= '0';
+				eo_copi_t <= '0';
 				-- hold not reading the TX FIFO
 				s_data_fifo_tx_re <= '0';
 				-- machine is not idle
 				s_spi_idle <= '0';
 
+				-- the chip not selected stop time
 				if (s_t = c_t_stand_wait_ss - c_t_inc) then
 					s_spi_nx_state <= ST_STAND_IDLE;
 				else
@@ -678,11 +680,11 @@ begin
 				eo_sck_o <= '0';
 				eo_sck_t <= '0';
 				-- no chip select
-				eo_ssn_o <= '1';
-				eo_ssn_t <= '0';
-				-- zero value for MOSI
-				eo_mosi_o <= '0';
-				eo_mosi_t <= '0';
+				eo_csn_o <= '1';
+				eo_csn_t <= '0';
+				-- zero value for COPI
+				eo_copi_o <= '0';
+				eo_copi_t <= '0';
 				-- hold not reading the TX FIFO
 				s_data_fifo_tx_re <= '0';
 				-- machine is idle
@@ -714,7 +716,7 @@ begin
 				if (s_spi_clk_ce3 = '1') then
 					if (s_spi_pr_state_delayed3 = ST_STAND_RX) then
 						-- input current byte to enqueue, one bit at a time, shifting
-						s_data_fifo_rx_in <= s_data_fifo_rx_in(6 downto 0) & ei_miso_i when
+						s_data_fifo_rx_in <= s_data_fifo_rx_in(6 downto 0) & ei_cipo_i when
 							(s_t_delayed3 < (8 * s_rx_len_aux)) else x"00";
 						
 						-- only if on last bit, enqueue another byte

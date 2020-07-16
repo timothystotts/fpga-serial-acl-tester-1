@@ -53,9 +53,9 @@ entity fpga_serial_acl_tester is
 		i_resetn  : in std_logic;
 		-- PMOD ACL2 SPI bus 4-wire and two interrupt signals
 		eo_pmod_acl2_sck  : out std_logic;
-		eo_pmod_acl2_ssn  : out std_logic;
-		eo_pmod_acl2_mosi : out std_logic;
-		ei_pmod_acl2_miso : in  std_logic;
+		eo_pmod_acl2_csn  : out std_logic;
+		eo_pmod_acl2_copi : out std_logic;
+		ei_pmod_acl2_cipo : in  std_logic;
 		ei_pmod_acl2_int1 : in  std_logic;
 		ei_pmod_acl2_int2 : in  std_logic;
 		-- blue LEDs of the multicolor
@@ -89,7 +89,7 @@ entity fpga_serial_acl_tester is
 		ei_btn2 : in std_logic;
 		ei_btn3 : in std_logic;
 		-- PMOD CLS SPI bus 4-wire
-		eo_pmod_cls_ssn : out std_logic;
+		eo_pmod_cls_csn : out std_logic;
 		eo_pmod_cls_sck : out std_logic;
 		eo_pmod_cls_dq0 : out std_logic;
 		ei_pmod_cls_dq1 : in  std_logic;
@@ -126,10 +126,10 @@ architecture rtl of fpga_serial_acl_tester is
 	-- Tri-state connectivity with the PMOD ACL2.
 	signal so_pmod_acl2_sck_o  : std_logic;
 	signal so_pmod_acl2_sck_t  : std_logic;
-	signal so_pmod_acl2_ssn_o  : std_logic;
-	signal so_pmod_acl2_ssn_t  : std_logic;
-	signal so_pmod_acl2_mosi_o : std_logic;
-	signal so_pmod_acl2_mosi_t : std_logic;
+	signal so_pmod_acl2_csn_o  : std_logic;
+	signal so_pmod_acl2_csn_t  : std_logic;
+	signal so_pmod_acl2_copi_o : std_logic;
+	signal so_pmod_acl2_copi_t : std_logic;
 
 	-- Data and indications to be displayed on the LEDs and CLS.
 	signal s_acl2_reg_status                      : std_logic_vector(7 downto 0);
@@ -180,10 +180,10 @@ architecture rtl of fpga_serial_acl_tester is
 	-- Signals for inferring tri-state buffer for CLS SPI bus outputs.
 	signal so_pmod_cls_sck_o  : std_logic;
 	signal so_pmod_cls_sck_t  : std_logic;
-	signal so_pmod_cls_ssn_o  : std_logic;
-	signal so_pmod_cls_ssn_t  : std_logic;
-	signal so_pmod_cls_mosi_o : std_logic;
-	signal so_pmod_cls_mosi_t : std_logic;
+	signal so_pmod_cls_csn_o  : std_logic;
+	signal so_pmod_cls_csn_t  : std_logic;
+	signal so_pmod_cls_copi_o : std_logic;
+	signal so_pmod_cls_copi_t : std_logic;
 
 	-- Extra MMCM signals for full port map to the MMCM primative, where
 	-- these signals will remain disconnected.
@@ -414,8 +414,8 @@ begin
 	-- Provide possible tri-state for later design revision for the PMOD ACL2 SPI
 	-- output ports.
 	eo_pmod_acl2_sck  <= so_pmod_acl2_sck_o  when so_pmod_acl2_sck_t = '0' else 'Z';
-	eo_pmod_acl2_ssn  <= so_pmod_acl2_ssn_o  when so_pmod_acl2_ssn_t = '0' else 'Z';
-	eo_pmod_acl2_mosi <= so_pmod_acl2_mosi_o when so_pmod_acl2_mosi_t = '0' else 'Z';
+	eo_pmod_acl2_csn  <= so_pmod_acl2_csn_o  when so_pmod_acl2_csn_t = '0' else 'Z';
+	eo_pmod_acl2_copi <= so_pmod_acl2_copi_o when so_pmod_acl2_copi_t = '0' else 'Z';
 
 	-- PMOD ACL2 Custom Driver instance.
 	u_pmod_acl2_custom_driver : entity work.pmod_acl2_custom_driver(rtl)
@@ -430,11 +430,11 @@ begin
 			i_rst_20mhz             => s_rst_20mhz,
 			eo_sck_t                => so_pmod_acl2_sck_t,
 			eo_sck_o                => so_pmod_acl2_sck_o,
-			eo_ssn_t                => so_pmod_acl2_ssn_t,
-			eo_ssn_o                => so_pmod_acl2_ssn_o,
-			eo_mosi_t               => so_pmod_acl2_mosi_t,
-			eo_mosi_o               => so_pmod_acl2_mosi_o,
-			ei_miso                 => ei_pmod_acl2_miso,
+			eo_csn_t                => so_pmod_acl2_csn_t,
+			eo_csn_o                => so_pmod_acl2_csn_o,
+			eo_copi_t               => so_pmod_acl2_copi_t,
+			eo_copi_o               => so_pmod_acl2_copi_o,
+			ei_cipo                 => ei_pmod_acl2_cipo,
 			ei_int1                 => ei_pmod_acl2_int1,
 			ei_int2                 => ei_pmod_acl2_int2,
 			o_command_ready         => s_acl2_command_ready,
@@ -511,8 +511,8 @@ begin
 
 	-- Tri-state outputs of PMOD CLS custom driver.
 	eo_pmod_cls_sck <= so_pmod_cls_sck_o  when so_pmod_cls_sck_t = '0' else 'Z';
-	eo_pmod_cls_ssn <= so_pmod_cls_ssn_o  when so_pmod_cls_ssn_t = '0' else 'Z';
-	eo_pmod_cls_dq0 <= so_pmod_cls_mosi_o when so_pmod_cls_mosi_t = '0' else 'Z';
+	eo_pmod_cls_csn <= so_pmod_cls_csn_o  when so_pmod_cls_csn_t = '0' else 'Z';
+	eo_pmod_cls_dq0 <= so_pmod_cls_copi_o when so_pmod_cls_copi_t = '0' else 'Z';
 
 	-- Instance of the PMOD CLS driver for 16x2 character LCD display for purposes
 	-- of an output display.
@@ -530,11 +530,11 @@ begin
 			i_ce_2_5mhz            => s_ce_2_5mhz,
 			eo_sck_t               => so_pmod_cls_sck_t,
 			eo_sck_o               => so_pmod_cls_sck_o,
-			eo_ssn_t               => so_pmod_cls_ssn_t,
-			eo_ssn_o               => so_pmod_cls_ssn_o,
-			eo_mosi_t              => so_pmod_cls_mosi_t,
-			eo_mosi_o              => so_pmod_cls_mosi_o,
-			ei_miso                => ei_pmod_cls_dq1,
+			eo_csn_t               => so_pmod_cls_csn_t,
+			eo_csn_o               => so_pmod_cls_csn_o,
+			eo_copi_t              => so_pmod_cls_copi_t,
+			eo_copi_o              => so_pmod_cls_copi_o,
+			ei_cipo                => ei_pmod_cls_dq1,
 			o_command_ready        => s_cls_command_ready,
 			i_cmd_wr_clear_display => s_cls_wr_clear_display,
 			i_cmd_wr_text_line1    => s_cls_wr_text_line1,
