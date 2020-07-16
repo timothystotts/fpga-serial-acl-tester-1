@@ -29,11 +29,17 @@ The project is named "Single Clock" as clock enable pulses are used instead of c
 as much as possible throughout the design.
 
 These three groupings of design provide equivalent functionality, excepting that the HDL designs provide
-additional animation effect of the board's three-emitter RGB LEDs. Additionally, work is in-progress in
+additional animation effect of the board's three-emitter RGB LEDs. Additionally, work is merged from
 the feature/ssd_with_presets branch to add a single Pmod SSD to the Pmod Jack A for the purpose of
 selecting among ten ADXL362 configuration preset values for each of Activity Detection threshold/timer
 and Inactivity Detection threshold/timer. The VHDL code is complete for this feature, but is not yet
 release ready. The Verilog code is also complete for this feature, but is not yet release ready.
+Checkouts for the design without a Pmod SSD peripheral should refer to release tag
+Serial_ACL_Tester_Release_A . Checkouts for the latest experimental implementation of adding
+Pmod SSD to Pmod Jack JA and using Buttons 0 and 1 to select threshold/timer presets, should
+refer to tag Serial_ACL_Tester_HDL_Prerelease_1B or the HEAD of the master branch. The AXI design
+does not yet implement the Pmod SSD at Pmod Jack JA due to a limitation of the Digilent Inc.
+User IP for that Pmod.
 
 ### Naming conventions notice
 The Pmod peripherals used in this project connect via a standard bus technology design called SPI.
