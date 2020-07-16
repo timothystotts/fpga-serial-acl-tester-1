@@ -35,6 +35,18 @@ selecting among ten ADXL362 configuration preset values for each of Activity Det
 and Inactivity Detection threshold/timer. The VHDL code is complete for this feature, but is not yet
 release ready. The Verilog code is also complete for this feature, but is not yet release ready.
 
+### Naming conventions notice
+The Pmod peripherals used in this project connect via a standard bus technology design called SPI.
+The use of MOSI/MISO terminology is considered obsolete. COPI/CIPO is now used. The MOSI signal on a
+controller can be replaced with the title 'COPI'. Master and Slave terms are now Controller and Peripheral.
+Additional information can be found [here](https://www.oshwa.org/a-resolution-to-redefine-spi-signal-names).
+The choice to use COPI and CIPO instead of SDO and SDI for single-direction bus signals is simple.
+On a single peripheral bus with two data lines of fixed direction, the usage of the signal name
+"SDO" is dependent on whether the Controller or the Peripheral is the chip being discussed;
+whereas COPI gives the exact direction regardless of which chip is being discussed. The author
+of this website agrees with the open source community that the removal of offensive language from
+standard terminology in engineering is a priority.
+
 ### Project information document:
 
 ./Serial ACL Readings Tester.pdf
