@@ -37,7 +37,7 @@ release ready. The Verilog code is also complete for this feature, but is not ye
 Checkouts for the design without a Pmod SSD peripheral should refer to release tag
 Serial_ACL_Tester_Release_A . Checkouts for the latest experimental implementation of adding
 Pmod SSD to Pmod Jack JA and using Buttons 0 and 1 to select threshold/timer presets, should
-refer to tag Serial_ACL_Tester_HDL_Prerelease_1B or the HEAD of the master branch. The AXI design
+refer to tag Serial_ACL_Tester_HDL_Prerelease_2B or the HEAD of the master branch. The AXI design
 does not yet implement the Pmod SSD at Pmod Jack JA due to a limitation of the Digilent Inc.
 User IP for that Pmod.
 
