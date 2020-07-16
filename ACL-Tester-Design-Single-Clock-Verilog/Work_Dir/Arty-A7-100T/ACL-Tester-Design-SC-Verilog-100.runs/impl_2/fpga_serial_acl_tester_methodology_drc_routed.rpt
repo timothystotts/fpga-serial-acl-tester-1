@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
-| Date         : Tue Jul 14 17:34:24 2020
+| Date         : Thu Jul 16 12:55:46 2020
 | Host         : l2study running 64-bit Ubuntu 18.04.4 LTS
 | Command      : report_methodology -file fpga_serial_acl_tester_methodology_drc_routed.rpt -pb fpga_serial_acl_tester_methodology_drc_routed.pb -rpx fpga_serial_acl_tester_methodology_drc_routed.rpx
 | Design       : fpga_serial_acl_tester
@@ -168,44 +168,44 @@ Related violations: <none>
 
 XDCH-2#17 Warning
 Same min and max delay values on IO port  
-The same output delay of 30.000 ns has been defined on port 'eo_pmod_acl2_mosi' relative to clock wiz_20mhz_virt_out for both max and min. Make sure this reflects the design intent.
-set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports eo_pmod_acl2_mosi]
+The same output delay of 30.000 ns has been defined on port 'eo_pmod_acl2_copi' relative to clock wiz_20mhz_virt_out for both max and min. Make sure this reflects the design intent.
+set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports eo_pmod_acl2_copi]
 /home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-Verilog/Constraints/a-Arty-A7-100-Master-timing.xdc (Line: 140)
 Related violations: <none>
 
 XDCH-2#18 Warning
+Same min and max delay values on IO port  
+The same output delay of 30.000 ns has been defined on port 'eo_pmod_acl2_csn' relative to clock wiz_20mhz_virt_out for both max and min. Make sure this reflects the design intent.
+set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports eo_pmod_acl2_csn]
+/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-Verilog/Constraints/a-Arty-A7-100-Master-timing.xdc (Line: 139)
+Related violations: <none>
+
+XDCH-2#19 Warning
 Same min and max delay values on IO port  
 The same output delay of 30.000 ns has been defined on port 'eo_pmod_acl2_sck' relative to clock wiz_20mhz_virt_out for both max and min. Make sure this reflects the design intent.
 set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports eo_pmod_acl2_sck]
 /home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-Verilog/Constraints/a-Arty-A7-100-Master-timing.xdc (Line: 141)
 Related violations: <none>
 
-XDCH-2#19 Warning
+XDCH-2#20 Warning
 Same min and max delay values on IO port  
-The same output delay of 30.000 ns has been defined on port 'eo_pmod_acl2_ssn' relative to clock wiz_20mhz_virt_out for both max and min. Make sure this reflects the design intent.
-set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports eo_pmod_acl2_ssn]
-/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-Verilog/Constraints/a-Arty-A7-100-Master-timing.xdc (Line: 139)
+The same output delay of 30.000 ns has been defined on port 'eo_pmod_cls_csn' relative to clock wiz_20mhz_virt_out for both max and min. Make sure this reflects the design intent.
+set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports eo_pmod_cls_csn]
+/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-Verilog/Constraints/a-Arty-A7-100-Master-timing.xdc (Line: 121)
 Related violations: <none>
 
-XDCH-2#20 Warning
+XDCH-2#21 Warning
 Same min and max delay values on IO port  
 The same output delay of 30.000 ns has been defined on port 'eo_pmod_cls_dq0' relative to clock wiz_20mhz_virt_out for both max and min. Make sure this reflects the design intent.
 set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports eo_pmod_cls_dq0]
 /home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-Verilog/Constraints/a-Arty-A7-100-Master-timing.xdc (Line: 122)
 Related violations: <none>
 
-XDCH-2#21 Warning
+XDCH-2#22 Warning
 Same min and max delay values on IO port  
 The same output delay of 30.000 ns has been defined on port 'eo_pmod_cls_sck' relative to clock wiz_20mhz_virt_out for both max and min. Make sure this reflects the design intent.
 set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports eo_pmod_cls_sck]
 /home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-Verilog/Constraints/a-Arty-A7-100-Master-timing.xdc (Line: 123)
-Related violations: <none>
-
-XDCH-2#22 Warning
-Same min and max delay values on IO port  
-The same output delay of 30.000 ns has been defined on port 'eo_pmod_cls_ssn' relative to clock wiz_20mhz_virt_out for both max and min. Make sure this reflects the design intent.
-set_output_delay -clock [get_clocks wiz_20mhz_virt_out] 30.000 [get_ports eo_pmod_cls_ssn]
-/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-Verilog/Constraints/a-Arty-A7-100-Master-timing.xdc (Line: 121)
 Related violations: <none>
 
 XDCH-2#23 Warning

@@ -24,7 +24,7 @@
 /**-----------------------------------------------------------------------------
 -- \file pmod_cls_custom_driver.v
 --
--- \brief A wrapper for the single Slave Select, Standard SPI modules
+-- \brief A wrapper for the single Chip Select, Standard SPI modules
 --        \ref pmod_cls_stand_spi_solo and \ref pmod_generic_spi_solo ,
 --        implementing a custom single-mode operation of the PMOD CLS by
 --        Digilent Inc.
@@ -36,8 +36,8 @@ module pmod_cls_custom_driver (
 	   with a clock enable that is 4 times the frequency of the SPI bus. */
 	i_clk_20mhz, i_rst_20mhz, i_ce_2_5mhz,
 	/* Outputs and inputs from the single SPI peripheral */
-	eo_sck_t, eo_sck_o, eo_ssn_t, eo_ssn_o, eo_mosi_t, eo_mosi_o,
-	ei_miso,
+	eo_sck_t, eo_sck_o, eo_csn_t, eo_csn_o, eo_copi_t, eo_copi_o,
+	ei_cipo,
 	/* Command ready indication and five possible commands to the driver */
 	o_command_ready,
 	i_cmd_wr_clear_display,
@@ -67,11 +67,11 @@ input wire i_ce_2_5mhz;
 
 output reg eo_sck_t;
 output reg eo_sck_o;
-output reg eo_ssn_t;
-output reg eo_ssn_o;
-output reg eo_mosi_t;
-output reg eo_mosi_o;
-input wire ei_miso;
+output reg eo_csn_t;
+output reg eo_csn_o;
+output reg eo_copi_t;
+output reg eo_copi_o;
+input wire ei_cipo;
 
 output wire o_command_ready;
 input wire i_cmd_wr_clear_display;
@@ -99,15 +99,15 @@ wire s_cls_rx_avail;
    optimal timing closure and glitch minimization. */
 wire sio_cls_sck_fsm_o;
 wire sio_cls_sck_fsm_t;
-wire sio_cls_ssn_fsm_o;
-wire sio_cls_ssn_fsm_t;
-wire sio_cls_mosi_fsm_o;
-wire sio_cls_mosi_fsm_t;
+wire sio_cls_csn_fsm_o;
+wire sio_cls_csn_fsm_t;
+wire sio_cls_copi_fsm_o;
+wire sio_cls_copi_fsm_t;
 
 /* CLS SPI input synchronizer signals, where the synchronizer is used to
    mitigate metastability. */
-reg sio_cls_miso_meta_i;
-reg sio_cls_miso_sync_i;
+reg sio_cls_cipo_meta_i;
+reg sio_cls_cipo_sync_i;
 
 //Part 3: Statements------------------------------------------------------------
 
@@ -119,11 +119,11 @@ begin: p_reg_spi_fsm_out
 		eo_sck_o <= sio_cls_sck_fsm_o;
 		eo_sck_t <= sio_cls_sck_fsm_t;
 
-		eo_ssn_o <= sio_cls_ssn_fsm_o;
-		eo_ssn_t <= sio_cls_ssn_fsm_t;
+		eo_csn_o <= sio_cls_csn_fsm_o;
+		eo_csn_t <= sio_cls_csn_fsm_t;
 
-		eo_mosi_o <= sio_cls_mosi_fsm_o;
-		eo_mosi_t <= sio_cls_mosi_fsm_t;
+		eo_copi_o <= sio_cls_copi_fsm_o;
+		eo_copi_t <= sio_cls_copi_fsm_t;
 	end
 end
 
@@ -131,8 +131,8 @@ end
 always @(posedge i_clk_20mhz)
 begin: p_sync_spi_in
 	if (i_ce_2_5mhz) begin
-		sio_cls_miso_sync_i <= sio_cls_miso_meta_i;
-		sio_cls_miso_meta_i <= ei_miso;
+		sio_cls_cipo_sync_i <= sio_cls_cipo_meta_i;
+		sio_cls_cipo_meta_i <= ei_cipo;
 	end
 end
 
@@ -167,7 +167,7 @@ pmod_cls_stand_spi_solo #(
 	.i_dat_ascii_line1(i_dat_ascii_line1),
 	.i_dat_ascii_line2(i_dat_ascii_line2));
 
-/* Stand-alone SPI bus driver for a single bus-slave. */
+/* Stand-alone SPI bus driver for a single bus-peripheral. */
 pmod_generic_spi_solo #(
 	.parm_ext_spi_clk_ratio (parm_ext_spi_clk_ratio),
 	.parm_tx_len_bits  (parm_tx_len_bits),
@@ -176,11 +176,11 @@ pmod_generic_spi_solo #(
 	) u_pmod_generic_spi_solo (
 	.eo_sck_o(sio_cls_sck_fsm_o),
 	.eo_sck_t(sio_cls_sck_fsm_t),
-	.eo_ssn_o(sio_cls_ssn_fsm_o),
-	.eo_ssn_t(sio_cls_ssn_fsm_t),
-	.eo_mosi_o(sio_cls_mosi_fsm_o),
-	.eo_mosi_t(sio_cls_mosi_fsm_t),
-	.ei_miso_i(sio_cls_miso_sync_i),
+	.eo_csn_o(sio_cls_csn_fsm_o),
+	.eo_csn_t(sio_cls_csn_fsm_t),
+	.eo_copi_o(sio_cls_copi_fsm_o),
+	.eo_copi_t(sio_cls_copi_fsm_t),
+	.ei_cipo_i(sio_cls_cipo_sync_i),
 	.i_ext_spi_clk_x(i_clk_20mhz),
 	.i_srst(i_rst_20mhz),
 	.i_spi_ce_4x(i_ce_2_5mhz),

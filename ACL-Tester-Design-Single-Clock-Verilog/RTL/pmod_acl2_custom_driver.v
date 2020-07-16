@@ -24,7 +24,7 @@
 /**-----------------------------------------------------------------------------
 -- \file pmod_acl2_custom_driver.v
 --
--- \brief A wrapper for the single Slave Select, Standard SPI modules
+-- \brief A wrapper for the single Chip Select, Standard SPI modules
 --        \ref pmod_acl2_stand_spi_solo and \ref pmod_generic_spi_solo ,
 --        implementing a custom multi-mode operation of the PMOD ACL2 by
 --        Digilent Inc with SPI bus communication and two GPIO level interrupts
@@ -36,8 +36,8 @@ module pmod_acl2_custom_driver (
 	/* Clock and reset, with clock at 4 times the frequency of the SPI bus */
 	i_clk_20mhz, i_rst_20mhz,
 	/* Outputs and inputs from the single SPI peripheral */
-	eo_sck_t, eo_sck_o, eo_ssn_t, eo_ssn_o, eo_mosi_t, eo_mosi_o,
-	ei_miso,
+	eo_sck_t, eo_sck_o, eo_csn_t, eo_csn_o, eo_copi_t, eo_copi_o,
+	ei_cipo,
 	ei_int1, ei_int2,
 	/* Command ready indication and five possible commands to the driver */
 	o_command_ready,
@@ -76,11 +76,11 @@ input wire i_rst_20mhz;
 
 output reg eo_sck_t;
 output reg eo_sck_o;
-output reg eo_ssn_t;
-output reg eo_ssn_o;
-output reg eo_mosi_t;
-output reg eo_mosi_o;
-input wire ei_miso;
+output reg eo_csn_t;
+output reg eo_csn_o;
+output reg eo_copi_t;
+output reg eo_copi_o;
+input wire ei_cipo;
 
 input wire ei_int1;
 input wire ei_int2;
@@ -133,15 +133,15 @@ reg [(8*8-1):0] s_hex_3axis_temp_measurements_aux;
    optimal timing closure and glitch minimization. */
 wire sio_acl2_sck_fsm_o;
 wire sio_acl2_sck_fsm_t;
-wire sio_acl2_ssn_fsm_o;
-wire sio_acl2_ssn_fsm_t;
-wire sio_acl2_mosi_fsm_o;
-wire sio_acl2_mosi_fsm_t;
+wire sio_acl2_csn_fsm_o;
+wire sio_acl2_csn_fsm_t;
+wire sio_acl2_copi_fsm_o;
+wire sio_acl2_copi_fsm_t;
 
 /* ACL2 SPI input synchronizer signals, where the synchronizer is used to
    mitigate metastability. */
-reg sio_acl2_miso_meta_i;
-reg sio_acl2_miso_sync_i;
+reg sio_acl2_cipo_meta_i;
+reg sio_acl2_cipo_sync_i;
 
 /* Debounced external interrupts. */
 wire si_int1_debounced;
@@ -219,18 +219,18 @@ begin: p_reg_spi_fsm_out
 	eo_sck_o <= sio_acl2_sck_fsm_o;
 	eo_sck_t <= sio_acl2_sck_fsm_t;
 
-	eo_ssn_o <= sio_acl2_ssn_fsm_o;
-	eo_ssn_t <= sio_acl2_ssn_fsm_t;
+	eo_csn_o <= sio_acl2_csn_fsm_o;
+	eo_csn_t <= sio_acl2_csn_fsm_t;
 
-	eo_mosi_o <= sio_acl2_mosi_fsm_o;
-	eo_mosi_t <= sio_acl2_mosi_fsm_t;
+	eo_copi_o <= sio_acl2_copi_fsm_o;
+	eo_copi_t <= sio_acl2_copi_fsm_t;
 end
 
 /* Double-register the SPI input at 4x-SPI-clock cycle to prevent metastability. */
 always @(posedge i_clk_20mhz)
 begin: p_sync_spi_in
-	sio_acl2_miso_sync_i <= sio_acl2_miso_meta_i;
-	sio_acl2_miso_meta_i <= ei_miso;
+	sio_acl2_cipo_sync_i <= sio_acl2_cipo_meta_i;
+	sio_acl2_cipo_meta_i <= ei_cipo;
 end
 
 /* Multiple mode driver to operate the PMOD ACL2 via a stand-alone SPI driver. */
@@ -277,7 +277,7 @@ pmod_acl2_stand_spi_solo #(
 
 	.i_tx_ax_cfg0_lm(s_tx_ax_cfg0_lm));
 
-/* Stand-alone SPI bus driver for a single bus-slave. */
+/* Stand-alone SPI bus driver for a single bus-peripheral. */
 pmod_generic_spi_solo #(
 	.parm_ext_spi_clk_ratio (parm_ext_spi_clk_ratio),
 	.parm_tx_len_bits  (parm_tx_len_bits),
@@ -286,11 +286,11 @@ pmod_generic_spi_solo #(
 	) u_pmod_generic_spi_solo (
 	.eo_sck_o(sio_acl2_sck_fsm_o),
 	.eo_sck_t(sio_acl2_sck_fsm_t),
-	.eo_ssn_o(sio_acl2_ssn_fsm_o),
-	.eo_ssn_t(sio_acl2_ssn_fsm_t),
-	.eo_mosi_o(sio_acl2_mosi_fsm_o),
-	.eo_mosi_t(sio_acl2_mosi_fsm_t),
-	.ei_miso_i(sio_acl2_miso_sync_i),
+	.eo_csn_o(sio_acl2_csn_fsm_o),
+	.eo_csn_t(sio_acl2_csn_fsm_t),
+	.eo_copi_o(sio_acl2_copi_fsm_o),
+	.eo_copi_t(sio_acl2_copi_fsm_t),
+	.ei_cipo_i(sio_acl2_cipo_sync_i),
 
 	.i_ext_spi_clk_x(i_clk_20mhz),
 	.i_srst(i_rst_20mhz),

@@ -38,7 +38,7 @@ module fpga_serial_acl_tester (
 	/* external clock and active-low reset */
 	CLK100MHZ, i_resetn,
 	/* PMOD ACL2 SPI bus 4-wire and two interrupt signals */
-	eo_pmod_acl2_sck, eo_pmod_acl2_ssn, eo_pmod_acl2_mosi, ei_pmod_acl2_miso,
+	eo_pmod_acl2_sck, eo_pmod_acl2_csn, eo_pmod_acl2_copi, ei_pmod_acl2_cipo,
 	ei_pmod_acl2_int1, ei_pmod_acl2_int2,
 	/* blue LEDs of the multicolor */
 	eo_led0_b, eo_led1_b, eo_led2_b, eo_led3_b,
@@ -53,7 +53,7 @@ module fpga_serial_acl_tester (
   /* four buttons */
   ei_btn0, ei_btn1, ei_btn2, ei_btn3,
 	/* PMOD CLS SPI bus 4-wire */
-	eo_pmod_cls_ssn, eo_pmod_cls_sck, eo_pmod_cls_dq0,
+	eo_pmod_cls_csn, eo_pmod_cls_sck, eo_pmod_cls_dq0,
 	ei_pmod_cls_dq1,
 	/* Arty A7-100T UART TX and RX signals */
 	eo_uart_tx, ei_uart_rx,
@@ -68,9 +68,9 @@ input wire CLK100MHZ;
 input wire i_resetn;
 
 output wire eo_pmod_acl2_sck;
-output wire eo_pmod_acl2_ssn;
-output wire eo_pmod_acl2_mosi;
-input wire ei_pmod_acl2_miso;
+output wire eo_pmod_acl2_csn;
+output wire eo_pmod_acl2_copi;
+input wire ei_pmod_acl2_cipo;
 input wire ei_pmod_acl2_int1;
 input wire ei_pmod_acl2_int2;
 
@@ -104,7 +104,7 @@ input wire ei_btn1;
 input wire ei_btn2;
 input wire ei_btn3;
 
-output wire eo_pmod_cls_ssn;
+output wire eo_pmod_cls_csn;
 output wire eo_pmod_cls_sck;
 output wire eo_pmod_cls_dq0;
 input wire ei_pmod_cls_dq1;
@@ -135,10 +135,10 @@ wire s_ce_2_5mhz;
 /* Tri-state connectivity with the PMOD ACL2. */
 wire so_pmod_acl2_sck_o;
 wire so_pmod_acl2_sck_t;
-wire so_pmod_acl2_ssn_o;
-wire so_pmod_acl2_ssn_t;
-wire so_pmod_acl2_mosi_o;
-wire so_pmod_acl2_mosi_t;
+wire so_pmod_acl2_csn_o;
+wire so_pmod_acl2_csn_t;
+wire so_pmod_acl2_copi_o;
+wire so_pmod_acl2_copi_t;
 
 /* Data and indications to be displayed on the LEDs and CLS. */
 wire [7:0] s_acl2_reg_status;
@@ -189,10 +189,10 @@ wire [(16*8-1):0] s_adxl_txt_ascii_line2;
 /* Connections for inferring tri-state buffer for CLS SPI bus outputs. */
 wire so_pmod_cls_sck_o;
 wire so_pmod_cls_sck_t;
-wire so_pmod_cls_ssn_o;
-wire so_pmod_cls_ssn_t;
-wire so_pmod_cls_mosi_o;
-wire so_pmod_cls_mosi_t;
+wire so_pmod_cls_csn_o;
+wire so_pmod_cls_csn_t;
+wire so_pmod_cls_copi_o;
+wire so_pmod_cls_copi_t;
 
 /* Extra MMCM signals for full port map to the MMCM primative,
    where these signals will remain disconnected. */
@@ -399,8 +399,8 @@ led_palette_pulser #(
 /* Provide possible tri-state for later design revision for the PMOD ACL2 SPI
    output ports. */
 assign eo_pmod_acl2_sck = so_pmod_acl2_sck_t ? 1'bz : so_pmod_acl2_sck_o;
-assign eo_pmod_acl2_ssn = so_pmod_acl2_ssn_t ? 1'bz : so_pmod_acl2_ssn_o;
-assign eo_pmod_acl2_mosi = so_pmod_acl2_mosi_t ? 1'bz : so_pmod_acl2_mosi_o;
+assign eo_pmod_acl2_csn = so_pmod_acl2_csn_t ? 1'bz : so_pmod_acl2_csn_o;
+assign eo_pmod_acl2_copi = so_pmod_acl2_copi_t ? 1'bz : so_pmod_acl2_copi_o;
 
 /* PMOD ACL2 Custom Driver instance. */
 pmod_acl2_custom_driver #(
@@ -413,11 +413,11 @@ pmod_acl2_custom_driver #(
 	.i_rst_20mhz(s_rst_20mhz),
 	.eo_sck_t(so_pmod_acl2_sck_t),
 	.eo_sck_o(so_pmod_acl2_sck_o),
-	.eo_ssn_t(so_pmod_acl2_ssn_t),
-	.eo_ssn_o(so_pmod_acl2_ssn_o),
-	.eo_mosi_t(so_pmod_acl2_mosi_t),
-	.eo_mosi_o(so_pmod_acl2_mosi_o),
-	.ei_miso(ei_pmod_acl2_miso),
+	.eo_csn_t(so_pmod_acl2_csn_t),
+	.eo_csn_o(so_pmod_acl2_csn_o),
+	.eo_copi_t(so_pmod_acl2_copi_t),
+	.eo_copi_o(so_pmod_acl2_copi_o),
+	.ei_cipo(ei_pmod_acl2_cipo),
 	.ei_int1(ei_pmod_acl2_int1),
 	.ei_int2(ei_pmod_acl2_int2),
 	.o_command_ready(s_acl2_command_ready),
@@ -489,8 +489,8 @@ pulse_stretcher_synch #(
 
 /* Tri-state outputs of PMOD CLS custom driver. */
 assign eo_pmod_cls_sck = so_pmod_cls_sck_t ? 1'bz : so_pmod_cls_sck_o;
-assign eo_pmod_cls_ssn = so_pmod_cls_ssn_t ? 1'bz : so_pmod_cls_ssn_o;
-assign eo_pmod_cls_dq0 = so_pmod_cls_mosi_t ? 1'bz : so_pmod_cls_mosi_o;
+assign eo_pmod_cls_csn = so_pmod_cls_csn_t ? 1'bz : so_pmod_cls_csn_o;
+assign eo_pmod_cls_dq0 = so_pmod_cls_copi_t ? 1'bz : so_pmod_cls_copi_o;
 
 /* Instance of the PMOD CLS driver for 16x2 character LCD display for purposes
    of an output display. */
@@ -506,11 +506,11 @@ pmod_cls_custom_driver #(
 	.i_ce_2_5mhz(s_ce_2_5mhz),
 	.eo_sck_t(so_pmod_cls_sck_t),
 	.eo_sck_o(so_pmod_cls_sck_o),
-	.eo_ssn_t(so_pmod_cls_ssn_t),
-	.eo_ssn_o(so_pmod_cls_ssn_o),
-	.eo_mosi_t(so_pmod_cls_mosi_t),
-	.eo_mosi_o(so_pmod_cls_mosi_o),
-	.ei_miso(ei_pmod_cls_dq1),
+	.eo_csn_t(so_pmod_cls_csn_t),
+	.eo_csn_o(so_pmod_cls_csn_o),
+	.eo_copi_t(so_pmod_cls_copi_t),
+	.eo_copi_o(so_pmod_cls_copi_o),
+	.ei_cipo(ei_pmod_cls_dq1),
 	.o_command_ready(s_cls_command_ready),
 	.i_cmd_wr_clear_display(s_cls_wr_clear_display),
 	.i_cmd_wr_text_line1(s_cls_wr_text_line1),

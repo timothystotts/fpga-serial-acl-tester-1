@@ -26,14 +26,14 @@
 --
 -- \brief A custom SPI driver for generic usage, implementing only Standard
 -- SPI operating in Mode 0, without Extended data transfer of more than the
--- standard MOSI and MISO data signals.
+-- standard COPI and CIPO data signals.
 ------------------------------------------------------------------------------*/
 //------------------------------------------------------------------------------
 //Multiple Recursive Moore Machines
 //Part 1: Module header:--------------------------------------------------------
 module pmod_generic_spi_solo (
 	/* SPI bus outputs and input to top-level */
-	eo_sck_o, eo_sck_t, eo_ssn_o, eo_ssn_t, eo_mosi_o, eo_mosi_t, ei_miso_i,
+	eo_sck_o, eo_sck_t, eo_csn_o, eo_csn_t, eo_copi_o, eo_copi_t, ei_cipo_i,
 	/* SPI state machine clock at 4x the SPI bus clock speed, with
 	   synchronous reset */
 	i_ext_spi_clk_x, i_srst, i_spi_ce_4x,
@@ -55,11 +55,11 @@ parameter parm_rx_len_bits = 11; /* now ignored due to usage of MACRO */
 
 output reg eo_sck_o;
 output reg eo_sck_t;
-output reg eo_ssn_o;
-output reg eo_ssn_t;
-output reg eo_mosi_o;
-output reg eo_mosi_t;
-input wire ei_miso_i;
+output reg eo_csn_o;
+output reg eo_csn_t;
+output reg eo_copi_o;
+output reg eo_copi_t;
+input wire ei_cipo_i;
 
 input wire i_ext_spi_clk_x;
 input wire i_srst;
@@ -476,7 +476,7 @@ begin: p_spi_fsm_state
 end
 
 /* SPI bus control state machine assignments for combinatorial assignment to
-   SPI bus outputs, timing of slave select, transmission of TX data,
+   SPI bus outputs, timing of chip select, transmission of TX data,
    holding for wait cycles, and timing for RX data where RX data is captured
    in a different synchronous state machine delayed from the state of this
    machine. */
@@ -492,17 +492,17 @@ begin: p_spi_fsm_comb
 			eo_sck_o = 1'b0;
 			eo_sck_t = 1'b0;
 			/* no chip select */
-			eo_ssn_o = 1'b1;
-			eo_ssn_t = 1'b0;
-			/* zero value for MOSI */
-			eo_mosi_o = 1'b0;
-			eo_mosi_t = 1'b0;
+			eo_csn_o = 1'b1;
+			eo_csn_t = 1'b0;
+			/* zero value for COPI */
+			eo_copi_o = 1'b0;
+			eo_copi_t = 1'b0;
 			/* hold not reading the TX FIFO */
 			s_data_fifo_tx_re = 1'b0;
 			/* machine is not idle */
 			s_spi_idle = 1'b0;
 
-			/* time the slave not selected start time */
+			/* time the chip not selected start time */
 			if (s_t == c_t_stand_wait_ss - c_t_inc)
 				s_spi_nx_state = ST_STAND_START_S;
 			else s_spi_nx_state = ST_STAND_START_D;
@@ -513,11 +513,11 @@ begin: p_spi_fsm_comb
 			eo_sck_o = 1'b0;
 			eo_sck_t = 1'b0;
 			/* assert chip select */
-			eo_ssn_o = 1'b0;
-			eo_ssn_t = 1'b0;
-			/* zero value for MOSI */
-			eo_mosi_o = 1'b0;
-			eo_mosi_t = 1'b0;
+			eo_csn_o = 1'b0;
+			eo_csn_t = 1'b0;
+			/* zero value for COPI */
+			eo_copi_o = 1'b0;
+			eo_copi_t = 1'b0;
 			/* hold not reading the TX FIFO */
 			s_data_fifo_tx_re = 1'b0;
 			/* machine is not idle */
@@ -526,7 +526,7 @@ begin: p_spi_fsm_comb
 			s_data_fifo_tx_re = ((s_t == c_t_stand_wait_ss - c_t_inc) &&
 				(s_data_fifo_tx_empty == 1'b0)) ? s_spi_clk_ce3 : 1'b0;
 
-			/* time the slave selected start time */
+			/* time the chip selected start time */
 			if (s_t == c_t_stand_wait_ss - c_t_inc)
 				s_spi_nx_state = ST_STAND_TX;
 			else s_spi_nx_state = ST_STAND_START_S;
@@ -537,11 +537,11 @@ begin: p_spi_fsm_comb
 			eo_sck_o = s_spi_clk_1x;
 			eo_sck_t = 1'b0;
 			/* assert chip select */
-			eo_ssn_o = 1'b0;
-			eo_ssn_t = 1'b0;
-			/* data value for MOSI */
-			eo_mosi_o = (s_t < 8 * s_tx_len_aux) ? s_data_fifo_tx_out[7 - (s_t % 8)] : 1'b0;
-			eo_mosi_t = 1'b0;
+			eo_csn_o = 1'b0;
+			eo_csn_t = 1'b0;
+			/* data value for COPI */
+			eo_copi_o = (s_t < 8 * s_tx_len_aux) ? s_data_fifo_tx_out[7 - (s_t % 8)] : 1'b0;
+			eo_copi_t = 1'b0;
 
 			/* machine is not idle */
 			s_spi_idle = 1'b0;
@@ -570,11 +570,11 @@ begin: p_spi_fsm_comb
 			eo_sck_o = s_spi_clk_1x;
 			eo_sck_t = 1'b0;
 			/* assert chip select */
-			eo_ssn_o = 1'b0;
-			eo_ssn_t = 1'b0;
-			/* zero value for MOSI */
-			eo_mosi_o = 1'b0;
-			eo_mosi_t = 1'b0;
+			eo_csn_o = 1'b0;
+			eo_csn_t = 1'b0;
+			/* zero value for COPI */
+			eo_copi_o = 1'b0;
+			eo_copi_t = 1'b0;
 			/* hold not reading the TX FIFO */
 			s_data_fifo_tx_re = 1'b0;
 			/* machine is not idle */
@@ -589,11 +589,11 @@ begin: p_spi_fsm_comb
 			eo_sck_o = s_spi_clk_1x;
 			eo_sck_t = 1'b0;
 			/* assert chip select */
-			eo_ssn_o = 1'b0;
-			eo_ssn_t = 1'b0;
-			/* zero value for MOSI */
-			eo_mosi_o = 1'b0;
-			eo_mosi_t = 1'b0;
+			eo_csn_o = 1'b0;
+			eo_csn_t = 1'b0;
+			/* zero value for COPI */
+			eo_copi_o = 1'b0;
+			eo_copi_t = 1'b0;
 			/* hold not reading the TX FIFO */
 			s_data_fifo_tx_re = 1'b0;
 			/* machine is not idle */
@@ -609,11 +609,11 @@ begin: p_spi_fsm_comb
 			eo_sck_o = 1'b0;
 			eo_sck_t = 1'b0;
 			/* assert chip select */
-			eo_ssn_o = 1'b0;
-			eo_ssn_t = 1'b0;
-			/* zero value for MOSI */
-			eo_mosi_o = 1'b0;
-			eo_mosi_t = 1'b0;
+			eo_csn_o = 1'b0;
+			eo_csn_t = 1'b0;
+			/* zero value for COPI */
+			eo_copi_o = 1'b0;
+			eo_copi_t = 1'b0;
 			/* hold not reading the TX FIFO */
 			s_data_fifo_tx_re = 1'b0;
 			/* machine is not idle */
@@ -629,11 +629,11 @@ begin: p_spi_fsm_comb
 			eo_sck_o = 1'b0;
 			eo_sck_t = 1'b0;
 			/* no chip select */
-			eo_ssn_o = 1'b1;
-			eo_ssn_t = 1'b0;
-			/* zero value for MOSI */
-			eo_mosi_o = 1'b0;
-			eo_mosi_t = 1'b0;
+			eo_csn_o = 1'b1;
+			eo_csn_t = 1'b0;
+			/* zero value for COPI */
+			eo_copi_o = 1'b0;
+			eo_copi_t = 1'b0;
 			/* hold not reading the TX FIFO */
 			s_data_fifo_tx_re = 1'b0;
 			/* machine is not idle */
@@ -649,11 +649,11 @@ begin: p_spi_fsm_comb
 			eo_sck_o = 1'b0;
 			eo_sck_t = 1'b0;
 			/* no chip select */
-			eo_ssn_o = 1'b1;
-			eo_ssn_t = 1'b0;
-			/* zero value for MOSI */
-			eo_mosi_o = 1'b0;
-			eo_mosi_t = 1'b0;
+			eo_csn_o = 1'b1;
+			eo_csn_t = 1'b0;
+			/* zero value for COPI */
+			eo_copi_o = 1'b0;
+			eo_copi_t = 1'b0;
 			/* hold not reading the TX FIFO */
 			s_data_fifo_tx_re = 1'b0;
 			/* machine is idle */
@@ -683,7 +683,7 @@ begin: p_spi_fsm_inputs
 			if (s_spi_pr_state_delayed3 == ST_STAND_RX) begin
 				/* input current byte to enqueue, one bit at a time, shifting */
 				s_data_fifo_rx_in <= (s_t_delayed3 < (8 * s_rx_len_aux)) ?
-					{s_data_fifo_rx_in[6-:7], ei_miso_i} : 8'h00;
+					{s_data_fifo_rx_in[6-:7], ei_cipo_i} : 8'h00;
 
 				/* only if on last bit, enqueue another byte */
 				/* only if RX FIFO is not full, enqueue another byte */

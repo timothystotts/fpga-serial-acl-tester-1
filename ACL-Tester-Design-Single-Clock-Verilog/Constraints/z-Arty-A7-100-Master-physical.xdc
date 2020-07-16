@@ -49,7 +49,7 @@ set_property -dict { PACKAGE_PIN A18   IOSTANDARD LVCMOS33 } [get_ports {eo_ssd_
 set_property -dict { PACKAGE_PIN K16   IOSTANDARD LVCMOS33 } [get_ports {eo_ssd_pmod0[7]}]; #IO_25_15 Sch=ja[10]
 
 ## Pmod Header JB
-set_property -dict {PACKAGE_PIN E15 IOSTANDARD LVCMOS33} [get_ports {eo_pmod_cls_ssn}]; #IO_L11P_T1_SRCC_15 Sch=jb_p[1]
+set_property -dict {PACKAGE_PIN E15 IOSTANDARD LVCMOS33} [get_ports {eo_pmod_cls_csn}]; #IO_L11P_T1_SRCC_15 Sch=jb_p[1]
 set_property -dict {PACKAGE_PIN E16 IOSTANDARD LVCMOS33} [get_ports {eo_pmod_cls_dq0}]; #IO_L11N_T1_SRCC_15 Sch=jb_n[1]
 set_property -dict {PACKAGE_PIN D15 IOSTANDARD LVCMOS33} [get_ports {ei_pmod_cls_dq1}]; #IO_L12P_T1_MRCC_15 Sch=jb_p[2]
 set_property -dict {PACKAGE_PIN C15 IOSTANDARD LVCMOS33} [get_ports {eo_pmod_cls_sck}]; #IO_L12N_T1_MRCC_15 Sch=jb_n[2]
@@ -59,9 +59,9 @@ set_property -dict {PACKAGE_PIN C15 IOSTANDARD LVCMOS33} [get_ports {eo_pmod_cls
 #set_property -dict { PACKAGE_PIN J15   IOSTANDARD LVCMOS33 } [get_ports { jb[7] }]; #IO_L24N_T3_RS0_15 Sch=jb_n[4]
 
 ## Pmod Header JC
-set_property -dict {PACKAGE_PIN U12 IOSTANDARD LVCMOS33} [get_ports {eo_pmod_acl2_ssn}]; #IO_L20P_T3_A08_D24_14 Sch=jc_p[1]
-set_property -dict {PACKAGE_PIN V12 IOSTANDARD LVCMOS33} [get_ports {eo_pmod_acl2_mosi}]; #IO_L20N_T3_A07_D23_14 Sch=jc_n[1]
-set_property -dict {PACKAGE_PIN V10 IOSTANDARD LVCMOS33} [get_ports {ei_pmod_acl2_miso}]; #IO_L21P_T3_DQS_14 Sch=jc_p[2]
+set_property -dict {PACKAGE_PIN U12 IOSTANDARD LVCMOS33} [get_ports {eo_pmod_acl2_csn}]; #IO_L20P_T3_A08_D24_14 Sch=jc_p[1]
+set_property -dict {PACKAGE_PIN V12 IOSTANDARD LVCMOS33} [get_ports {eo_pmod_acl2_copi}]; #IO_L20N_T3_A07_D23_14 Sch=jc_n[1]
+set_property -dict {PACKAGE_PIN V10 IOSTANDARD LVCMOS33} [get_ports {ei_pmod_acl2_cipo}]; #IO_L21P_T3_DQS_14 Sch=jc_p[2]
 set_property -dict {PACKAGE_PIN V11 IOSTANDARD LVCMOS33} [get_ports {eo_pmod_acl2_sck}]; #IO_L21N_T3_DQS_A06_D22_14 Sch=jc_n[2]
 set_property -dict {PACKAGE_PIN U14 IOSTANDARD LVCMOS33} [get_ports {ei_pmod_acl2_int2}]; #IO_L22P_T3_A05_D21_14 Sch=jc_p[3]
 set_property -dict {PACKAGE_PIN V14 IOSTANDARD LVCMOS33} [get_ports {ei_pmod_acl2_int1}]; #IO_L22N_T3_A04_D20_14 Sch=jc_n[3]
@@ -160,7 +160,7 @@ set_property -dict {PACKAGE_PIN A9 IOSTANDARD LVCMOS33} [get_ports {ei_uart_rx}]
 #set_property -dict { PACKAGE_PIN A4    IOSTANDARD LVCMOS33 } [get_ports { ck_a10 }]; #IO_L8P_T1_AD14P_35 Sch=ad_p[14]
 #set_property -dict { PACKAGE_PIN A3    IOSTANDARD LVCMOS33 } [get_ports { ck_a11 }]; #IO_L8N_T1_AD14N_35 Sch=ad_n[14]
 
-## ChipKit SPI
+## ChipKit SPI - these signal names should be deprecated and replaced with updated standard names
 #set_property -dict { PACKAGE_PIN G1    IOSTANDARD LVCMOS33 } [get_ports { ck_miso }]; #IO_L17N_T2_35 Sch=ck_miso
 #set_property -dict { PACKAGE_PIN H1    IOSTANDARD LVCMOS33 } [get_ports { ck_mosi }]; #IO_L17P_T2_35 Sch=ck_mosi
 #set_property -dict { PACKAGE_PIN F1    IOSTANDARD LVCMOS33 } [get_ports { ck_sck }]; #IO_L18P_T2_35 Sch=ck_sck
