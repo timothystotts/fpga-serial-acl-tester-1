@@ -24,9 +24,8 @@
 /**-----------------------------------------------------------------------------
  * @file Experiment.c
  *
- * @brief A SoPC top-level design with the PMOD SF3 FreeRTOS driver.
- * This design erases a group of subsectors, programs the subsectors, and then
- * byte-compares the contents of the subsectors. The progress is displayed on
+ * @brief A SoPC top-level design with the PMOD ACL2 custom driver.
+ * This design tests and accelerometer. The readings are displayed on
  * a PMOD CLS 16x2 dot-matrix LCD and printed on a USB-UART display terminal.
  *
  * @author
@@ -179,25 +178,25 @@ void Experiment_prvAcl2Task( void *pvParameters )
 
 	/* Main execution loop. Change in switches 0,1 cause change of mode. */
 	for(;;) {
+		/* Update the Pmod SSD two digit seven segment display. */
+		Experiment_updateSSD(&experiData);
+
+		/* Update the color LEDs based on the current operating mode. */
+		Experiment_updateLedsDisplayMode(&experiData);
+
+		/* Update the basic LEDs based on current global statuses. */
+		Experiment_updateLedsStatuses(&experiData);
+
+		/* Update the Pmod CLS display based upon current state machine state and other variables */
+		Experiment_updateClsDisplayAndTerminal(&experiData);
+
+		/* Update the color LEDs based on the activity/inactivity events.
+		 * This is updated after the CLS and Terminal so that the display
+		 * update can track the beginning value CNT_START of cntActive and
+		 * cntInactive. */
+		Experiment_updateLedsEvents(&experiData);
+
 		for (int i = 0; i < 4; ++i) {
-			/* Update the Pmod SSD two digit seven segment display. */
-			Experiment_updateSSD(&experiData);
-
-			/* Update the color LEDs based on the current operating mode. */
-			Experiment_updateLedsDisplayMode(&experiData);
-
-			/* Update the basic LEDs based on current global statuses. */
-			Experiment_updateLedsStatuses(&experiData);
-
-			/* Update the Pmod CLS display based upon current state machine state and other variables */
-			Experiment_updateClsDisplayAndTerminal(&experiData);
-
-			/* Update the color LEDs based on the activity/inactivity events.
-			 * This is updated after the CLS and Terminal so that the display
-			 * update can track the beginning value CNT_START of cntActive and
-			 * cntInactive. */
-			Experiment_updateLedsEvents(&experiData);
-
 			/* Delay for 50 milliseconds. */
 			vTaskDelay( x50millisecond );
 

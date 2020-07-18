@@ -43,13 +43,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="0"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="32"/>
-    <Option Name="WTModelSimExportSim" Val="32"/>
-    <Option Name="WTQuestaExportSim" Val="32"/>
-    <Option Name="WTIesExportSim" Val="32"/>
-    <Option Name="WTVcsExportSim" Val="32"/>
-    <Option Name="WTRivieraExportSim" Val="32"/>
-    <Option Name="WTActivehdlExportSim" Val="32"/>
+    <Option Name="WTXSimExportSim" Val="33"/>
+    <Option Name="WTModelSimExportSim" Val="33"/>
+    <Option Name="WTQuestaExportSim" Val="33"/>
+    <Option Name="WTIesExportSim" Val="33"/>
+    <Option Name="WTVcsExportSim" Val="33"/>
+    <Option Name="WTRivieraExportSim" Val="33"/>
+    <Option Name="WTActivehdlExportSim" Val="33"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -70,17 +70,20 @@
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_dlmb_bram_if_cntlr_0/system_100T_dlmb_bram_if_cntlr_0.xci">
-          <Proxy FileSetName="system_100T_dlmb_bram_if_cntlr_0"/>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_microblaze_0_axi_intc_0/system_100T_microblaze_0_axi_intc_0.xci">
+          <Proxy FileSetName="system_100T_microblaze_0_axi_intc_0"/>
         </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_ilmb_v10_0/system_100T_ilmb_v10_0.xci">
-          <Proxy FileSetName="system_100T_ilmb_v10_0"/>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_xbar_0/system_100T_xbar_0.xci">
+          <Proxy FileSetName="system_100T_xbar_0"/>
         </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_ilmb_bram_if_cntlr_0/system_100T_ilmb_bram_if_cntlr_0.xci">
-          <Proxy FileSetName="system_100T_ilmb_bram_if_cntlr_0"/>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_mdm_1_0/system_100T_mdm_1_0.xci">
+          <Proxy FileSetName="system_100T_mdm_1_0"/>
         </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_lmb_bram_0/system_100T_lmb_bram_0.xci">
-          <Proxy FileSetName="system_100T_lmb_bram_0"/>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_proc_sys_reset_0_0/system_100T_proc_sys_reset_0_0.xci">
+          <Proxy FileSetName="system_100T_proc_sys_reset_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_MuxSSD_0_0/system_100T_MuxSSD_0_0.xci">
+          <Proxy FileSetName="system_100T_MuxSSD_0_0"/>
         </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_PmodACL2_0_5/system_100T_PmodACL2_0_5.xci">
           <Proxy FileSetName="system_100T_PmodACL2_0_5"/>
@@ -115,32 +118,29 @@
         <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_rst_mig_7series_0_83M_0/system_100T_rst_mig_7series_0_83M_0.xci">
           <Proxy FileSetName="system_100T_rst_mig_7series_0_83M_0"/>
         </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_mdm_1_0/system_100T_mdm_1_0.xci">
-          <Proxy FileSetName="system_100T_mdm_1_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_microblaze_0_axi_intc_0/system_100T_microblaze_0_axi_intc_0.xci">
-          <Proxy FileSetName="system_100T_microblaze_0_axi_intc_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_xbar_0/system_100T_xbar_0.xci">
-          <Proxy FileSetName="system_100T_xbar_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_microblaze_0_0/system_100T_microblaze_0_0.xci">
-          <Proxy FileSetName="system_100T_microblaze_0_0"/>
-        </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_clk_wiz_0_0/system_100T_clk_wiz_0_0.xci">
           <Proxy FileSetName="system_100T_clk_wiz_0_0"/>
         </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_mig_7series_0_0/system_100T_mig_7series_0_0.xci">
           <Proxy FileSetName="system_100T_mig_7series_0_0"/>
         </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_microblaze_0_0/system_100T_microblaze_0_0.xci">
+          <Proxy FileSetName="system_100T_microblaze_0_0"/>
+        </CompFileExtendedInfo>
         <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_dlmb_v10_0/system_100T_dlmb_v10_0.xci">
           <Proxy FileSetName="system_100T_dlmb_v10_0"/>
         </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_MuxSSD_0_0/system_100T_MuxSSD_0_0.xci">
-          <Proxy FileSetName="system_100T_MuxSSD_0_0"/>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_ilmb_v10_0/system_100T_ilmb_v10_0.xci">
+          <Proxy FileSetName="system_100T_ilmb_v10_0"/>
         </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_proc_sys_reset_0_0/system_100T_proc_sys_reset_0_0.xci">
-          <Proxy FileSetName="system_100T_proc_sys_reset_0_0"/>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_dlmb_bram_if_cntlr_0/system_100T_dlmb_bram_if_cntlr_0.xci">
+          <Proxy FileSetName="system_100T_dlmb_bram_if_cntlr_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_ilmb_bram_if_cntlr_0/system_100T_ilmb_bram_if_cntlr_0.xci">
+          <Proxy FileSetName="system_100T_ilmb_bram_if_cntlr_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_lmb_bram_0/system_100T_lmb_bram_0.xci">
+          <Proxy FileSetName="system_100T_lmb_bram_0"/>
         </CompFileExtendedInfo>
       </File>
       <File Path="$PPRDIR/../../IPI-BDs/system_100T/hdl/system_100T_wrapper.vhd">
@@ -317,12 +317,6 @@
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="system_100T_PmodACL2_0_5" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_PmodACL2_0_5">
-      <Config>
-        <Option Name="TopModule" Val="system_100T_PmodACL2_0_5"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
     <FileSet Name="system_100T_proc_sys_reset_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_proc_sys_reset_0_0">
       <Config>
         <Option Name="TopModule" Val="system_100T_proc_sys_reset_0_0"/>
@@ -332,6 +326,12 @@
     <FileSet Name="system_100T_MuxSSD_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_MuxSSD_0_0">
       <Config>
         <Option Name="TopModule" Val="system_100T_MuxSSD_0_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="system_100T_PmodACL2_0_5" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_PmodACL2_0_5">
+      <Config>
+        <Option Name="TopModule" Val="system_100T_PmodACL2_0_5"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
@@ -372,9 +372,7 @@
     </Run>
     <Run Id="system_100T_clk_wiz_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_clk_wiz_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_clk_wiz_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_clk_wiz_0_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -383,9 +381,7 @@
     </Run>
     <Run Id="system_100T_mig_7series_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_mig_7series_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_mig_7series_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_mig_7series_0_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -394,9 +390,7 @@
     </Run>
     <Run Id="system_100T_microblaze_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_microblaze_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_microblaze_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_microblaze_0_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -405,9 +399,7 @@
     </Run>
     <Run Id="system_100T_dlmb_v10_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_dlmb_v10_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_dlmb_v10_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_dlmb_v10_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -416,9 +408,7 @@
     </Run>
     <Run Id="system_100T_ilmb_v10_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_ilmb_v10_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_ilmb_v10_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_ilmb_v10_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -427,9 +417,7 @@
     </Run>
     <Run Id="system_100T_dlmb_bram_if_cntlr_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_dlmb_bram_if_cntlr_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_dlmb_bram_if_cntlr_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_dlmb_bram_if_cntlr_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -438,9 +426,7 @@
     </Run>
     <Run Id="system_100T_ilmb_bram_if_cntlr_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_ilmb_bram_if_cntlr_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_ilmb_bram_if_cntlr_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_ilmb_bram_if_cntlr_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -449,9 +435,7 @@
     </Run>
     <Run Id="system_100T_lmb_bram_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_lmb_bram_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_lmb_bram_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_lmb_bram_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -460,9 +444,7 @@
     </Run>
     <Run Id="system_100T_xbar_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_xbar_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_xbar_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_xbar_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -471,9 +453,7 @@
     </Run>
     <Run Id="system_100T_microblaze_0_axi_intc_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_microblaze_0_axi_intc_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_microblaze_0_axi_intc_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_microblaze_0_axi_intc_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -482,9 +462,7 @@
     </Run>
     <Run Id="system_100T_mdm_1_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_mdm_1_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_mdm_1_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_mdm_1_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -493,9 +471,7 @@
     </Run>
     <Run Id="system_100T_rst_mig_7series_0_83M_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_rst_mig_7series_0_83M_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_rst_mig_7series_0_83M_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_rst_mig_7series_0_83M_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -504,9 +480,7 @@
     </Run>
     <Run Id="system_100T_axi_uartlite_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_uartlite_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_uartlite_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_uartlite_0_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -515,9 +489,7 @@
     </Run>
     <Run Id="system_100T_axi_ethernetlite_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_ethernetlite_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_ethernetlite_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_ethernetlite_0_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -526,9 +498,7 @@
     </Run>
     <Run Id="system_100T_axi_timer_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_timer_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_timer_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_timer_0_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -537,9 +507,7 @@
     </Run>
     <Run Id="system_100T_axi_smc_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_smc_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_smc_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_smc_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -548,9 +516,7 @@
     </Run>
     <Run Id="system_100T_PWM_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_PWM_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PWM_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_PWM_0_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -559,9 +525,7 @@
     </Run>
     <Run Id="system_100T_PWM_1_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_PWM_1_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PWM_1_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_PWM_1_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -570,9 +534,7 @@
     </Run>
     <Run Id="system_100T_axi_gpio_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_gpio_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_gpio_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_gpio_0_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -581,9 +543,7 @@
     </Run>
     <Run Id="system_100T_axi_quad_spi_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_quad_spi_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_quad_spi_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_quad_spi_0_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -592,20 +552,7 @@
     </Run>
     <Run Id="system_100T_PmodCLS_0_6_synth_1" Type="Ft3:Synth" SrcSet="system_100T_PmodCLS_0_6" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PmodCLS_0_6" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_PmodCLS_0_6_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
-        <Step Id="synth_design"/>
-      </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2019"/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-    </Run>
-    <Run Id="system_100T_PmodACL2_0_5_synth_1" Type="Ft3:Synth" SrcSet="system_100T_PmodACL2_0_5" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PmodACL2_0_5" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_PmodACL2_0_5_synth_1" IncludeInArchive="true">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -614,9 +561,7 @@
     </Run>
     <Run Id="system_100T_proc_sys_reset_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_proc_sys_reset_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_proc_sys_reset_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_proc_sys_reset_0_0_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
-          <Desc>Vivado Synthesis Defaults</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
@@ -624,6 +569,15 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
     <Run Id="system_100T_MuxSSD_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_MuxSSD_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_MuxSSD_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_MuxSSD_0_0_synth_1" IncludeInArchive="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2019"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="system_100T_PmodACL2_0_5_synth_1" Type="Ft3:Synth" SrcSet="system_100T_PmodACL2_0_5" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PmodACL2_0_5" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_PmodACL2_0_5_synth_1" IncludeInArchive="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2019">
           <Desc>Vivado Synthesis Defaults</Desc>
@@ -655,9 +609,7 @@
     </Run>
     <Run Id="system_100T_clk_wiz_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_clk_wiz_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_clk_wiz_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -673,9 +625,7 @@
     </Run>
     <Run Id="system_100T_mig_7series_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_mig_7series_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_mig_7series_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -691,9 +641,7 @@
     </Run>
     <Run Id="system_100T_microblaze_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_microblaze_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_microblaze_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -709,9 +657,7 @@
     </Run>
     <Run Id="system_100T_dlmb_v10_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_dlmb_v10_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_dlmb_v10_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -727,9 +673,7 @@
     </Run>
     <Run Id="system_100T_ilmb_v10_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_ilmb_v10_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_ilmb_v10_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -745,9 +689,7 @@
     </Run>
     <Run Id="system_100T_dlmb_bram_if_cntlr_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_dlmb_bram_if_cntlr_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_dlmb_bram_if_cntlr_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -763,9 +705,7 @@
     </Run>
     <Run Id="system_100T_ilmb_bram_if_cntlr_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_ilmb_bram_if_cntlr_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_ilmb_bram_if_cntlr_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -781,9 +721,7 @@
     </Run>
     <Run Id="system_100T_lmb_bram_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_lmb_bram_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_lmb_bram_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -799,9 +737,7 @@
     </Run>
     <Run Id="system_100T_xbar_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_xbar_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_xbar_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -817,9 +753,7 @@
     </Run>
     <Run Id="system_100T_microblaze_0_axi_intc_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_microblaze_0_axi_intc_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_microblaze_0_axi_intc_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -835,9 +769,7 @@
     </Run>
     <Run Id="system_100T_mdm_1_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_mdm_1_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_mdm_1_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -853,9 +785,7 @@
     </Run>
     <Run Id="system_100T_rst_mig_7series_0_83M_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_rst_mig_7series_0_83M_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_rst_mig_7series_0_83M_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -871,9 +801,7 @@
     </Run>
     <Run Id="system_100T_axi_uartlite_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_uartlite_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_uartlite_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -889,9 +817,7 @@
     </Run>
     <Run Id="system_100T_axi_ethernetlite_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_ethernetlite_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_ethernetlite_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -907,9 +833,7 @@
     </Run>
     <Run Id="system_100T_axi_timer_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_timer_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_timer_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -925,9 +849,7 @@
     </Run>
     <Run Id="system_100T_axi_smc_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_smc_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_smc_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -943,9 +865,7 @@
     </Run>
     <Run Id="system_100T_PWM_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PWM_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_PWM_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -961,9 +881,7 @@
     </Run>
     <Run Id="system_100T_PWM_1_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PWM_1_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_PWM_1_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -979,9 +897,7 @@
     </Run>
     <Run Id="system_100T_axi_gpio_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_gpio_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_gpio_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -997,9 +913,7 @@
     </Run>
     <Run Id="system_100T_axi_quad_spi_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_quad_spi_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_quad_spi_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -1015,27 +929,7 @@
     </Run>
     <Run Id="system_100T_PmodCLS_0_6_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PmodCLS_0_6" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_PmodCLS_0_6_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
-        <Step Id="init_design"/>
-        <Step Id="opt_design"/>
-        <Step Id="power_opt_design"/>
-        <Step Id="place_design"/>
-        <Step Id="post_place_power_opt_design"/>
-        <Step Id="phys_opt_design"/>
-        <Step Id="route_design"/>
-        <Step Id="post_route_phys_opt_design"/>
-        <Step Id="write_bitstream"/>
-      </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2019"/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-    </Run>
-    <Run Id="system_100T_PmodACL2_0_5_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PmodACL2_0_5" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_PmodACL2_0_5_synth_1" IncludeInArchive="false" GenFullBitstream="true">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -1051,9 +945,7 @@
     </Run>
     <Run Id="system_100T_proc_sys_reset_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_proc_sys_reset_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_proc_sys_reset_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
-          <Desc>Default settings for Implementation.</Desc>
-        </StratHandle>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -1068,6 +960,22 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
     </Run>
     <Run Id="system_100T_MuxSSD_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_MuxSSD_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_MuxSSD_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
+        <Step Id="init_design"/>
+        <Step Id="opt_design"/>
+        <Step Id="power_opt_design"/>
+        <Step Id="place_design"/>
+        <Step Id="post_place_power_opt_design"/>
+        <Step Id="phys_opt_design"/>
+        <Step Id="route_design"/>
+        <Step Id="post_route_phys_opt_design"/>
+        <Step Id="write_bitstream"/>
+      </Strategy>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2019"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+    </Run>
+    <Run Id="system_100T_PmodACL2_0_5_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PmodACL2_0_5" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_PmodACL2_0_5_synth_1" IncludeInArchive="false" GenFullBitstream="true">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019">
           <Desc>Default settings for Implementation.</Desc>

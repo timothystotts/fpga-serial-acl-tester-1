@@ -1,7 +1,7 @@
 --Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
---Date        : Fri Jul 17 22:39:55 2020
+--Date        : Sat Jul 18 14:14:37 2020
 --Host        : l2study running 64-bit Ubuntu 18.04.4 LTS
 --Command     : generate_target system_100T_wrapper.bd
 --Design      : system_100T_wrapper
@@ -183,8 +183,8 @@ architecture STRUCTURE of system_100T_wrapper is
     jb_pin3_t : out STD_LOGIC;
     jb_pin8_o : out STD_LOGIC;
     push_buttons_4bits_tri_i : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    seg_gpio_ja_tri_o : out STD_LOGIC_VECTOR ( 6 downto 0 );
-    ssd_mux_ja_tri_o : out STD_LOGIC
+    ssd_mux_ja_tri_o : out STD_LOGIC;
+    seg_gpio_ja_tri_o : out STD_LOGIC_VECTOR ( 6 downto 0 )
   );
   end component system_100T;
   component IOBUF is
