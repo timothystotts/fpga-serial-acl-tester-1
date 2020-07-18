@@ -54,6 +54,7 @@
 #include "xintc.h"
 #include "xgpio.h"
 /* Project includes. */
+#include "thresh_presets_include.h"
 #include "MuxSSD.h"
 #include "PmodACL2custom.h"
 #include "PWM.h"
@@ -145,11 +146,12 @@ static void Experiment_operateFSM(t_experiment_data* expData);
 static void Experiment_iterationTimer(t_experiment_data* expData);
 static u8 Experiment_convertValueToSSD(u8 value);
 static void Experiment_updateSSD(t_experiment_data* expData);
+static void Experiment_presetLinkedMode(t_experiment_data* expData);
 
 /*-----------------------------------------------------------*/
 void Experiment_prvAcl2Task( void *pvParameters )
 {
-	const TickType_t x200millisecond = pdMS_TO_TICKS( DELAY_1_SECOND / 5 );
+	const TickType_t x50millisecond = pdMS_TO_TICKS( (DELAY_1_SECOND / 20) - (DELAY_1_SECOND / 1000) );
 
 	Experiment_InitData(&experiData);
 
@@ -177,29 +179,34 @@ void Experiment_prvAcl2Task( void *pvParameters )
 
 	/* Main execution loop. Change in switches 0,1 cause change of mode. */
 	for(;;) {
-		/* Update the Pmod SSD two digit seven segment display. */
-		Experiment_updateSSD(&experiData);
+		for (int i = 0; i < 4; ++i) {
+			/* Update the Pmod SSD two digit seven segment display. */
+			Experiment_updateSSD(&experiData);
 
-		/* Update the color LEDs based on the current operating mode. */
-		Experiment_updateLedsDisplayMode(&experiData);
+			/* Update the color LEDs based on the current operating mode. */
+			Experiment_updateLedsDisplayMode(&experiData);
 
-		/* Update the basic LEDs based on current global statuses. */
-		Experiment_updateLedsStatuses(&experiData);
+			/* Update the basic LEDs based on current global statuses. */
+			Experiment_updateLedsStatuses(&experiData);
 
-		/* Update the Pmod CLS display based upon current state machine state and other variables */
-		Experiment_updateClsDisplayAndTerminal(&experiData);
+			/* Update the Pmod CLS display based upon current state machine state and other variables */
+			Experiment_updateClsDisplayAndTerminal(&experiData);
 
-		/* Update the color LEDs based on the activity/inactivity events.
-		 * This is updated after the CLS and Terminal so that the display
-		 * update can track the beginning value CNT_START of cntActive and
-		 * cntInactive. */
-		Experiment_updateLedsEvents(&experiData);
+			/* Update the color LEDs based on the activity/inactivity events.
+			 * This is updated after the CLS and Terminal so that the display
+			 * update can track the beginning value CNT_START of cntActive and
+			 * cntInactive. */
+			Experiment_updateLedsEvents(&experiData);
 
-		/* Delay for 200 milliseconds. */
-		vTaskDelay( x200millisecond );
+			/* Delay for 50 milliseconds. */
+			vTaskDelay( x50millisecond );
 
-		/* Read the user inputs */
-		Experiment_readUserInputs(&experiData);
+			/* Read the user inputs */
+			Experiment_readUserInputs(&experiData);
+		}
+
+		/* Preset the threshold values */
+		Experiment_presetLinkedMode(&experiData);
 
 		/* Operate a single step of the Experiment FSM */
 		Experiment_operateFSM(&experiData);
@@ -598,4 +605,21 @@ static void Experiment_updateSSD(t_experiment_data* expData) {
 
 	MUXSSD_mWriteReg(XPAR_MUXSSD_0_S00_AXI_BASEADDR, MUXSSD_S00_AXI_SLV_REG0_OFFSET, right);
 	MUXSSD_mWriteReg(XPAR_MUXSSD_0_S00_AXI_BASEADDR, MUXSSD_S00_AXI_SLV_REG1_OFFSET, left);
+}
+
+/*-----------------------------------------------------------*/
+/* Update the Linked Mode presets so when the operator changes
+ * to Linked Mode or back again to Linked Mode, the configuration
+ * of the Pmod ACL2 uses the preset index matching the SSD display. */
+static void Experiment_presetLinkedMode(t_experiment_data* expData)
+{
+	if (expData->ssdDigitLeft < 16) {
+		expData->acl2Device.activeThresh = c_thresh_presets_active_a[0][expData->ssdDigitLeft];
+		expData->acl2Device.activeTimer = c_thresh_presets_active_a[1][expData->ssdDigitLeft];
+	}
+
+	if (expData->ssdDigitRight < 16) {
+		expData->acl2Device.inactiveThresh = c_thresh_presets_inactive_a[0][expData->ssdDigitLeft];
+		expData->acl2Device.inactiveTimer = c_thresh_presets_inactive_a[1][expData->ssdDigitLeft];
+	}
 }

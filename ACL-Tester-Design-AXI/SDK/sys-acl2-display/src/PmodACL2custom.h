@@ -120,6 +120,10 @@ typedef struct PmodACL2c {
    XSpi ACL2Spi;
    u32  GPIO_addr;
    u8   range;
+   u16  activeThresh;
+   u8   activeTimer;
+   u16  inactiveThresh;
+   u16  inactiveTimer;
 } PmodACL2c;
 
 /* ------------------------------------------------------------ */

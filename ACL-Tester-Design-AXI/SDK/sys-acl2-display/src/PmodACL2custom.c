@@ -69,6 +69,12 @@ void ACL2c_begin(PmodACL2c *InstancePtr, u32 GPIO_Address, u32 SPI_Address) {
 
    //initialize SPI device
    ACL2c_SPIInit(&InstancePtr->ACL2Spi);
+
+   // Initialize defaults for Linked Mode configuration
+   InstancePtr->activeThresh = 0x0020;
+   InstancePtr->activeTimer = 0x64;
+   InstancePtr->inactiveThresh = 0x001A;
+   InstancePtr->inactiveTimer = 0x0064;
 }
 
 void ACL2c_configureMeasureMode(PmodACL2c *InstancePtr) {
@@ -107,13 +113,14 @@ void ACL2c_configureLinkedMode(PmodACL2c *InstancePtr) {
    u8 value[7];
 
    // Configure the Activity and Inactivity thresholds and timers.
-   value[0] = 0x20; // Activity threshold is 0x0014
-   value[1] = 0x00;
-   value[2] = 0x64; // Activity timer is 0x64 at 100 Hz
-   value[3] = 0x1A; // Inactivity threshold is 0x0010
-   value[4] = 0x00;
-   value[5] = 0x64; // Inactivity timer is 0x64 at 100 Hz
-   value[6] = 0x00;
+   value[0] = (u8)(InstancePtr->activeThresh & 0xFF); // Activity threshold Low
+   value[1] = (u8)(InstancePtr->activeThresh >> 8); // Activity threshold High
+   value[2] = (InstancePtr->activeTimer); // Activity timer
+   value[3] = (u8)(InstancePtr->inactiveThresh & 0xFF); // Inactivity threshold Low
+   value[4] = (u8)(InstancePtr->inactiveThresh >> 8); // Inactivity threshold High
+   value[5] = (u8)(InstancePtr->inactiveTimer & 0xFF); // Inactivity timer Low
+   value[6] = (u8)(InstancePtr->inactiveTimer >> 8); // Inactivity timer High
+
    ACL2c_WriteSpi(InstancePtr, ACL2c_THRESH_ACT_L_REG, &value[0], 7);
 
    value[0] = 0x1F; // Enable the linked mode, and activity and inactivity functionality with relative measurements.
