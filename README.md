@@ -34,12 +34,17 @@ the feature/ssd_with_presets branch to add a single Pmod SSD to the Pmod Jack A 
 selecting among ten ADXL362 configuration preset values for each of Activity Detection threshold/timer
 and Inactivity Detection threshold/timer. The VHDL code is complete for this feature, but is not yet
 release ready. The Verilog code is also complete for this feature, but is not yet release ready.
+The IPI-BD AXI design is also complete for this feature, but is not yet release ready.
 Checkouts for the design without a Pmod SSD peripheral should refer to release tag
 Serial_ACL_Tester_Release_A . Checkouts for the latest experimental implementation of adding
 Pmod SSD to Pmod Jack JA and using Buttons 0 and 1 to select threshold/timer presets, should
-refer to tag Serial_ACL_Tester_HDL_Prerelease_2B or the HEAD of the master branch. The AXI design
-does not yet implement the Pmod SSD at Pmod Jack JA due to a limitation of the Digilent Inc.
-User IP for that Pmod.
+refer to tag Serial_ACL_Tester_HDL_Prerelease_4B or the HEAD of the master branch. The AXI design
+implements an alternative IP module instead of Pmod SSD user IP, called MuxSSD. This allows the
+FreeRTOS C code to implement a software driver to update two registers on the MuxSSD that control
+the discrete segments of each of the two Seven Segment digit emitters. The MuxSSD IP in the IPI-BD
+takes care of multiplexing the two digits with only 8 general purpose signals. The FreeRTOS
+program can write one or both digits at any time and expect continued display of both digits
+and no necessary timer usage for GPIO multiplexing in the user code.
 
 ### Naming conventions notice
 The Pmod peripherals used in this project connect via a standard bus technology design called SPI.
