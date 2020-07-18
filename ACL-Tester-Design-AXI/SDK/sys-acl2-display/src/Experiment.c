@@ -54,6 +54,7 @@
 #include "xintc.h"
 #include "xgpio.h"
 /* Project includes. */
+#include "MuxSSD.h"
 #include "PmodACL2custom.h"
 #include "PWM.h"
 #include "led_pwm.h"
@@ -107,6 +108,8 @@ typedef struct EXPERIMENT_DATA_TAG {
 	/* GPIO reading values at this point in the execution */
 	u32 switchesRead;
 	u32 buttonsRead;
+	u32 switchesReadPrev;
+	u32 buttonsReadPrev;
 	/* Timer count T for delay interval of the real-time task */
 	uint32_t cnt_t;
 	uint32_t cnt_t_freerun;
@@ -116,6 +119,9 @@ typedef struct EXPERIMENT_DATA_TAG {
 	u8 cntInactive;
 	/* raw data */
 	ACL2c_SamplePacket acl2Data;
+	/* SSD two digit values */
+	u8 ssdDigitRight;
+	u8 ssdDigitLeft;
 } t_experiment_data;
 
 t_experiment_data experiData; // Global as that the object is always in scope, including interrupt handler.
@@ -137,6 +143,8 @@ static void Experiment_updateClsDisplayAndTerminal(t_experiment_data* expData);
 static void Experiment_readUserInputs(t_experiment_data* expData);
 static void Experiment_operateFSM(t_experiment_data* expData);
 static void Experiment_iterationTimer(t_experiment_data* expData);
+static u8 Experiment_convertValueToSSD(u8 value);
+static void Experiment_updateSSD(t_experiment_data* expData);
 
 /*-----------------------------------------------------------*/
 void Experiment_prvAcl2Task( void *pvParameters )
@@ -169,6 +177,9 @@ void Experiment_prvAcl2Task( void *pvParameters )
 
 	/* Main execution loop. Change in switches 0,1 cause change of mode. */
 	for(;;) {
+		/* Update the Pmod SSD two digit seven segment display. */
+		Experiment_updateSSD(&experiData);
+
 		/* Update the color LEDs based on the current operating mode. */
 		Experiment_updateLedsDisplayMode(&experiData);
 
@@ -216,11 +227,15 @@ static void Experiment_InitData(t_experiment_data* expData) {
 	expData->acl2IsConfigured = ACL2_NEVERCONFIGURED;
 	expData->switchesRead = 0x00000000;
 	expData->buttonsRead = 0x00000000;
+	expData->switchesReadPrev = 0x00000000;
+	expData->buttonsReadPrev = 0x00000000;
 	expData->cnt_t = 0;
 	expData->cnt_t_freerun = 0;
 	expData->statusReg = 0;
 	expData->cntActive = CNT_DONE;
 	expData->cntInactive = CNT_DONE;
+	expData->ssdDigitRight = 0;
+	expData->ssdDigitLeft = 0;
 }
 
 /*-----------------------------------------------------------*/
@@ -415,8 +430,29 @@ static void Experiment_updateClsDisplayAndTerminal(t_experiment_data* expData) {
 /*-----------------------------------------------------------*/
 /* Helper function to read user inputs at this time. */
 static void Experiment_readUserInputs(t_experiment_data* expData) {
+	expData->switchesReadPrev = expData->switchesRead;
+	expData->buttonsReadPrev = expData->buttonsRead;
+
 	expData->switchesRead = XGpio_DiscreteRead(&(expData->axGpio), SWTCH_SW_CHANNEL);
 	expData->buttonsRead = XGpio_DiscreteRead(&(expData->axGpio), BTNS_SW_CHANNEL);
+
+	if ((expData->buttonsReadPrev == 0) && (expData->buttonsRead == BTN1_MASK)) {
+		if (expData->ssdDigitRight < 9) {
+			expData->ssdDigitRight += 1;
+		}
+		else {
+			expData->ssdDigitRight = 0;
+		}
+	}
+
+	if ((expData->buttonsReadPrev == 0) && (expData->buttonsRead == BTN0_MASK)) {
+		if (expData->ssdDigitLeft < 9) {
+			expData->ssdDigitLeft += 1;
+		}
+		else {
+			expData->ssdDigitLeft = 0;
+		}
+	}
 }
 
 /*-----------------------------------------------------------*/
@@ -493,4 +529,73 @@ static void Experiment_iterationTimer(t_experiment_data* expData) {
 
 	/* Track operating mode history (only one step back) */
 	expData->operatingModePrev = expData->operatingMode;
+}
+
+/*-----------------------------------------------------------*/
+/* Update the right and left digits of a PmodSSD */
+static u8 Experiment_convertValueToSSD(u8 value) {
+	u8 ret = 0x00;
+
+	switch(value) {
+	case 0:
+		ret = 0x3F;
+		break;
+	case 1:
+		ret = 0x06;
+		break;
+	case 2:
+		ret = 0x5B;
+		break;
+	case 3:
+		ret = 0x4F;
+		break;
+	case 4:
+		ret = 0x66;
+		break;
+	case 5:
+		ret = 0x6D;
+		break;
+	case 6:
+		ret = 0x7D;
+		break;
+	case 7:
+		ret = 0x07;
+		break;
+	case 8:
+		ret = 0x7F;
+		break;
+	case 9:
+		ret = 0x67;
+		break;
+	case 10:
+		ret = 0x77;
+		break;
+	case 11:
+		ret = 0x7C;
+		break;
+	case 12:
+		ret = 0x39;
+		break;
+	case 13:
+		ret = 0x5E;
+		break;
+	case 14:
+		ret = 0x79;
+		break;
+	case 15:
+		ret = 0x71;
+		break;
+	}
+
+	return ret;
+}
+
+/*-----------------------------------------------------------*/
+/* Update the right and left digits of a PmodSSD */
+static void Experiment_updateSSD(t_experiment_data* expData) {
+	u32 right = (u32) Experiment_convertValueToSSD(expData->ssdDigitRight);
+	u32 left = (u32) Experiment_convertValueToSSD(expData->ssdDigitLeft);
+
+	MUXSSD_mWriteReg(XPAR_MUXSSD_0_S00_AXI_BASEADDR, MUXSSD_S00_AXI_SLV_REG0_OFFSET, right);
+	MUXSSD_mWriteReg(XPAR_MUXSSD_0_S00_AXI_BASEADDR, MUXSSD_S00_AXI_SLV_REG1_OFFSET, left);
 }

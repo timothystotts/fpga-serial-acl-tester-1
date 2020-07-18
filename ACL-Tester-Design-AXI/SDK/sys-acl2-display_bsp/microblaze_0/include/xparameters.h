@@ -470,6 +470,17 @@
 
 /******************************************************************/
 
+/* Definitions for driver MUXSSD */
+#define XPAR_MUXSSD_NUM_INSTANCES 1
+
+/* Definitions for peripheral MUXSSD_0 */
+#define XPAR_MUXSSD_0_DEVICE_ID 0
+#define XPAR_MUXSSD_0_S00_AXI_BASEADDR 0x44A60000
+#define XPAR_MUXSSD_0_S00_AXI_HIGHADDR 0x44A6FFFF
+
+
+/******************************************************************/
+
 /* Definitions for driver PWM */
 #define XPAR_PWM_NUM_INSTANCES 2
 

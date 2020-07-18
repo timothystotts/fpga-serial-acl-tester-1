@@ -1,8 +1,8 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ------------------------------------------------------------------------------------------------------
-| Tool Version      : Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
-| Date              : Mon Jul  6 13:35:33 2020
-| Host              : J1STUDY running 64-bit major release  (build 9200)
+| Tool Version      : Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
+| Date              : Fri Jul 17 22:44:37 2020
+| Host              : l2study running 64-bit Ubuntu 18.04.4 LTS
 | Command           : report_clock_utilization -file system_100T_wrapper_clock_utilization_routed.rpt
 | Design            : system_100T_wrapper
 | Device            : 7a100ti-csg324
@@ -60,16 +60,16 @@ Table of Contents
 +-----------+-----------+-----------------+------------+----------------+--------------+-------------------+-------------+-----------------+--------------+-------------------------------------------------------------+-------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------+
 | Global Id | Source Id | Driver Type/Pin | Constraint | Site           | Clock Region | Load Clock Region | Clock Loads | Non-Clock Loads | Clock Period | Clock                                                       | Driver Pin                                                                                            | Net                                                                                                   |
 +-----------+-----------+-----------------+------------+----------------+--------------+-------------------+-------------+-----------------+--------------+-------------------------------------------------------------+-------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------+
-| g0        | src0      | BUFG/O          | None       | BUFGCTRL_X0Y0  | n/a          |                 6 |       14727 |               0 |       12.000 | clk_pll_i                                                   | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/u_bufg_clkdiv0/O  | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i_0 |
-| g1        | src1      | BUFG/O          | None       | BUFGCTRL_X0Y16 | n/a          |                 3 |         686 |               0 |       20.000 | clk_out4_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/clkout4_buf/O                                                            | system_100T_i/clk_wiz_0/inst/clk_out4                                                                 |
-| g2        | src2      | BUFG/O          | None       | BUFGCTRL_X0Y1  | n/a          |                 2 |         234 |               0 |       33.333 | system_100T_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/DRCK | system_100T_i/mdm_1/U0/No_Dbg_Reg_Access.BUFG_DRCK/Using_FPGA.Native/O                                | system_100T_i/mdm_1/U0/No_Dbg_Reg_Access.BUFG_DRCK/Ext_JTAG_DRCK                                      |
-| g3        | src1      | BUFG/O          | None       | BUFGCTRL_X0Y18 | n/a          |                 3 |          62 |               0 |        5.000 | clk_out2_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/clkout2_buf/O                                                            | system_100T_i/clk_wiz_0/inst/clk_out2                                                                 |
+| g0        | src0      | BUFG/O          | None       | BUFGCTRL_X0Y0  | n/a          |                 6 |       14898 |               0 |       12.000 | clk_pll_i                                                   | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/u_bufg_clkdiv0/O  | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i_0 |
+| g1        | src1      | BUFG/O          | None       | BUFGCTRL_X0Y16 | n/a          |                 3 |         742 |               0 |       20.000 | clk_out4_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/clkout4_buf/O                                                            | system_100T_i/clk_wiz_0/inst/clk_out4                                                                 |
+| g2        | src2      | BUFG/O          | None       | BUFGCTRL_X0Y1  | n/a          |                 3 |         234 |               0 |       33.333 | system_100T_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/DRCK | system_100T_i/mdm_1/U0/No_Dbg_Reg_Access.BUFG_DRCK/Using_FPGA.Native/O                                | system_100T_i/mdm_1/U0/No_Dbg_Reg_Access.BUFG_DRCK/Ext_JTAG_DRCK                                      |
+| g3        | src1      | BUFG/O          | None       | BUFGCTRL_X0Y18 | n/a          |                 2 |          62 |               0 |        5.000 | clk_out2_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/clkout2_buf/O                                                            | system_100T_i/clk_wiz_0/inst/clk_out2                                                                 |
 | g4        | src3      | BUFG/O          | None       | BUFGCTRL_X0Y19 | n/a          |                 3 |          59 |               1 |       40.000 | eth_mii_tx_clk                                              | system_100T_i/axi_ethernetlite_0/U0/NO_LOOPBACK_GEN.INCLUDE_BUFG_GEN.CLOCK_BUFG_TX/O                  | system_100T_i/axi_ethernetlite_0/U0/phy_tx_clk_core                                                   |
 | g5        | src4      | BUFG/O          | None       | BUFGCTRL_X0Y17 | n/a          |                 2 |          57 |               0 |       40.000 | eth_mii_rx_clk                                              | system_100T_i/axi_ethernetlite_0/U0/NO_LOOPBACK_GEN.INCLUDE_BUFG_GEN.CLOCK_BUFG_RX/O                  | system_100T_i/axi_ethernetlite_0/U0/C                                                                 |
-| g6        | src1      | BUFG/O          | None       | BUFGCTRL_X0Y20 | n/a          |                 1 |           1 |               0 |        6.000 | clk_out1_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/clkout1_buf/O                                                            | system_100T_i/clk_wiz_0/inst/clk_out1                                                                 |
-| g7        | src1      | BUFG/O          | None       | BUFGCTRL_X0Y22 | n/a          |                 1 |           1 |               0 |       10.000 | clkfbout_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/clkf_buf/O                                                               | system_100T_i/clk_wiz_0/inst/clkfbout_buf_system_100T_clk_wiz_0_0                                     |
-| g8        | src5      | BUFH/O          | None       | BUFHCE_X1Y12   | X1Y1         |                 1 |           1 |               0 |       12.000 | pll_clk3_out                                                | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/u_bufh_pll_clk3/O | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/pll_clk3          |
-| g9        | src1      | BUFG/O          | None       | BUFGCTRL_X0Y21 | n/a          |                 1 |           0 |               1 |       40.000 | clk_out3_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/clkout3_buf/O                                                            | system_100T_i/clk_wiz_0/inst/clk_out3                                                                 |
+| g6        | src1      | BUFG/O          | None       | BUFGCTRL_X0Y20 | n/a          |                 1 |          34 |               1 |       40.000 | clk_out3_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/clkout3_buf/O                                                            | system_100T_i/clk_wiz_0/inst/clk_out3                                                                 |
+| g7        | src1      | BUFG/O          | None       | BUFGCTRL_X0Y21 | n/a          |                 1 |           1 |               0 |        6.000 | clk_out1_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/clkout1_buf/O                                                            | system_100T_i/clk_wiz_0/inst/clk_out1                                                                 |
+| g8        | src1      | BUFG/O          | None       | BUFGCTRL_X0Y22 | n/a          |                 1 |           1 |               0 |       10.000 | clkfbout_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/clkf_buf/O                                                               | system_100T_i/clk_wiz_0/inst/clkfbout_buf_system_100T_clk_wiz_0_0                                     |
+| g9        | src5      | BUFH/O          | None       | BUFHCE_X1Y12   | X1Y1         |                 1 |           1 |               0 |       12.000 | pll_clk3_out                                                | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/u_bufh_pll_clk3/O | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/pll_clk3          |
 +-----------+-----------+-----------------+------------+----------------+--------------+-------------------+-------------+-----------------+--------------+-------------------------------------------------------------+-------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------+
 * Clock Loads column represents the clock pin loads (pin count)
 ** Non-Clock Loads column represents the non-clock pin loads (pin count)
@@ -82,15 +82,15 @@ Table of Contents
 | Source Id | Global Id | Driver Type/Pin     | Constraint      | Site            | Clock Region | Clock Loads | Non-Clock Loads | Source Clock Period | Source Clock                                                | Driver Pin                                                                                                   | Net                                                                                              |
 +-----------+-----------+---------------------+-----------------+-----------------+--------------+-------------+-----------------+---------------------+-------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
 | src0      | g0        | MMCME2_ADV/CLKFBOUT | MMCME2_ADV_X1Y1 | MMCME2_ADV_X1Y1 | X1Y1         |           1 |               0 |              12.000 | clk_pll_i                                                   | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i/CLKFBOUT | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/clk_pll_i    |
-| src1      | g6        | MMCME2_ADV/CLKOUT0  | None            | MMCME2_ADV_X1Y2 | X1Y2         |           1 |               0 |               6.000 | clk_out1_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/mmcm_adv_inst/CLKOUT0                                                           | system_100T_i/clk_wiz_0/inst/clk_out1_system_100T_clk_wiz_0_0                                    |
+| src1      | g7        | MMCME2_ADV/CLKOUT0  | None            | MMCME2_ADV_X1Y2 | X1Y2         |           1 |               0 |               6.000 | clk_out1_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/mmcm_adv_inst/CLKOUT0                                                           | system_100T_i/clk_wiz_0/inst/clk_out1_system_100T_clk_wiz_0_0                                    |
 | src1      | g3        | MMCME2_ADV/CLKOUT1  | None            | MMCME2_ADV_X1Y2 | X1Y2         |           1 |               0 |               5.000 | clk_out2_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/mmcm_adv_inst/CLKOUT1                                                           | system_100T_i/clk_wiz_0/inst/clk_out2_system_100T_clk_wiz_0_0                                    |
-| src1      | g9        | MMCME2_ADV/CLKOUT2  | None            | MMCME2_ADV_X1Y2 | X1Y2         |           1 |               0 |              40.000 | clk_out3_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/mmcm_adv_inst/CLKOUT2                                                           | system_100T_i/clk_wiz_0/inst/clk_out3_system_100T_clk_wiz_0_0                                    |
+| src1      | g6        | MMCME2_ADV/CLKOUT2  | None            | MMCME2_ADV_X1Y2 | X1Y2         |           1 |               0 |              40.000 | clk_out3_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/mmcm_adv_inst/CLKOUT2                                                           | system_100T_i/clk_wiz_0/inst/clk_out3_system_100T_clk_wiz_0_0                                    |
 | src1      | g1        | MMCME2_ADV/CLKOUT3  | None            | MMCME2_ADV_X1Y2 | X1Y2         |           1 |               0 |              20.000 | clk_out4_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/mmcm_adv_inst/CLKOUT3                                                           | system_100T_i/clk_wiz_0/inst/clk_out4_system_100T_clk_wiz_0_0                                    |
-| src1      | g7        | MMCME2_ADV/CLKFBOUT | None            | MMCME2_ADV_X1Y2 | X1Y2         |           1 |               0 |              10.000 | clkfbout_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/mmcm_adv_inst/CLKFBOUT                                                          | system_100T_i/clk_wiz_0/inst/clkfbout_system_100T_clk_wiz_0_0                                    |
+| src1      | g8        | MMCME2_ADV/CLKFBOUT | None            | MMCME2_ADV_X1Y2 | X1Y2         |           1 |               0 |              10.000 | clkfbout_system_100T_clk_wiz_0_0                            | system_100T_i/clk_wiz_0/inst/mmcm_adv_inst/CLKFBOUT                                                          | system_100T_i/clk_wiz_0/inst/clkfbout_system_100T_clk_wiz_0_0                                    |
 | src2      | g2        | BSCANE2/DRCK        | None            | BSCAN_X0Y1      | X0Y1         |           1 |               0 |              33.333 | system_100T_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/DRCK | system_100T_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/DRCK                                                  | system_100T_i/mdm_1/U0/Use_E2.BSCAN_I/DRCK                                                       |
 | src3      | g4        | IBUF/O              | IOB_X0Y124      | IOB_X0Y124      | X0Y2         |           1 |               0 |              40.000 | eth_mii_tx_clk                                              | system_100T_i/axi_ethernetlite_0/U0/NO_LOOPBACK_GEN.INCLUDE_BUFG_GEN.TX_IBUF_INST/O                          | system_100T_i/axi_ethernetlite_0/U0/o                                                            |
 | src4      | g5        | IBUF/O              | IOB_X0Y122      | IOB_X0Y122      | X0Y2         |           1 |               0 |              40.000 | eth_mii_rx_clk                                              | system_100T_i/axi_ethernetlite_0/U0/NO_LOOPBACK_GEN.INCLUDE_BUFG_GEN.RX_IBUF_INST/O                          | system_100T_i/axi_ethernetlite_0/U0/NO_LOOPBACK_GEN.INCLUDE_BUFG_GEN.RX_IBUF_INST_n_0            |
-| src5      | g8        | PLLE2_ADV/CLKOUT3   | PLLE2_ADV_X1Y1  | PLLE2_ADV_X1Y1  | X1Y1         |           1 |               0 |              12.000 | pll_clk3_out                                                | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/plle2_i/CLKOUT3          | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/pll_clk3_out |
+| src5      | g9        | PLLE2_ADV/CLKOUT3   | PLLE2_ADV_X1Y1  | PLLE2_ADV_X1Y1  | X1Y1         |           1 |               0 |              12.000 | pll_clk3_out                                                | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/plle2_i/CLKOUT3          | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/pll_clk3_out |
 +-----------+-----------+---------------------+-----------------+-----------------+--------------+-------------+-----------------+---------------------+-------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------+
 * Clock Loads column represents the clock pin loads (pin count)
 ** Non-Clock Loads column represents the non-clock pin loads (pin count)
@@ -120,12 +120,12 @@ Table of Contents
 +-------------------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+
 | Clock Region Name | Used | Avail | Used | Avail | Used | Avail | Used | Avail | Used | Avail | Used | Avail | Used | Avail | Used | Avail | Used | Avail | Used | Avail | Used | Avail | Used | Avail | Used | Avail | Used | Avail | Used | Avail |
 +-------------------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+
-| X0Y0              |    4 |    12 |    0 |     4 |    0 |     2 |    0 |     4 |    0 |     1 |    0 |     1 |    0 |     0 |    0 |     0 |    0 |    50 |    0 |    50 | 3221 |  2600 |  689 |   600 |    0 |    20 |    0 |    10 |    0 |    20 |
-| X1Y0              |    2 |    12 |    0 |     0 |    0 |     0 |    0 |     0 |    0 |     0 |    0 |     0 |    0 |     4 |    0 |     0 |    0 |     0 |    0 |     0 | 1547 |  1500 |  615 |   550 |    4 |    40 |   12 |    20 |    0 |    40 |
-| X0Y1              |    3 |    12 |    0 |     4 |    0 |     2 |    0 |     4 |    0 |     1 |    0 |     1 |    0 |     0 |    0 |     0 |    6 |    50 |    2 |    50 | 3356 |  2000 |  943 |   600 |    0 |    20 |    0 |    10 |    0 |    20 |
-| X1Y1              |    5 |    12 |    0 |     4 |    0 |     2 |    0 |     4 |    1 |     1 |    1 |     1 |    0 |     0 |    0 |     0 |    0 |    50 |    4 |    50 | 5056 |  1900 | 2057 |   650 |    0 |    60 |    6 |    30 |    0 |    40 |
-| X0Y2              |    6 |    12 |    0 |     4 |    0 |     2 |    0 |     4 |    0 |     1 |    0 |     1 |    0 |     0 |    0 |     0 |    8 |    50 |    6 |    50 |  555 |  2000 |  146 |   600 |    0 |    20 |    0 |    10 |    0 |    20 |
-| X1Y2              |    3 |    12 |    0 |     4 |    0 |     2 |    0 |     4 |    1 |     1 |    0 |     1 |    0 |     0 |    0 |     0 |    0 |    50 |    0 |    50 | 1108 |  1900 |  489 |   650 |    0 |    60 |    0 |    30 |    0 |    40 |
+| X0Y0              |    4 |    12 |    0 |     4 |    0 |     2 |    0 |     4 |    0 |     1 |    0 |     1 |    0 |     0 |    0 |     0 |    0 |    50 |    0 |    50 | 3328 |  2600 |  740 |   600 |    4 |    20 |    0 |    10 |    0 |    20 |
+| X1Y0              |    2 |    12 |    0 |     0 |    0 |     0 |    0 |     0 |    0 |     0 |    0 |     0 |    0 |     4 |    0 |     0 |    0 |     0 |    0 |     0 |  767 |  1500 |  249 |   550 |    0 |    40 |    9 |    20 |    0 |    40 |
+| X0Y1              |    4 |    12 |    0 |     4 |    0 |     2 |    0 |     4 |    0 |     1 |    0 |     1 |    0 |     0 |    0 |     0 |    6 |    50 |    2 |    50 | 3782 |  2000 | 1158 |   600 |    0 |    20 |    0 |    10 |    0 |    20 |
+| X1Y1              |    5 |    12 |    0 |     4 |    0 |     2 |    0 |     4 |    1 |     1 |    1 |     1 |    0 |     0 |    0 |     0 |    0 |    50 |    4 |    50 | 4327 |  1900 | 1747 |   650 |    0 |    60 |    9 |    30 |    0 |    40 |
+| X0Y2              |    6 |    12 |    0 |     4 |    0 |     2 |    0 |     4 |    0 |     1 |    0 |     1 |    0 |     0 |    0 |     0 |    8 |    50 |    6 |    50 | 1256 |  2000 |  306 |   600 |    0 |    20 |    0 |    10 |    0 |    20 |
+| X1Y2              |    2 |    12 |    0 |     4 |    0 |     2 |    0 |     4 |    1 |     1 |    0 |     1 |    0 |     0 |    0 |     0 |    0 |    50 |    0 |    50 | 1643 |  1900 |  651 |   650 |    0 |    60 |    0 |    30 |    0 |    40 |
 | X0Y3              |    0 |    12 |    0 |     4 |    0 |     2 |    0 |     4 |    0 |     1 |    0 |     1 |    0 |     0 |    0 |     0 |    0 |    50 |    0 |    50 |    0 |  2600 |    0 |   600 |    0 |    20 |    0 |    10 |    0 |    20 |
 | X1Y3              |    0 |    12 |    0 |     0 |    0 |     0 |    0 |     0 |    0 |     0 |    0 |     0 |    0 |     4 |    0 |     1 |    0 |     0 |    0 |     0 |    0 |  1350 |    0 |   500 |    0 |    30 |    0 |    15 |    0 |    40 |
 +-------------------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+------+-------+
@@ -140,8 +140,8 @@ All Modules
 |    | X0 | X1 |
 +----+----+----+
 | Y3 |  0 |  0 |
-| Y2 |  6 |  3 |
-| Y1 |  3 |  5 |
+| Y2 |  6 |  2 |
+| Y1 |  4 |  5 |
 | Y0 |  4 |  2 |
 +----+----+----+
 
@@ -152,7 +152,7 @@ All Modules
 +-----------+-----------------+-------------------+-----------+-------------+---------------+-------------+----------+----------------+----------+-------------------------------------------------------------------------------------------------------+
 | Global Id | Driver Type/Pin | Driver Region (D) | Clock     | Period (ns) | Waveform (ns) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                                                                                   |
 +-----------+-----------------+-------------------+-----------+-------------+---------------+-------------+----------+----------------+----------+-------------------------------------------------------------------------------------------------------+
-| g0        | BUFG/O          | n/a               | clk_pll_i |      12.000 | {0.000 6.000} |       14301 |        0 |              1 |        0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i_0 |
+| g0        | BUFG/O          | n/a               | clk_pll_i |      12.000 | {0.000 6.000} |       14472 |        0 |              1 |        0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i_0 |
 +-----------+-----------------+-------------------+-----------+-------------+---------------+-------------+----------+----------------+----------+-------------------------------------------------------------------------------------------------------+
 * Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
 ** IO Loads column represents load cell count of IO types
@@ -164,9 +164,9 @@ All Modules
 |    | X0    | X1    |
 +----+-------+-------+
 | Y3 |     0 |     0 |
-| Y2 |   488 |  1093 |
-| Y1 |  3153 |  5363 |
-| Y0 |  2730 |  1475 |
+| Y2 |  1142 |  1652 |
+| Y1 |  3311 |  4617 |
+| Y0 |  2988 |   763 |
 +----+-------+-------+
 
 
@@ -176,7 +176,7 @@ All Modules
 +-----------+-----------------+-------------------+----------------------------------+-------------+----------------+-------------+----------+----------------+----------+---------------------------------------+
 | Global Id | Driver Type/Pin | Driver Region (D) | Clock                            | Period (ns) | Waveform (ns)  | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                   |
 +-----------+-----------------+-------------------+----------------------------------+-------------+----------------+-------------+----------+----------------+----------+---------------------------------------+
-| g1        | BUFG/O          | n/a               | clk_out4_system_100T_clk_wiz_0_0 |      20.000 | {0.000 10.000} |         680 |        0 |              0 |        0 | system_100T_i/clk_wiz_0/inst/clk_out4 |
+| g1        | BUFG/O          | n/a               | clk_out4_system_100T_clk_wiz_0_0 |      20.000 | {0.000 10.000} |         736 |        0 |              0 |        0 | system_100T_i/clk_wiz_0/inst/clk_out4 |
 +-----------+-----------------+-------------------+----------------------------------+-------------+----------------+-------------+----------+----------------+----------+---------------------------------------+
 * Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
 ** IO Loads column represents load cell count of IO types
@@ -189,8 +189,8 @@ All Modules
 +----+------+----+
 | Y3 |    0 |  0 |
 | Y2 |    3 |  0 |
-| Y1 |  254 |  0 |
-| Y0 |  423 |  0 |
+| Y1 |  453 |  0 |
+| Y0 |  280 |  0 |
 +----+------+----+
 
 
@@ -208,14 +208,14 @@ All Modules
 **** GT Loads column represents load cell count of GT types
 
 
-+----+----+------+
-|    | X0 | X1   |
-+----+----+------+
-| Y3 |  0 |    0 |
-| Y2 |  0 |    0 |
-| Y1 |  0 |  106 |
-| Y0 |  0 |  128 |
-+----+----+------+
++----+------+------+
+|    | X0   | X1   |
++----+------+------+
+| Y3 |    0 |    0 |
+| Y2 |    0 |    0 |
+| Y1 |  101 |  118 |
+| Y0 |    0 |   15 |
++----+------+------+
 
 
 10. Device Cell Placement Summary for Global Clock g3
@@ -232,14 +232,14 @@ All Modules
 **** GT Loads column represents load cell count of GT types
 
 
-+----+-----+-----+
-|    | X0  | X1  |
-+----+-----+-----+
-| Y3 |   0 |   0 |
-| Y2 |  46 |  15 |
-| Y1 |   0 |   1 |
-| Y0 |   0 |   0 |
-+----+-----+-----+
++----+-----+----+
+|    | X0  | X1 |
++----+-----+----+
+| Y3 |   0 |  0 |
+| Y2 |  61 |  0 |
+| Y1 |   0 |  1 |
+| Y0 |   0 |  0 |
++----+-----+----+
 
 
 11. Device Cell Placement Summary for Global Clock g4
@@ -293,10 +293,34 @@ All Modules
 13. Device Cell Placement Summary for Global Clock g6
 -----------------------------------------------------
 
++-----------+-----------------+-------------------+----------------------------------+-------------+----------------+-------------+----------+----------------+----------+---------------------------------------+
+| Global Id | Driver Type/Pin | Driver Region (D) | Clock                            | Period (ns) | Waveform (ns)  | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                   |
++-----------+-----------------+-------------------+----------------------------------+-------------+----------------+-------------+----------+----------------+----------+---------------------------------------+
+| g6        | BUFG/O          | n/a               | clk_out3_system_100T_clk_wiz_0_0 |      40.000 | {0.000 20.000} |          34 |        1 |              0 |        0 | system_100T_i/clk_wiz_0/inst/clk_out3 |
++-----------+-----------------+-------------------+----------------------------------+-------------+----------------+-------------+----------+----------------+----------+---------------------------------------+
+* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
+** IO Loads column represents load cell count of IO types
+*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
+**** GT Loads column represents load cell count of GT types
+
+
++----+-----+----+
+|    | X0  | X1 |
++----+-----+----+
+| Y3 |   0 |  0 |
+| Y2 |  35 |  0 |
+| Y1 |   0 |  0 |
+| Y0 |   0 |  0 |
++----+-----+----+
+
+
+14. Device Cell Placement Summary for Global Clock g7
+-----------------------------------------------------
+
 +-----------+-----------------+-------------------+----------------------------------+-------------+---------------+-------------+----------+----------------+----------+---------------------------------------+
 | Global Id | Driver Type/Pin | Driver Region (D) | Clock                            | Period (ns) | Waveform (ns) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                   |
 +-----------+-----------------+-------------------+----------------------------------+-------------+---------------+-------------+----------+----------------+----------+---------------------------------------+
-| g6        | BUFG/O          | n/a               | clk_out1_system_100T_clk_wiz_0_0 |       6.000 | {0.000 3.000} |           0 |        0 |              1 |        0 | system_100T_i/clk_wiz_0/inst/clk_out1 |
+| g7        | BUFG/O          | n/a               | clk_out1_system_100T_clk_wiz_0_0 |       6.000 | {0.000 3.000} |           0 |        0 |              1 |        0 | system_100T_i/clk_wiz_0/inst/clk_out1 |
 +-----------+-----------------+-------------------+----------------------------------+-------------+---------------+-------------+----------+----------------+----------+---------------------------------------+
 * Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
 ** IO Loads column represents load cell count of IO types
@@ -314,13 +338,13 @@ All Modules
 +----+----+----+
 
 
-14. Device Cell Placement Summary for Global Clock g7
+15. Device Cell Placement Summary for Global Clock g8
 -----------------------------------------------------
 
 +-----------+-----------------+-------------------+----------------------------------+-------------+---------------+-------------+----------+----------------+----------+-------------------------------------------------------------------+
 | Global Id | Driver Type/Pin | Driver Region (D) | Clock                            | Period (ns) | Waveform (ns) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                                               |
 +-----------+-----------------+-------------------+----------------------------------+-------------+---------------+-------------+----------+----------------+----------+-------------------------------------------------------------------+
-| g7        | BUFG/O          | n/a               | clkfbout_system_100T_clk_wiz_0_0 |      10.000 | {0.000 5.000} |           0 |        0 |              1 |        0 | system_100T_i/clk_wiz_0/inst/clkfbout_buf_system_100T_clk_wiz_0_0 |
+| g8        | BUFG/O          | n/a               | clkfbout_system_100T_clk_wiz_0_0 |      10.000 | {0.000 5.000} |           0 |        0 |              1 |        0 | system_100T_i/clk_wiz_0/inst/clkfbout_buf_system_100T_clk_wiz_0_0 |
 +-----------+-----------------+-------------------+----------------------------------+-------------+---------------+-------------+----------+----------------+----------+-------------------------------------------------------------------+
 * Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
 ** IO Loads column represents load cell count of IO types
@@ -338,13 +362,13 @@ All Modules
 +----+----+----+
 
 
-15. Device Cell Placement Summary for Global Clock g8
+16. Device Cell Placement Summary for Global Clock g9
 -----------------------------------------------------
 
 +-----------+-----------------+-------------------+--------------+-------------+---------------+-------------+----------+----------------+----------+----------------------------------------------------------------------------------------------+
 | Global Id | Driver Type/Pin | Driver Region (D) | Clock        | Period (ns) | Waveform (ns) | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                                                                          |
 +-----------+-----------------+-------------------+--------------+-------------+---------------+-------------+----------+----------------+----------+----------------------------------------------------------------------------------------------+
-| g8        | BUFH/O          | X1Y1              | pll_clk3_out |      12.000 | {0.000 6.000} |           0 |        0 |              1 |        0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/pll_clk3 |
+| g9        | BUFH/O          | X1Y1              | pll_clk3_out |      12.000 | {0.000 6.000} |           0 |        0 |              1 |        0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/pll_clk3 |
 +-----------+-----------------+-------------------+--------------+-------------+---------------+-------------+----------+----------------+----------+----------------------------------------------------------------------------------------------+
 * Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
 ** IO Loads column represents load cell count of IO types
@@ -362,38 +386,14 @@ All Modules
 +----+----+--------+
 
 
-16. Device Cell Placement Summary for Global Clock g9
------------------------------------------------------
-
-+-----------+-----------------+-------------------+----------------------------------+-------------+----------------+-------------+----------+----------------+----------+---------------------------------------+
-| Global Id | Driver Type/Pin | Driver Region (D) | Clock                            | Period (ns) | Waveform (ns)  | Slice Loads | IO Loads | Clocking Loads | GT Loads | Net                                   |
-+-----------+-----------------+-------------------+----------------------------------+-------------+----------------+-------------+----------+----------------+----------+---------------------------------------+
-| g9        | BUFG/O          | n/a               | clk_out3_system_100T_clk_wiz_0_0 |      40.000 | {0.000 20.000} |           0 |        1 |              0 |        0 | system_100T_i/clk_wiz_0/inst/clk_out3 |
-+-----------+-----------------+-------------------+----------------------------------+-------------+----------------+-------------+----------+----------------+----------+---------------------------------------+
-* Slice Loads column represents load cell count of all cell types other than IO, GT and clock resources
-** IO Loads column represents load cell count of IO types
-*** Clocking Loads column represents load cell count that are clock resources (global clock buffer, MMCM, PLL, etc)
-**** GT Loads column represents load cell count of GT types
-
-
-+----+----+----+
-|    | X0 | X1 |
-+----+----+----+
-| Y3 |  0 |  0 |
-| Y2 |  1 |  0 |
-| Y1 |  0 |  0 |
-| Y0 |  0 |  0 |
-+----+----+----+
-
-
 17. Clock Region Cell Placement per Global Clock: Region X0Y0
 -------------------------------------------------------------
 
 +-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
 | Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF   | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                   |
 +-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
-| g0        | n/a   | BUFG/O          | None       |        2730 |               0 | 2712 |     18 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i_0 |
-| g1        | n/a   | BUFG/O          | None       |         423 |               0 |  423 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/clk_wiz_0/inst/clk_out4                                                                 |
+| g0        | n/a   | BUFG/O          | None       |        2988 |               0 | 2962 |     18 |    4 |   0 |  0 |    0 |   0 |       0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i_0 |
+| g1        | n/a   | BUFG/O          | None       |         280 |               0 |  280 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/clk_wiz_0/inst/clk_out4                                                                 |
 | g4        | n/a   | BUFG/O          | None       |          40 |               1 |   41 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/axi_ethernetlite_0/U0/phy_tx_clk_core                                                   |
 | g5        | n/a   | BUFG/O          | None       |          46 |               0 |   46 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/axi_ethernetlite_0/U0/C                                                                 |
 +-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
@@ -405,12 +405,12 @@ All Modules
 18. Clock Region Cell Placement per Global Clock: Region X1Y0
 -------------------------------------------------------------
 
-+-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
-| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF   | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                   |
-+-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
-| g0        | n/a   | BUFG/O          | None       |        1475 |               0 | 1436 |     19 |   16 |   0 |  0 |    0 |   0 |       0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i_0 |
-| g2        | n/a   | BUFG/O          | None       |         128 |               0 |  111 |     17 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/mdm_1/U0/No_Dbg_Reg_Access.BUFG_DRCK/Ext_JTAG_DRCK                                      |
-+-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
++-----------+-------+-----------------+------------+-------------+-----------------+-----+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF  | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                   |
++-----------+-------+-----------------+------------+-------------+-----------------+-----+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
+| g0        | n/a   | BUFG/O          | None       |         763 |               0 | 752 |      2 |    9 |   0 |  0 |    0 |   0 |       0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i_0 |
+| g2        | n/a   | BUFG/O          | None       |          15 |               0 |  15 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/mdm_1/U0/No_Dbg_Reg_Access.BUFG_DRCK/Ext_JTAG_DRCK                                      |
++-----------+-------+-----------------+------------+-------------+-----------------+-----+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
 * Clock Loads column represents the clock pin loads (pin count)
 ** Non-Clock Loads column represents the non-clock pin loads (pin count)
 *** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
@@ -422,8 +422,9 @@ All Modules
 +-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
 | Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF   | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                   |
 +-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
-| g0        | n/a   | BUFG/O          | None       |        3153 |               0 | 3093 |     60 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i_0 |
-| g1        | n/a   | BUFG/O          | None       |         254 |               0 |  253 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/clk_wiz_0/inst/clk_out4                                                                 |
+| g0        | n/a   | BUFG/O          | None       |        3311 |               0 | 3223 |     88 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i_0 |
+| g1        | n/a   | BUFG/O          | None       |         453 |               0 |  452 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/clk_wiz_0/inst/clk_out4                                                                 |
+| g2        | n/a   | BUFG/O          | None       |         101 |               0 |   97 |      4 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/mdm_1/U0/No_Dbg_Reg_Access.BUFG_DRCK/Ext_JTAG_DRCK                                      |
 | g4        | n/a   | BUFG/O          | None       |          10 |               0 |   10 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/axi_ethernetlite_0/U0/phy_tx_clk_core                                                   |
 +-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
 * Clock Loads column represents the clock pin loads (pin count)
@@ -437,11 +438,11 @@ All Modules
 +-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
 | Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF   | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                   |
 +-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
-| g0        | n/a   | BUFG/O          | None       |        5363 |               0 | 4957 |    370 |    6 |   0 |  0 |    1 |   0 |       0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i_0 |
-| g2        | n/a   | BUFG/O          | None       |         106 |               0 |   99 |      7 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/mdm_1/U0/No_Dbg_Reg_Access.BUFG_DRCK/Ext_JTAG_DRCK                                      |
+| g0        | n/a   | BUFG/O          | None       |        4617 |               0 | 4229 |    349 |    9 |   0 |  0 |    1 |   0 |       0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i_0 |
+| g2        | n/a   | BUFG/O          | None       |         118 |               0 |   98 |     20 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/mdm_1/U0/No_Dbg_Reg_Access.BUFG_DRCK/Ext_JTAG_DRCK                                      |
 | g3        | n/a   | BUFG/O          | None       |           1 |               0 |    0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/clk_wiz_0/inst/clk_out2                                                                 |
-| g6        | n/a   | BUFG/O          | None       |           1 |               0 |    0 |      0 |    0 |   0 |  0 |    0 |   1 |       0 | system_100T_i/clk_wiz_0/inst/clk_out1                                                                 |
-| g8        | n/a   | BUFH/O          | None       |           1 |               0 |    0 |      0 |    0 |   0 |  0 |    1 |   0 |       0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/pll_clk3          |
+| g7        | n/a   | BUFG/O          | None       |           1 |               0 |    0 |      0 |    0 |   0 |  0 |    0 |   1 |       0 | system_100T_i/clk_wiz_0/inst/clk_out1                                                                 |
+| g9        | n/a   | BUFH/O          | None       |           1 |               0 |    0 |      0 |    0 |   0 |  0 |    1 |   0 |       0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/pll_clk3          |
 +-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
 * Clock Loads column represents the clock pin loads (pin count)
 ** Non-Clock Loads column represents the non-clock pin loads (pin count)
@@ -451,16 +452,16 @@ All Modules
 21. Clock Region Cell Placement per Global Clock: Region X0Y2
 -------------------------------------------------------------
 
-+-----------+-------+-----------------+------------+-------------+-----------------+-----+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
-| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF  | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                   |
-+-----------+-------+-----------------+------------+-------------+-----------------+-----+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
-| g0        | n/a   | BUFG/O          | None       |         488 |               0 | 488 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i_0 |
-| g1        | n/a   | BUFG/O          | None       |           3 |               0 |   3 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/clk_wiz_0/inst/clk_out4                                                                 |
-| g3        | n/a   | BUFG/O          | None       |          46 |               0 |  45 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/clk_wiz_0/inst/clk_out2                                                                 |
-| g4        | n/a   | BUFG/O          | None       |           9 |               0 |   9 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/axi_ethernetlite_0/U0/phy_tx_clk_core                                                   |
-| g5        | n/a   | BUFG/O          | None       |          10 |               0 |  10 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/axi_ethernetlite_0/U0/C                                                                 |
-| g9        | n/a   | BUFG/O          | None       |           0 |               1 |   0 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/clk_wiz_0/inst/clk_out3                                                                 |
-+-----------+-------+-----------------+------------+-------------+-----------------+-----+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
+| Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF   | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                   |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
+| g0        | n/a   | BUFG/O          | None       |        1142 |               0 | 1141 |      1 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i_0 |
+| g1        | n/a   | BUFG/O          | None       |           3 |               0 |    3 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/clk_wiz_0/inst/clk_out4                                                                 |
+| g3        | n/a   | BUFG/O          | None       |          61 |               0 |   60 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/clk_wiz_0/inst/clk_out2                                                                 |
+| g4        | n/a   | BUFG/O          | None       |           9 |               0 |    9 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/axi_ethernetlite_0/U0/phy_tx_clk_core                                                   |
+| g5        | n/a   | BUFG/O          | None       |          10 |               0 |   10 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/axi_ethernetlite_0/U0/C                                                                 |
+| g6        | n/a   | BUFG/O          | None       |          34 |               1 |   33 |      1 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/clk_wiz_0/inst/clk_out3                                                                 |
++-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
 * Clock Loads column represents the clock pin loads (pin count)
 ** Non-Clock Loads column represents the non-clock pin loads (pin count)
 *** Columns FF, LUTRAM, RAMB through 'Hard IP' represents load cell counts
@@ -472,9 +473,8 @@ All Modules
 +-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
 | Global Id | Track | Driver Type/Pin | Constraint | Clock Loads | Non-Clock Loads | FF   | LUTRAM | RAMB | DSP | GT | MMCM | PLL | Hard IP | Net                                                                                                   |
 +-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
-| g0        | n/a   | BUFG/O          | None       |        1093 |               0 | 1093 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i_0 |
-| g3        | n/a   | BUFG/O          | None       |          15 |               0 |   15 |      0 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/clk_wiz_0/inst/clk_out2                                                                 |
-| g7        | n/a   | BUFG/O          | None       |           1 |               0 |    0 |      0 |    0 |   0 |  0 |    1 |   0 |       0 | system_100T_i/clk_wiz_0/inst/clkfbout_buf_system_100T_clk_wiz_0_0                                     |
+| g0        | n/a   | BUFG/O          | None       |        1652 |               0 | 1643 |      9 |    0 |   0 |  0 |    0 |   0 |       0 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/gen_mmcm.mmcm_i_0 |
+| g8        | n/a   | BUFG/O          | None       |           1 |               0 |    0 |      0 |    0 |   0 |  0 |    1 |   0 |       0 | system_100T_i/clk_wiz_0/inst/clkfbout_buf_system_100T_clk_wiz_0_0                                     |
 +-----------+-------+-----------------+------------+-------------+-----------------+------+--------+------+-----+----+------+-----+---------+-------------------------------------------------------------------------------------------------------+
 * Clock Loads column represents the clock pin loads (pin count)
 ** Non-Clock Loads column represents the non-clock pin loads (pin count)
@@ -487,9 +487,9 @@ set_property LOC BUFGCTRL_X0Y0 [get_cells system_100T_i/mig_7series_0/u_system_1
 set_property LOC BUFGCTRL_X0Y1 [get_cells system_100T_i/mdm_1/U0/No_Dbg_Reg_Access.BUFG_DRCK/Using_FPGA.Native]
 set_property LOC BUFGCTRL_X0Y22 [get_cells system_100T_i/clk_wiz_0/inst/clkf_buf]
 set_property LOC BUFGCTRL_X0Y16 [get_cells system_100T_i/clk_wiz_0/inst/clkout4_buf]
-set_property LOC BUFGCTRL_X0Y21 [get_cells system_100T_i/clk_wiz_0/inst/clkout3_buf]
+set_property LOC BUFGCTRL_X0Y20 [get_cells system_100T_i/clk_wiz_0/inst/clkout3_buf]
 set_property LOC BUFGCTRL_X0Y18 [get_cells system_100T_i/clk_wiz_0/inst/clkout2_buf]
-set_property LOC BUFGCTRL_X0Y20 [get_cells system_100T_i/clk_wiz_0/inst/clkout1_buf]
+set_property LOC BUFGCTRL_X0Y21 [get_cells system_100T_i/clk_wiz_0/inst/clkout1_buf]
 set_property LOC BUFGCTRL_X0Y19 [get_cells system_100T_i/axi_ethernetlite_0/U0/NO_LOOPBACK_GEN.INCLUDE_BUFG_GEN.CLOCK_BUFG_TX]
 set_property LOC BUFGCTRL_X0Y17 [get_cells system_100T_i/axi_ethernetlite_0/U0/NO_LOOPBACK_GEN.INCLUDE_BUFG_GEN.CLOCK_BUFG_RX]
 
@@ -515,7 +515,7 @@ resize_pblock [get_pblocks {CLKAG_system_100T_i/mig_7series_0/u_system_100T_mig_
 #startgroup
 create_pblock {CLKAG_system_100T_i/mdm_1/U0/No_Dbg_Reg_Access.BUFG_DRCK/Ext_JTAG_DRCK}
 add_cells_to_pblock [get_pblocks  {CLKAG_system_100T_i/mdm_1/U0/No_Dbg_Reg_Access.BUFG_DRCK/Ext_JTAG_DRCK}] [get_cells -filter { PRIMITIVE_GROUP != I/O && IS_PRIMITIVE==1 && PRIMITIVE_LEVEL !=INTERNAL } -of_object [get_pins -filter {DIRECTION==IN} -of_objects [get_nets -hierarchical -filter {PARENT=="system_100T_i/mdm_1/U0/No_Dbg_Reg_Access.BUFG_DRCK/Ext_JTAG_DRCK"}]]]
-resize_pblock [get_pblocks {CLKAG_system_100T_i/mdm_1/U0/No_Dbg_Reg_Access.BUFG_DRCK/Ext_JTAG_DRCK}] -add {CLOCKREGION_X1Y0:CLOCKREGION_X1Y0 CLOCKREGION_X1Y1:CLOCKREGION_X1Y1}
+resize_pblock [get_pblocks {CLKAG_system_100T_i/mdm_1/U0/No_Dbg_Reg_Access.BUFG_DRCK/Ext_JTAG_DRCK}] -add {CLOCKREGION_X0Y1:CLOCKREGION_X0Y1 CLOCKREGION_X1Y0:CLOCKREGION_X1Y0 CLOCKREGION_X1Y1:CLOCKREGION_X1Y1}
 #endgroup
 
 # Clock net "system_100T_i/clk_wiz_0/inst/clk_out4" driven by instance "system_100T_i/clk_wiz_0/inst/clkout4_buf" located at site "BUFGCTRL_X0Y16"
@@ -525,11 +525,18 @@ add_cells_to_pblock [get_pblocks  {CLKAG_system_100T_i/clk_wiz_0/inst/clk_out4}]
 resize_pblock [get_pblocks {CLKAG_system_100T_i/clk_wiz_0/inst/clk_out4}] -add {CLOCKREGION_X0Y0:CLOCKREGION_X0Y0 CLOCKREGION_X0Y1:CLOCKREGION_X0Y1 CLOCKREGION_X0Y2:CLOCKREGION_X0Y2}
 #endgroup
 
+# Clock net "system_100T_i/clk_wiz_0/inst/clk_out3" driven by instance "system_100T_i/clk_wiz_0/inst/clkout3_buf" located at site "BUFGCTRL_X0Y20"
+#startgroup
+create_pblock {CLKAG_system_100T_i/clk_wiz_0/inst/clk_out3}
+add_cells_to_pblock [get_pblocks  {CLKAG_system_100T_i/clk_wiz_0/inst/clk_out3}] [get_cells -filter { PRIMITIVE_GROUP != I/O && IS_PRIMITIVE==1 && PRIMITIVE_LEVEL !=INTERNAL && NAME!=eth_ref_clk_OBUF_inst} -of_object [get_pins -filter {DIRECTION==IN} -of_objects [get_nets -hierarchical -filter {PARENT=="system_100T_i/clk_wiz_0/inst/clk_out3"}]]]
+resize_pblock [get_pblocks {CLKAG_system_100T_i/clk_wiz_0/inst/clk_out3}] -add {CLOCKREGION_X0Y2:CLOCKREGION_X0Y2}
+#endgroup
+
 # Clock net "system_100T_i/clk_wiz_0/inst/clk_out2" driven by instance "system_100T_i/clk_wiz_0/inst/clkout2_buf" located at site "BUFGCTRL_X0Y18"
 #startgroup
 create_pblock {CLKAG_system_100T_i/clk_wiz_0/inst/clk_out2}
 add_cells_to_pblock [get_pblocks  {CLKAG_system_100T_i/clk_wiz_0/inst/clk_out2}] [get_cells -filter { PRIMITIVE_GROUP != I/O && IS_PRIMITIVE==1 && PRIMITIVE_LEVEL !=INTERNAL } -of_object [get_pins -filter {DIRECTION==IN} -of_objects [get_nets -hierarchical -filter {PARENT=="system_100T_i/clk_wiz_0/inst/clk_out2"}]]]
-resize_pblock [get_pblocks {CLKAG_system_100T_i/clk_wiz_0/inst/clk_out2}] -add {CLOCKREGION_X0Y2:CLOCKREGION_X0Y2 CLOCKREGION_X1Y1:CLOCKREGION_X1Y1 CLOCKREGION_X1Y2:CLOCKREGION_X1Y2}
+resize_pblock [get_pblocks {CLKAG_system_100T_i/clk_wiz_0/inst/clk_out2}] -add {CLOCKREGION_X0Y2:CLOCKREGION_X0Y2 CLOCKREGION_X1Y1:CLOCKREGION_X1Y1}
 #endgroup
 
 # Clock net "system_100T_i/axi_ethernetlite_0/U0/phy_tx_clk_core" driven by instance "system_100T_i/axi_ethernetlite_0/U0/NO_LOOPBACK_GEN.INCLUDE_BUFG_GEN.CLOCK_BUFG_TX" located at site "BUFGCTRL_X0Y19"

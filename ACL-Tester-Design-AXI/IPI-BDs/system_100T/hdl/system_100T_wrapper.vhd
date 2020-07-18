@@ -1,8 +1,8 @@
 --Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
---Tool Version: Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
---Date        : Mon Jul  6 13:26:55 2020
---Host        : J1STUDY running 64-bit major release  (build 9200)
+--Tool Version: Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
+--Date        : Fri Jul 17 22:39:55 2020
+--Host        : l2study running 64-bit Ubuntu 18.04.4 LTS
 --Command     : generate_target system_100T_wrapper.bd
 --Design      : system_100T_wrapper
 --Purpose     : IP block netlist
@@ -68,6 +68,8 @@ entity system_100T_wrapper is
     qspi_flash_sck_io : inout STD_LOGIC;
     qspi_flash_ss_io : inout STD_LOGIC;
     reset : in STD_LOGIC;
+    seg_gpio_ja_tri_o : out STD_LOGIC_VECTOR ( 6 downto 0 );
+    ssd_mux_ja_tri_o : out STD_LOGIC;
     sys_clock : in STD_LOGIC;
     usb_uart_rxd : in STD_LOGIC;
     usb_uart_txd : out STD_LOGIC
@@ -82,16 +84,6 @@ architecture STRUCTURE of system_100T_wrapper is
     eth_ref_clk : out STD_LOGIC;
     led03_rgb : out STD_LOGIC_VECTOR ( 11 downto 0 );
     led47 : out STD_LOGIC_VECTOR ( 3 downto 0 );
-    eth_mii_col : in STD_LOGIC;
-    eth_mii_crs : in STD_LOGIC;
-    eth_mii_rst_n : out STD_LOGIC;
-    eth_mii_rx_clk : in STD_LOGIC;
-    eth_mii_rx_dv : in STD_LOGIC;
-    eth_mii_rx_er : in STD_LOGIC;
-    eth_mii_rxd : in STD_LOGIC_VECTOR ( 3 downto 0 );
-    eth_mii_tx_clk : in STD_LOGIC;
-    eth_mii_tx_en : out STD_LOGIC;
-    eth_mii_txd : out STD_LOGIC_VECTOR ( 3 downto 0 );
     qspi_flash_io0_i : in STD_LOGIC;
     qspi_flash_io0_o : out STD_LOGIC;
     qspi_flash_io0_t : out STD_LOGIC;
@@ -110,8 +102,16 @@ architecture STRUCTURE of system_100T_wrapper is
     qspi_flash_ss_i : in STD_LOGIC;
     qspi_flash_ss_o : out STD_LOGIC;
     qspi_flash_ss_t : out STD_LOGIC;
-    usb_uart_rxd : in STD_LOGIC;
-    usb_uart_txd : out STD_LOGIC;
+    eth_mii_col : in STD_LOGIC;
+    eth_mii_crs : in STD_LOGIC;
+    eth_mii_rst_n : out STD_LOGIC;
+    eth_mii_rx_clk : in STD_LOGIC;
+    eth_mii_rx_dv : in STD_LOGIC;
+    eth_mii_rx_er : in STD_LOGIC;
+    eth_mii_rxd : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    eth_mii_tx_clk : in STD_LOGIC;
+    eth_mii_tx_en : out STD_LOGIC;
+    eth_mii_txd : out STD_LOGIC_VECTOR ( 3 downto 0 );
     dip_switches_4bits_tri_i : in STD_LOGIC_VECTOR ( 3 downto 0 );
     eth_mdio_mdc_mdc : out STD_LOGIC;
     eth_mdio_mdc_mdio_i : in STD_LOGIC;
@@ -132,30 +132,8 @@ architecture STRUCTURE of system_100T_wrapper is
     ddr3_sdram_cs_n : out STD_LOGIC_VECTOR ( 0 to 0 );
     ddr3_sdram_dm : out STD_LOGIC_VECTOR ( 1 downto 0 );
     ddr3_sdram_odt : out STD_LOGIC_VECTOR ( 0 to 0 );
-    jb_pin1_o : out STD_LOGIC;
-    jb_pin7_i : in STD_LOGIC;
-    jb_pin2_o : out STD_LOGIC;
-    jb_pin8_i : in STD_LOGIC;
-    jb_pin3_o : out STD_LOGIC;
-    jb_pin9_i : in STD_LOGIC;
-    jb_pin10_o : out STD_LOGIC;
-    jb_pin4_o : out STD_LOGIC;
-    jb_pin3_i : in STD_LOGIC;
-    jb_pin4_i : in STD_LOGIC;
-    jb_pin1_i : in STD_LOGIC;
-    jb_pin2_i : in STD_LOGIC;
-    jb_pin10_t : out STD_LOGIC;
-    jb_pin8_t : out STD_LOGIC;
-    jb_pin9_t : out STD_LOGIC;
-    jb_pin4_t : out STD_LOGIC;
-    jb_pin9_o : out STD_LOGIC;
-    jb_pin10_i : in STD_LOGIC;
-    jb_pin7_t : out STD_LOGIC;
-    jb_pin1_t : out STD_LOGIC;
-    jb_pin2_t : out STD_LOGIC;
-    jb_pin7_o : out STD_LOGIC;
-    jb_pin3_t : out STD_LOGIC;
-    jb_pin8_o : out STD_LOGIC;
+    usb_uart_rxd : in STD_LOGIC;
+    usb_uart_txd : out STD_LOGIC;
     jc_pin1_o : out STD_LOGIC;
     jc_pin7_i : in STD_LOGIC;
     jc_pin2_o : out STD_LOGIC;
@@ -180,7 +158,33 @@ architecture STRUCTURE of system_100T_wrapper is
     jc_pin7_o : out STD_LOGIC;
     jc_pin3_t : out STD_LOGIC;
     jc_pin8_o : out STD_LOGIC;
-    push_buttons_4bits_tri_i : in STD_LOGIC_VECTOR ( 3 downto 0 )
+    jb_pin1_o : out STD_LOGIC;
+    jb_pin7_i : in STD_LOGIC;
+    jb_pin2_o : out STD_LOGIC;
+    jb_pin8_i : in STD_LOGIC;
+    jb_pin3_o : out STD_LOGIC;
+    jb_pin9_i : in STD_LOGIC;
+    jb_pin10_o : out STD_LOGIC;
+    jb_pin4_o : out STD_LOGIC;
+    jb_pin3_i : in STD_LOGIC;
+    jb_pin4_i : in STD_LOGIC;
+    jb_pin1_i : in STD_LOGIC;
+    jb_pin2_i : in STD_LOGIC;
+    jb_pin10_t : out STD_LOGIC;
+    jb_pin8_t : out STD_LOGIC;
+    jb_pin9_t : out STD_LOGIC;
+    jb_pin4_t : out STD_LOGIC;
+    jb_pin9_o : out STD_LOGIC;
+    jb_pin10_i : in STD_LOGIC;
+    jb_pin7_t : out STD_LOGIC;
+    jb_pin1_t : out STD_LOGIC;
+    jb_pin2_t : out STD_LOGIC;
+    jb_pin7_o : out STD_LOGIC;
+    jb_pin3_t : out STD_LOGIC;
+    jb_pin8_o : out STD_LOGIC;
+    push_buttons_4bits_tri_i : in STD_LOGIC_VECTOR ( 3 downto 0 );
+    seg_gpio_ja_tri_o : out STD_LOGIC_VECTOR ( 6 downto 0 );
+    ssd_mux_ja_tri_o : out STD_LOGIC
   );
   end component system_100T;
   component IOBUF is
@@ -525,6 +529,8 @@ system_100T_i: component system_100T
       qspi_flash_ss_o => qspi_flash_ss_o,
       qspi_flash_ss_t => qspi_flash_ss_t,
       reset => reset,
+      seg_gpio_ja_tri_o(6 downto 0) => seg_gpio_ja_tri_o(6 downto 0),
+      ssd_mux_ja_tri_o => ssd_mux_ja_tri_o,
       sys_clock => sys_clock,
       usb_uart_rxd => usb_uart_rxd,
       usb_uart_txd => usb_uart_txd

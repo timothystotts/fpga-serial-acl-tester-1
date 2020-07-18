@@ -1,8 +1,8 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| Tool Version     : Vivado v.2019.1 (win64) Build 2552052 Fri May 24 14:49:42 MDT 2019
-| Date             : Mon Jul  6 13:35:28 2020
-| Host             : J1STUDY running 64-bit major release  (build 9200)
+| Tool Version     : Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
+| Date             : Fri Jul 17 22:44:33 2020
+| Host             : l2study running 64-bit Ubuntu 18.04.4 LTS
 | Command          : report_power -file system_100T_wrapper_power_routed.rpt -pb system_100T_wrapper_power_summary_routed.pb -rpx system_100T_wrapper_power_routed.rpx
 | Design           : system_100T_wrapper
 | Device           : xc7a100ticsg324-1L
@@ -30,7 +30,7 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.910        |
+| Total On-Chip Power (W)  | 0.911        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
 | Dynamic (W)              | 0.819        |
@@ -53,23 +53,23 @@ Table of Contents
 | On-Chip                  | Power (W) | Used     | Available | Utilization (%) |
 +--------------------------+-----------+----------+-----------+-----------------+
 | Clocks                   |     0.052 |       30 |       --- |             --- |
-| Slice Logic              |     0.021 |    34695 |       --- |             --- |
-|   LUT as Logic           |     0.017 |    11726 |     63400 |           18.50 |
+| Slice Logic              |     0.021 |    35084 |       --- |             --- |
+|   LUT as Logic           |     0.017 |    11827 |     63400 |           18.65 |
 |   LUT as Distributed RAM |     0.002 |     1414 |     19000 |            7.44 |
-|   Register               |     0.001 |    14864 |    126800 |           11.72 |
-|   CARRY4                 |    <0.001 |      330 |     15850 |            2.08 |
-|   LUT as Shift Register  |    <0.001 |      419 |     19000 |            2.21 |
+|   Register               |     0.001 |    15124 |    126800 |           11.93 |
+|   CARRY4                 |    <0.001 |      335 |     15850 |            2.11 |
+|   LUT as Shift Register  |    <0.001 |      420 |     19000 |            2.21 |
 |   F7/F8 Muxes            |    <0.001 |      177 |     63400 |            0.28 |
-|   Others                 |    <0.001 |     1521 |       --- |             --- |
-| Signals                  |     0.027 |    24332 |       --- |             --- |
+|   Others                 |    <0.001 |     1536 |       --- |             --- |
+| Signals                  |     0.026 |    24660 |       --- |             --- |
 | Block RAM                |     0.025 |     22.5 |       135 |           16.67 |
 | MMCM                     |     0.195 |        2 |         6 |           33.33 |
 | PLL                      |     0.116 |        1 |         6 |           16.67 |
-| I/O                      |     0.268 |      116 |       210 |           55.24 |
+| I/O                      |     0.268 |      124 |       210 |           59.05 |
 | PHASER                   |     0.111 |       14 |       --- |             --- |
 | XADC                     |     0.004 |        1 |       --- |             --- |
 | Static Power             |     0.092 |          |           |                 |
-| Total                    |     0.910 |          |           |                 |
+| Total                    |     0.911 |          |           |                 |
 +--------------------------+-----------+----------+-----------+-----------------+
 
 
@@ -79,7 +79,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) |
 +-----------+-------------+-----------+-------------+------------+
-| Vccint    |       0.950 |     0.177 |       0.166 |      0.011 |
+| Vccint    |       0.950 |     0.178 |       0.167 |      0.011 |
 | Vccaux    |       1.800 |     0.289 |       0.273 |      0.017 |
 | Vcco33    |       3.300 |     0.006 |       0.002 |      0.004 |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |
@@ -177,8 +177,8 @@ Table of Contents
 +-----------------------------------------+-----------+
 | system_100T_wrapper                     |     0.819 |
 |   system_100T_i                         |     0.811 |
-|     PWM_0                               |     0.002 |
-|       inst                              |     0.002 |
+|     PWM_0                               |     0.003 |
+|       inst                              |     0.003 |
 |     PWM_1                               |     0.001 |
 |       inst                              |     0.001 |
 |     PmodACL2_0                          |     0.003 |
@@ -201,8 +201,8 @@ Table of Contents
 |       xbar                              |     0.001 |
 |     microblaze_0_local_memory           |     0.003 |
 |       lmb_bram                          |     0.003 |
-|     mig_7series_0                       |     0.611 |
-|       u_system_100T_mig_7series_0_0_mig |     0.610 |
+|     mig_7series_0                       |     0.610 |
+|       u_system_100T_mig_7series_0_0_mig |     0.609 |
 +-----------------------------------------+-----------+
 
 
