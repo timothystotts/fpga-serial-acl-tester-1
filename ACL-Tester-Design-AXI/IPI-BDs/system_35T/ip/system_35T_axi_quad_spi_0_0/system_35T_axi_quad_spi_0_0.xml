@@ -4588,11 +4588,11 @@ This bit has no significance in dual or quad mode.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Jul 06 20:08:41 UTC 2020</spirit:value>
+            <spirit:value>Sat Jul 18 23:35:35 UTC 2020</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:df852780</spirit:value>
+            <spirit:value>9:bc25eb65</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -4603,7 +4603,7 @@ This bit has no significance in dual or quad mode.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:df852780</spirit:value>
+            <spirit:value>9:bc25eb65</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -4619,11 +4619,11 @@ This bit has no significance in dual or quad mode.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Jul 06 20:08:41 UTC 2020</spirit:value>
+            <spirit:value>Sat Jul 18 23:35:35 UTC 2020</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:df852780</spirit:value>
+            <spirit:value>9:bc25eb65</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -4662,11 +4662,11 @@ This bit has no significance in dual or quad mode.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Jul 06 20:08:41 UTC 2020</spirit:value>
+            <spirit:value>Sat Jul 18 23:35:35 UTC 2020</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:e9418e14</spirit:value>
+            <spirit:value>9:b172c1ae</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -4682,11 +4682,11 @@ This bit has no significance in dual or quad mode.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Jul 06 20:08:41 UTC 2020</spirit:value>
+            <spirit:value>Sat Jul 18 23:35:35 UTC 2020</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:e9418e14</spirit:value>
+            <spirit:value>9:b172c1ae</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -4700,11 +4700,11 @@ This bit has no significance in dual or quad mode.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Jul 06 20:08:41 UTC 2020</spirit:value>
+            <spirit:value>Sat Jul 18 23:35:35 UTC 2020</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:df852780</spirit:value>
+            <spirit:value>9:bc25eb65</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -4718,11 +4718,11 @@ This bit has no significance in dual or quad mode.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Mon Jul 06 20:17:09 UTC 2020</spirit:value>
+            <spirit:value>Sat Jul 18 23:50:51 UTC 2020</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:df852780</spirit:value>
+            <spirit:value>9:bc25eb65</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -7142,7 +7142,7 @@ This bit has no significance in dual or quad mode.
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_FIFO_DEPTH</spirit:name>
         <spirit:displayName>FIFO Depth</spirit:displayName>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_FIFO_DEPTH">16</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_FIFO_DEPTH">256</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_SCK_RATIO</spirit:name>
@@ -7186,7 +7186,7 @@ This bit has no significance in dual or quad mode.
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_SPI_MEMORY</spirit:name>
         <spirit:displayName>SPI Memory</spirit:displayName>
-        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_SPI_MEMORY" spirit:minimum="0" spirit:maximum="4" spirit:rangeType="long">2</spirit:value>
+        <spirit:value spirit:format="long" spirit:resolve="generated" spirit:id="MODELPARAM_VALUE.C_SPI_MEMORY" spirit:minimum="0" spirit:maximum="4" spirit:rangeType="long">3</spirit:value>
       </spirit:modelParameter>
       <spirit:modelParameter spirit:dataType="integer">
         <spirit:name>C_S_AXI_ADDR_WIDTH</spirit:name>
@@ -7884,7 +7884,7 @@ This bit has no significance in dual or quad mode.
       <spirit:name>C_SPI_MEMORY</spirit:name>
       <spirit:displayName>SPI Memory</spirit:displayName>
       <spirit:description>This parameter should be set for tagetting the SPI flash memory. Please refer PG for more reference. Allowed values are 0= Mixed Flash, 1= Winbond SPI Flash, 2= Micron SPI Flash(Numonyx), 3= Spansion SPI Flash, 4= Macronix SPI Flash.</spirit:description>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C_SPI_MEMORY" spirit:choiceRef="choice_pairs_b1f7d961" spirit:order="40">2</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C_SPI_MEMORY" spirit:choiceRef="choice_pairs_b1f7d961" spirit:order="40">3</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -7988,7 +7988,7 @@ This bit has no significance in dual or quad mode.
       <spirit:name>C_FIFO_DEPTH</spirit:name>
       <spirit:displayName>FIFO Depth</spirit:displayName>
       <spirit:description>This parameter should be set while choosing FIFO depth. Please refer PG for more reference. Standard SPI mode provides the choice 0 or 16 or 256 beat FIFO depth, while Dual and Quad mode provides options of 16 or 256 beat FIFO depth.</spirit:description>
-      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C_FIFO_DEPTH" spirit:choiceRef="choice_list_0051c444" spirit:order="100">16</spirit:value>
+      <spirit:value spirit:format="long" spirit:resolve="user" spirit:id="PARAM_VALUE.C_FIFO_DEPTH" spirit:choiceRef="choice_list_0051c444" spirit:order="100">256</spirit:value>
       <spirit:vendorExtensions>
         <xilinx:parameterInfo>
           <xilinx:enablement>
@@ -8279,6 +8279,7 @@ This bit has no significance in dual or quad mode.
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.SPI_CLK.FREQ_HZ" xilinx:valueSource="ip_propagated" xilinx:valuePermission="bd"/>
         <xilinx:configElementInfo xilinx:referenceId="BUSIFPARAM_VALUE.SPI_CLK.PHASE" xilinx:valueSource="ip_propagated" xilinx:valuePermission="bd"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.Async_Clk" xilinx:valueSource="propagated"/>
+        <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.C_FIFO_DEPTH" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.C_SCK_RATIO" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.C_SPI_MEMORY" xilinx:valueSource="user"/>
         <xilinx:configElementInfo xilinx:referenceId="PARAM_VALUE.C_SPI_MODE" xilinx:valueSource="user"/>
