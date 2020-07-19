@@ -1,8 +1,8 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
-| Date         : Thu Jul  2 16:21:17 2020
-| Host         : ubuntu running 64-bit Ubuntu 18.04.4 LTS
+| Date         : Sat Jul 18 20:39:15 2020
+| Host         : l2study running 64-bit Ubuntu 18.04.4 LTS
 | Command      : report_utilization -file fpga_serial_acl_tester_utilization_synth.rpt -pb fpga_serial_acl_tester_utilization_synth.pb
 | Design       : fpga_serial_acl_tester
 | Device       : 7a35ticsg324-1L
@@ -30,14 +30,14 @@ Table of Contents
 +-------------------------+------+-------+-----------+-------+
 |        Site Type        | Used | Fixed | Available | Util% |
 +-------------------------+------+-------+-----------+-------+
-| Slice LUTs*             | 3531 |     0 |     20800 | 16.98 |
-|   LUT as Logic          | 3531 |     0 |     20800 | 16.98 |
+| Slice LUTs*             | 3734 |     0 |     20800 | 17.95 |
+|   LUT as Logic          | 3734 |     0 |     20800 | 17.95 |
 |   LUT as Memory         |    0 |     0 |      9600 |  0.00 |
-| Slice Registers         | 2376 |     0 |     41600 |  5.71 |
-|   Register as Flip Flop | 2376 |     0 |     41600 |  5.71 |
+| Slice Registers         | 2540 |     0 |     41600 |  6.11 |
+|   Register as Flip Flop | 2540 |     0 |     41600 |  6.11 |
 |   Register as Latch     |    0 |     0 |     41600 |  0.00 |
-| F7 Muxes                |   13 |     0 |     16300 |  0.08 |
-| F8 Muxes                |    6 |     0 |      8150 |  0.07 |
+| F7 Muxes                |    0 |     0 |     16300 |  0.00 |
+| F8 Muxes                |    0 |     0 |      8150 |  0.00 |
 +-------------------------+------+-------+-----------+-------+
 * Warning! The Final LUT count, after physical optimizations and full implementation, is typically lower. Run opt_design after synthesis, if not already completed, for a more realistic count.
 
@@ -56,8 +56,8 @@ Table of Contents
 | 0     |          Yes |           - |            - |
 | 28    |          Yes |           - |          Set |
 | 0     |          Yes |           - |        Reset |
-| 261   |          Yes |         Set |            - |
-| 2087  |          Yes |       Reset |            - |
+| 262   |          Yes |         Set |            - |
+| 2250  |          Yes |       Reset |            - |
 +-------+--------------+-------------+--------------+
 
 
@@ -92,7 +92,7 @@ Table of Contents
 +-----------------------------+------+-------+-----------+-------+
 |          Site Type          | Used | Fixed | Available | Util% |
 +-----------------------------+------+-------+-----------+-------+
-| Bonded IOB                  |   37 |     0 |       210 | 17.62 |
+| Bonded IOB                  |   45 |     0 |       210 | 21.43 |
 | Bonded IPADs                |    0 |     0 |         2 |  0.00 |
 | PHY_CONTROL                 |    0 |     0 |         5 |  0.00 |
 | PHASER_REF                  |    0 |     0 |         5 |  0.00 |
@@ -148,21 +148,19 @@ Table of Contents
 +------------+------+---------------------+
 |  Ref Name  | Used | Functional Category |
 +------------+------+---------------------+
-| FDRE       | 2087 |        Flop & Latch |
-| LUT4       |  925 |                 LUT |
-| LUT2       |  902 |                 LUT |
-| LUT6       |  887 |                 LUT |
-| LUT5       |  707 |                 LUT |
-| LUT1       |  616 |                 LUT |
-| CARRY4     |  561 |          CarryLogic |
-| LUT3       |  475 |                 LUT |
-| FDSE       |  261 |        Flop & Latch |
+| FDRE       | 2250 |        Flop & Latch |
+| LUT4       | 1009 |                 LUT |
+| LUT2       |  973 |                 LUT |
+| LUT6       |  838 |                 LUT |
+| LUT5       |  774 |                 LUT |
+| LUT3       |  662 |                 LUT |
+| LUT1       |  620 |                 LUT |
+| CARRY4     |  575 |          CarryLogic |
+| FDSE       |  262 |        Flop & Latch |
+| OBUF       |   31 |                  IO |
 | FDPE       |   28 |        Flop & Latch |
-| OBUF       |   23 |                  IO |
 | DSP48E1    |   16 |    Block Arithmetic |
 | IBUF       |   14 |                  IO |
-| MUXF7      |   13 |               MuxFx |
-| MUXF8      |    6 |               MuxFx |
 | FIFO18E1   |    5 |        Block Memory |
 | MMCME2_ADV |    1 |               Clock |
 | BUFG       |    1 |               Clock |
