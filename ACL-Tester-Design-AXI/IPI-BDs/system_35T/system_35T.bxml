@@ -2,10 +2,10 @@
 <Root MajorVersion="0" MinorVersion="37">
   <CompositeFile CompositeFileTopName="system_35T" CanBeSetAsTop="false" CanDisplayChildGraph="true">
     <Description>Composite Fileset</Description>
-    <Generation Name="SYNTHESIS" State="GENERATED" Timestamp="1594067124"/>
-    <Generation Name="IMPLEMENTATION" State="GENERATED" Timestamp="1594067124"/>
-    <Generation Name="SIMULATION" State="GENERATED" Timestamp="1594067124"/>
-    <Generation Name="HW_HANDOFF" State="GENERATED" Timestamp="1594067124"/>
+    <Generation Name="SYNTHESIS" State="GENERATED" Timestamp="1595115337"/>
+    <Generation Name="IMPLEMENTATION" State="GENERATED" Timestamp="1595115337"/>
+    <Generation Name="SIMULATION" State="GENERATED" Timestamp="1595115337"/>
+    <Generation Name="HW_HANDOFF" State="GENERATED" Timestamp="1595115337"/>
     <FileCollection Name="SOURCES" Type="SOURCES">
       <File Name="ip/system_35T_clk_wiz_0_0/system_35T_clk_wiz_0_0.xci" Type="IP">
         <Instance HierarchyPath="clk_wiz_0"/>
@@ -202,6 +202,22 @@
       </File>
       <File Name="ip/system_35T_PmodACL2_0_1/system_35T_PmodACL2_0_1.xci" Type="IP">
         <Instance HierarchyPath="PmodACL2_0"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip/system_35T_MuxSSD_0_0/system_35T_MuxSSD_0_0.xci" Type="IP">
+        <Instance HierarchyPath="MuxSSD_0"/>
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="ip/system_35T_proc_sys_reset_0_0/system_35T_proc_sys_reset_0_0.xci" Type="IP">
+        <Instance HierarchyPath="proc_sys_reset_0"/>
         <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SYNTHESIS"/>
