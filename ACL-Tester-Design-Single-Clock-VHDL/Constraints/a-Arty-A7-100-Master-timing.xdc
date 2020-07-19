@@ -53,7 +53,7 @@ set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -min 5.000 [get_ports {ei_
 set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -max 20.000 [get_ports {ei_sw3}];
 set_input_delay -clock [get_clocks wiz_20mhz_virt_in] -min 5.000 [get_ports {ei_sw3}];
 
-## Switches
+## Buttons
 ## The inpout of two-position buttons is synchronized into the design at the MMCM
 ## 20 MHz clock. A virtual clock is used to allow the tool to automatically compute
 ## jitter and other metrics. Note that the input delay is set to a max of 40% the
@@ -164,7 +164,7 @@ set_output_delay -clock [get_clocks wiz_7_373mhz_virt_out] 81.379 [get_ports {eo
 ## ChipKit I2C
 
 ## Misc. ChipKit Ports
-set_false_path -from [get_ports {i_resetn}] -to [all_registers]
+set_false_path -from [get_ports {i_resetn}] -to [all_registers];
 
 ## SMSC Ethernet PHY
 

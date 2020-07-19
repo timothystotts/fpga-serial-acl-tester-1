@@ -1,8 +1,8 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
-| Date             : Thu Jul  2 16:32:38 2020
-| Host             : ubuntu running 64-bit Ubuntu 18.04.4 LTS
+| Date             : Sat Jul 18 20:30:51 2020
+| Host             : l2study running 64-bit Ubuntu 18.04.4 LTS
 | Command          : report_power -file fpga_serial_acl_tester_power_routed.rpt -pb fpga_serial_acl_tester_power_summary_routed.pb -rpx fpga_serial_acl_tester_power_routed.rpx
 | Design           : fpga_serial_acl_tester
 | Device           : xc7a35ticsg324-1L
@@ -52,18 +52,17 @@ Table of Contents
 +----------------+-----------+----------+-----------+-----------------+
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
-| Clocks         |     0.002 |       12 |       --- |             --- |
-| Slice Logic    |     0.001 |     6455 |       --- |             --- |
-|   LUT as Logic |    <0.001 |     3212 |     20800 |           15.44 |
-|   CARRY4       |    <0.001 |      408 |      8150 |            5.01 |
-|   Register     |    <0.001 |     2093 |     41600 |            5.03 |
-|   F7/F8 Muxes  |    <0.001 |       20 |     32600 |            0.06 |
-|   Others       |     0.000 |       60 |       --- |             --- |
-| Signals        |    <0.001 |     4763 |       --- |             --- |
+| Clocks         |     0.002 |       13 |       --- |             --- |
+| Slice Logic    |     0.001 |     6979 |       --- |             --- |
+|   LUT as Logic |     0.001 |     3421 |     20800 |           16.45 |
+|   CARRY4       |    <0.001 |      416 |      8150 |            5.10 |
+|   Register     |    <0.001 |     2242 |     41600 |            5.39 |
+|   Others       |     0.000 |       70 |       --- |             --- |
+| Signals        |    <0.001 |     4974 |       --- |             --- |
 | Block RAM      |    <0.001 |        2 |        50 |            4.00 |
 | MMCM           |     0.102 |        1 |         5 |           20.00 |
-| DSPs           |     0.001 |       16 |        90 |           17.78 |
-| I/O            |    <0.001 |       36 |       210 |           17.14 |
+| DSPs           |    <0.001 |       16 |        90 |           17.78 |
+| I/O            |    <0.001 |       44 |       210 |           20.95 |
 | Static Power   |     0.062 |          |           |                 |
 | Total          |     0.170 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
@@ -75,7 +74,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) |
 +-----------+-------------+-----------+-------------+------------+
-| Vccint    |       0.950 |     0.012 |       0.006 |      0.006 |
+| Vccint    |       0.950 |     0.011 |       0.005 |      0.006 |
 | Vccaux    |       1.800 |     0.068 |       0.057 |      0.011 |
 | Vcco33    |       3.300 |     0.001 |       0.000 |      0.001 |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |
@@ -132,6 +131,7 @@ Table of Contents
 | Clock         | Domain                                                                             | Constraint (ns) |
 +---------------+------------------------------------------------------------------------------------+-----------------+
 | CLKFBIN       | CLKFBIN                                                                            |            50.0 |
+| clk100hz_ssd  | u_one_pmod_ssd_display/u_pmod_ssd_out/u_clock_divider/o_clk_div                    |      10000000.0 |
 | genclk5mhz    | u_pmod_acl2_custom_driver/u_pmod_generic_spi_solo/u_spi_1x_clock_divider/o_clk_div |           200.0 |
 | genclk625khz  | u_pmod_cls_custom_driver/u_pmod_generic_spi_solo/u_spi_1x_clock_divider/o_clk_div  |          1600.0 |
 | s_clk_20mhz   | s_clk_20mhz                                                                        |            50.0 |
@@ -146,11 +146,12 @@ Table of Contents
 3.1 By Hierarchy
 ----------------
 
-+------------------------+-----------+
-| Name                   | Power (W) |
-+------------------------+-----------+
-| fpga_serial_acl_tester |     0.108 |
-|   u_led_pwm_driver     |     0.003 |
-+------------------------+-----------+
++-----------------------------+-----------+
+| Name                        | Power (W) |
++-----------------------------+-----------+
+| fpga_serial_acl_tester      |     0.108 |
+|   u_led_pwm_driver          |     0.002 |
+|   u_pmod_acl2_custom_driver |     0.001 |
++-----------------------------+-----------+
 
 
