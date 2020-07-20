@@ -24,7 +24,11 @@
 /**-----------------------------------------------------------------------------
 -- \file pulse_stretcher_synch.v
 --
--- \brief A synchronous pulse stretcher implementation.
+-- \brief A synchronous pulse stretcher implementation
+--
+-- \description  This FSM for \ref par_T_stretch_count of 2 or more implements
+-- the FSM of Figure 8.28a from the text Finite State Machines in Hardware:
+-- Theory and Design (with VHDL and SystemVerilog) by Volnei A. Pedroni..
 ------------------------------------------------------------------------------*/
 //Timed Moore machine with timer control strategy #1
 //Part 1: Module header:--------------------------------------------------------
