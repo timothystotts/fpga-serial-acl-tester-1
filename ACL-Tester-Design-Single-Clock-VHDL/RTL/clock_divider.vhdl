@@ -23,7 +23,8 @@
 --------------------------------------------------------------------------------
 -- \file clock_divider.vhdl
 --
--- \brief A clock divider for an even integer division of the source clock.
+-- \brief A clock divider to divide a MMCM clock by a large divisor, plus
+-- synchronized reset in divide clock domain.
 --
 -- \description Generates a single clock cycle synchronous reset and generates
 -- a divided-down clock for usage of clock edge sensitivity.
@@ -41,13 +42,13 @@ library work;
 entity clock_divider is
 	generic(
 		par_clk_divisor : natural := 1000
-		);
+	);
 	port(
 		o_clk_div : out std_logic;
 		o_rst_div : out std_logic;
-		i_clk_mhz : in std_logic;
-		i_rst_mhz : in std_logic
-		);
+		i_clk_mhz : in  std_logic;
+		i_rst_mhz : in  std_logic
+	);
 end entity clock_divider;
 --------------------------------------------------------------------------------
 
@@ -71,49 +72,49 @@ architecture rtl of clock_divider is
 	signal s_rst_out : std_logic;
 begin
 
--- The even clock frequency division is operated by a clock enable signal to
--- indicate the upstream clock cycle for changing the edge of the downstream
--- clock waveform.
-p_clk_div_cnt: process(i_clk_mhz)
-begin
-	if rising_edge(i_clk_mhz) then
-		if (i_rst_mhz = '1') then
-			s_clk_div_cnt <= 0;
-			s_clk_div_ce <= '1';
-		else
-			if (s_clk_div_cnt = c_clk_max) then
+	-- The even clock frequency division is operated by a clock enable signal to
+	-- indicate the upstream clock cycle for changing the edge of the downstream
+	-- clock waveform.
+	p_clk_div_cnt : process(i_clk_mhz)
+	begin
+		if rising_edge(i_clk_mhz) then
+			if (i_rst_mhz = '1') then
 				s_clk_div_cnt <= 0;
-				s_clk_div_ce <= '1';
+				s_clk_div_ce  <= '1';
 			else
-				s_clk_div_cnt <= s_clk_div_cnt + 1;
-				s_clk_div_ce <= '0';
+				if (s_clk_div_cnt = c_clk_max) then
+					s_clk_div_cnt <= 0;
+					s_clk_div_ce  <= '1';
+				else
+					s_clk_div_cnt <= s_clk_div_cnt + 1;
+					s_clk_div_ce  <= '0';
+				end if;
 			end if;
 		end if;
-	end if;
-end process p_clk_div_cnt;
+	end process p_clk_div_cnt;
 
--- While the upstream clock is executing with reset held, this process will
--- hold the clock at zero and the reset at active one. When the upstream reset
--- signal is released, the downstream clock will have one positive edge with
--- this reset output held active one, and then on the falling edge of the
--- downstream clock, the reset will change from active one to inactive low.
-p_clk_div_out: process(i_clk_mhz)
-begin
-	if rising_edge(i_clk_mhz) then
-		if (i_rst_mhz = '1') then
-			s_rst_out <= '1';
-			s_clk_out <= '0';
-		else
-			if (s_clk_div_ce = '1') then
-				s_rst_out <= s_rst_out and (not s_clk_out);
-				s_clk_out <= not s_clk_out;
+	-- While the upstream clock is executing with reset held, this process will
+	-- hold the clock at zero and the reset at active one. When the upstream reset
+	-- signal is released, the downstream clock will have one positive edge with
+	-- this reset output held active one, and then on the falling edge of the
+	-- downstream clock, the reset will change from active one to inactive low.
+	p_clk_div_out : process(i_clk_mhz)
+	begin
+		if rising_edge(i_clk_mhz) then
+			if (i_rst_mhz = '1') then
+				s_rst_out <= '1';
+				s_clk_out <= '0';
+			else
+				if (s_clk_div_ce = '1') then
+					s_rst_out <= s_rst_out and (not s_clk_out);
+					s_clk_out <= not s_clk_out;
+				end if;
 			end if;
 		end if;
-	end if;
-end process p_clk_div_out;
+	end process p_clk_div_out;
 
-o_clk_div <= s_clk_out;
-o_rst_div <= s_rst_out;
+	o_clk_div <= s_clk_out;
+	o_rst_div <= s_rst_out;
 
 end architecture rtl;
 --------------------------------------------------------------------------------

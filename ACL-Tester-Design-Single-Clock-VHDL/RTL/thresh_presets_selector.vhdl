@@ -65,114 +65,114 @@ end entity thresh_presets_selector;
 architecture rtl of thresh_presets_selector is
 	type t_state is (ST_0, ST_1, ST_2, ST_3, ST_4, ST_5, ST_6, ST_7, ST_8, ST_9,
 		ST_A, ST_B, ST_C, ST_D, ST_E, ST_F);
-	signal s_pr_state : t_state;
-	signal s_nx_state : t_state;
+	signal s_thrpset_pr_state : t_state;
+	signal s_thrpset_nx_state : t_state;
 begin
 	-- FSM state register:
 	p_fsm_state : process(i_clk_20mhz)
 	begin
 		if rising_edge(i_clk_20mhz) then
 			if (i_rst_20mhz = '1') then
-				s_pr_state <= ST_0;
+				s_thrpset_pr_state <= ST_0;
 			else
-				s_pr_state <= s_nx_state;
+				s_thrpset_pr_state <= s_thrpset_nx_state;
 			end if;
 		end if;
 	end process p_fsm_state;
 
 	-- FSM combinational logic:
-	p_fsm_comb : process(s_pr_state, i_btn_chg_preset)
+	p_fsm_comb : process(s_thrpset_pr_state, i_btn_chg_preset)
 	begin
-		case (s_pr_state) is
+		case (s_thrpset_pr_state) is
 			when ST_1 =>
 				o_value_enum <= x"1";
 				o_value_thresh <= std_logic_vector(to_unsigned(parm_presets_config.thresholds(1), 16));
 				o_value_timer <= std_logic_vector(to_unsigned(parm_presets_config.timers(1), 16));
 				if (i_btn_chg_preset = '1') then
-					s_nx_state <= ST_2;
+					s_thrpset_nx_state <= ST_2;
 				else
-					s_nx_state <= ST_1;
+					s_thrpset_nx_state <= ST_1;
 				end if;
 			when ST_2 =>
 				o_value_enum <= x"2";
 				o_value_thresh <= std_logic_vector(to_unsigned(parm_presets_config.thresholds(2), 16));
 				o_value_timer <= std_logic_vector(to_unsigned(parm_presets_config.timers(2), 16));
 				if (i_btn_chg_preset = '1') then
-					s_nx_state <= ST_3;
+					s_thrpset_nx_state <= ST_3;
 				else
-					s_nx_state <= ST_2;
+					s_thrpset_nx_state <= ST_2;
 				end if;
 			when ST_3 =>
 				o_value_enum <= x"3";
 				o_value_thresh <= std_logic_vector(to_unsigned(parm_presets_config.thresholds(3), 16));
 				o_value_timer <= std_logic_vector(to_unsigned(parm_presets_config.timers(3), 16));
 				if (i_btn_chg_preset = '1') then
-					s_nx_state <= ST_4;
+					s_thrpset_nx_state <= ST_4;
 				else
-					s_nx_state <= ST_3;
+					s_thrpset_nx_state <= ST_3;
 				end if;
 			when ST_4 =>
 				o_value_enum <= x"4";
 				o_value_thresh <= std_logic_vector(to_unsigned(parm_presets_config.thresholds(4), 16));
 				o_value_timer <= std_logic_vector(to_unsigned(parm_presets_config.timers(4), 16));
 				if (i_btn_chg_preset = '1') then
-					s_nx_state <= ST_5;
+					s_thrpset_nx_state <= ST_5;
 				else
-					s_nx_state <= ST_4;
+					s_thrpset_nx_state <= ST_4;
 				end if;
 			when ST_5 =>
 				o_value_enum <= x"5";
 				o_value_thresh <= std_logic_vector(to_unsigned(parm_presets_config.thresholds(5), 16));
 				o_value_timer <= std_logic_vector(to_unsigned(parm_presets_config.timers(5), 16));
 				if (i_btn_chg_preset = '1') then
-					s_nx_state <= ST_6;
+					s_thrpset_nx_state <= ST_6;
 				else
-					s_nx_state <= ST_5;
+					s_thrpset_nx_state <= ST_5;
 				end if;
 			when ST_6 =>
 				o_value_enum <= x"6";
 				o_value_thresh <= std_logic_vector(to_unsigned(parm_presets_config.thresholds(6), 16));
 				o_value_timer <= std_logic_vector(to_unsigned(parm_presets_config.timers(6), 16));
 				if (i_btn_chg_preset = '1') then
-					s_nx_state <= ST_7;
+					s_thrpset_nx_state <= ST_7;
 				else
-					s_nx_state <= ST_6;
+					s_thrpset_nx_state <= ST_6;
 				end if;
 			when ST_7 =>
 				o_value_enum <= x"7";
 				o_value_thresh <= std_logic_vector(to_unsigned(parm_presets_config.thresholds(7), 16));
 				o_value_timer <= std_logic_vector(to_unsigned(parm_presets_config.timers(7), 16));
 				if (i_btn_chg_preset = '1') then
-					s_nx_state <= ST_8;
+					s_thrpset_nx_state <= ST_8;
 				else
-					s_nx_state <= ST_7;
+					s_thrpset_nx_state <= ST_7;
 				end if;
 			when ST_8 =>
 				o_value_enum <= x"8";
 				o_value_thresh <= std_logic_vector(to_unsigned(parm_presets_config.thresholds(8), 16));
 				o_value_timer <= std_logic_vector(to_unsigned(parm_presets_config.timers(8), 16));
 				if (i_btn_chg_preset = '1') then
-					s_nx_state <= ST_9;
+					s_thrpset_nx_state <= ST_9;
 				else
-					s_nx_state <= ST_8;
+					s_thrpset_nx_state <= ST_8;
 				end if;
 			when ST_9 =>
 				o_value_enum <= x"9";
 				o_value_thresh <= std_logic_vector(to_unsigned(parm_presets_config.thresholds(9), 16));
 				o_value_timer <= std_logic_vector(to_unsigned(parm_presets_config.timers(9), 16));
 				if (i_btn_chg_preset = '1') then
-					s_nx_state <= ST_0; -- only increment 0 to 9, even though configuration is 0 to F
+					s_thrpset_nx_state <= ST_0; -- only increment 0 to 9, even though configuration is 0 to F
 				else
-					s_nx_state <= ST_9;
+					s_thrpset_nx_state <= ST_9;
 				end if;
 			when others => -- ST_0
 				o_value_enum <= x"0";
 				o_value_thresh <= std_logic_vector(to_unsigned(parm_presets_config.thresholds(0), 16));
 				o_value_timer <= std_logic_vector(to_unsigned(parm_presets_config.timers(0), 16));
 				if (i_btn_chg_preset = '1') then
-					s_nx_state <= ST_1;
+					s_thrpset_nx_state <= ST_1;
 				else
-					s_nx_state <= ST_0;
+					s_thrpset_nx_state <= ST_0;
 				end if;
 		end case;
 	end process p_fsm_comb;

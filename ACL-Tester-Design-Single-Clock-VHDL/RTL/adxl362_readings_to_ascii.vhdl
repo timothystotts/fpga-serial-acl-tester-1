@@ -31,6 +31,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 library work;
+use work.lcd_text_functions_pkg.ascii_of_hdigit;
 --------------------------------------------------------------------------------
 entity adxl362_readings_to_ascii is
 	port(
@@ -46,23 +47,6 @@ end entity adxl362_readings_to_ascii;
 
 --------------------------------------------------------------------------------
 architecture rtl of adxl362_readings_to_ascii is
-	-- A re-entrant function that converts a 4-bit vector to an 8-bit ASCII
-	-- hexadecimal character.
-	function ascii_of_hdigit(bchex_val : std_logic_vector(3 downto 0))
-		return std_logic_vector is
-		variable v_bchex_nibble : unsigned(bchex_val'range);
-		variable v_ascii_byte   : std_logic_vector(7 downto 0);
-	begin
-		v_bchex_nibble := unsigned(bchex_val);
-		if (v_bchex_nibble < 10) then
-			v_ascii_byte := std_logic_vector(unsigned'(x"30") + (unsigned'(x"0") & unsigned(bchex_val)));
-		else
-			v_ascii_byte := std_logic_vector(unsigned'(x"37") + (unsigned'(x"0") & unsigned(bchex_val)));
-		end if;
-
-		return v_ascii_byte;
-	end function ascii_of_hdigit;
-
 	-- Signals for reparse of the eight PMOD ACL2 measurement reading bytes
 	signal s_hex_xaxis_msb : std_logic_vector(7 downto 0);
 	signal s_hex_xaxis_lsb : std_logic_vector(7 downto 0);

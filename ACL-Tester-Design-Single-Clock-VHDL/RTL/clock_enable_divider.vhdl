@@ -23,8 +23,8 @@
 --------------------------------------------------------------------------------
 -- \file clock_enable_divider.vhdl
 --
--- \brief A clock enable divider for an integer division of the source
--- clock enable. The clock and synchronous reset are kept the same; but the
+-- \brief A clock enable divider for an integer division of the source clock
+-- enable. The clock and synchronous reset are kept the same; but the
 -- clock enable is further divided.
 --------------------------------------------------------------------------------
 library ieee;
@@ -48,25 +48,24 @@ end entity clock_enable_divider;
 
 --------------------------------------------------------------------------------
 architecture rtl of clock_enable_divider is
-	-- A constant representing the counter maximum which is an even division of the
-	-- source clock, per paramter \ref par_clk_divisor .
+	-- A constant representing the counter maximum which is an integer division
+	-- of the source clock, per paramter \ref par_clk_divisor .
 	constant c_clk_max : natural := par_ce_divisor - 1;
 
 	-- Clock division count, that counts from 0 to \ref c_clk_max and back again
-    -- to run the divided clock enable output at a division of i_clk_mhz according
-    -- to a down division ratio of \ref i_ce_mhz
-    -- the source clock.
+	-- to run the divided clock enable output at a division of i_clk_mhz according
+	-- to a down division ratio of \ref i_ce_mhz the source clock.
 	signal s_clk_div_cnt : natural range 0 to c_clk_max;
 
 	-- A clock enable at the source clock frequency which issues the periodic
-   	-- toggle of the divided clock.
+	-- toggle of the divided clock.
 	signal s_clk_div_ce : std_logic;
 
 begin
 
-	-- The even clock frequency division is operated by a clock enable signal to
-	-- indicate the upstream clock cycle for changing the edge of the downstream
-	-- clock waveform.
+	-- The integer clock frequency division is operated by a clock enable signal
+	-- to indicate the upstream clock cycle on which to change the edge of the
+	-- downstream clock waveform.
 	p_clk_div_cnt : process(i_clk_mhz)
 	begin
 		if rising_edge(i_clk_mhz) then
