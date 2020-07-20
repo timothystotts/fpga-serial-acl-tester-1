@@ -7,14 +7,16 @@ by Timothy Stotts
 ## Description
 A small FPGA project of different implementations for testing Measurement and Activity Events of a SPI accelerometer.
 The design targets the Digilent Inc. Arty-A7-100T FPGA development board containing a Xilinx Artix-7 FPGA.
-Two peripherals are used: Digilent Inc. Pmod ACL2, Digilent Inc. Pmod CLS.
+Three peripherals are used: Digilent Inc. Pmod ACL2, Digilent Inc. Pmod CLS., Digilent Inc. Pmod SSD.
 
 The design is broken into three groupings.
 
 The folder ACL-Tester-Design-AXI contains a Xilinx Vivado IP Integrator plus
 Xilinx SDK design. A microblaze soft CPU is instantiated to talk with board components, an accelerometer peripheral,
-and a 16x2 character LCD peripheral. A Xilinx SDK project contains a very small FreeRTOS program in C; drivers
-for the peripherals, a real-time task to poll the accelerometer, and two real-time tasks to display data.
+a 16x2 character LCD peripheral, and a two-digit Seven Segment Display.
+A Xilinx SDK project contains a very small FreeRTOS program in C; drivers
+for the peripherals, a real-time task to operate and poll the accelerometer,
+two real-time tasks to display data, and a real-time task to color-mix RGB LEDs.
 
 The folder ACL-Tester-Design-Single-Clock-Verilog contains a Xilinx Vivado project with sources
 containing only Verilog-2001 modules. Plain HDL without a soft CPU or C code is authored to
@@ -112,3 +114,5 @@ standard terminology in engineering is a priority.
 #### Pmod CLS Standard SPI custom driver FSM for operating the standard SPI driver to send text line refreshes to the ATmega48 microcontroller chip of the Pmod CLS:
 ![CLS Custom Driver readings driver FSM](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-CLS-driver-FSM.svg)
 
+#### Threshold Preset Selector - design implements 0 to 9, and back. The diagram is for h0 to hF, and back.
+![Threshold Preset Selector FSM](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-thresh-preset-sel-FSM.svg)
