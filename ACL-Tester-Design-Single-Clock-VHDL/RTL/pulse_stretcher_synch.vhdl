@@ -24,6 +24,10 @@
 -- \file pulse_stretcher_synch.vhdl
 --
 -- \brief A synchronous pulse stretcher implementation.
+--
+-- \description  This FSM for \ref par_T_stretch_count of 2 or more implements
+-- the FSM of Figure 8.28a from the text Finite State Machines in Hardware:
+-- Theory and Design (with VHDL and SystemVerilog) by Volnei A. Pedroni.
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
