@@ -38,7 +38,7 @@ Navigate the web browser to
 Select branch **arty-a7-100-vivado-2019.1** on the web page. Then download the
 ZIP file. Place the ZIP file in the folder location:
 ```bash
- fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/IP/
+ fpga-serial-acl-tester-1-master/ACL-Tester-Design-AXI/IP/
 ```
 Then extract the ZIP file. Its contents should create a
 ```bash
