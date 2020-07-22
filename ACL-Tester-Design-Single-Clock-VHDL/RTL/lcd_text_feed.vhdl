@@ -55,6 +55,7 @@ architecture rtl of lcd_text_feed is
 			ST_LCD_CLEAR_WAIT, ST_LCD_LINE1_RUN, ST_LCD_LINE1_DLY, ST_LCD_LINE1_WAIT,
 			ST_LCD_LINE2_RUN, ST_LCD_LINE2_DLY);
 
+	-- Display update FSM state register
 	signal s_lcd_upd_pr_state : t_lcd_update_state;
 	signal s_lcd_upd_nx_state : t_lcd_update_state;
 
@@ -73,7 +74,7 @@ architecture rtl of lcd_text_feed is
 
 	signal s_i : natural range 0 to c_i_max;
 begin
-	-- Timer (strategy #1) for timing the PMOD CLS display update
+	-- Timer (strategy #1) for timing the LCD display update commands
 	p_fsm_timer_run_display_update : process(i_clk_20mhz)
 	begin
 		if rising_edge(i_clk_20mhz) then
@@ -89,7 +90,7 @@ begin
 		end if;
 	end process p_fsm_timer_run_display_update;
 
-	-- FSM state transition for timing the PMOD CLS display udpate
+	-- FSM state transition for operating the FSM state register
 	p_fsm_state_run_display_update : process(i_clk_20mhz)
 	begin
 		if rising_edge(i_clk_20mhz) then
@@ -101,7 +102,7 @@ begin
 		end if;
 	end process p_fsm_state_run_display_update;
 
-	-- FSM combinatorial logic for timing the PMOD CLS display udpate
+	-- FSM combinatorial logic for operating the FSM updated commands
 	p_fsm_comb_run_display_update : process(s_lcd_upd_pr_state,
 			i_lcd_command_ready, s_i)
 	begin
