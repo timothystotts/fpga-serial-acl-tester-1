@@ -40,7 +40,7 @@ The IPI-BD AXI design is also complete for this feature, but is not yet release 
 Checkouts for the design without a Pmod SSD peripheral should refer to release tag
 Serial_ACL_Tester_Release_A . Checkouts for the latest experimental implementation of adding
 Pmod SSD to Pmod Jack JA and using Buttons 0 and 1 to select threshold/timer presets, should
-refer to tag Serial_ACL_Tester_HDL_Prerelease_4B or the HEAD of the master branch. The AXI design
+refer to tag Serial_ACL_Tester_HDL_Prerelease_5B or the HEAD of the master branch. The AXI design
 implements an alternative IP module instead of Pmod SSD user IP, called MuxSSD. This allows the
 FreeRTOS C code to implement a software driver to update two registers on the MuxSSD that control
 the discrete segments of each of the two Seven Segment digit emitters. The MuxSSD IP in the IPI-BD
