@@ -608,7 +608,9 @@ begin
 
 	u_uart_tx_only : entity work.uart_tx_only(moore_fsm_recursive)
 		generic map (
-			parm_BAUD => 115200
+			parm_BAUD => 115200,
+			parm_ascii_line_length => 34,
+			parm_almost_full_thresh => "111" & x"dd"
 		)
 		port map (
 			i_clk_20mhz   => s_clk_20mhz,
@@ -622,6 +624,9 @@ begin
 		);
 
 	u_uart_tx_feed : entity work.uart_tx_feed(rtl)
+		generic map(
+			parm_ascii_line_length => 34
+		)
 		port map(
 			i_clk_20mhz      => s_clk_20mhz,
 			i_rst_20mhz      => s_rst_20mhz,

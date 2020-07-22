@@ -42,17 +42,27 @@ library work;
 --------------------------------------------------------------------------------
 entity uart_tx_only is
 	generic(
-		parm_BAUD : natural := 115200
+		-- the Modem Baud Rate of the UART TX machine, max 115200
+		parm_BAUD : natural := 115200;
+		-- the ASCII line length
+		parm_ascii_line_length : natural := 35;
+		-- the almost full threshold for FIFO byte count range 0 to 2047
+		parm_almost_full_thresh : bit_vector(10 downto 0) := "111" & x"dc"
 	);
 	port(
-		i_clk_20mhz   : in  std_logic;
-		i_rst_20mhz   : in  std_logic;
-		i_clk_7_37mhz : in  std_logic;
-		i_rst_7_37mhz : in  std_logic;
-		eo_uart_tx    : out std_logic;
-		i_tx_data     : in  std_logic_vector(7 downto 0);
-		i_tx_valid    : in  std_logic;
-		o_tx_ready    : out std_logic
+		-- system clock
+		i_clk_20mhz : in std_logic;
+		i_rst_20mhz : in std_logic;
+		-- modem clock from MMCM divided down
+		i_clk_7_37mhz : in std_logic;
+		i_rst_7_37mhz : in std_logic;
+		-- the output to connect to USB-UART RXD pin
+		eo_uart_tx : out std_logic;
+		-- data to transmit out the UART
+		i_tx_data  : in std_logic_vector(7 downto 0);
+		i_tx_valid : in std_logic;
+		-- indication that the FIFO is not almost full and can receive a line of data
+		o_tx_ready : out std_logic
 	);
 end entity uart_tx_only;
 --------------------------------------------------------------------------------
@@ -96,8 +106,7 @@ architecture moore_fsm_recursive of uart_tx_only is
 	signal s_data_fifo_tx_rd_err      : std_logic;
 	signal s_data_fifo_tx_wr_err      : std_logic;
 begin
-	-- clock for 1x times the baud rate: no oversampling for TX ONLY
-	-- requires create_generated_clock constraint in XDC
+	-- clock enable for 1x times the baud rate: no oversampling for TX ONLY
 	u_baud_1x_ce_divider : entity work.clock_enable_divider(rtl)
 		generic map(
 			par_ce_divisor => (4 * 16 * 115200 / parm_BAUD)
@@ -115,12 +124,13 @@ begin
 	s_data_fifo_tx_we <= i_tx_valid;
 	o_tx_ready        <= '1' when ((s_data_fifo_tx_full = '0') and (s_data_fifo_tx_almostfull = '0')) else '0';
 
-	p_gen_fifo_tx_valid : process(i_clk_7_37mhz)
-	begin
-		if rising_edge(i_clk_7_37mhz) then
-			s_data_fifo_tx_valid <= s_data_fifo_tx_re;
-		end if;
-	end process p_gen_fifo_tx_valid;
+	-- Generate a Valid pulse on TX read
+	--p_gen_fifo_tx_valid : process(i_clk_7_37mhz)
+	--begin
+	--	if rising_edge(i_clk_7_37mhz) then
+	--		s_data_fifo_tx_valid <= s_data_fifo_tx_re;
+	--	end if;
+	--end process p_gen_fifo_tx_valid;
 
 	-- FIFO_DUALCLOCK_MACRO: Dual-Clock First-In, First-Out (FIFO) RAM Buffer
 	--                       Artix-7
@@ -145,12 +155,12 @@ begin
 
 	u_fifo_uart_tx_0 : FIFO_DUALCLOCK_MACRO
 		generic map (
-			DEVICE                  => "7SERIES",     -- Target Device: "VIRTEX5", "VIRTEX6", "7SERIES" 
-			ALMOST_FULL_OFFSET      => "000" & x"22", -- Sets almost full threshold
-			ALMOST_EMPTY_OFFSET     => "111" & x"de", -- Sets the almost empty threshold
-			DATA_WIDTH              => 8,             -- Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
-			FIFO_SIZE               => "18Kb",        -- Target BRAM, "18Kb" or "36Kb" 
-			FIRST_WORD_FALL_THROUGH => TRUE)          -- Sets the FIFO FWFT to TRUE or FALSE
+			DEVICE                  => "7SERIES",               -- Target Device: "VIRTEX5", "VIRTEX6", "7SERIES" 
+			ALMOST_FULL_OFFSET      => parm_almost_full_thresh, -- Sets almost full threshold
+			ALMOST_EMPTY_OFFSET     => "000" & x"23",           -- Sets the almost empty threshold
+			DATA_WIDTH              => 8,                       -- Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
+			FIFO_SIZE               => "18Kb",                  -- Target BRAM, "18Kb" or "36Kb" 
+			FIRST_WORD_FALL_THROUGH => TRUE)                    -- Sets the FIFO FWFT to TRUE or FALSE
 		port map (
 			ALMOSTEMPTY => s_data_fifo_tx_almostempty, -- 1-bit output almost empty
 			ALMOSTFULL  => s_data_fifo_tx_almostfull,  -- 1-bit output almost full

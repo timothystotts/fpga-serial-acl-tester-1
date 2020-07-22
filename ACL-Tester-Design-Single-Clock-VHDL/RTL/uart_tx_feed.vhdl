@@ -32,14 +32,23 @@ use ieee.numeric_std.all;
 library work;
 --------------------------------------------------------------------------------
 entity uart_tx_feed is
+	generic(
+		-- the ASCII line length
+		parm_ascii_line_length : natural := 35
+	);
 	port(
+		-- system clock and reset
 		i_clk_20mhz      : in  std_logic;
 		i_rst_20mhz      : in  std_logic;
+		-- data and valid pulse output to the UART TX
 		o_tx_data        : out std_logic_vector(7 downto 0);
 		o_tx_valid       : out std_logic;
+		-- the TX Ready input from the UART TX
 		i_tx_ready       : in  std_logic;
+		-- system pulse to start transmit of a new line
 		i_tx_go          : in  std_logic;
-		i_dat_ascii_line : in  std_logic_vector((34*8-1) downto 0)
+		-- data captured as next 35 character line to transmit
+		i_dat_ascii_line : in  std_logic_vector((parm_ascii_line_length*8-1) downto 0)
 	);
 end entity uart_tx_feed;
 --------------------------------------------------------------------------------
@@ -50,27 +59,32 @@ architecture rtl of uart_tx_feed is
 	type t_uarttx_feed_state is (ST_UARTFEED_IDLE, ST_UARTFEED_CAPT,
 			ST_UARTFEED_DATA, ST_UARTFEED_WAIT);
 
+	-- UART feed FSM state register
 	signal s_uartfeed_pr_state : t_uarttx_feed_state;
 	signal s_uartfeed_nx_state : t_uarttx_feed_state;
 
-	constant c_uart_k_preset : natural := 34;
-
-	constant c_line_of_spaces : std_logic_vector((34*8-1) downto 0) :=
-		x"20202020202020202020202020202020202020202020202020202020202020200D0A";
-
-	-- UART TX signals for UART TX update FSM
+	-- UART feed FSM auxliary registers
 	signal s_uart_k_val    : natural range 0 to 63;
 	signal s_uart_k_aux    : natural range 0 to 63;
-	signal s_uart_line_val : std_logic_vector((34*8-1) downto 0);
-	signal s_uart_line_aux : std_logic_vector((34*8-1) downto 0);
-begin
-	-- UART TX machine, the 34 bytes of \ref i_dat_ascii_line
-	-- are feed into the UART TX ONLY FIFO upon every pulse of the
-	-- \ref i_tx_go signal. The UART TX ONLY FIFO machine will
-	-- automatically dequeue any bytes present in the queue and quickly
-	-- transmit them, one-at-a-time at the \ref parm_BAUD baudrate.
+	signal s_uart_line_val : std_logic_vector((parm_ascii_line_length*8-1) downto 0);
+	signal s_uart_line_aux : std_logic_vector((parm_ascii_line_length*8-1) downto 0);
 
-	-- UART TX machine, synchronous state and auxiliary counting register.
+	-- preset values on START
+	constant c_uart_k_preset : natural := parm_ascii_line_length;
+
+	-- preset values on reset
+	constant c_line_of_spaces : std_logic_vector((parm_ascii_line_length*8-1) downto 0) :=
+		x"20202020202020202020202020202020202020202020202020202020202020200D0A";
+
+begin
+	-- UART TX machine, the \ref parm_ascii_line_length bytes
+	-- of \ref i_dat_ascii_line
+	-- are feed into out the \ref o_tx_data and \ref o_tx_valid signals.
+	-- Another module receives the bytes, indicates readiness on signal
+	-- \ref i_tx_ready .
+
+	-- UART TX machine, synchronous state, auxiliary counting register K,
+	-- and auxiliary line data register LINE.
 	p_uartfeed_fsm_state_aux : process(i_clk_20mhz)
 	begin
 		if rising_edge(i_clk_20mhz) then
@@ -86,7 +100,8 @@ begin
 		end if;
 	end process p_uartfeed_fsm_state_aux;
 
-	-- UART TX machine, combinatorial next state and auxiliary counting register.
+	-- UART TX machine, combinatorial next state, with usage of auxiliary
+	-- counting register and auxiliary text line register.
 	p_uartfeed_fsm_nx_out : process(s_uartfeed_pr_state, s_uart_k_aux, s_uart_line_aux,
 			i_tx_go, i_dat_ascii_line, i_tx_ready)
 	begin
@@ -95,7 +110,10 @@ begin
 				-- Capture the input ASCII line and the index K.
 				-- The value of \ref i_tx_ready is also checked as to
 				-- not overflow the UART TX buffer. Once TX is ready,
-				-- begin the enqueue of outgoing data.
+				-- begin the enqueue of outgoing data. TX Ready is presumed to
+				-- indicate that the TX FIFO is below the threshold of almost
+				-- full and that enqueueing the full line will not overflow
+				-- the TX FIFO.
 				o_tx_data       <= x"00";
 				o_tx_valid      <= '0';
 				s_uart_k_val    <= c_uart_k_preset;
@@ -151,5 +169,6 @@ begin
 				end if;
 		end case;
 	end process p_uartfeed_fsm_nx_out;
+
 end architecture rtl;
 --------------------------------------------------------------------------------
