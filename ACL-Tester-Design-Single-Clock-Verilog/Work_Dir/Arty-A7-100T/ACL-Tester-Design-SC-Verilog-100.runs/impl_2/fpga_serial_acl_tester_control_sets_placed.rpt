@@ -1,7 +1,7 @@
 Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
-| Date         : Thu Jul 16 12:55:21 2020
+| Date         : Wed Jul 22 11:15:53 2020
 | Host         : l2study running 64-bit Ubuntu 18.04.4 LTS
 | Command      : report_control_sets -verbose -file fpga_serial_acl_tester_control_sets_placed.rpt
 | Design       : fpga_serial_acl_tester
@@ -60,10 +60,10 @@ Table of Contents
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | No           | No                    | No                     |             294 |          115 |
 | No           | No                    | Yes                    |              28 |            6 |
-| No           | Yes                   | No                     |            1024 |          324 |
+| No           | Yes                   | No                     |            1024 |          323 |
 | Yes          | No                    | No                     |               3 |            2 |
 | Yes          | No                    | Yes                    |               0 |            0 |
-| Yes          | Yes                   | No                     |            1132 |          345 |
+| Yes          | Yes                   | No                     |            1132 |          344 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
 
@@ -154,13 +154,13 @@ Table of Contents
 |  s_clk_20mhz_BUFG                                                |                                                                                  | u_led_pwm_driver/basicloop[1].s_basic_lumin_pwm_period_count[0]_i_1_n_0        |                8 |             32 |
 |  s_clk_20mhz_BUFG                                                |                                                                                  | u_buttons_deb_0123/o_btns_deb[1]                                               |                5 |             34 |
 |  s_clk_7_37mhz_BUFG                                              |                                                                                  | u_reset_synch_7_37mhz/o_rst_mhz                                                |               14 |             34 |
-|  s_clk_20mhz_BUFG                                                | s_hex_3axis_temp_measurements_display[63]_i_1_n_0                                | u_reset_synch_20mhz/o_rst_mhz                                                  |               35 |             64 |
-|  s_clk_20mhz_BUFG                                                | u_pmod_acl2_custom_driver/o_data_3axis_temp[63]_i_1_n_0                          | u_reset_synch_20mhz/o_rst_mhz                                                  |               23 |             64 |
-|  s_clk_20mhz_BUFG                                                | u_pmod_acl2_custom_driver/s_hex_3axis_temp_measurements_aux[63]_i_1_n_0          | u_reset_synch_20mhz/o_rst_mhz                                                  |               16 |             64 |
-|  s_clk_20mhz_BUFG                                                | u_pmod_cls_custom_driver/u_pmod_cls_stand_spi_solo/s_cls_cmd_tx_aux              | u_reset_synch_20mhz/o_rst_mhz                                                  |               36 |             88 |
+|  s_clk_20mhz_BUFG                                                | s_hex_3axis_temp_measurements_display[63]_i_1_n_0                                | u_reset_synch_20mhz/o_rst_mhz                                                  |               37 |             64 |
+|  s_clk_20mhz_BUFG                                                | u_pmod_acl2_custom_driver/o_data_3axis_temp[63]_i_1_n_0                          | u_reset_synch_20mhz/o_rst_mhz                                                  |               22 |             64 |
+|  s_clk_20mhz_BUFG                                                | u_pmod_acl2_custom_driver/s_hex_3axis_temp_measurements_aux[63]_i_1_n_0          | u_reset_synch_20mhz/o_rst_mhz                                                  |               15 |             64 |
+|  s_clk_20mhz_BUFG                                                | u_pmod_cls_custom_driver/u_pmod_cls_stand_spi_solo/s_cls_cmd_tx_aux              | u_reset_synch_20mhz/o_rst_mhz                                                  |               35 |             88 |
 |  s_clk_20mhz_BUFG                                                | u_uart_tx_feed/s_uart_k_aux[5]_i_1_n_0                                           | u_reset_synch_20mhz/o_rst_mhz                                                  |               34 |            223 |
 |  s_clk_20mhz_BUFG                                                |                                                                                  |                                                                                |              113 |            292 |
-|  s_clk_20mhz_BUFG                                                |                                                                                  | u_reset_synch_20mhz/o_rst_mhz                                                  |              140 |            309 |
+|  s_clk_20mhz_BUFG                                                |                                                                                  | u_reset_synch_20mhz/o_rst_mhz                                                  |              139 |            309 |
 +------------------------------------------------------------------+----------------------------------------------------------------------------------+--------------------------------------------------------------------------------+------------------+----------------+
 
 
