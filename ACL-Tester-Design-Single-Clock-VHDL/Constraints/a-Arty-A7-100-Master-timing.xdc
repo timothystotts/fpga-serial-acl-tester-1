@@ -31,7 +31,7 @@ create_clock -period 10000000.000 -name VIRTUAL_clk100hz_ssd -waveform {0.000 50
 # The following are scaled input and output delays of the top-level ports of the design.
 # The waveform that was calculated for determining the input and output delays as
 # estimated values (rather than datasheet calculations) is taken from the Xilinx
-# video on constraining FPGA timin: "Using the Vivado Timing Constraint Wizard".
+# video on constraining FPGA timing: "Using the Vivado Timing Constraint Wizard".
 # To determine more precise delay constraints requires collaboration between the
 # board designer and the FPGA designer.
 
