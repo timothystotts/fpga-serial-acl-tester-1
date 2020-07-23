@@ -135,10 +135,10 @@ architecture moore_fsm_recursive of pmod_generic_spi_solo is
 	signal s_spi_clk_ce2 : std_logic;
 	signal s_spi_clk_ce3 : std_logic;
 
-	-- FSM pulsestretched
+	-- FSM pulse stretched
 	signal s_go_stand : std_logic;
 
-	-- FSM auxiliaryregisters
+	-- FSM auxiliary registers
 	signal s_tx_len_val   : unsigned((parm_tx_len_bits - 1) downto 0);
 	signal s_tx_len_aux   : unsigned((parm_tx_len_bits - 1) downto 0);
 	signal s_rx_len_val   : unsigned((parm_rx_len_bits - 1) downto 0);
@@ -148,10 +148,10 @@ architecture moore_fsm_recursive of pmod_generic_spi_solo is
 	signal s_go_stand_val : std_logic;
 	signal s_go_stand_aux : std_logic;
 
-	-- FSM outputstatus
+	-- FSM output status
 	signal s_spi_idle : std_logic;
 
-	-- Mapping for FIFORX
+	-- Mapping for FIFO RX
 	signal s_data_fifo_rx_in          : std_logic_vector(7 downto 0);
 	signal s_data_fifo_rx_out         : std_logic_vector(7 downto 0);
 	signal s_data_fifo_rx_re          : std_logic;
@@ -166,7 +166,7 @@ architecture moore_fsm_recursive of pmod_generic_spi_solo is
 	signal s_data_fifo_rx_wrerr       : std_logic;
 	signal s_data_fifo_rx_rderr       : std_logic;
 
-	-- Mapping for FIFOTX
+	-- Mapping for FIFO TX
 	signal s_data_fifo_tx_in          : std_logic_vector(7 downto 0);
 	signal s_data_fifo_tx_out         : std_logic_vector(7 downto 0);
 	signal s_data_fifo_tx_re          : std_logic;
@@ -230,11 +230,11 @@ begin
 
 	u_fifo_rx_0 : FIFO_SYNC_MACRO
 		generic map (
-			DEVICE              => "7SERIES", -- Target Device: "VIRTEX5, "VIRTEX6", "7SERIES" 
-			ALMOST_FULL_OFFSET  => "0000" & x"80",   -- Sets almost full threshold
-			ALMOST_EMPTY_OFFSET => "0000" & x"80",   -- Sets the almost empty threshold
-			DATA_WIDTH          => 8,         -- Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
-			FIFO_SIZE           => "18Kb")    -- Target BRAM, "18Kb" or "36Kb" 
+			DEVICE              => "7SERIES",      -- Target Device: "VIRTEX5, "VIRTEX6", "7SERIES" 
+			ALMOST_FULL_OFFSET  => "0000" & x"80", -- Sets almost full threshold
+			ALMOST_EMPTY_OFFSET => "0000" & x"80", -- Sets the almost empty threshold
+			DATA_WIDTH          => 8,              -- Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
+			FIFO_SIZE           => "18Kb")         -- Target BRAM, "18Kb" or "36Kb" 
 		port map (
 			ALMOSTEMPTY => s_data_fifo_rx_almostempty, -- 1-bit output almost empty
 			ALMOSTFULL  => s_data_fifo_rx_almostfull,  -- 1-bit output almost full
@@ -259,12 +259,12 @@ begin
 	s_data_fifo_tx_we <= i_tx_enqueue and s_spi_ce_4x;
 	o_tx_ready        <= not s_data_fifo_tx_full and s_spi_ce_4x;
 
-	p_gen_fifo_tx_valid : process(i_ext_spi_clk_x)
-	begin
-		if rising_edge(i_ext_spi_clk_x) then
-			s_data_fifo_tx_valid <= s_data_fifo_tx_re;
-		end if;
-	end process p_gen_fifo_tx_valid;
+	--p_gen_fifo_tx_valid : process(i_ext_spi_clk_x)
+	--begin
+	--	if rising_edge(i_ext_spi_clk_x) then
+	--		s_data_fifo_tx_valid <= s_data_fifo_tx_re;
+	--	end if;
+	--end process p_gen_fifo_tx_valid;
 
 	-- FIFO_SYNC_MACRO: Synchronous First-In, First-Out (FIFO) RAM Buffer
 	--                  Artix-7
@@ -289,11 +289,11 @@ begin
 
 	u_fifo_tx_0 : FIFO_SYNC_MACRO
 		generic map (
-			DEVICE              => "7SERIES", -- Target Device: "VIRTEX5, "VIRTEX6", "7SERIES" 
-			ALMOST_FULL_OFFSET  => "000" & x"80",   -- Sets almost full threshold
-			ALMOST_EMPTY_OFFSET => "000" & x"80",   -- Sets the almost empty threshold
-			DATA_WIDTH          => 8,         -- Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
-			FIFO_SIZE           => "18Kb")    -- Target BRAM, "18Kb" or "36Kb" 
+			DEVICE              => "7SERIES",     -- Target Device: "VIRTEX5, "VIRTEX6", "7SERIES" 
+			ALMOST_FULL_OFFSET  => "000" & x"80", -- Sets almost full threshold
+			ALMOST_EMPTY_OFFSET => "000" & x"80", -- Sets the almost empty threshold
+			DATA_WIDTH          => 8,             -- Valid values are 1-72 (37-72 only valid when FIFO_SIZE="36Kb")
+			FIFO_SIZE           => "18Kb")        -- Target BRAM, "18Kb" or "36Kb" 
 		port map (
 			ALMOSTEMPTY => s_data_fifo_tx_almostempty, -- 1-bit output almost empty
 			ALMOSTFULL  => s_data_fifo_tx_almostfull,  -- 1-bit output almost full
@@ -542,8 +542,8 @@ begin
 				eo_copi_o <= '0';
 				eo_copi_t <= '0';
 				-- hold not reading the TX FIFO
-				s_data_fifo_tx_re <= s_spi_clk_ce3 when ((s_t = c_t_stand_wait_ss - c_t_inc) and 
-					(s_data_fifo_tx_empty = '0')) else '0';
+				s_data_fifo_tx_re <= s_spi_clk_ce3 when ((s_t = c_t_stand_wait_ss - c_t_inc) and
+						(s_data_fifo_tx_empty = '0')) else '0';
 				-- machine is not idle
 				s_spi_idle <= '0';
 
@@ -571,7 +571,7 @@ begin
 				-- read byte by byte from the TX FIFO
 				-- only if on last bit, dequeue another byte
 				s_data_fifo_tx_re <= s_spi_clk_ce2 when ((s_t /= (8 * s_tx_len_aux) - c_t_inc) and
-					(s_t mod 8 = 7) and (s_data_fifo_tx_empty = '0')) else '0';
+						(s_t mod 8 = 7) and (s_data_fifo_tx_empty = '0')) else '0';
 
 				-- If every bit from the FIFO according to i_tx_len value captured
 				-- in s_tx_len_aux, then move to either WAIT, RX, or STOP.
@@ -718,11 +718,11 @@ begin
 						-- input current byte to enqueue, one bit at a time, shifting
 						s_data_fifo_rx_in <= s_data_fifo_rx_in(6 downto 0) & ei_cipo_i when
 							(s_t_delayed3 < (8 * s_rx_len_aux)) else x"00";
-						
+
 						-- only if on last bit, enqueue another byte
 						-- only if RX FIFO is not full, enqueue another byte
 						s_data_fifo_rx_we <= '1' when ((s_t_delayed3 mod 8 = 7) and
-							(s_data_fifo_rx_full = '0')) else '0';
+								(s_data_fifo_rx_full = '0')) else '0';
 					else
 						s_data_fifo_rx_we <= '0';
 						s_data_fifo_rx_in <= x"00";
