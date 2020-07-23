@@ -105,8 +105,8 @@ standard terminology in engineering is a priority.
 #### Pmod ACL2 Standard SPI custom driver FSM for operating the standard SPI driver to configuration and operate the modes of the ADXL362 accelerometer chip of the Pmod ACL2:
 ![ACL2 Custom Driver readings driver FSM](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-ADXL362-driver-FSM.svg)
 
-#### Generic Standard SPI Single Slave protocol bus driver, used by the ACL2 driver and the CLS driver
-![Generic Standard SPI Single Slave bus driver](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-SPI-generic-FSM.svg)
+#### Generic Standard SPI Single Chip protocol bus driver, used by the ACL2 driver and the CLS driver
+![Generic Standard SPI Single Chip bus driver](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-SPI-generic-FSM.svg)
 
 #### CLS Custom Driver Ports diagram of the HDL designs:
 ![CLS Custom Driver Ports](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-CLS-ports.svg)
