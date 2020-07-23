@@ -152,6 +152,7 @@ begin
 	begin
 		if rising_edge(i_clk) then
 			if (i_srst = '1') then
+				-- Upon reset, stage the pulses to be approximately a value of 21 apart
 				s_ld0_dir_pulse <= '0';
 				s_ld0_led_pulse <= "000001";
 				s_ld1_dir_pulse <= '0';
@@ -227,18 +228,18 @@ begin
 	p_tester_led_display : process(i_clk)
 	begin
 		if rising_edge(i_clk) then
+			-- LED 0 will be red when tester is initializing.
+			-- LED 0 will be green when tester is running.
+			-- LED 0 will be blue when tester is not working at all.
 			if (i_active_init_display = '1') then
-				-- LED 0 will be red when tester is initializing.
 				s_ld0_red_pulse   <= s_ld0_led_pulse;
 				s_ld0_green_pulse <= "000001";
 				s_ld0_blue_pulse  <= "000001";
 			elsif (i_active_run_display = '1') then
-				-- LED 0 will be green when tester is running.
 				s_ld0_red_pulse   <= "000001";
 				s_ld0_green_pulse <= s_ld0_led_pulse;
 				s_ld0_blue_pulse  <= "000001";
 			else
-				-- LED 0 will be blue when tester is not working at all.
 				s_ld0_red_pulse   <= "000001";
 				s_ld0_green_pulse <= "000001";
 				s_ld0_blue_pulse  <= s_ld0_led_pulse;
