@@ -52,6 +52,7 @@ entity pmod_cls_stand_spi_solo is
 		-- system clock and synchronous reset
 		i_ext_spi_clk_x : in std_logic;
 		i_srst          : in std_logic;
+		-- clock enable that is 4 times the rate of SPI signal sck
 		i_spi_ce_4x     : in std_logic;
 		-- system interface to the \ref pmod_generic_spi_solo module.
 		o_go_stand : out std_logic;
