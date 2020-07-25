@@ -25,6 +25,10 @@
 -- \file one_shot_fsm.v
 --
 -- \brief A one-shot pulse generator based on level input.
+--
+-- \description This FSM implements
+-- the FSM of Figure 5.7c from the text Finite State Machines in Hardware:
+-- Theory and Design (with VHDL and SystemVerilog) by Volnei A. Pedroni.
 ------------------------------------------------------------------------------*/
 //------------------------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
