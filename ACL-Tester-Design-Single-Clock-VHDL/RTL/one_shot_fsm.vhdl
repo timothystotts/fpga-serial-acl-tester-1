@@ -26,7 +26,7 @@
 -- \brief A one-shot pulse generator based on level input.
 --
 -- \description  This FSM fimplements the FSM of Figure 5.7c from the text
--- Finite State Machines in Hardware: -- Theory and Design (with VHDL and
+-- Finite State Machines in Hardware: Theory and Design (with VHDL and
 -- SystemVerilog) by Volnei A. Pedroni.
 --------------------------------------------------------------------------------
 library ieee;
