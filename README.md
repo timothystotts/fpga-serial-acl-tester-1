@@ -116,3 +116,6 @@ standard terminology in engineering is a priority.
 
 #### Threshold Preset Selector - design implements 0 to 9, and back. The diagram is for h0 to hF, and back.
 ![Threshold Preset Selector FSM](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-thresh-preset-sel-FSM.svg)
+
+#### Utility FSMs: one-shot FSM and synchonous pulse stretcher
+![Utility FSMs, one-shot, pulse stretcher](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-Utility-FSMs.svg)
