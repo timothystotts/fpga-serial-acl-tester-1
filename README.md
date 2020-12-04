@@ -64,58 +64,58 @@ standard terminology in engineering is a priority.
 
 ./Serial ACL Readings Tester.pdf
 
-[Serial ACL Readings Tester info](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/Serial%20ACL%20Readings%20Tester.pdf)
+[Serial ACL Readings Tester info](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/Serial%20ACL%20Readings%20Tester.pdf)
 
 ### Diagrams design document:
 
 ./ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams.pdf
 
-[Serial ACL Design Diagrams info](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams.pdf)
+[Serial ACL Design Diagrams info](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams.pdf)
 
 #### Target device assembly: Arty-A7-100T with Pmod ACL2, Pmod CLS, Pmod SSD, on extension cables
-![Target device assembly](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/img_serial-acl-tester-assembled-20190718.jpg)
+![Target device assembly](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/img_serial-acl-tester-assembled-20190718.jpg)
 
 #### Block diagram architecture of the HDL designs:
-![ACL Tester Architecture Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-Architecture%201.svg)
+![ACL Tester Architecture Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-Architecture%201.svg)
 
 #### Top Port diagram architecture of the HDL designs:
-![ACL Tester Top Ports Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-Top-Ports.svg)
+![ACL Tester Top Ports Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-Top-Ports.svg)
 
 #### Tester FSM diagram of the HDL designs:
-![ACL Tester FSM Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-Tester-FSM.svg)
+![ACL Tester FSM Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-Tester-FSM.svg)
 
 #### LCD FSM diagram of the HDL designs:
-![LCD FSM Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-LCD-FSM.svg)
+![LCD FSM Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-LCD-FSM.svg)
 
 #### UART Feed FSM diagram of the HDL designs:
-![UART Feed FSM Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-UARTfeed.svg)
+![UART Feed FSM Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-UARTfeed.svg)
 
 #### UART TX ONLY FSM diagram of the HDL designs:
-![UART Feed FSM Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-UART-Tx-FSM.svg)
+![UART Feed FSM Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-UART-Tx-FSM.svg)
 
 #### 4-input Multi-Debouncer for 4 exclusve inputs, such as switches or buttons, of the HDL designs:
-![4-bit Multi-Debouncer](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-multi-debounce.svg)
+![4-bit Multi-Debouncer](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-multi-debounce.svg)
 
 #### ACL2 Custom Driver Ports diagram of the HDL designs:
-![ACL2 Custom Driver Ports](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-ACL2-ports.svg)
+![ACL2 Custom Driver Ports](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-ACL2-ports.svg)
 
 #### ACL2 Custom Driver readings Stream FSM:
-![ACL2 Custom Driver readings Stream FSM](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-StreamFSM.svg)
+![ACL2 Custom Driver readings Stream FSM](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-StreamFSM.svg)
 
 #### Pmod ACL2 Standard SPI custom driver FSM for operating the standard SPI driver to configuration and operate the modes of the ADXL362 accelerometer chip of the Pmod ACL2:
-![ACL2 Custom Driver readings driver FSM](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-ADXL362-driver-FSM.svg)
+![ACL2 Custom Driver readings driver FSM](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-ADXL362-driver-FSM.svg)
 
 #### Generic Standard SPI Single Chip protocol bus driver, used by the ACL2 driver and the CLS driver
-![Generic Standard SPI Single Chip bus driver](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-SPI-generic-FSM.svg)
+![Generic Standard SPI Single Chip bus driver](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-SPI-generic-FSM.svg)
 
 #### CLS Custom Driver Ports diagram of the HDL designs:
-![CLS Custom Driver Ports](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-CLS-ports.svg)
+![CLS Custom Driver Ports](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-CLS-ports.svg)
 
 #### Pmod CLS Standard SPI custom driver FSM for operating the standard SPI driver to send text line refreshes to the ATmega48 microcontroller chip of the Pmod CLS:
-![CLS Custom Driver readings driver FSM](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-CLS-driver-FSM.svg)
+![CLS Custom Driver readings driver FSM](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-CLS-driver-FSM.svg)
 
 #### Threshold Preset Selector - design implements 0 to 9, and back. The diagram is for h0 to hF, and back.
-![Threshold Preset Selector FSM](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-thresh-preset-sel-FSM.svg)
+![Threshold Preset Selector FSM](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-thresh-preset-sel-FSM.svg)
 
 #### Utility FSMs: one-shot FSM and synchonous pulse stretcher
-![Utility FSMs, one-shot, pulse stretcher](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/master/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-Utility-FSMs.svg)
+![Utility FSMs, one-shot, pulse stretcher](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-Utility-FSMs.svg)
