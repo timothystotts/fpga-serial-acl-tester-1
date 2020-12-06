@@ -1,8 +1,8 @@
-Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------
-| Tool Version : Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
-| Date         : Sat Jul 18 19:55:42 2020
-| Host         : l2study running 64-bit Ubuntu 18.04.4 LTS
+| Tool Version : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
+| Date         : Sat Dec  5 22:39:25 2020
+| Host         : l2study running 64-bit Ubuntu 18.04.5 LTS
 | Command      : report_utilization -file system_35T_wrapper_utilization_synth.rpt -pb system_35T_wrapper_utilization_synth.pb
 | Design       : system_35T_wrapper
 | Device       : 7a35ticsg324-1L
@@ -177,11 +177,11 @@ Table of Contents
 | system_35T_axi_quad_spi_0_0        |    1 |
 | system_35T_axi_gpio_0_0            |    1 |
 | system_35T_axi_ethernetlite_0_0    |    1 |
-| system_35T_PmodCLS_0_1             |    1 |
-| system_35T_PmodACL2_0_1            |    1 |
+| system_35T_PmodCLS_0_2             |    1 |
+| system_35T_PmodACL2_0_2            |    1 |
 | system_35T_PWM_1_0                 |    1 |
 | system_35T_PWM_0_0                 |    1 |
-| system_35T_MuxSSD_0_0              |    1 |
+| system_35T_MuxSSD_0_1              |    1 |
 +------------------------------------+------+
 
 
