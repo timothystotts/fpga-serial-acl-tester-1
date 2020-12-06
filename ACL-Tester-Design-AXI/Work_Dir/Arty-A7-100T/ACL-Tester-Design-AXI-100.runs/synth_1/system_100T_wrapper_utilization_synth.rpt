@@ -1,8 +1,8 @@
-Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------
-| Tool Version : Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
-| Date         : Sat Jul 18 14:16:29 2020
-| Host         : l2study running 64-bit Ubuntu 18.04.4 LTS
+| Tool Version : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
+| Date         : Sat Dec  5 21:45:38 2020
+| Host         : l2study running 64-bit Ubuntu 18.04.5 LTS
 | Command      : report_utilization -file system_100T_wrapper_utilization_synth.rpt -pb system_100T_wrapper_utilization_synth.pb
 | Design       : system_100T_wrapper
 | Device       : 7a100ticsg324-1L
@@ -177,8 +177,8 @@ Table of Contents
 | system_100T_axi_quad_spi_0_0        |    1 |
 | system_100T_axi_gpio_0_0            |    1 |
 | system_100T_axi_ethernetlite_0_0    |    1 |
-| system_100T_PmodCLS_0_6             |    1 |
-| system_100T_PmodACL2_0_5            |    1 |
+| system_100T_PmodCLS_0_0             |    1 |
+| system_100T_PmodACL2_0_0            |    1 |
 | system_100T_PWM_1_0                 |    1 |
 | system_100T_PWM_0_0                 |    1 |
 | system_100T_MuxSSD_0_0              |    1 |
