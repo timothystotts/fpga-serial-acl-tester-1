@@ -1,8 +1,8 @@
-Copyright 1986-2019 Xilinx, Inc. All Rights Reserved.
+Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| Tool Version : Vivado v.2019.1 (lin64) Build 2552052 Fri May 24 14:47:09 MDT 2019
-| Date         : Wed Jul 22 11:26:42 2020
-| Host         : l2study running 64-bit Ubuntu 18.04.4 LTS
+| Tool Version : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
+| Date         : Mon Dec  7 15:38:00 2020
+| Host         : l2study running 64-bit Ubuntu 18.04.5 LTS
 | Command      : report_methodology -file fpga_serial_acl_tester_methodology_drc_routed.rpt -pb fpga_serial_acl_tester_methodology_drc_routed.pb -rpx fpga_serial_acl_tester_methodology_drc_routed.rpx
 | Design       : fpga_serial_acl_tester
 | Device       : xc7a35ticsg324-1L
@@ -23,12 +23,11 @@ Table of Contents
           Floorplan: design_1
       Design limits: <entire design considered>
              Max violations: <unlimited>
-             Violations found: 4
+             Violations found: 2
 +----------+------------------+-----------------------------------------+------------+
 | Rule     | Severity         | Description                             | Violations |
 +----------+------------------+-----------------------------------------+------------+
 | TIMING-8 | Critical Warning | No common period between related clocks | 2          |
-| LUTAR-1  | Warning          | LUT drives async reset alert            | 2          |
 +----------+------------------+-----------------------------------------+------------+
 
 2. REPORT DETAILS
@@ -41,16 +40,6 @@ Related violations: <none>
 TIMING-8#2 Critical Warning
 No common period between related clocks  
 The clocks s_clk_20mhz and clk100hz_ssd are found related (timed together) but have no common (expandable) period
-Related violations: <none>
-
-LUTAR-1#1 Warning
-LUT drives async reset alert  
-LUT cell u_switches_deb_0123/FSM_sequential_s_pr_state[0]_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) u_reset_synch_20mhz/s_rst_shift_reg[0]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[10]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[11]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[12]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[13]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[1]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[2]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[3]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[4]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[5]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[6]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[7]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[8]/PRE, u_reset_synch_20mhz/s_rst_shift_reg[9]/PRE. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
-Related violations: <none>
-
-LUTAR-1#2 Warning
-LUT drives async reset alert  
-LUT cell u_switches_deb_0123/FSM_sequential_s_pr_state[0]_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) u_reset_synch_7_37mhz/s_rst_shift_reg[0]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[10]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[11]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[12]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[13]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[1]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[2]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[3]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[4]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[5]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[6]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[7]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[8]/PRE, u_reset_synch_7_37mhz/s_rst_shift_reg[9]/PRE. The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
 Related violations: <none>
 
 
