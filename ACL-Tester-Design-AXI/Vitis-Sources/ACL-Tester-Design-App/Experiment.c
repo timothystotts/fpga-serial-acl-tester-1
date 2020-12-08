@@ -499,7 +499,7 @@ static void Experiment_operateFSM(t_experiment_data* expData) {
 		expData->operatingMode = OPERATING_MODE_NONE;
 	}
 	else {
-		expData->operatingMode = OPERATING_MODE_BOOT;
+		expData->operatingMode = OPERATING_MODE_NONE;
 	}
 
 	expData->statusReg = ACL2c_getStatus(&(expData->acl2Device));
