@@ -1,8 +1,8 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------
-| Tool Version              : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
-| Date                      : Tue Dec  8 14:32:43 2020
-| Host                      : J1STUDY running 64-bit major release  (build 9200)
+| Tool Version              : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
+| Date                      : Fri Dec 11 21:40:12 2020
+| Host                      : l4study running 64-bit Ubuntu 18.04.5 LTS
 | Command                   : report_io -file system_100T_wrapper_io_placed.rpt
 | Design                    : system_100T_wrapper
 | Device                    : xc7a100ti
@@ -276,7 +276,7 @@ Table of Contents
 | P5         | ddr3_sdram_we_n             | High Range | IO_L13N_T2_MRCC_34           | OUTPUT      | SSTL135      |      34 |            | FAST |                     |            FP_VTT_50 |         | FIXED      |           |          |          | NONE             |              |                   |              |
 | P6         |                             | High Range | VCCO_34                      | VCCO        |              |      34 |            |      |                     |                      |    1.35 |            |           |          |          |                  |              |                   |              |
 | P7         |                             | Dedicated  | INIT_B_0                     | Config      |              |       0 |            |      |                     |                      |         |            |           |          |          |                  |              |                   |              |
-| P8         |                             | Dedicated  | CFGBVS_0                     | Config      |              |       0 |            |      |                     |                      |         |            |           |          |          |                  |              |                   |              |
+| P8         |                             | Dedicated  | CFGBVS_0                     | Config      |              |       0 |            |      |                     |                      |    3.30 |            |           |          |          |                  |              |                   |              |
 | P9         |                             | Dedicated  | PROGRAM_B_0                  | Config      |              |       0 |            |      |                     |                      |         |            |           |          |          |                  |              |                   |              |
 | P10        |                             | Dedicated  | DONE_0                       | Config      |              |       0 |            |      |                     |                      |         |            |           |          |          |                  |              |                   |              |
 | P11        |                             | Dedicated  | M2_0                         | Config      |              |       0 |            |      |                     |                      |         |            |           |          |          |                  |              |                   |              |
@@ -295,7 +295,7 @@ Table of Contents
 | R6         | ddr3_sdram_addr[10]         | High Range | IO_L19P_T3_34                | OUTPUT      | SSTL135      |      34 |            | FAST |                     |            FP_VTT_50 |         | FIXED      |           |          |          | NONE             |              |                   |              |
 | R7         | ddr3_sdram_addr[5]          | High Range | IO_L23P_T3_34                | OUTPUT      | SSTL135      |      34 |            | FAST |                     |            FP_VTT_50 |         | FIXED      |           |          |          | NONE             |              |                   |              |
 | R8         | ddr3_sdram_addr[8]          | High Range | IO_L24P_T3_34                | OUTPUT      | SSTL135      |      34 |            | FAST |                     |            FP_VTT_50 |         | FIXED      |           |          |          | NONE             |              |                   |              |
-| R9         |                             | Dedicated  | VCCO_0                       | VCCO        |              |       0 |            |      |                     |                      |   any** |            |           |          |          |                  |              |                   |              |
+| R9         |                             | Dedicated  | VCCO_0                       | VCCO        |              |       0 |            |      |                     |                      |    3.30 |            |           |          |          |                  |              |                   |              |
 | R10        |                             | High Range | IO_25_14                     | User IO     |              |      14 |            |      |                     |                      |         |            |           |          |          |                  |              |                   |              |
 | R11        |                             | High Range | IO_0_14                      | User IO     |              |      14 |            |      |                     |                      |         |            |           |          |          |                  |              |                   |              |
 | R12        |                             | High Range | IO_L5P_T0_D06_14             | User IO     |              |      14 |            |      |                     |                      |         |            |           |          |          |                  |              |                   |              |
@@ -361,6 +361,5 @@ Table of Contents
 | V18        |                             | High Range | VCCO_14                      | VCCO        |              |      14 |            |      |                     |                      |    3.30 |            |           |          |          |                  |              |                   |              |
 +------------+-----------------------------+------------+------------------------------+-------------+--------------+---------+------------+------+---------------------+----------------------+---------+------------+-----------+----------+----------+------------------+--------------+-------------------+--------------+
 * Default value
-** Special VCCO requirements may apply. Please consult the device family datasheet for specific guideline on VCCO requirements.
 
 

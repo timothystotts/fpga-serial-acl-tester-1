@@ -56,7 +56,7 @@
 /config/ip/num_si/value=2
 /config/ip/num_mi/value=1
 /config/ip/num_clks/value=1
-/config/aclk/csk/value=system_100T_mig_7series_0_0_ui_clk:83:0
+/config/aclk/csk/value=system_100T_mig_7series_0_1_ui_clk:83:0
 /clocking/S00_Entry/ASSOCIATED_CLK/value=aclk;range=aclk;editable=0
 /clocking/S01_Entry/ASSOCIATED_CLK/value=aclk;range=aclk;editable=0
 /clocking/M00_Exit/ASSOCIATED_CLK/value=aclk;range=aclk;editable=0

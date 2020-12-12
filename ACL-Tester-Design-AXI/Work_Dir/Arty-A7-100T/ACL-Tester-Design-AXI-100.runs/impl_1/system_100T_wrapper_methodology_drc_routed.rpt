@@ -1,8 +1,8 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
-| Date         : Tue Dec  8 14:34:51 2020
-| Host         : J1STUDY running 64-bit major release  (build 9200)
+| Tool Version : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
+| Date         : Fri Dec 11 21:41:32 2020
+| Host         : l4study running 64-bit Ubuntu 18.04.5 LTS
 | Command      : report_methodology -file system_100T_wrapper_methodology_drc_routed.rpt -pb system_100T_wrapper_methodology_drc_routed.pb -rpx system_100T_wrapper_methodology_drc_routed.rpx
 | Design       : system_100T_wrapper
 | Device       : xc7a100ticsg324-1L
@@ -40,12 +40,12 @@ Table of Contents
 -----------------
 TIMING-54#1 Critical Warning
 Scoped false path or clock group constraint between clocks  
-A scoped Clock Group timing constraint is set between clocks system_100T_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/DRCK and clk_pll_i (see constraint position 16 in the Timing Constraint window in Vivado IDE). It is not recommended to define such scoped constraints between clocks as the constraint impacts timing paths outside of the scope. 
+A scoped Clock Group timing constraint is set between clocks system_100T_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/DRCK and clk_pll_i (see constraint position 32 in the Timing Constraint window in Vivado IDE). It is not recommended to define such scoped constraints between clocks as the constraint impacts timing paths outside of the scope. 
 Related violations: <none>
 
 TIMING-54#2 Critical Warning
 Scoped false path or clock group constraint between clocks  
-A scoped Clock Group timing constraint is set between clocks system_100T_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/UPDATE and clk_pll_i (see constraint position 17 in the Timing Constraint window in Vivado IDE). It is not recommended to define such scoped constraints between clocks as the constraint impacts timing paths outside of the scope. 
+A scoped Clock Group timing constraint is set between clocks system_100T_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/UPDATE and clk_pll_i (see constraint position 33 in the Timing Constraint window in Vivado IDE). It is not recommended to define such scoped constraints between clocks as the constraint impacts timing paths outside of the scope. 
 Related violations: <none>
 
 LUTAR-1#1 Warning
@@ -55,97 +55,97 @@ Related violations: <none>
 
 LUTAR-1#2 Warning
 LUT drives async reset alert  
-LUT cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_iodelay_ctrl/rstdiv2_sync_r[11]_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep/PRE,
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__0/PRE,
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__1/PRE,
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__10/PRE,
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__11/PRE,
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__12/PRE,
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__13/PRE,
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__14/PRE,
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__15/PRE,
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__16/PRE,
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__17/PRE,
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__2/PRE,
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__3/PRE,
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__4/PRE,
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__5/PRE
+LUT cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_iodelay_ctrl/rstdiv2_sync_r[11]_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep/PRE,
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__0/PRE,
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__1/PRE,
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__10/PRE,
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__11/PRE,
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__12/PRE,
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__13/PRE,
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__14/PRE,
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__15/PRE,
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__16/PRE,
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__17/PRE,
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__2/PRE,
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__3/PRE,
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__4/PRE,
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/rstdiv0_sync_r1_reg_rep__5/PRE
  (the first 15 of 31 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
 Related violations: <none>
 
 PDRC-190#1 Warning
 Suboptimally placed synchronized register chain  
-The FDRE cell system_100T_i/PmodACL2_0/inst/axi_quad_spi_0/U0/NO_DUAL_QUAD_MODE.QSPI_NORMAL/QSPI_LEGACY_MD_GEN.QSPI_CORE_INTERFACE_I/FIFO_EXISTS.CLK_CROSS_I/LOGIC_GENERATION_CDC.RX_FIFO_RST_AX2S_1/GENERATE_LEVEL_P_S_CDC.SINGLE_BIT.CROSS_PLEVEL_IN2SCNDRY_IN_cdc_to in site SLICE_X24Y39 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/PmodACL2_0/inst/axi_quad_spi_0/U0/NO_DUAL_QUAD_MODE.QSPI_NORMAL/QSPI_LEGACY_MD_GEN.QSPI_CORE_INTERFACE_I/FIFO_EXISTS.CLK_CROSS_I/LOGIC_GENERATION_CDC.RX_FIFO_RST_AX2S_1_CDC_1 is not placed in the same (SLICE) site.
+The FDRE cell system_100T_i/PmodACL2_0/inst/axi_quad_spi_0/U0/NO_DUAL_QUAD_MODE.QSPI_NORMAL/QSPI_LEGACY_MD_GEN.QSPI_CORE_INTERFACE_I/FIFO_EXISTS.CLK_CROSS_I/LOGIC_GENERATION_CDC.RX_FIFO_RST_AX2S_1/GENERATE_LEVEL_P_S_CDC.SINGLE_BIT.CROSS_PLEVEL_IN2SCNDRY_IN_cdc_to in site SLICE_X29Y45 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/PmodACL2_0/inst/axi_quad_spi_0/U0/NO_DUAL_QUAD_MODE.QSPI_NORMAL/QSPI_LEGACY_MD_GEN.QSPI_CORE_INTERFACE_I/FIFO_EXISTS.CLK_CROSS_I/LOGIC_GENERATION_CDC.RX_FIFO_RST_AX2S_1_CDC_1 is not placed in the same (SLICE) site.
 Related violations: <none>
 
 PDRC-190#2 Warning
 Suboptimally placed synchronized register chain  
-The FDRE cell system_100T_i/PmodCLS_0/inst/axi_quad_spi_0/U0/NO_DUAL_QUAD_MODE.QSPI_NORMAL/QSPI_LEGACY_MD_GEN.QSPI_CORE_INTERFACE_I/FIFO_EXISTS.CLK_CROSS_I/LOGIC_GENERATION_CDC.RX_FIFO_RST_AX2S_1/GENERATE_LEVEL_P_S_CDC.SINGLE_BIT.CROSS_PLEVEL_IN2SCNDRY_IN_cdc_to in site SLICE_X10Y22 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/PmodCLS_0/inst/axi_quad_spi_0/U0/NO_DUAL_QUAD_MODE.QSPI_NORMAL/QSPI_LEGACY_MD_GEN.QSPI_CORE_INTERFACE_I/FIFO_EXISTS.CLK_CROSS_I/LOGIC_GENERATION_CDC.RX_FIFO_RST_AX2S_1_CDC_1 is not placed in the same (SLICE) site.
+The FDRE cell system_100T_i/PmodCLS_0/inst/axi_quad_spi_0/U0/NO_DUAL_QUAD_MODE.QSPI_NORMAL/QSPI_LEGACY_MD_GEN.QSPI_CORE_INTERFACE_I/FIFO_EXISTS.CLK_CROSS_I/LOGIC_GENERATION_CDC.RX_FIFO_RST_AX2S_1/GENERATE_LEVEL_P_S_CDC.SINGLE_BIT.CROSS_PLEVEL_IN2SCNDRY_IN_cdc_to in site SLICE_X18Y23 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/PmodCLS_0/inst/axi_quad_spi_0/U0/NO_DUAL_QUAD_MODE.QSPI_NORMAL/QSPI_LEGACY_MD_GEN.QSPI_CORE_INTERFACE_I/FIFO_EXISTS.CLK_CROSS_I/LOGIC_GENERATION_CDC.RX_FIFO_RST_AX2S_1_CDC_1 is not placed in the same (SLICE) site.
 Related violations: <none>
 
 PDRC-190#3 Warning
 Suboptimally placed synchronized register chain  
-The FDRE cell system_100T_i/axi_quad_spi_0/U0/NO_DUAL_QUAD_MODE.QSPI_NORMAL/QSPI_LEGACY_MD_GEN.QSPI_CORE_INTERFACE_I/FIFO_EXISTS.CLK_CROSS_I/LOGIC_GENERATION_CDC.RX_FIFO_RST_AX2S_1/GENERATE_LEVEL_P_S_CDC.SINGLE_BIT.CROSS_PLEVEL_IN2SCNDRY_IN_cdc_to in site SLICE_X11Y37 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/axi_quad_spi_0/U0/NO_DUAL_QUAD_MODE.QSPI_NORMAL/QSPI_LEGACY_MD_GEN.QSPI_CORE_INTERFACE_I/FIFO_EXISTS.CLK_CROSS_I/LOGIC_GENERATION_CDC.RX_FIFO_RST_AX2S_1_CDC_1 is not placed in the same (SLICE) site.
+The FDRE cell system_100T_i/axi_quad_spi_0/U0/NO_DUAL_QUAD_MODE.QSPI_NORMAL/QSPI_LEGACY_MD_GEN.QSPI_CORE_INTERFACE_I/FIFO_EXISTS.CLK_CROSS_I/LOGIC_GENERATION_CDC.RX_FIFO_RST_AX2S_1/GENERATE_LEVEL_P_S_CDC.SINGLE_BIT.CROSS_PLEVEL_IN2SCNDRY_IN_cdc_to in site SLICE_X13Y36 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/axi_quad_spi_0/U0/NO_DUAL_QUAD_MODE.QSPI_NORMAL/QSPI_LEGACY_MD_GEN.QSPI_CORE_INTERFACE_I/FIFO_EXISTS.CLK_CROSS_I/LOGIC_GENERATION_CDC.RX_FIFO_RST_AX2S_1_CDC_1 is not placed in the same (SLICE) site.
 Related violations: <none>
 
 PDRC-190#4 Warning
 Suboptimally placed synchronized register chain  
-The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[0] in site SLICE_X28Y116 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[0] is not placed in the same (SLICE) site.
+The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[0] in site SLICE_X29Y124 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[0] is not placed in the same (SLICE) site.
 Related violations: <none>
 
 PDRC-190#5 Warning
 Suboptimally placed synchronized register chain  
-The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[10] in site SLICE_X29Y120 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[10] is not placed in the same (SLICE) site.
+The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[10] in site SLICE_X32Y123 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[10] is not placed in the same (SLICE) site.
 Related violations: <none>
 
 PDRC-190#6 Warning
 Suboptimally placed synchronized register chain  
-The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[11] in site SLICE_X29Y122 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[11] is not placed in the same (SLICE) site.
+The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[11] in site SLICE_X30Y122 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[11] is not placed in the same (SLICE) site.
 Related violations: <none>
 
 PDRC-190#7 Warning
 Suboptimally placed synchronized register chain  
-The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[1] in site SLICE_X30Y123 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[1] is not placed in the same (SLICE) site.
+The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[1] in site SLICE_X31Y125 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[1] is not placed in the same (SLICE) site.
 Related violations: <none>
 
 PDRC-190#8 Warning
 Suboptimally placed synchronized register chain  
-The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[2] in site SLICE_X30Y116 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[2] is not placed in the same (SLICE) site.
+The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[2] in site SLICE_X32Y121 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[2] is not placed in the same (SLICE) site.
 Related violations: <none>
 
 PDRC-190#9 Warning
 Suboptimally placed synchronized register chain  
-The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[3] in site SLICE_X31Y115 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[3] is not placed in the same (SLICE) site.
+The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[3] in site SLICE_X33Y123 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[3] is not placed in the same (SLICE) site.
 Related violations: <none>
 
 PDRC-190#10 Warning
 Suboptimally placed synchronized register chain  
-The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[4] in site SLICE_X31Y118 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[4] is not placed in the same (SLICE) site.
+The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[4] in site SLICE_X30Y120 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[4] is not placed in the same (SLICE) site.
 Related violations: <none>
 
 PDRC-190#11 Warning
 Suboptimally placed synchronized register chain  
-The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[5] in site SLICE_X29Y116 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[5] is not placed in the same (SLICE) site.
+The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[5] in site SLICE_X36Y121 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[5] is not placed in the same (SLICE) site.
 Related violations: <none>
 
 PDRC-190#12 Warning
 Suboptimally placed synchronized register chain  
-The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[6] in site SLICE_X31Y120 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[6] is not placed in the same (SLICE) site.
+The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[6] in site SLICE_X31Y123 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[6] is not placed in the same (SLICE) site.
 Related violations: <none>
 
 PDRC-190#13 Warning
 Suboptimally placed synchronized register chain  
-The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[7] in site SLICE_X29Y118 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[7] is not placed in the same (SLICE) site.
+The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[7] in site SLICE_X33Y121 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[7] is not placed in the same (SLICE) site.
 Related violations: <none>
 
 PDRC-190#14 Warning
 Suboptimally placed synchronized register chain  
-The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[8] in site SLICE_X31Y123 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[8] is not placed in the same (SLICE) site.
+The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[8] in site SLICE_X32Y119 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[8] is not placed in the same (SLICE) site.
 Related violations: <none>
 
 PDRC-190#15 Warning
 Suboptimally placed synchronized register chain  
-The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[9] in site SLICE_X30Y119 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[9] is not placed in the same (SLICE) site.
+The FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_sync_r5_reg[9] in site SLICE_X34Y121 is part of a synchronized register chain that is suboptimally placed as the load FDRE cell system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/temp_mon_enabled.u_tempmon/device_temp_r_reg[9] is not placed in the same (SLICE) site.
 Related violations: <none>
 
 TIMING-9#1 Warning
@@ -210,88 +210,88 @@ Related violations: <none>
 
 XDCB-5#1 Warning
 Runtime inefficient way to find pin objects  
-The option '-to : [get_pins -hier -include_replicated_objects -filter {NAME =~ *temp_mon_enabled.u_tempmon/device_temp_sync_r1_reg[*]/D}]' of constraint 'set_max_delay' uses inefficient query to find pin objects (see constraint position '8' in the Timing Constraint window in Vivado IDE). To reduce runtime, it is recommended to get the pins through the cell objects. Please refer to Using Constraints Guide (Constraints Efficiency). An example of optimal query is: get_pins -filter {REF_PIN_NAME=~yy*} -of_objects [get_cells -hierarchical xx*].
-Current XDC: w:/wa/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/IPI-BDs/system_100T/ip/system_100T_mig_7series_0_0/system_100T_mig_7series_0_0/user_design/constraints/system_100T_mig_7series_0_0.xdc (Line: 356)
+The option '-to : [get_pins -hier -include_replicated_objects -filter {NAME =~ *temp_mon_enabled.u_tempmon/device_temp_sync_r1_reg[*]/D}]' of constraint 'set_max_delay' uses inefficient query to find pin objects (see constraint position '6' in the Timing Constraint window in Vivado IDE). To reduce runtime, it is recommended to get the pins through the cell objects. Please refer to Using Constraints Guide (Constraints Efficiency). An example of optimal query is: get_pins -filter {REF_PIN_NAME=~yy*} -of_objects [get_cells -hierarchical xx*].
+Current XDC: /home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/IPI-BDs/system_100T/ip/system_100T_mig_7series_0_1/system_100T_mig_7series_0_1/user_design/constraints/system_100T_mig_7series_0_1.xdc (Line: 356)
 Related violations: <none>
 
 REQP-1959#1 Advisory
 connects_SERDES_RST_driver_not_FF  
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/ddr_byte_group_io/input_[1].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/ddr_byte_group_io/input_[1].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
 Related violations: <none>
 
 REQP-1959#2 Advisory
 connects_SERDES_RST_driver_not_FF  
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/ddr_byte_group_io/input_[2].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/ddr_byte_group_io/input_[2].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
 Related violations: <none>
 
 REQP-1959#3 Advisory
 connects_SERDES_RST_driver_not_FF  
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/ddr_byte_group_io/input_[3].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/ddr_byte_group_io/input_[3].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
 Related violations: <none>
 
 REQP-1959#4 Advisory
 connects_SERDES_RST_driver_not_FF  
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/ddr_byte_group_io/input_[4].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/ddr_byte_group_io/input_[4].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
 Related violations: <none>
 
 REQP-1959#5 Advisory
 connects_SERDES_RST_driver_not_FF  
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/ddr_byte_group_io/input_[5].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/ddr_byte_group_io/input_[5].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
 Related violations: <none>
 
 REQP-1959#6 Advisory
 connects_SERDES_RST_driver_not_FF  
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/ddr_byte_group_io/input_[6].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/ddr_byte_group_io/input_[6].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
 Related violations: <none>
 
 REQP-1959#7 Advisory
 connects_SERDES_RST_driver_not_FF  
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/ddr_byte_group_io/input_[7].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/ddr_byte_group_io/input_[7].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
 Related violations: <none>
 
 REQP-1959#8 Advisory
 connects_SERDES_RST_driver_not_FF  
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/ddr_byte_group_io/input_[8].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/ddr_byte_group_io/input_[8].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
 Related violations: <none>
 
 REQP-1959#9 Advisory
 connects_SERDES_RST_driver_not_FF  
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/ddr_byte_group_io/input_[1].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/ddr_byte_group_io/input_[1].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
 Related violations: <none>
 
 REQP-1959#10 Advisory
 connects_SERDES_RST_driver_not_FF  
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/ddr_byte_group_io/input_[2].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/ddr_byte_group_io/input_[2].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
 Related violations: <none>
 
 REQP-1959#11 Advisory
 connects_SERDES_RST_driver_not_FF  
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/ddr_byte_group_io/input_[3].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/ddr_byte_group_io/input_[3].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
 Related violations: <none>
 
 REQP-1959#12 Advisory
 connects_SERDES_RST_driver_not_FF  
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/ddr_byte_group_io/input_[4].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/ddr_byte_group_io/input_[4].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
 Related violations: <none>
 
 REQP-1959#13 Advisory
 connects_SERDES_RST_driver_not_FF  
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/ddr_byte_group_io/input_[5].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/ddr_byte_group_io/input_[5].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
 Related violations: <none>
 
 REQP-1959#14 Advisory
 connects_SERDES_RST_driver_not_FF  
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/ddr_byte_group_io/input_[6].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/ddr_byte_group_io/input_[6].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
 Related violations: <none>
 
 REQP-1959#15 Advisory
 connects_SERDES_RST_driver_not_FF  
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/ddr_byte_group_io/input_[7].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/ddr_byte_group_io/input_[7].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
 Related violations: <none>
 
 REQP-1959#16 Advisory
 connects_SERDES_RST_driver_not_FF  
-system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/ddr_byte_group_io/input_[8].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
+system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/ddr_byte_group_io/input_[8].iserdes_dq_.iserdesdq: The RST pin should only be driven by a Flip-flop.
 Related violations: <none>
 
 

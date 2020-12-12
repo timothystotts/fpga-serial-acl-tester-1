@@ -1,8 +1,8 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| Tool Version     : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
-| Date             : Tue Dec  8 14:35:07 2020
-| Host             : J1STUDY running 64-bit major release  (build 9200)
+| Tool Version     : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
+| Date             : Fri Dec 11 21:41:41 2020
+| Host             : l4study running 64-bit Ubuntu 18.04.5 LTS
 | Command          : report_power -file system_100T_wrapper_power_routed.rpt -pb system_100T_wrapper_power_summary_routed.pb -rpx system_100T_wrapper_power_routed.rpx
 | Design           : system_100T_wrapper
 | Device           : xc7a100ticsg324-1L
@@ -33,7 +33,7 @@ Table of Contents
 | Total On-Chip Power (W)  | 0.919        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.827        |
+| Dynamic (W)              | 0.828        |
 | Device Static (W)        | 0.092        |
 | Effective TJA (C/W)      | 4.6          |
 | Max Ambient (C)          | 95.8         |
@@ -52,16 +52,16 @@ Table of Contents
 +--------------------------+-----------+----------+-----------+-----------------+
 | On-Chip                  | Power (W) | Used     | Available | Utilization (%) |
 +--------------------------+-----------+----------+-----------+-----------------+
-| Clocks                   |     0.052 |       30 |       --- |             --- |
-| Slice Logic              |     0.023 |    34790 |       --- |             --- |
-|   LUT as Logic           |     0.019 |    11149 |     63400 |           17.59 |
+| Clocks                   |     0.053 |       30 |       --- |             --- |
+| Slice Logic              |     0.023 |    34794 |       --- |             --- |
+|   LUT as Logic           |     0.019 |    11150 |     63400 |           17.59 |
 |   LUT as Distributed RAM |     0.002 |     1378 |     19000 |            7.25 |
 |   Register               |     0.001 |    15025 |    126800 |           11.85 |
 |   CARRY4                 |    <0.001 |      335 |     15850 |            2.11 |
 |   LUT as Shift Register  |    <0.001 |      422 |     19000 |            2.22 |
 |   F7/F8 Muxes            |    <0.001 |      176 |     63400 |            0.28 |
 |   Others                 |    <0.001 |     1534 |       --- |             --- |
-| Signals                  |     0.030 |    24426 |       --- |             --- |
+| Signals                  |     0.029 |    24449 |       --- |             --- |
 | Block RAM                |     0.029 |     22.5 |       135 |           16.67 |
 | MMCM                     |     0.195 |        2 |         6 |           33.33 |
 | PLL                      |     0.116 |        1 |         6 |           16.67 |
@@ -79,7 +79,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       0.950 |     0.186 |       0.175 |      0.011 |       NA    | Unspecified | NA         |
+| Vccint    |       0.950 |     0.187 |       0.176 |      0.011 |       NA    | Unspecified | NA         |
 | Vccaux    |       1.800 |     0.289 |       0.272 |      0.017 |       NA    | Unspecified | NA         |
 | Vcco33    |       3.300 |     0.006 |       0.002 |      0.004 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
@@ -139,30 +139,30 @@ Table of Contents
 | clk_out2_system_100T_clk_wiz_0_0                                                                                                                          | system_100T_i/clk_wiz_0/inst/clk_out2_system_100T_clk_wiz_0_0                                                                                                                                                                    |             5.0 |
 | clk_out3_system_100T_clk_wiz_0_0                                                                                                                          | system_100T_i/clk_wiz_0/inst/clk_out3_system_100T_clk_wiz_0_0                                                                                                                                                                    |            40.0 |
 | clk_out4_system_100T_clk_wiz_0_0                                                                                                                          | system_100T_i/clk_wiz_0/inst/clk_out4_system_100T_clk_wiz_0_0                                                                                                                                                                    |            20.0 |
-| clk_pll_i                                                                                                                                                 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/clk_pll_i                                                                                                                                    |            12.0 |
+| clk_pll_i                                                                                                                                                 | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/clk_pll_i                                                                                                                                    |            12.0 |
 | clkfbout_system_100T_clk_wiz_0_0                                                                                                                          | system_100T_i/clk_wiz_0/inst/clkfbout_system_100T_clk_wiz_0_0                                                                                                                                                                    |            10.0 |
 | eth_mii_rx_clk                                                                                                                                            | eth_mii_rx_clk                                                                                                                                                                                                                   |            40.0 |
 | eth_mii_tx_clk                                                                                                                                            | eth_mii_tx_clk                                                                                                                                                                                                                   |            40.0 |
-| freq_refclk                                                                                                                                               | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/freq_refclk                                                                                                                                  |             1.5 |
-| iserdes_clkdiv                                                                                                                                            | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/iserdes_clkdiv       |            12.0 |
-| iserdes_clkdiv_1                                                                                                                                          | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/iserdes_clkdiv       |            12.0 |
-| mem_refclk                                                                                                                                                | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/mem_refclk                                                                                                                                   |             3.0 |
-| oserdes_clk                                                                                                                                               | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_A.ddr_byte_lane_A/oserdes_clk          |             3.0 |
-| oserdes_clk_1                                                                                                                                             | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_B.ddr_byte_lane_B/oserdes_clk          |             3.0 |
-| oserdes_clk_2                                                                                                                                             | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/oserdes_clk          |             3.0 |
-| oserdes_clk_3                                                                                                                                             | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/oserdes_clk          |             3.0 |
-| oserdes_clkdiv                                                                                                                                            | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_A.ddr_byte_lane_A/oserdes_clkdiv       |            12.0 |
-| oserdes_clkdiv_1                                                                                                                                          | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_B.ddr_byte_lane_B/oserdes_clkdiv       |            12.0 |
-| oserdes_clkdiv_2                                                                                                                                          | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/oserdes_clkdiv       |             6.0 |
-| oserdes_clkdiv_3                                                                                                                                          | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/oserdes_clkdiv       |             6.0 |
-| pll_clk3_out                                                                                                                                              | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/pll_clk3_out                                                                                                                                 |            12.0 |
-| pll_clkfbout                                                                                                                                              | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/pll_clkfbout                                                                                                                                 |             6.0 |
-| sync_pulse                                                                                                                                                | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_ddr3_infrastructure/sync_pulse                                                                                                                                   |            48.0 |
+| freq_refclk                                                                                                                                               | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/freq_refclk                                                                                                                                  |             1.5 |
+| iserdes_clkdiv                                                                                                                                            | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/iserdes_clkdiv       |            12.0 |
+| iserdes_clkdiv_1                                                                                                                                          | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/iserdes_clkdiv       |            12.0 |
+| mem_refclk                                                                                                                                                | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/mem_refclk                                                                                                                                   |             3.0 |
+| oserdes_clk                                                                                                                                               | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_A.ddr_byte_lane_A/oserdes_clk          |             3.0 |
+| oserdes_clk_1                                                                                                                                             | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_B.ddr_byte_lane_B/oserdes_clk          |             3.0 |
+| oserdes_clk_2                                                                                                                                             | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/oserdes_clk          |             3.0 |
+| oserdes_clk_3                                                                                                                                             | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/oserdes_clk          |             3.0 |
+| oserdes_clkdiv                                                                                                                                            | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_A.ddr_byte_lane_A/oserdes_clkdiv       |            12.0 |
+| oserdes_clkdiv_1                                                                                                                                          | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_B.ddr_byte_lane_B/oserdes_clkdiv       |            12.0 |
+| oserdes_clkdiv_2                                                                                                                                          | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/oserdes_clkdiv       |             6.0 |
+| oserdes_clkdiv_3                                                                                                                                          | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/oserdes_clkdiv       |             6.0 |
+| pll_clk3_out                                                                                                                                              | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/pll_clk3_out                                                                                                                                 |            12.0 |
+| pll_clkfbout                                                                                                                                              | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/pll_clkfbout                                                                                                                                 |             6.0 |
+| sync_pulse                                                                                                                                                | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_ddr3_infrastructure/sync_pulse                                                                                                                                   |            48.0 |
 | sys_clock                                                                                                                                                 | sys_clock                                                                                                                                                                                                                        |            10.0 |
 | system_100T_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/DRCK                                                                                               | system_100T_i/mdm_1/U0/Use_E2.BSCAN_I/DRCK                                                                                                                                                                                       |            33.3 |
 | system_100T_i/mdm_1/U0/Use_E2.BSCAN_I/Use_E2.BSCANE2_I/UPDATE                                                                                             | system_100T_i/mdm_1/U0/Use_E2.BSCAN_I/Dbg_Update_0                                                                                                                                                                               |            33.3 |
-| u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/iserdes_clk | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/A_rst_primitives_reg |             3.0 |
-| u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/iserdes_clk | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_0_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/A_rst_primitives_reg |             3.0 |
+| u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/iserdes_clk | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_C.ddr_byte_lane_C/A_rst_primitives_reg |             3.0 |
+| u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/iserdes_clk | system_100T_i/mig_7series_0/u_system_100T_mig_7series_0_1_mig/u_memc_ui_top_axi/mem_intfc0/ddr_phy_top0/u_ddr_mc_phy_wrapper/u_ddr_mc_phy/ddr_phy_4lanes_0.u_ddr_phy_4lanes/ddr_byte_lane_D.ddr_byte_lane_D/A_rst_primitives_reg |             3.0 |
 +-----------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------+
 
 
@@ -175,7 +175,7 @@ Table of Contents
 +-----------------------------------------+-----------+
 | Name                                    | Power (W) |
 +-----------------------------------------+-----------+
-| system_100T_wrapper                     |     0.827 |
+| system_100T_wrapper                     |     0.828 |
 |   system_100T_i                         |     0.819 |
 |     PWM_0                               |     0.003 |
 |       inst                              |     0.003 |
@@ -200,7 +200,7 @@ Table of Contents
 |     microblaze_0_local_memory           |     0.003 |
 |       lmb_bram                          |     0.003 |
 |     mig_7series_0                       |     0.612 |
-|       u_system_100T_mig_7series_0_0_mig |     0.610 |
+|       u_system_100T_mig_7series_0_1_mig |     0.611 |
 +-----------------------------------------+-----------+
 
 
