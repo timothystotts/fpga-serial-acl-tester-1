@@ -56,7 +56,9 @@ architecture simultation of fpga_serial_acl_tester_tb is
 			eo_pmod_cls_dq0 : out std_logic;
 			ei_pmod_cls_dq1 : in  std_logic;
 			eo_uart_tx      : out std_logic;
-			ei_uart_rx      : in  std_logic
+			ei_uart_rx      : in  std_logic;
+
+			eo_ssd_pmod0 : out std_logic_vector(7 downto 0)
 		);
 	end component fpga_serial_acl_tester;
 
@@ -97,6 +99,7 @@ architecture simultation of fpga_serial_acl_tester_tb is
 	signal si_pmod_cls_dq1   : std_logic;
 	signal so_uart_tx        : std_logic;
 	signal si_uart_rx        : std_logic;
+	signal so_ssd_pmod0      : std_logic_vector(7 downto 0);
 
 begin
 	-- Unit Under Test: ACL2 Experiment
@@ -141,7 +144,8 @@ begin
 			eo_pmod_cls_dq0   => so_pmod_cls_dq0,
 			ei_pmod_cls_dq1   => si_pmod_cls_dq1,
 			eo_uart_tx        => so_uart_tx,
-			ei_uart_rx        => si_uart_rx
+			ei_uart_rx        => si_uart_rx,
+			eo_ssd_pmod0      => so_ssd_pmod0
 		);
 
 	-- Simulated data response of UUT just to show visiual data on the waveform
