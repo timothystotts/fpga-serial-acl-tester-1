@@ -4,6 +4,7 @@ function clean_work_dir () {
     rm -f *.o
     rm -f work-obj08.cf osvvm-obj08.cf osvvm_common-obj08.cf osvvm_axi4-obj08.cf osvvm_uart-obj08.cf
     rm -f fpga_serial_acl_tester_tb
+    rm -f fpga_serial_acl_tester_testharness
 }
 
 function ghdl_analyze () {
@@ -14,7 +15,7 @@ function ghdl_analyze () {
 
 function ghdl_elaborate () {
     # std, work unit
-    echo "ghdl -e --std=08 -fsynopsys -frelaxed -O2 fpga_serial_acl_tester_tb"
+    echo "ghdl -e --std=08 -fsynopsys -frelaxed -O2 ${2}"
     ghdl -e --std=${1} -fsynopsys -frelaxed -O2 ${2} || exit 1
 }
 
@@ -22,6 +23,12 @@ function ghdl_run () {
     # std, work unit, wave dump, wave list
     echo "ghdl -r --std=${1} -fsynopsys -frelaxed ${2} --stop-time=100ms --vcd=s${3} --read-wave-opt=${4}"
     ghdl -r --std=${1} -fsynopsys -frelaxed ${2} --stop-time=100ms --vcd=s${3} --read-wave-opt=${4} || exit 1
+}
+
+function ghdl_run_batch () {
+    # std, work unit, duration
+    echo "ghdl -r --std=${1} -fsynopsys -frelaxed ${2} --stop-time=${3}"
+    ghdl -r --std=${1} -fsynopsys -frelaxed ${2} --stop-time=${3} || exit 1
 }
 
 function compile_ossvm () {
@@ -188,14 +195,21 @@ function compile_work () {
     done
 
     for filename in \
-        fpga_serial_acl_tester_tb.vhdl \
+        clock_gen.vhdl \
+        board_ui.vhdl \
+        board_uart.vhdl \
+        pmod_acl2.vhdl \
+        pmod_cls.vhdl \
+        pmod_7sd.vhdl \
+        fpga_serial_acl_tester_testbench.vhdl \
+        fpga_serial_acl_tester_testharness.vhdl \
         ; do
 
         ghdl_analyze 08 work ../Testbench/${filename}
     done
 }
 
-function elab_and_run () {
+function elab_and_run_visual () {
     ghdl_elaborate 08 fpga_serial_acl_tester_tb
 
     #python3 xilinx_wave_to_ghdl_wave.py fpga_serial_acl_tester_tb_waves.opt \
@@ -216,6 +230,14 @@ function elab_and_run () {
     # --write-wave-opt=test.opt
 }
 
+function elab_and_run_batch () {
+    ghdl_elaborate 08 fpga_serial_acl_tester_testharness
+
+    ghdl_run_batch 08 fpga_serial_acl_tester_testharness 500ms
+
+    # --write-wave-opt=test.opt
+}
+
 case "$1" in
     "clean" | "realclean" | "mrproper" )
     clean_work_dir;
@@ -231,6 +253,17 @@ case "$1" in
     compile_ossvm_uart;
     compile_work;
     ;;
+    "analyze-work" | "compile-work" )
+    # clean_work_dir;
+    # compile_ossvm;
+    # compile_ossvm_common;
+    # compile_ossvm_axi4_common
+    # compile_ossvm_axi4_axi4lite
+    # compile_ossvm_axi4_axi4stream
+    # compile_ossvm_axi4_axi4
+    # compile_ossvm_uart;
+    compile_work;
+    ;;
     "simulate" | "run" | "execute" )
     clean_work_dir;
     compile_ossvm;
@@ -241,7 +274,7 @@ case "$1" in
     # compile_ossvm_axi4_axi4
     compile_ossvm_uart;
     compile_work;
-    elab_and_run;
+    elab_and_run_batch;
     ;;
     *)
     echo "$0 <clean | compile | run >"
