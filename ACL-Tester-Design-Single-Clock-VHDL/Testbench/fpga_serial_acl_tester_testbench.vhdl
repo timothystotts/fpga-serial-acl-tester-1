@@ -189,7 +189,12 @@ begin
 	p_set_logfile : process
 	begin
 		TranscriptOpen(parm_log_file_name, WRITE_MODE);
+		SetTranscriptMirror;
 		SetLogEnable(INFO, TRUE);
+
+		Print("FPGA_SERIAL_ACL_TESTER_TESTBENCH starting simulation.");
+		Print("Logging enabled for ALWAYS, INFO.");
+
 		wait;
 	end process p_set_logfile;
 
