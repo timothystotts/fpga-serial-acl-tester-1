@@ -203,6 +203,7 @@ function compile_work () {
         pmod_7sd.vhdl \
         fpga_serial_acl_tester_testbench.vhdl \
         fpga_serial_acl_tester_testharness.vhdl \
+        test_default_fpga_regression.vhdl \
         ; do
 
         ghdl_analyze 08 work ../Testbench/${filename}
@@ -231,9 +232,9 @@ function elab_and_run_visual () {
 }
 
 function elab_and_run_batch () {
-    ghdl_elaborate 08 fpga_serial_acl_tester_testharness
+    ghdl_elaborate 08 test_default_fpga_regression
 
-    ghdl_run_batch 08 fpga_serial_acl_tester_testharness 500ms
+    ghdl_run_batch 08 test_default_fpga_regression 500ms
 
     # --write-wave-opt=test.opt
 }

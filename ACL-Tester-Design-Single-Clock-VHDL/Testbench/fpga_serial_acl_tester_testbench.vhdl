@@ -85,8 +85,11 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 			parm_button_count : positive := 4;
 			parm_switch_count : positive := 4;
 			parm_rgb_led_count : positive := 4;
-			parm_basic_led_count : positive := 4
-		);
+			parm_basic_led_count : positive := 4;
+			parm_pwm_period_milliseconds : natural := 10;
+			parm_pwm_color_max_duty_cycle : natural := 8;
+			parm_pwm_basic_max_duty_cycle : natural := 9
+			);
 		port(
 			ci_main_clock : in std_logic;
 			cin_main_reset : in std_logic;
