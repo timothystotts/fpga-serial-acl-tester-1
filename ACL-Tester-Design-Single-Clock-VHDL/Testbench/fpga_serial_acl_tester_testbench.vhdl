@@ -82,6 +82,7 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 
 	component tbc_board_ui is
 		generic(
+			parm_clk_freq : natural := 100_000_000;
 			parm_button_count : positive := 4;
 			parm_switch_count : positive := 4;
 			parm_rgb_led_count : positive := 4;
@@ -136,6 +137,7 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 			);
 	end component tbc_pmod_7sd;
 	
+	constant c_clock_FREQ : natural := 100_000_000;
 	constant c_clock_period : time := 10 ns;
 	constant c_reset_clock_count : positive := 100;
 	
@@ -261,6 +263,7 @@ begin
 	-- Drive and Watch User low-level Interface of FPGA dev-board
 	u_tbc_board_ui : tbc_board_ui
 		generic map(
+			parm_clk_freq => c_clock_FREQ,
 			parm_button_count => 4,
 			parm_switch_count => 4,
 			parm_rgb_led_count => 4,

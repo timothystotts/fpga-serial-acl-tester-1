@@ -14,6 +14,7 @@ library work;
 --------------------------------------------------------------------------------
 entity tbc_board_ui is
 	generic(
+        parm_clk_freq : natural := 100_000_000;
         parm_button_count : positive := 4;
         parm_switch_count : positive := 4;
         parm_rgb_led_count : positive := 4;
@@ -57,8 +58,12 @@ begin
         WaitForClock(ci_main_clock, 1);
         WaitForLevel(cin_main_reset, '0');
         WaitForClock(ci_main_clock, 1);
-        
         so_buttons <= (others => '0');
+
+        WaitForClock(ci_main_clock, parm_clk_freq * 120 / 1000);
+        so_buttons(0) <= '1';
+        WaitForClock(ci_main_clock, parm_clk_freq * 140 / 1000);
+        so_buttons(0) <= '0';
         wait;
     end process p_set_buttons;
 
@@ -70,6 +75,8 @@ begin
         WaitForClock(ci_main_clock, 1);
         
         so_switches <= (others => '0');
+
+        WaitForClock(ci_main_clock, parm_clk_freq * 20 / 1000);
         so_switches(0) <= '1';
         wait;
     end process p_set_switches;
@@ -103,7 +110,7 @@ begin
                             v_have_on(i_idx) := true;
                             v_time_on(i_idx) := NOW;
                         end if;
-                    else
+                    elsif v_have_on(i_idx) then
                         if not v_have_off(i_idx) then
                             v_have_off(i_idx) := true;
                             v_time_off(i_idx) := NOW;
@@ -126,22 +133,57 @@ begin
                     " B:" & to_string(v_time_delta(0)), INFO);
 
                     Log("RGB LED PWM " & to_string(i_rgb) & " changed to:" &
-                    " R:" & to_string(integer(real(v_time_delta(2) / c_pwm_period)) * 256) &
-                    " G:" & to_string(integer(real(v_time_delta(1) / c_pwm_period)) * 256) &
-                    " B:" & to_string(integer(real(v_time_delta(0) / c_pwm_period)) * 256), INFO);
+                    " R:" & to_string(integer(real(v_time_delta(2) * 256 / c_pwm_period))) &
+                    " G:" & to_string(integer(real(v_time_delta(1) * 256 / c_pwm_period))) &
+                    " B:" & to_string(integer(real(v_time_delta(0) * 256 / c_pwm_period))), INFO);
                 end if;
             end if;
         end process p_log_rgb_leds;
     end generate g_log_rgb_leds;
 
     -- Log the changes on the Basic LEDs
-    p_log_basic_leds : process
+    g_log_basic_leds : for i_basic in ci_led_basic'range generate
     begin
-        wait on ci_led_basic;
-        Log("BASIC Leds: (" & to_string(parm_basic_led_count - 1) & ":0) " &
-        "changed to: " & to_string(ci_led_basic),
-        INFO);
-    end process p_log_basic_leds;
+        p_log_basic_leds : process
+            constant c_pwm_period : time := parm_pwm_basic_max_duty_cycle * 1 ms;
+            variable v_have_on : boolean := false;
+            variable v_have_off : boolean := false;
+            variable v_time_on : time := 0 ms;
+            variable v_time_off : time := 0 ms;
+            variable v_time_delta : time := 0 ms;
+        begin
+            wait on ci_led_basic(i_basic);
+            Log("BASIC LED Filament " & to_string(i_basic) & " changed to: " & to_string(ci_led_basic(i_basic)),
+            INFO);
+
+            if ci_led_basic(i_basic) = '1' then
+                if not v_have_on then
+                    v_have_on := true;
+                    v_time_on := NOW;
+                end if;
+            elsif v_have_on then
+                if not v_have_off then
+                    v_have_off := true;
+                    v_time_off := NOW;
+                end if;
+            end if;
+
+            if (v_have_on and v_have_off) then
+                v_time_delta := v_time_off - v_time_on;
+                v_have_on := false;
+                v_have_off := false;
+                v_time_on := 0 ms;
+                v_time_off := 0 ms;
+
+                Log("Basic LED PWM " & to_string(i_basic) & " lasted for:" &
+                " L:" & to_string(v_time_delta), INFO);
+
+                Log("Basic LED PWM " & to_string(i_basic) & " changed to:" &
+                " L:" & to_string(integer(real(v_time_delta * 256 / c_pwm_period))), INFO);
+            end if;
+
+        end process p_log_basic_leds;
+    end generate g_log_basic_leds;
 
 end architecture simulation_default;
 --------------------------------------------------------------------------------
