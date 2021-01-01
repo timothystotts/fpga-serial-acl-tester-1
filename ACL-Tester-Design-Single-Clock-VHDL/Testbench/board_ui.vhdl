@@ -59,27 +59,40 @@ begin
         WaitForLevel(cin_main_reset, '0');
         WaitForClock(ci_main_clock, 1);
         so_buttons <= (others => '0');
+        Log("BOARD UI buttons 0,1,2,3 released at startup.", INFO);
+        WaitForLevel(cin_main_reset, '1');
+        WaitForClock(ci_main_clock, 1);   
 
-        WaitForClock(ci_main_clock, parm_clk_freq * 120 / 1000);
+        WaitForClock(ci_main_clock, parm_clk_freq / 1000 * 120);
         so_buttons(0) <= '1';
-        WaitForClock(ci_main_clock, parm_clk_freq * 140 / 1000);
+        Log("BOARD UI button 0 depressed.", INFO);
+
+        WaitForClock(ci_main_clock, parm_clk_freq / 1000 * 120);
         so_buttons(0) <= '0';
+        Log("BOARD UI button 0 released.", INFO);
         wait;
     end process p_set_buttons;
+
+    co_buttons <= so_buttons;
 
     -- Default initialization of the switches on the board.
     p_set_switches : process
     begin
         WaitForClock(ci_main_clock, 1);
         WaitForLevel(cin_main_reset, '0');
-        WaitForClock(ci_main_clock, 1);
-        
+        WaitForClock(ci_main_clock, 1);        
         so_switches <= (others => '0');
+        Log("BOARD UI switches 0,1,2,3 unselected at startup.", INFO);        
+        WaitForLevel(cin_main_reset, '1');
+        WaitForClock(ci_main_clock, 1);   
 
-        WaitForClock(ci_main_clock, parm_clk_freq * 20 / 1000);
+        WaitForClock(ci_main_clock, parm_clk_freq / 1000 * 5);
         so_switches(0) <= '1';
+        Log("BOARD UI switch 0 selected.", INFO);
         wait;
     end process p_set_switches;
+
+    co_switches <= so_switches;
 
     -- Log the changes on the RGB LEDs
     g_log_rgb_leds : for i_rgb in ci_led_red'range generate

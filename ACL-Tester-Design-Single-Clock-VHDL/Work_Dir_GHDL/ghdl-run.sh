@@ -9,8 +9,8 @@ function clean_work_dir () {
 
 function ghdl_analyze () {
     # std , worklib, path
-    echo "ghdl -a --std=${1} --work=${2} ${3}"
-    ghdl -a --std=${1} --work=${2} ${3} || exit 1
+    echo "ghdl -a --std=${1} --work=${2} -O2 ${3}"
+    ghdl -a --std=${1} --work=${2} -O2 ${3} || exit 1
 }
 
 function ghdl_elaborate () {
@@ -234,7 +234,7 @@ function elab_and_run_visual () {
 function elab_and_run_batch () {
     ghdl_elaborate 08 test_default_fpga_regression
 
-    ghdl_run_batch 08 test_default_fpga_regression 500ms
+    ghdl_run_batch 08 test_default_fpga_regression 750ms
 
     # --write-wave-opt=test.opt
 }
