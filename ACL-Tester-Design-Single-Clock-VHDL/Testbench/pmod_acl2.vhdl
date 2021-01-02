@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- \file pmod_acl2.vhdl
 --
--- \brief OSVVM testbench component: Simulation Model of Digilent Inc.
+-- \brief OSVVM testbench component: incomplete Simulation Model of Digilent Inc.
 -- Pmod ACL2 external peripheral.
 --------------------------------------------------------------------------------
 library ieee;
@@ -18,7 +18,34 @@ package tbc_pmod_acl2_types_pkg is
     type t_reg_array is array (natural range <>) of natural range 0 to 255;
     type t_reg_perms is array(natural range <>) of t_reg_perm;
     subtype t_op_addr is natural range 0 to 47;
+
+    type t_share_reg is protected
+        impure function Get return std_logic_vector;
+        procedure Set(constant c_reg : in std_logic_vector(7 downto 0));
+        procedure Update(constant c_bit : std_logic; constant c_pos : natural range 0 to 7);
+    end protected t_share_reg;   
 end package tbc_pmod_acl2_types_pkg;
+--------------------------------------------------------------------------------
+package body tbc_pmod_acl2_types_pkg is
+        type t_share_reg is protected body
+        variable v_reg : std_logic_vector(7 downto 0);
+
+        impure function Get return std_logic_vector is
+        begin
+            return v_reg;
+        end function Get;
+
+        procedure Set(constant c_reg : in std_logic_vector(7 downto 0)) is
+        begin
+            v_reg := c_reg;
+        end procedure Set;
+
+        procedure Update(constant c_bit : std_logic; constant c_pos : natural range 0 to 7) is
+        begin
+            v_reg(c_pos) := c_bit;
+        end procedure Update;
+    end protected body t_share_reg;   
+end package body tbc_pmod_acl2_types_pkg;
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
@@ -31,6 +58,11 @@ library work;
 use work.tbc_pmod_acl2_types_pkg.all;
 --------------------------------------------------------------------------------
 package tbc_pmod_acl2_pkg is
+    constant c_reg_idx_status_reg : natural := 16#0B#;
+    constant c_reg_idx_int1_map : natural := 16#2A#;
+    constant c_reg_idx_int2_map : natural := 16#2B#;
+    constant c_reg_idx_filter_ctl : natural := 16#2C#;
+
     constant c_acl2_reg_mem : t_reg_array(t_op_addr'low to t_op_addr'high) := (
         16#AD#, 16#1D#, 16#F2#, 16#01#, 16#00#, 16#00#, 16#00#, 16#00#,
         16#00#, 16#00#, 16#00#, 16#40#, 16#00#, 16#00#, 16#00#, 16#00#,
@@ -58,6 +90,8 @@ package tbc_pmod_acl2_pkg is
         variable buffer_len : inout natural;
         variable buffer_ovr : inout natural;
         variable reg_mem : inout t_reg_array;
+        variable reg_access : inout t_reg_array;
+        variable reg_dirty : inout t_reg_array;
         constant reg_perms : in t_reg_perms
     );
 end package tbc_pmod_acl2_pkg;
@@ -73,6 +107,8 @@ package body tbc_pmod_acl2_pkg is
         variable buffer_len : inout natural;
         variable buffer_ovr : inout natural;
         variable reg_mem : inout t_reg_array;
+        variable reg_access : inout t_reg_array;
+        variable reg_dirty : inout t_reg_array;
         constant reg_perms : in t_reg_perms
     ) is
         alias in_buf : std_logic_vector(input_buffer'length downto 1) is input_buffer;
@@ -135,6 +171,7 @@ package body tbc_pmod_acl2_pkg is
                         if ((op_read) and (buffer_len >= 16)) then
                             if ((reg_perms(op_addr) = REG_R) or (reg_perms(op_addr) = REG_RW)) then
                                 out_buf(out_buf'left downto out_buf'left - 7) := val_out_as_slv;
+                                reg_access(op_addr) := 1;
                                 op_byte_slv := std_logic_vector(to_unsigned(reg_mem(op_addr), 8));
 
                                 Log("PMOD ACL2 read addr x" & to_hstring(op_addr_slv) &
@@ -152,6 +189,7 @@ package body tbc_pmod_acl2_pkg is
                         if ((op_write) and (buffer_len >= 24)) then
                             if ((reg_perms(op_addr) = REG_W) or (reg_perms(op_addr) = REG_RW)) then
                                 reg_mem(op_addr) := val_in_as_int;
+                                reg_dirty(op_addr) := 1;
                                 op_byte_slv := std_logic_vector(to_unsigned(reg_mem(op_addr), 8));
 
                                 Log("PMOD ACL2 write addr x" & to_hstring(op_addr_slv) &
@@ -199,18 +237,26 @@ entity tbc_pmod_acl2 is
         );
 end entity tbc_pmod_acl2;
 --------------------------------------------------------------------------------
-architecture simulation_default of tbc_pmod_acl2 is
-begin
-    -- Just hold outputs at zero
-    co_int1 <= '0';
-    co_int2 <= '0';
+architecture simulation_default of tbc_pmod_acl2 is    
+    shared variable sv_status_reg : t_share_reg;
 
-    P_spi_reg_access_mode_zero : process
+    signal so_int1 : std_logic;
+    signal so_int2 : std_logic;
+    signal s_filter_ctl_reg : std_logic_vector(7 downto 0);
+    signal s_int1_map_reg : std_logic_vector(7 downto 0);
+    signal s_int2_map_reg : std_logic_vector(7 downto 0);
+begin
+    co_int1 <= so_int1;
+    co_int2 <= so_int2;
+
+    p_spi_reg_access_mode_zero : process
         variable input_buffer : std_logic_vector(127 downto 0);
         variable output_buffer : std_logic_vector(127 downto 0);
         variable buffer_len : natural;
         variable buffer_ovr : natural;
         variable reg_mem : t_reg_array(c_acl2_reg_mem'range) := c_acl2_reg_mem;
+        variable reg_access : t_reg_array(c_acl2_reg_mem'range) := (others => 0);
+        variable reg_dirty : t_reg_array(c_acl2_reg_mem'range) := (others => 0);
         constant reg_perms : t_reg_perms(c_acl2_reg_perms'range) := c_acl2_reg_perms;
     begin
         input_buffer := (others => '0');
@@ -226,8 +272,72 @@ begin
             buffer_len,
             buffer_ovr,
             reg_mem,
+            reg_access,
+            reg_dirty,
             reg_perms);
+
+        s_int1_map_reg <= std_logic_vector(to_unsigned(reg_mem(c_reg_idx_int1_map), 8));
+        s_int2_map_reg <= std_logic_vector(to_unsigned(reg_mem(c_reg_idx_int2_map), 8));
+        s_filter_ctl_reg <= std_logic_vector(to_unsigned(reg_mem(c_reg_idx_filter_ctl), 8));
+
+        -- Synchronize the Status Register
+        -- Step 1 - react to register write
+        if (reg_dirty(c_reg_idx_status_reg) = 1) then
+            sv_status_reg.Set(std_logic_vector(to_unsigned(reg_mem(c_reg_idx_status_reg), 8)));
+            reg_dirty(c_reg_idx_status_reg) := 0;
+        end if;
+        -- Step 2 - react to register read
+        if (reg_access(c_reg_idx_status_reg) = 1) then
+            sv_status_reg.Update('0', 0);
+            reg_access(c_reg_idx_status_reg) := 0;
+        end if;
+        -- Step 3 - final sync
+        reg_mem(c_reg_idx_status_reg) := to_integer(unsigned(sv_status_reg.Get));
+
     end process p_spi_reg_access_mode_zero;
 
+    p_filter_ctl : process
+    begin
+        sv_status_reg.Update('0', 0);
+        l_drive_data_ready : loop
+            case s_filter_ctl_reg(2 downto 0) is
+                when "000" => wait for 80 ms;
+                when "001" => wait for 40 ms;
+                when "010" => wait for 20 ms;
+                when "011" => wait for 10 ms;
+                when "100" => wait for 5 ms;
+                when others => wait for 2.5 ms;
+            end case;
+            sv_status_reg.Update('1', 0);
+        end loop l_drive_data_ready;
+        wait;
+    end process p_filter_ctl;
+
+    p_update_int12 : process
+        variable v_status_reg : std_logic_vector(7 downto 0);
+        variable v_prev_int1 : std_logic;
+        variable v_prev_int2 : std_logic;
+    begin
+        l_drive_int : loop
+            wait for 100 ns;
+            v_prev_int1 := so_int1;
+            v_prev_int2 := so_int2;
+
+            v_status_reg := sv_status_reg.Get;
+
+            so_int1 <= s_int1_map_reg(7) xor (or(s_int1_map_reg(6 downto 0) and v_status_reg(6 downto 0)));
+            so_int2 <= s_int2_map_reg(7) xor (or(s_int2_map_reg(6 downto 0) and v_status_reg(6 downto 0)));
+            wait for 1 ns;
+
+            if (so_int1 /= v_prev_int1) then
+                Log("PMOD ACL2 INT1 is " & to_string(so_int1), DEBUG);
+            end if;
+
+            if (so_int2 /= v_prev_int2) then
+                Log("PMOD ACL2 INT2 is " & to_string(so_int2), DEBUG);
+            end if;
+        end loop l_drive_int;
+    end process p_update_int12;
+    
 end architecture simulation_default;
 --------------------------------------------------------------------------------

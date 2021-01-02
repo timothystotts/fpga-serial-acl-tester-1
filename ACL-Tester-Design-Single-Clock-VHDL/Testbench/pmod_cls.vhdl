@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- \file pmod_cls.vhdl
 --
--- \brief OSVVM testbench component: Simulation Model of Digilent Inc.
+-- \brief OSVVM testbench component: incomplete Simulation Model of Digilent Inc.
 -- Pmod CLS external peripheral in SPI mode.
 --------------------------------------------------------------------------------
 library ieee;

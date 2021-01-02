@@ -188,10 +188,10 @@ begin
                 v_time_on := 0 ms;
                 v_time_off := 0 ms;
 
-                Log("Basic LED PWM " & to_string(i_basic) & " lasted for:" &
+                Log("BASIC LED PWM " & to_string(i_basic) & " lasted for:" &
                 " L:" & to_string(v_time_delta), INFO);
 
-                Log("Basic LED PWM " & to_string(i_basic) & " changed to:" &
+                Log("BASIC LED PWM " & to_string(i_basic) & " changed to:" &
                 " L:" & to_string(integer(real(v_time_delta * 256 / c_pwm_period))), INFO);
             end if;
 
