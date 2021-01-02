@@ -15,6 +15,7 @@ library work;
 --------------------------------------------------------------------------------
 entity tbc_pmod_7sd is
     port(
+        TBID : in AlertLogIDType;
         ci_mux_ena : in std_logic;
         ci_mux_dat : in std_logic_vector(6 downto 0)
         );
@@ -48,26 +49,41 @@ architecture simulation_default of tbc_pmod_7sd is
         return v_ret;
     end function ssd_to_unsigned;
 
+    signal ModelID : AlertLogIDType;
 begin
+    -- Simulation initialization
+    p_sim_init : process
+        variable ID : AlertLogIDType;
+    begin
+        wait for 1 ns;
+        ID := GetAlertLogID(PathTail(tbc_pmod_7sd'path_name), TBID);
+        ModelID <= ID;
+        wait;
+    end process p_sim_init;
+
     -- Just print signal lines
     p_receive_display_value : process
         variable val_of_7sd : unsigned(3 downto 0);
         variable val_is_valid : std_logic;
     begin
-        wait on ci_mux_ena;
-        wait for 100 ns;
-        val_of_7sd := ssd_to_unsigned(ci_mux_dat);
-        val_is_valid := std_logic(val_of_7sd(0));
+        wait for 2 ns;
 
-        if (val_is_valid = 'U') then
-            if (ci_mux_dat = "0000000") then
-                Log("7SD Digit " & to_string(ci_mux_ena) & " is turned OFF: " & to_string(ci_mux_dat), INFO);
+        l_7seg_monitor : loop
+            wait on ci_mux_ena;
+            wait for 100 ns;
+            val_of_7sd := ssd_to_unsigned(ci_mux_dat);
+            val_is_valid := std_logic(val_of_7sd(0));
+
+            if (val_is_valid = 'U') then
+                if (ci_mux_dat = "0000000") then
+                    Log(ModelID, "7SD Digit " & to_string(ci_mux_ena) & " is turned OFF: " & to_string(ci_mux_dat), INFO);
+                else
+                    Alert(ModelID, "7SD Digit " & to_string(ci_mux_ena) & " is displaying an invalid value: " & to_string(ci_mux_dat), WARNING);
+                end if;
             else
-                Alert("7SD Digit " & to_string(ci_mux_ena) & " is displaying an invalid value: " & to_string(ci_mux_dat), WARNING);
+                Log(ModelID, "7SD Digit " & to_string(ci_mux_ena) & " is displaying character: " & to_hstring(val_of_7sd) & " (" & to_string(ci_mux_dat) & ")", INFO);
             end if;
-        else
-            Log("7SD Digit " & to_string(ci_mux_ena) & " is displaying character: " & to_hstring(val_of_7sd) & " (" & to_string(ci_mux_dat) & ")", INFO);
-        end if;
+        end loop l_7seg_monitor;
     end process p_receive_display_value;
 end architecture simulation_default;
 --------------------------------------------------------------------------------

@@ -14,6 +14,7 @@ library work;
 --------------------------------------------------------------------------------
 entity fpga_serial_acl_tester_testbench is
 	generic(
+		parm_simulation_duration : time := 7 ms;
 		parm_fast_simulation : integer := 1;
 		parm_log_file_name : string := "log_fpga_serial_acl_tester_no_test.txt"
 	);
@@ -75,6 +76,7 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 			parm_reset_cycle_count : positive := 5
 		);
 		port(
+			TBID : in  AlertLogIDType;
 			co_main_clock : out std_logic;
 			con_main_reset : out std_logic
 		);
@@ -92,6 +94,7 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 			parm_pwm_basic_max_duty_cycle : natural := 9
 			);
 		port(
+			TBID : in AlertLogIDType;
 			ci_main_clock : in std_logic;
 			cin_main_reset : in std_logic;
 			co_buttons : out std_logic_vector((parm_button_count - 1) downto 0);
@@ -105,6 +108,7 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 
 	component tbc_pmod_acl2 is
 		port(
+			TBID : in AlertLogIDType;
 			ci_sck : in std_logic;
 			ci_csn : in std_logic;
 			ci_copi : in std_logic;
@@ -116,6 +120,7 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 	
 	component tbc_pmod_cls is
 		port(
+			TBID : in AlertLogIDType;
 			ci_sck : in std_logic;
 			ci_csn : in std_logic;
 			ci_copi : in std_logic;
@@ -125,6 +130,7 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 
 	component tbc_board_uart is
 		port(
+			TBID : in AlertLogIDType;
 			ci_rxd : in std_logic;
 			co_txd : out std_logic
 			);
@@ -132,6 +138,7 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 	
 	component tbc_pmod_7sd is
 		port(
+			TBID : in AlertLogIDType;
 			ci_mux_ena : in std_logic;
 			ci_mux_dat : in std_logic_vector(6 downto 0)
 			);
@@ -141,7 +148,9 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 	constant c_clock_period : time := 10 ns;
 	constant c_reset_clock_count : positive := 100;
 	
-	signal run_clock             : boolean;
+	signal TBID : AlertLogIDType;
+
+	signal run_clock : boolean;
 
 	signal CLK100MHZ         : std_logic;
 	signal si_resetn         : std_logic;
@@ -192,7 +201,13 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 begin
 	-- Configure alert/log log file
 	p_set_logfile : process
+		variable ID : AlertLogIDType;
 	begin
+		wait for 0.5 ns;
+		ID := GetAlertLogID(PathTail(fpga_serial_acl_tester_testbench'path_name), ALERTLOG_BASE_ID);
+		TBID <= ID;
+
+		wait for 1.5 ns;
 		TranscriptOpen(parm_log_file_name, WRITE_MODE);
 		SetTranscriptMirror;
 		SetLogEnable(INFO, TRUE);
@@ -201,6 +216,10 @@ begin
 		Print("FPGA_SERIAL_ACL_TESTER_TESTBENCH starting simulation.");
 		Print("Logging enabled for ALWAYS, INFO, DEBUG.");
 
+		wait for parm_simulation_duration - 2 ns;
+		ReportAlerts;
+
+		std.env.finish;
 		wait;
 	end process p_set_logfile;
 
@@ -257,6 +276,7 @@ begin
 			parm_reset_cycle_count => c_reset_clock_count
 		)
 		port map(
+			TBID => TBID,
 			co_main_clock => CLK100MHZ,
 			con_main_reset => si_resetn
 		);
@@ -271,6 +291,7 @@ begin
 			parm_basic_led_count => 4
 			)
 		port map(
+			TBID => TBID,
 			ci_main_clock => CLK100MHZ,
 			cin_main_reset => si_resetn,
 			co_buttons => si_buttons,
@@ -314,6 +335,7 @@ begin
 	-- Simulate the Pmod ACL2 peripheral
 	u_tbc_pmod_acl2 : tbc_pmod_acl2
 		port map(
+			TBID => TBID,
 			ci_sck => so_pmod_acl2_sck,
 			ci_csn => so_pmod_acl2_csn,
 			ci_copi => so_pmod_acl2_copi,
@@ -325,6 +347,7 @@ begin
 	-- Simulate the Pmod CLS peripheral
 	u_tbc_pmod_cls : tbc_pmod_cls
 		port map(
+			TBID => TBID,
 			ci_sck => so_pmod_cls_sck,
 			ci_csn => so_pmod_cls_csn,
 			ci_copi => so_pmod_cls_dq0,
@@ -334,6 +357,7 @@ begin
 	-- Simulate the board UART peripheral
 	u_tbc_board_uart : tbc_board_uart
 		port map(
+			TBID => TBID,
 			ci_rxd => so_uart_tx,
 			co_txd => si_uart_rx
 			);
@@ -341,6 +365,7 @@ begin
 	-- Simulate the Pmod SSD (7SD) peripheral
 	u_tbc_pmod_7sd : tbc_pmod_7sd
 		port map(
+			TBID => TBID,
 			ci_mux_ena => so_ssd_pmod0(7),
 			ci_mux_dat => so_ssd_pmod0(6 downto 0)
 			);

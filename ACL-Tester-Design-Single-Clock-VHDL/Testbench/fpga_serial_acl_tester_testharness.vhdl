@@ -15,6 +15,7 @@ end entity fpga_serial_acl_tester_testharness;
 architecture simulation of fpga_serial_acl_tester_testharness is
     component fpga_serial_acl_tester_testbench is
         generic(
+            parm_simulation_duration : time := 7 ms;
             parm_fast_simulation : integer := 1;
             parm_log_file_name : string := "log_fpga_serial_acl_tester_no_test.txt"
         );
@@ -23,6 +24,7 @@ begin
 
     u_fpga_serial_acl_tester_testbench : fpga_serial_acl_tester_testbench
         generic map(
+            parm_simulation_duration => 7 ms,
             parm_fast_simulation => 1,
             parm_log_file_name => "log_fpga_serial_acl_tester_no_test.txt"
             );

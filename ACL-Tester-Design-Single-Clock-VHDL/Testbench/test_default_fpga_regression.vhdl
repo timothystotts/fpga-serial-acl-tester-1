@@ -18,6 +18,7 @@ configuration test_default_fpga_regression of fpga_serial_acl_tester_testharness
         for u_fpga_serial_acl_tester_testbench : fpga_serial_acl_tester_testbench
             use entity work.fpga_serial_acl_tester_testbench(simulation)
             generic map(
+                parm_simulation_duration => 750 ms,
                 parm_log_file_name => "log_test_default_fpga_regression.txt"
             );
 

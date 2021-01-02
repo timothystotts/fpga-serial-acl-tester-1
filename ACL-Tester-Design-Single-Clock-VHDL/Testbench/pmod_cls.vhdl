@@ -215,6 +215,7 @@ use work.tbc_pmod_cls_pkg.all;
 --------------------------------------------------------------------------------
 entity tbc_pmod_cls is
     port(
+        TBID : in AlertLogIDType;
         ci_sck : in std_logic;
         ci_csn : in std_logic;
         ci_copi : in std_logic;
@@ -224,7 +225,18 @@ end entity tbc_pmod_cls;
 --------------------------------------------------------------------------------
 architecture simulation_default of tbc_pmod_cls is
     constant ASCII_CLS_ESC : std_logic_vector(7 downto 0) := x"1B";
+    signal ModelID : AlertLogIDType;
 begin
+    -- Simulation initialization
+        p_sim_init : process
+        variable ID : AlertLogIDType;
+    begin
+        wait for 1 ns;
+        ID := GetAlertLogID(PathTail(tbc_pmod_cls'path_name), TBID);
+        ModelID <= ID;
+        wait;
+    end process p_sim_init;
+
     -- Just hold outputs at zero
     co_cipo <= '0';
 
@@ -234,31 +246,35 @@ begin
         variable buf_ovr : natural := 0;
         variable start_char : std_logic_vector(7 downto 0);
     begin
-        input_buffer := (others => '0');
-        buf_len := 0;
-        buf_ovr := 0;
-        start_char := x"20";
+        wait for 2 ns;
 
-        pr_spi_recv_only(ci_sck, ci_csn, ci_copi, input_buffer, buf_len, buf_ovr);
+        l_spi_recv : loop
+            input_buffer := (others => '0');
+            buf_len := 0;
+            buf_ovr := 0;
+            start_char := x"20";
 
-        if (buf_len < 8) then
-            Alert("PMOD CLS failed a SPI transferr with a short buffer length of " & to_string(buf_len) & " bits", ERROR);
-        elsif (buf_len mod 8 /= 0) then
-            Alert("PMOD CLS failed a SPI transferr with a uneven buffer length of " & to_string(buf_len) & " bits", ERROR);
-        elsif (buf_ovr > 0) then
-            Alert("PMOD CLS failed a SPI transferr with a tbc_pmod_cls buffer overflow of " & to_string(buf_len) & " bits", ERROR);
-        else
-            start_char := input_buffer(buf_len - 1 downto buf_len - 8);
-            if (start_char = ASCII_CLS_ESC) then
-                Log("PMOD CLS received control line of " & to_string(real(buf_len) / real(8)) & " bytes: " &
-                to_hstring(input_buffer(buf_len - 1 downto 0)) & " decoded: \x" &
-                fn_convert_hex_to_ascii(input_buffer, (buf_len - 8) / 8), INFO);
+            pr_spi_recv_only(ci_sck, ci_csn, ci_copi, input_buffer, buf_len, buf_ovr);
+
+            if (buf_len < 8) then
+                Alert(ModelID, "PMOD CLS failed a SPI transferr with a short buffer length of " & to_string(buf_len) & " bits", ERROR);
+            elsif (buf_len mod 8 /= 0) then
+                Alert(ModelID, "PMOD CLS failed a SPI transferr with a uneven buffer length of " & to_string(buf_len) & " bits", ERROR);
+            elsif (buf_ovr > 0) then
+                Alert(ModelID, "PMOD CLS failed a SPI transferr with a tbc_pmod_cls buffer overflow of " & to_string(buf_len) & " bits", ERROR);
             else
-                Log("PMOD CLS received text line of " & to_string(real(buf_len) / real(8)) & " bytes: " &
-                to_hstring(input_buffer(buf_len - 1 downto 0)) & " decoded: " &
-                fn_convert_hex_to_ascii(input_buffer, buf_len / 8), INFO);
+                start_char := input_buffer(buf_len - 1 downto buf_len - 8);
+                if (start_char = ASCII_CLS_ESC) then
+                    Log(ModelID, "PMOD CLS received control line of " & to_string(real(buf_len) / real(8)) & " bytes: " &
+                    to_hstring(input_buffer(buf_len - 1 downto 0)) & " decoded: \x" &
+                    fn_convert_hex_to_ascii(input_buffer, (buf_len - 8) / 8), INFO);
+                else
+                    Log(ModelID, "PMOD CLS received text line of " & to_string(real(buf_len) / real(8)) & " bytes: " &
+                    to_hstring(input_buffer(buf_len - 1 downto 0)) & " decoded: " &
+                    fn_convert_hex_to_ascii(input_buffer, buf_len / 8), INFO);
+                end if;
             end if;
-        end if;
+        end loop l_spi_recv;
     end process p_spi_recv;
 end architecture simulation_default;
 --------------------------------------------------------------------------------

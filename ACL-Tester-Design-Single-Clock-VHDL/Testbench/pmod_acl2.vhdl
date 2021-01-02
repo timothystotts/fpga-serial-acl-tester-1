@@ -2,7 +2,7 @@
 -- \file pmod_acl2.vhdl
 --
 -- \brief OSVVM testbench component: incomplete Simulation Model of Digilent Inc.
--- Pmod ACL2 external peripheral.
+-- Pmod ACL2 external peripheral, using datasheet for Analog Devices ADXL362.
 --------------------------------------------------------------------------------
 library ieee;
 use ieee.std_logic_1164.all;
@@ -81,6 +81,7 @@ package tbc_pmod_acl2_pkg is
     );
 
     procedure pr_spi_reg_access_mode_zero(
+        constant ModelID : in AlertLogIDType;
         signal sck : in std_logic;
         signal csn : in std_logic;
         signal copi : in std_logic;
@@ -98,6 +99,7 @@ end package tbc_pmod_acl2_pkg;
 --------------------------------------------------------------------------------
 package body tbc_pmod_acl2_pkg is
     procedure pr_spi_reg_access_mode_zero(
+        constant ModelID : in AlertLogIDType;
         signal sck : in std_logic;
         signal csn : in std_logic;
         signal copi : in std_logic;
@@ -172,34 +174,47 @@ package body tbc_pmod_acl2_pkg is
                             if ((reg_perms(op_addr) = REG_R) or (reg_perms(op_addr) = REG_RW)) then
                                 out_buf(out_buf'left downto out_buf'left - 7) := val_out_as_slv;
                                 reg_access(op_addr) := 1;
+                            end if;
+                        end if;
+                    end if;
+                end if;
+
+                if (buffer_len mod 8 = 1) then
+                    if (op_addr < t_op_addr'high) then
+                        if ((op_read) and (buffer_len > 16)) then
+                            if ((reg_perms(op_addr) = REG_R) or (reg_perms(op_addr) = REG_RW)) then
                                 op_byte_slv := std_logic_vector(to_unsigned(reg_mem(op_addr), 8));
 
-                                Log("PMOD ACL2 read addr x" & to_hstring(op_addr_slv) &
+                                Log(ModelID, "PMOD ACL2 read addr x" & to_hstring(op_addr_slv) &
                                 " value x" & to_hstring(op_byte_slv), INFO);
 
                                 if (op_addr < t_op_addr'high) then
                                     op_addr := op_addr + 1;
                                 end if;
                             else
-                                Alert("PMOD ACL2 attempted read of non-read address x" &
+                                Alert(ModelID, "PMOD ACL2 attempted read of non-read address x" &
                                 to_string(op_addr_slv), WARNING);
                             end if;
                         end if;
+                    end if;
+                end if;
 
+                if (buffer_len mod 8 = 0) then
+                    if (op_addr < t_op_addr'high) then
                         if ((op_write) and (buffer_len >= 24)) then
                             if ((reg_perms(op_addr) = REG_W) or (reg_perms(op_addr) = REG_RW)) then
                                 reg_mem(op_addr) := val_in_as_int;
                                 reg_dirty(op_addr) := 1;
                                 op_byte_slv := std_logic_vector(to_unsigned(reg_mem(op_addr), 8));
 
-                                Log("PMOD ACL2 write addr x" & to_hstring(op_addr_slv) &
+                                Log(ModelID, "PMOD ACL2 write addr x" & to_hstring(op_addr_slv) &
                                 " value x" & to_hstring(op_byte_slv), INFO);
 
                                 if (op_addr < t_op_addr'high) then
                                     op_addr := op_addr + 1;
                                 end if;
                             else
-                                Alert("PMOD ACL2 attempted write to non-write address x" &
+                                Alert(ModelID, "PMOD ACL2 attempted write to non-write address x" &
                                 to_string(op_addr_slv) & " with value x" &
                                 to_string(op_byte_slv), WARNING);
                             end if;
@@ -228,6 +243,7 @@ use work.tbc_pmod_acl2_pkg.all;
 --------------------------------------------------------------------------------
 entity tbc_pmod_acl2 is
     port(
+        TBID : in AlertLogIDType;
         ci_sck : in std_logic;
         ci_csn : in std_logic;
         ci_copi : in std_logic;
@@ -240,12 +256,25 @@ end entity tbc_pmod_acl2;
 architecture simulation_default of tbc_pmod_acl2 is    
     shared variable sv_status_reg : t_share_reg;
 
+    signal ModelID : AlertLogIDType;
+
     signal so_int1 : std_logic;
     signal so_int2 : std_logic;
     signal s_filter_ctl_reg : std_logic_vector(7 downto 0);
     signal s_int1_map_reg : std_logic_vector(7 downto 0);
     signal s_int2_map_reg : std_logic_vector(7 downto 0);
 begin
+    -- Simulation initialization
+    p_sim_init : process
+        variable ID : AlertLogIDType;
+    begin
+        wait for 1 ns;
+        ID := GetAlertLogID(PathTail(tbc_pmod_acl2'path_name), TBID);
+        ModelID <= ID;
+        wait;
+    end process p_sim_init;
+
+    -- interrupt signal outputs
     co_int1 <= so_int1;
     co_int2 <= so_int2;
 
@@ -259,45 +288,51 @@ begin
         variable reg_dirty : t_reg_array(c_acl2_reg_mem'range) := (others => 0);
         constant reg_perms : t_reg_perms(c_acl2_reg_perms'range) := c_acl2_reg_perms;
     begin
-        input_buffer := (others => '0');
-        output_buffer := (others => '0');
+        wait for 2 ns;
 
-        pr_spi_reg_access_mode_zero(
-            ci_sck,
-            ci_csn,
-            ci_copi,
-            co_cipo,
-            input_buffer,
-            output_buffer,
-            buffer_len,
-            buffer_ovr,
-            reg_mem,
-            reg_access,
-            reg_dirty,
-            reg_perms);
+        l_spi_recv : loop
+            input_buffer := (others => '0');
+            output_buffer := (others => '0');
 
-        s_int1_map_reg <= std_logic_vector(to_unsigned(reg_mem(c_reg_idx_int1_map), 8));
-        s_int2_map_reg <= std_logic_vector(to_unsigned(reg_mem(c_reg_idx_int2_map), 8));
-        s_filter_ctl_reg <= std_logic_vector(to_unsigned(reg_mem(c_reg_idx_filter_ctl), 8));
+            pr_spi_reg_access_mode_zero(
+                ModelID,
+                ci_sck,
+                ci_csn,
+                ci_copi,
+                co_cipo,
+                input_buffer,
+                output_buffer,
+                buffer_len,
+                buffer_ovr,
+                reg_mem,
+                reg_access,
+                reg_dirty,
+                reg_perms);
 
-        -- Synchronize the Status Register
-        -- Step 1 - react to register write
-        if (reg_dirty(c_reg_idx_status_reg) = 1) then
-            sv_status_reg.Set(std_logic_vector(to_unsigned(reg_mem(c_reg_idx_status_reg), 8)));
-            reg_dirty(c_reg_idx_status_reg) := 0;
-        end if;
-        -- Step 2 - react to register read
-        if (reg_access(c_reg_idx_status_reg) = 1) then
-            sv_status_reg.Update('0', 0);
-            reg_access(c_reg_idx_status_reg) := 0;
-        end if;
-        -- Step 3 - final sync
-        reg_mem(c_reg_idx_status_reg) := to_integer(unsigned(sv_status_reg.Get));
+            s_int1_map_reg <= std_logic_vector(to_unsigned(reg_mem(c_reg_idx_int1_map), 8));
+            s_int2_map_reg <= std_logic_vector(to_unsigned(reg_mem(c_reg_idx_int2_map), 8));
+            s_filter_ctl_reg <= std_logic_vector(to_unsigned(reg_mem(c_reg_idx_filter_ctl), 8));
 
+            -- Synchronize the Status Register
+            -- Step 1 - react to register write
+            if (reg_dirty(c_reg_idx_status_reg) = 1) then
+                sv_status_reg.Set(std_logic_vector(to_unsigned(reg_mem(c_reg_idx_status_reg), 8)));
+                reg_dirty(c_reg_idx_status_reg) := 0;
+            end if;
+            -- Step 2 - react to register read
+            if (reg_access(c_reg_idx_status_reg) = 1) then
+                sv_status_reg.Update('0', 0);
+                reg_access(c_reg_idx_status_reg) := 0;
+            end if;
+            -- Step 3 - final sync
+            reg_mem(c_reg_idx_status_reg) := to_integer(unsigned(sv_status_reg.Get));
+        end loop l_spi_recv;
     end process p_spi_reg_access_mode_zero;
 
     p_filter_ctl : process
     begin
+        wait for 2 ns;
+
         sv_status_reg.Update('0', 0);
         l_drive_data_ready : loop
             case s_filter_ctl_reg(2 downto 0) is
@@ -318,6 +353,8 @@ begin
         variable v_prev_int1 : std_logic;
         variable v_prev_int2 : std_logic;
     begin
+        wait for 2 ns;
+
         l_drive_int : loop
             wait for 100 ns;
             v_prev_int1 := so_int1;
@@ -330,11 +367,11 @@ begin
             wait for 1 ns;
 
             if (so_int1 /= v_prev_int1) then
-                Log("PMOD ACL2 INT1 is " & to_string(so_int1), DEBUG);
+                Log(ModelID, "PMOD ACL2 INT1 is " & to_string(so_int1), DEBUG);
             end if;
 
             if (so_int2 /= v_prev_int2) then
-                Log("PMOD ACL2 INT2 is " & to_string(so_int2), DEBUG);
+                Log(ModelID, "PMOD ACL2 INT2 is " & to_string(so_int2), DEBUG);
             end if;
         end loop l_drive_int;
     end process p_update_int12;

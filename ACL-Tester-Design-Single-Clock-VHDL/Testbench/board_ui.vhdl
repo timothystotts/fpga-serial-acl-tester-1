@@ -24,6 +24,7 @@ entity tbc_board_ui is
         parm_pwm_basic_max_duty_cycle : natural := 9
         );
     port(
+        TBID : in AlertLogIDType;
         ci_main_clock : in std_logic;
         cin_main_reset : in std_logic;
         co_buttons : out std_logic_vector((parm_button_count - 1) downto 0);
@@ -39,11 +40,22 @@ architecture simulation_default of tbc_board_ui is
     type t_rgb_led_arrray is array (natural range <>) of
         std_logic_vector(2 downto 0);
 
+    signal ModelID : AlertLogIDType;
+
     signal so_buttons : std_logic_vector(co_buttons'range);
     signal so_switches : std_logic_vector(co_switches'range);
     signal si_rbg_leds : t_rgb_led_arrray((parm_rgb_led_count - 1) downto 0);
-
 begin
+    -- Simulation initialization
+    p_sim_init : process
+        variable ID : AlertLogIDType;
+    begin
+        wait for 1 ns;
+        ID := GetAlertLogID(PathTail(tbc_board_ui'path_name), TBID);
+        ModelID <= ID;
+        wait;
+    end process p_sim_init;
+
     -- Input the RGB lEDs
     g_rgb_leds : for i_rgb in ci_led_red'range generate
     begin
@@ -55,21 +67,23 @@ begin
     -- Default initialization of the buttons on the board.
     p_set_buttons : process
     begin
+        wait for 2 ns;
+
         WaitForClock(ci_main_clock, 1);
         WaitForLevel(cin_main_reset, '0');
         WaitForClock(ci_main_clock, 1);
         so_buttons <= (others => '0');
-        Log("BOARD UI buttons 0,1,2,3 released at startup.", INFO);
+        Log(ModelID, "BOARD UI buttons 0,1,2,3 released at startup.", INFO);
         WaitForLevel(cin_main_reset, '1');
         WaitForClock(ci_main_clock, 1);   
 
         WaitForClock(ci_main_clock, parm_clk_freq / 1000 * 120);
         so_buttons(0) <= '1';
-        Log("BOARD UI button 0 depressed.", INFO);
+        Log(ModelID, "BOARD UI button 0 depressed.", INFO);
 
         WaitForClock(ci_main_clock, parm_clk_freq / 1000 * 120);
         so_buttons(0) <= '0';
-        Log("BOARD UI button 0 released.", INFO);
+        Log(ModelID, "BOARD UI button 0 released.", INFO);
         wait;
     end process p_set_buttons;
 
@@ -78,17 +92,19 @@ begin
     -- Default initialization of the switches on the board.
     p_set_switches : process
     begin
+        wait for 2 ns;
+        
         WaitForClock(ci_main_clock, 1);
         WaitForLevel(cin_main_reset, '0');
         WaitForClock(ci_main_clock, 1);        
         so_switches <= (others => '0');
-        Log("BOARD UI switches 0,1,2,3 unselected at startup.", INFO);        
+        Log(ModelID, "BOARD UI switches 0,1,2,3 unselected at startup.", INFO);        
         WaitForLevel(cin_main_reset, '1');
         WaitForClock(ci_main_clock, 1);   
 
         WaitForClock(ci_main_clock, parm_clk_freq / 1000 * 5);
         so_switches(0) <= '1';
-        Log("BOARD UI switch 0 selected.", INFO);
+        Log(ModelID, "BOARD UI switch 0 selected.", INFO);
         wait;
     end process p_set_switches;
 
@@ -111,7 +127,7 @@ begin
             wait on si_rbg_leds(i_rgb);
 
             if cin_main_reset /= '0' then
-                Log("RGB LED Filament " & to_string(i_rgb) & " changed to:" &
+                Log(ModelID, "RGB LED Filament " & to_string(i_rgb) & " changed to:" &
                 " R:" & to_string(si_rbg_leds(i_rgb)(2)) &
                 " G:" & to_string(si_rbg_leds(i_rgb)(1)) &
                 " B:" & to_string(si_rbg_leds(i_rgb)(0)),
@@ -140,12 +156,12 @@ begin
                         v_time_off(i_idx) := 0 ms;
                     end loop;
 
-                    Log("RGB LED PWM " & to_string(i_rgb) & " lasted for:" &
+                    Log(ModelID, "RGB LED PWM " & to_string(i_rgb) & " lasted for:" &
                     " R:" & to_string(v_time_delta(2)) &
                     " G:" & to_string(v_time_delta(1)) &
                     " B:" & to_string(v_time_delta(0)), INFO);
 
-                    Log("RGB LED PWM " & to_string(i_rgb) & " changed to:" &
+                    Log(ModelID, "RGB LED PWM " & to_string(i_rgb) & " changed to:" &
                     " R:" & to_string(integer(real(v_time_delta(2) * 256 / c_pwm_period))) &
                     " G:" & to_string(integer(real(v_time_delta(1) * 256 / c_pwm_period))) &
                     " B:" & to_string(integer(real(v_time_delta(0) * 256 / c_pwm_period))), INFO);
@@ -166,7 +182,7 @@ begin
             variable v_time_delta : time := 0 ms;
         begin
             wait on ci_led_basic(i_basic);
-            Log("BASIC LED Filament " & to_string(i_basic) & " changed to: " & to_string(ci_led_basic(i_basic)),
+            Log(ModelID, "BASIC LED Filament " & to_string(i_basic) & " changed to: " & to_string(ci_led_basic(i_basic)),
             INFO);
 
             if ci_led_basic(i_basic) = '1' then
@@ -188,10 +204,10 @@ begin
                 v_time_on := 0 ms;
                 v_time_off := 0 ms;
 
-                Log("BASIC LED PWM " & to_string(i_basic) & " lasted for:" &
+                Log(ModelID, "BASIC LED PWM " & to_string(i_basic) & " lasted for:" &
                 " L:" & to_string(v_time_delta), INFO);
 
-                Log("BASIC LED PWM " & to_string(i_basic) & " changed to:" &
+                Log(ModelID, "BASIC LED PWM " & to_string(i_basic) & " changed to:" &
                 " L:" & to_string(integer(real(v_time_delta * 256 / c_pwm_period))), INFO);
             end if;
 
