@@ -25,6 +25,8 @@ entity tbc_board_ui is
         );
     port(
         TBID : in AlertLogIDType;
+        BarrierTestStart : inout std_logic;
+        BarrierLogStart : inout std_logic;
         ci_main_clock : in std_logic;
         cin_main_reset : in std_logic;
         co_buttons : out std_logic_vector((parm_button_count - 1) downto 0);
@@ -50,9 +52,17 @@ begin
     p_sim_init : process
         variable ID : AlertLogIDType;
     begin
-        wait for 1 ns;
+        wait for 0 ns;
+        WaitForBarrier(BarrierTestStart);
         ID := GetAlertLogID(PathTail(tbc_board_ui'path_name), TBID);
         ModelID <= ID;
+
+        wait on ModelID;
+        Log(ModelID, "Starting board user interface emulation, " &
+        to_string(parm_button_count) & " buttons, " &
+        to_string(parm_switch_count) & " switches, " &
+        to_string(parm_rgb_led_count) & " RGB LEDs, " &
+        to_string(parm_basic_led_count) & " Basic LEDs.", ALWAYS);
         wait;
     end process p_sim_init;
 
@@ -67,7 +77,9 @@ begin
     -- Default initialization of the buttons on the board.
     p_set_buttons : process
     begin
-        wait for 2 ns;
+        wait for 0 ns;
+        WaitForBarrier(BarrierLogStart);
+        Log(ModelID, "Entering emulation of buttons 0,1,2,3 .", ALWAYS);
 
         WaitForClock(ci_main_clock, 1);
         WaitForLevel(cin_main_reset, '0');
@@ -92,8 +104,10 @@ begin
     -- Default initialization of the switches on the board.
     p_set_switches : process
     begin
-        wait for 2 ns;
-        
+        wait for 0 ns;
+        WaitForBarrier(BarrierLogStart);
+        Log(ModelID, "Entering emulation of switches 0,1,2,3 .", ALWAYS);
+
         WaitForClock(ci_main_clock, 1);
         WaitForLevel(cin_main_reset, '0');
         WaitForClock(ci_main_clock, 1);        
@@ -126,46 +140,44 @@ begin
         begin
             wait on si_rbg_leds(i_rgb);
 
-            if cin_main_reset /= '0' then
-                Log(ModelID, "RGB LED Filament " & to_string(i_rgb) & " changed to:" &
-                " R:" & to_string(si_rbg_leds(i_rgb)(2)) &
-                " G:" & to_string(si_rbg_leds(i_rgb)(1)) &
-                " B:" & to_string(si_rbg_leds(i_rgb)(0)),
-                INFO);
+            Log(ModelID, "RGB LED Filament " & to_string(i_rgb) & " changed to:" &
+            " R:" & to_string(si_rbg_leds(i_rgb)(2)) &
+            " G:" & to_string(si_rbg_leds(i_rgb)(1)) &
+            " B:" & to_string(si_rbg_leds(i_rgb)(0)),
+            INFO);
 
-                for i_idx in 2 downto 0 loop
-                    if si_rbg_leds(i_rgb)(i_idx) = '1' then
-                        if not v_have_on(i_idx) then
-                            v_have_on(i_idx) := true;
-                            v_time_on(i_idx) := NOW;
-                        end if;
-                    elsif v_have_on(i_idx) then
-                        if not v_have_off(i_idx) then
-                            v_have_off(i_idx) := true;
-                            v_time_off(i_idx) := NOW;
-                        end if;
+            for i_idx in 2 downto 0 loop
+                if si_rbg_leds(i_rgb)(i_idx) = '1' then
+                    if not v_have_on(i_idx) then
+                        v_have_on(i_idx) := true;
+                        v_time_on(i_idx) := NOW;
                     end if;
+                elsif v_have_on(i_idx) then
+                    if not v_have_off(i_idx) then
+                        v_have_off(i_idx) := true;
+                        v_time_off(i_idx) := NOW;
+                    end if;
+                end if;
+            end loop;
+
+            if (v_have_on(2) and v_have_on(1) and v_have_on(0) and v_have_off(2) and v_have_off(1) and v_have_off(0)) then
+                for i_idx in 2 downto 0 loop
+                    v_time_delta(i_idx) := abs(v_time_off(i_idx) - v_time_on(i_idx));
+                    v_have_on(i_idx) := false;
+                    v_have_off(i_idx) := false;
+                    v_time_on(i_idx) := 0 ms;
+                    v_time_off(i_idx) := 0 ms;
                 end loop;
 
-                if (v_have_on(2) and v_have_on(1) and v_have_on(0) and v_have_off(2) and v_have_off(1) and v_have_off(0)) then
-                    for i_idx in 2 downto 0 loop
-                        v_time_delta(i_idx) := abs(v_time_off(i_idx) - v_time_on(i_idx));
-                        v_have_on(i_idx) := false;
-                        v_have_off(i_idx) := false;
-                        v_time_on(i_idx) := 0 ms;
-                        v_time_off(i_idx) := 0 ms;
-                    end loop;
+                Log(ModelID, "RGB LED PWM " & to_string(i_rgb) & " lasted for:" &
+                " R:" & to_string(v_time_delta(2)) &
+                " G:" & to_string(v_time_delta(1)) &
+                " B:" & to_string(v_time_delta(0)), INFO);
 
-                    Log(ModelID, "RGB LED PWM " & to_string(i_rgb) & " lasted for:" &
-                    " R:" & to_string(v_time_delta(2)) &
-                    " G:" & to_string(v_time_delta(1)) &
-                    " B:" & to_string(v_time_delta(0)), INFO);
-
-                    Log(ModelID, "RGB LED PWM " & to_string(i_rgb) & " changed to:" &
-                    " R:" & to_string(integer(real(v_time_delta(2) * 256 / c_pwm_period))) &
-                    " G:" & to_string(integer(real(v_time_delta(1) * 256 / c_pwm_period))) &
-                    " B:" & to_string(integer(real(v_time_delta(0) * 256 / c_pwm_period))), INFO);
-                end if;
+                Log(ModelID, "RGB LED PWM " & to_string(i_rgb) & " changed to:" &
+                " R:" & to_string(integer(real(v_time_delta(2) * 256 / c_pwm_period))) &
+                " G:" & to_string(integer(real(v_time_delta(1) * 256 / c_pwm_period))) &
+                " B:" & to_string(integer(real(v_time_delta(0) * 256 / c_pwm_period))), INFO);
             end if;
         end process p_log_rgb_leds;
     end generate g_log_rgb_leds;

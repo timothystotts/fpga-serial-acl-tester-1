@@ -77,6 +77,8 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 		);
 		port(
 			TBID : in  AlertLogIDType;
+			BarrierTestStart : inout std_logic;
+			BarrierLogStart : inout std_logic;
 			co_main_clock : out std_logic;
 			con_main_reset : out std_logic
 		);
@@ -95,6 +97,8 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 			);
 		port(
 			TBID : in AlertLogIDType;
+			BarrierTestStart : inout std_logic;
+			BarrierLogStart : inout std_logic;
 			ci_main_clock : in std_logic;
 			cin_main_reset : in std_logic;
 			co_buttons : out std_logic_vector((parm_button_count - 1) downto 0);
@@ -109,6 +113,8 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 	component tbc_pmod_acl2 is
 		port(
 			TBID : in AlertLogIDType;
+			BarrierTestStart : inout std_logic;
+			BarrierLogStart : inout std_logic;
 			ci_sck : in std_logic;
 			ci_csn : in std_logic;
 			ci_copi : in std_logic;
@@ -121,6 +127,8 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 	component tbc_pmod_cls is
 		port(
 			TBID : in AlertLogIDType;
+			BarrierTestStart : inout std_logic;
+			BarrierLogStart : inout std_logic;
 			ci_sck : in std_logic;
 			ci_csn : in std_logic;
 			ci_copi : in std_logic;
@@ -139,6 +147,8 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 	component tbc_pmod_7sd is
 		port(
 			TBID : in AlertLogIDType;
+			BarrierTestStart : inout std_logic;
+			BarrierLogStart : inout std_logic;
 			ci_mux_ena : in std_logic;
 			ci_mux_dat : in std_logic_vector(6 downto 0)
 			);
@@ -198,16 +208,19 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 	signal so_led_green : std_logic_vector(3 downto 0);
 	signal so_led_blue : std_logic_vector(3 downto 0);
 	signal so_led_basic : std_logic_vector(3 downto 0);
+
+	signal s_barrier_test_start : std_logic;
+	signal s_barrier_log_start : std_logic;
 begin
 	-- Configure alert/log log file
 	p_set_logfile : process
 		variable ID : AlertLogIDType;
 	begin
-		wait for 0.5 ns;
 		ID := GetAlertLogID(PathTail(fpga_serial_acl_tester_testbench'path_name), ALERTLOG_BASE_ID);
 		TBID <= ID;
+		wait for 1 ns;
+		WaitForBarrier(s_barrier_test_start);
 
-		wait for 1.5 ns;
 		TranscriptOpen(parm_log_file_name, WRITE_MODE);
 		SetTranscriptMirror;
 		SetLogEnable(INFO, TRUE);
@@ -216,7 +229,10 @@ begin
 		Print("FPGA_SERIAL_ACL_TESTER_TESTBENCH starting simulation.");
 		Print("Logging enabled for ALWAYS, INFO, DEBUG.");
 
-		wait for parm_simulation_duration - 2 ns;
+		wait for 1 ns;
+		WaitForBarrier(s_barrier_log_start);
+
+		wait for parm_simulation_duration;
 		ReportAlerts;
 
 		std.env.finish;
@@ -276,7 +292,9 @@ begin
 			parm_reset_cycle_count => c_reset_clock_count
 		)
 		port map(
-			TBID => TBID,
+			TBID => TBID,			
+			BarrierTestStart => s_barrier_test_start,
+			BarrierLogStart => s_barrier_log_start,
 			co_main_clock => CLK100MHZ,
 			con_main_reset => si_resetn
 		);
@@ -292,6 +310,8 @@ begin
 			)
 		port map(
 			TBID => TBID,
+			BarrierTestStart => s_barrier_test_start,
+			BarrierLogStart => s_barrier_log_start,
 			ci_main_clock => CLK100MHZ,
 			cin_main_reset => si_resetn,
 			co_buttons => si_buttons,
@@ -336,6 +356,8 @@ begin
 	u_tbc_pmod_acl2 : tbc_pmod_acl2
 		port map(
 			TBID => TBID,
+			BarrierTestStart => s_barrier_test_start,
+			BarrierLogStart => s_barrier_log_start,
 			ci_sck => so_pmod_acl2_sck,
 			ci_csn => so_pmod_acl2_csn,
 			ci_copi => so_pmod_acl2_copi,
@@ -348,6 +370,8 @@ begin
 	u_tbc_pmod_cls : tbc_pmod_cls
 		port map(
 			TBID => TBID,
+			BarrierTestStart => s_barrier_test_start,
+			BarrierLogStart => s_barrier_log_start,
 			ci_sck => so_pmod_cls_sck,
 			ci_csn => so_pmod_cls_csn,
 			ci_copi => so_pmod_cls_dq0,
@@ -366,6 +390,8 @@ begin
 	u_tbc_pmod_7sd : tbc_pmod_7sd
 		port map(
 			TBID => TBID,
+			BarrierTestStart => s_barrier_test_start,
+			BarrierLogStart => s_barrier_log_start,
 			ci_mux_ena => so_ssd_pmod0(7),
 			ci_mux_dat => so_ssd_pmod0(6 downto 0)
 			);

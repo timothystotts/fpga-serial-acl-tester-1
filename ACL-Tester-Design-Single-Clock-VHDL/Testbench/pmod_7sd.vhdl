@@ -16,6 +16,8 @@ library work;
 entity tbc_pmod_7sd is
     port(
         TBID : in AlertLogIDType;
+        BarrierTestStart : inout std_logic;
+        BarrierLogStart : inout std_logic;
         ci_mux_ena : in std_logic;
         ci_mux_dat : in std_logic_vector(6 downto 0)
         );
@@ -55,9 +57,13 @@ begin
     p_sim_init : process
         variable ID : AlertLogIDType;
     begin
-        wait for 1 ns;
+        wait for 0 ns;
+        WaitForBarrier(BarrierTestStart);
         ID := GetAlertLogID(PathTail(tbc_pmod_7sd'path_name), TBID);
         ModelID <= ID;
+
+        wait on ModelID;
+        Log(ModelID, "Starting monitoring emulation of Pmod SSD (7SD).", ALWAYS);
         wait;
     end process p_sim_init;
 
@@ -66,8 +72,9 @@ begin
         variable val_of_7sd : unsigned(3 downto 0);
         variable val_is_valid : std_logic;
     begin
-        wait for 2 ns;
-
+        wait for 0 ns;
+        WaitForBarrier(BarrierLogStart);
+        
         l_7seg_monitor : loop
             wait on ci_mux_ena;
             wait for 100 ns;

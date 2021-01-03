@@ -244,6 +244,8 @@ use work.tbc_pmod_acl2_pkg.all;
 entity tbc_pmod_acl2 is
     port(
         TBID : in AlertLogIDType;
+        BarrierTestStart : inout std_logic;
+        BarrierLogStart : inout std_logic;
         ci_sck : in std_logic;
         ci_csn : in std_logic;
         ci_copi : in std_logic;
@@ -268,9 +270,13 @@ begin
     p_sim_init : process
         variable ID : AlertLogIDType;
     begin
-        wait for 1 ns;
+        wait for 0 ns;
+        WaitForBarrier(BarrierTestStart);
         ID := GetAlertLogID(PathTail(tbc_pmod_acl2'path_name), TBID);
         ModelID <= ID;
+
+        wait on ModelID;
+        Log(ModelID, "Starting Pmod ACL2 emulation with SPI mode 0 bus and two interrupt lines.", ALWAYS);
         wait;
     end process p_sim_init;
 
@@ -288,7 +294,9 @@ begin
         variable reg_dirty : t_reg_array(c_acl2_reg_mem'range) := (others => 0);
         constant reg_perms : t_reg_perms(c_acl2_reg_perms'range) := c_acl2_reg_perms;
     begin
-        wait for 2 ns;
+        wait for 0 ns;
+        WaitForBarrier(BarrierLogStart);
+        Log(ModelID, "Entering Pmod ACL2 emulation with SPI mode 0 bus.", ALWAYS);
 
         l_spi_recv : loop
             input_buffer := (others => '0');
@@ -330,20 +338,33 @@ begin
     end process p_spi_reg_access_mode_zero;
 
     p_filter_ctl : process
+        variable v_delay : time := 2.5 ms;
+        variable v_delay_prev : time := 0 ms;
     begin
-        wait for 2 ns;
+        wait for 0 ns;
+        WaitForBarrier(BarrierLogStart);
+        Log(ModelID, "Entering Pmod ACL2 emulation of Data Ready filter control.", ALWAYS);
 
         sv_status_reg.Update('0', 0);
         l_drive_data_ready : loop
             case s_filter_ctl_reg(2 downto 0) is
-                when "000" => wait for 80 ms;
-                when "001" => wait for 40 ms;
-                when "010" => wait for 20 ms;
-                when "011" => wait for 10 ms;
-                when "100" => wait for 5 ms;
-                when others => wait for 2.5 ms;
+                when "000" => v_delay := 80 ms;
+                when "001" => v_delay := 40 ms;
+                when "010" => v_delay := 20 ms;
+                when "011" => v_delay := 10 ms;
+                when "100" => v_delay := 5 ms;
+                when others => v_delay := 2.5 ms;
             end case;
             sv_status_reg.Update('1', 0);
+
+            if (v_delay /= v_delay_prev) then
+                Log(ModelID, "Entering Pmod ACL2 emulation of Data Ready filter " &
+                "control executing with period " & to_string(v_delay) & " .", ALWAYS);
+            end if;
+
+            wait for v_delay;
+            
+            v_delay_prev := v_delay;
         end loop l_drive_data_ready;
         wait;
     end process p_filter_ctl;
@@ -353,7 +374,9 @@ begin
         variable v_prev_int1 : std_logic;
         variable v_prev_int2 : std_logic;
     begin
-        wait for 2 ns;
+        wait for 0 ns;
+        WaitForBarrier(BarrierLogStart);
+        Log(ModelID, "Entering Pmod ACL2 emulation of interrupt lines.", ALWAYS);
 
         l_drive_int : loop
             wait for 100 ns;

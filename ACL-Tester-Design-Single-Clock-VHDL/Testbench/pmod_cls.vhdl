@@ -216,6 +216,8 @@ use work.tbc_pmod_cls_pkg.all;
 entity tbc_pmod_cls is
     port(
         TBID : in AlertLogIDType;
+        BarrierTestStart : inout std_logic;
+        BarrierLogStart : inout std_logic;
         ci_sck : in std_logic;
         ci_csn : in std_logic;
         ci_copi : in std_logic;
@@ -231,9 +233,13 @@ begin
         p_sim_init : process
         variable ID : AlertLogIDType;
     begin
-        wait for 1 ns;
+        wait for 0 ns;
+        WaitForBarrier(BarrierTestStart);
         ID := GetAlertLogID(PathTail(tbc_pmod_cls'path_name), TBID);
         ModelID <= ID;
+
+        wait on ModelID;
+        Log(ModelID, "Starting Pmod CLS emulation with SPI mode 0 bus.", ALWAYS);
         wait;
     end process p_sim_init;
 
@@ -246,7 +252,9 @@ begin
         variable buf_ovr : natural := 0;
         variable start_char : std_logic_vector(7 downto 0);
     begin
-        wait for 2 ns;
+        wait for 0 ns;
+        WaitForBarrier(BarrierLogStart);
+        Log(ModelID, "Entering Pmod CLS emulation with SPI mode 0 bus.", ALWAYS);
 
         l_spi_recv : loop
             input_buffer := (others => '0');

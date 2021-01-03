@@ -19,6 +19,8 @@ entity tbc_clock_gen is
     );
     port(
         TBID : in  AlertLogIDType;
+        BarrierTestStart : inout std_logic;
+        BarrierLogStart : inout std_logic;
         co_main_clock : out std_logic;
         con_main_reset : out std_logic
     );
@@ -32,9 +34,14 @@ begin
     p_sim_init : process
         variable ID : AlertLogIDType;
     begin
-        wait for 1 ns;
+        wait for 0 ns;
+        WaitForBarrier(BarrierTestStart);
         ID := GetAlertLogID(PathTail(tbc_clock_gen'path_name), TBID);
         ModelID <= ID;
+
+        wait on ModelID;
+        Log(ModelID, "Starting system clock emulation with period " &
+        to_string(parm_main_clock_period) & ".", ALWAYS);
         wait;
     end process p_sim_init;
 
@@ -44,9 +51,10 @@ begin
     -- Generate main clock
     p_gen_main_clock : process
     begin
-        wait for 2 ns;
-        Log(ModelID, "Started external clock running with period " &
-            to_string(parm_main_clock_period), ALWAYS);
+        wait for 0 ns;
+        WaitForBarrier(BarrierLogStart);
+        Log(ModelID, "Entering external clock running with period " &
+            to_string(parm_main_clock_period) & " and 50% duty cycle.", ALWAYS);
         CreateClock(
             Clk => so_main_clock,
             Period => parm_main_clock_period,
@@ -59,12 +67,15 @@ begin
     p_gen_main_reset : process
         constant c_reset_period : time := parm_reset_cycle_count * parm_main_clock_period;
     begin
-        wait for 2 ns;
+        wait for 0 ns;
+        WaitForBarrier(BarrierLogStart);
         con_main_reset <= '1';
+        Log(ModelID, "Delaying external reset running with delay " &
+            to_string(c_reset_period) & ".", ALWAYS);
         wait for c_reset_period;
 
-        Log(ModelID, "Started external reset running with period " &
-            to_string(c_reset_period), ALWAYS);
+        Log(ModelID, "Entering external reset running low with period " &
+            to_string(c_reset_period) & ".", ALWAYS);
         CreateReset(
             Reset => con_main_reset,
             ResetActive => '0',
