@@ -67,8 +67,13 @@ architecture rtl of lcd_text_feed is
 	-- Write Line 2
 	-- Wait 0.198 seconds
 	-- Repeat the above.
+	--
+	-- Note that c_i_subsecond_fast must cause a delay substantially slower than
+	-- the 100 Hz operation of the Pmod ACL2; otherwise the data may not display
+	-- on the Pmod CLS; depending on factors such as at what simulation time was
+	-- the Switch 0 positioned to ON.
 	constant c_i_one_ms         : natural := 2500;
-	constant c_i_subsecond_fast : natural := (2500000 / 100) - (2 * c_i_one_ms);
+	constant c_i_subsecond_fast : natural := (2500000 / 20) - (2 * c_i_one_ms);
 	constant c_i_subsecond      : natural := (2500000 / 5) - (2 * c_i_one_ms);
 	constant c_i_max            : natural := c_i_subsecond;
 
