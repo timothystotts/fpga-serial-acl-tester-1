@@ -27,8 +27,13 @@ function ghdl_run () {
 
 function ghdl_run_batch () {
     # std, work unit, duration
-    echo "ghdl -r --std=${1} -fsynopsys -frelaxed ${2} --stop-time=${3}"
-    ghdl -r --std=${1} -fsynopsys -frelaxed ${2} --stop-time=${3} || exit 1
+    if [[ -z ${3} ]]; then
+        echo "ghdl -r --std=${1} -fsynopsys -frelaxed ${2}"
+        ghdl -r --std=${1} -fsynopsys -frelaxed ${2} || exit 1
+    else
+        echo "ghdl -r --std=${1} -fsynopsys -frelaxed ${2} --stop-time=${3}"
+        ghdl -r --std=${1} -fsynopsys -frelaxed ${2} --stop-time=${3} || exit 1
+    fi;
 }
 
 function compile_ossvm () {
@@ -195,6 +200,7 @@ function compile_work () {
     done
 
     for filename in \
+        acl_testbench_pkg.vhdl \
         clock_gen.vhdl \
         board_ui.vhdl \
         board_uart.vhdl \
@@ -234,7 +240,7 @@ function elab_and_run_visual () {
 function elab_and_run_batch () {
     ghdl_elaborate 08 test_default_fpga_regression
 
-    ghdl_run_batch 08 test_default_fpga_regression 750ms
+    ghdl_run_batch 08 test_default_fpga_regression #750ms
 
     # --write-wave-opt=test.opt
 }

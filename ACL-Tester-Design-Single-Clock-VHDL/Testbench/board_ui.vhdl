@@ -89,6 +89,10 @@ begin
         WaitForLevel(cin_main_reset, '1');
         WaitForClock(ci_main_clock, 1);   
 
+        WaitForClock(ci_main_clock, parm_clk_freq / 1000 * 20);
+        so_buttons(3) <= '1';
+        Log(ModelID, "BOARD UI button 3 depressed.", INFO);
+
         WaitForClock(ci_main_clock, parm_clk_freq / 1000 * 120);
         so_buttons(0) <= '1';
         Log(ModelID, "BOARD UI button 0 depressed.", INFO);
@@ -96,6 +100,10 @@ begin
         WaitForClock(ci_main_clock, parm_clk_freq / 1000 * 120);
         so_buttons(0) <= '0';
         Log(ModelID, "BOARD UI button 0 released.", INFO);
+
+        WaitForClock(ci_main_clock, parm_clk_freq / 1000 * 300);
+        so_buttons(3) <= '0';
+        Log(ModelID, "BOARD UI button 3 released.", INFO);
         wait;
     end process p_set_buttons;
 
@@ -144,7 +152,7 @@ begin
             " R:" & to_string(si_rbg_leds(i_rgb)(2)) &
             " G:" & to_string(si_rbg_leds(i_rgb)(1)) &
             " B:" & to_string(si_rbg_leds(i_rgb)(0)),
-            INFO);
+            DEBUG);
 
             for i_idx in 2 downto 0 loop
                 if si_rbg_leds(i_rgb)(i_idx) = '1' then
@@ -195,7 +203,7 @@ begin
         begin
             wait on ci_led_basic(i_basic);
             Log(ModelID, "BASIC LED Filament " & to_string(i_basic) & " changed to: " & to_string(ci_led_basic(i_basic)),
-            INFO);
+            DEBUG);
 
             if ci_led_basic(i_basic) = '1' then
                 if not v_have_on then

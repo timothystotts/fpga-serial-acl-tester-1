@@ -10,13 +10,16 @@ use ieee.numeric_std.all;
 library osvvm;
 context osvvm.OsvvmContext;
 
+library osvvm_uart;
+context osvvm_uart.UartContext;
+
 library work;
 --------------------------------------------------------------------------------
 entity fpga_serial_acl_tester_testbench is
 	generic(
-		parm_simulation_duration : time := 7 ms;
-		parm_fast_simulation : integer := 1;
-		parm_log_file_name : string := "log_fpga_serial_acl_tester_no_test.txt"
+		parm_simulation_duration : time    := 7 ms;
+		parm_fast_simulation     : integer := 1;
+		parm_log_file_name       : string  := "log_fpga_serial_acl_tester_no_test.txt"
 	);
 end entity fpga_serial_acl_tester_testbench;
 --------------------------------------------------------------------------------
@@ -50,14 +53,14 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 			eo_led6           : out std_logic;
 			eo_led7           : out std_logic;
 
-			ei_sw0          : in  std_logic;
-			ei_sw1          : in  std_logic;
-			ei_sw2          : in  std_logic;
-			ei_sw3          : in  std_logic;
-			ei_btn0         : in  std_logic;
-			ei_btn1         : in  std_logic;
-			ei_btn2         : in  std_logic;
-			ei_btn3         : in  std_logic;
+			ei_sw0  : in std_logic;
+			ei_sw1  : in std_logic;
+			ei_sw2  : in std_logic;
+			ei_sw3  : in std_logic;
+			ei_btn0 : in std_logic;
+			ei_btn1 : in std_logic;
+			ei_btn2 : in std_logic;
+			ei_btn3 : in std_logic;
 
 			eo_pmod_cls_csn : out std_logic;
 			eo_pmod_cls_sck : out std_logic;
@@ -72,92 +75,108 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 
 	component tbc_clock_gen is
 		generic(
-			parm_main_clock_period : time := 10 ns;
+			parm_main_clock_period : time     := 10 ns;
 			parm_reset_cycle_count : positive := 5
 		);
 		port(
-			TBID : in  AlertLogIDType;
+			TBID             : in    AlertLogIDType;
 			BarrierTestStart : inout std_logic;
-			BarrierLogStart : inout std_logic;
-			co_main_clock : out std_logic;
-			con_main_reset : out std_logic
+			BarrierLogStart  : inout std_logic;
+			co_main_clock    : out   std_logic;
+			con_main_reset   : out   std_logic
 		);
 	end component tbc_clock_gen;
 
 	component tbc_board_ui is
 		generic(
-			parm_clk_freq : natural := 100_000_000;
-			parm_button_count : positive := 4;
-			parm_switch_count : positive := 4;
-			parm_rgb_led_count : positive := 4;
-			parm_basic_led_count : positive := 4;
-			parm_pwm_period_milliseconds : natural := 10;
-			parm_pwm_color_max_duty_cycle : natural := 8;
-			parm_pwm_basic_max_duty_cycle : natural := 9
-			);
+			parm_clk_freq                 : natural  := 100_000_000;
+			parm_button_count             : positive := 4;
+			parm_switch_count             : positive := 4;
+			parm_rgb_led_count            : positive := 4;
+			parm_basic_led_count          : positive := 4;
+			parm_pwm_period_milliseconds  : natural  := 10;
+			parm_pwm_color_max_duty_cycle : natural  := 8;
+			parm_pwm_basic_max_duty_cycle : natural  := 9
+		);
 		port(
-			TBID : in AlertLogIDType;
+			TBID             : in    AlertLogIDType;
 			BarrierTestStart : inout std_logic;
-			BarrierLogStart : inout std_logic;
-			ci_main_clock : in std_logic;
-			cin_main_reset : in std_logic;
-			co_buttons : out std_logic_vector((parm_button_count - 1) downto 0);
-			co_switches : out std_logic_vector((parm_switch_count - 1) downto 0);
-			ci_led_blue : in std_logic_vector((parm_rgb_led_count - 1) downto 0);
-			ci_led_red : in std_logic_vector((parm_rgb_led_count - 1) downto 0);
-			ci_led_green : in std_logic_vector((parm_rgb_led_count - 1) downto 0);
-			ci_led_basic : in std_logic_vector((parm_basic_led_count - 1) downto 0)
-			);
+			BarrierLogStart  : inout std_logic;
+			ci_main_clock    : in    std_logic;
+			cin_main_reset   : in    std_logic;
+			co_buttons       : out   std_logic_vector((parm_button_count - 1) downto 0);
+			co_switches      : out   std_logic_vector((parm_switch_count - 1) downto 0);
+			ci_led_blue      : in    std_logic_vector((parm_rgb_led_count - 1) downto 0);
+			ci_led_red       : in    std_logic_vector((parm_rgb_led_count - 1) downto 0);
+			ci_led_green     : in    std_logic_vector((parm_rgb_led_count - 1) downto 0);
+			ci_led_basic     : in    std_logic_vector((parm_basic_led_count - 1) downto 0)
+		);
 	end component tbc_board_ui;
 
 	component tbc_pmod_acl2 is
 		port(
-			TBID : in AlertLogIDType;
+			TBID             : in    AlertLogIDType;
 			BarrierTestStart : inout std_logic;
-			BarrierLogStart : inout std_logic;
-			ci_sck : in std_logic;
-			ci_csn : in std_logic;
-			ci_copi : in std_logic;
-			co_cipo : out std_logic;
-			co_int1 : out std_logic;
-			co_int2 : out std_logic
-			);
+			BarrierLogStart  : inout std_logic;
+			ci_sck           : in    std_logic;
+			ci_csn           : in    std_logic;
+			ci_copi          : in    std_logic;
+			co_cipo          : out   std_logic;
+			co_int1          : out   std_logic;
+			co_int2          : out   std_logic
+		);
 	end component tbc_pmod_acl2;
-	
+
 	component tbc_pmod_cls is
 		port(
-			TBID : in AlertLogIDType;
+			TBID             : in    AlertLogIDType;
 			BarrierTestStart : inout std_logic;
-			BarrierLogStart : inout std_logic;
-			ci_sck : in std_logic;
-			ci_csn : in std_logic;
-			ci_copi : in std_logic;
-			co_cipo : out std_logic
-			);
+			BarrierLogStart  : inout std_logic;
+			ci_sck           : in    std_logic;
+			ci_csn           : in    std_logic;
+			ci_copi          : in    std_logic;
+			co_cipo          : out   std_logic
+		);
 	end component tbc_pmod_cls;
 
 	component tbc_board_uart is
 		port(
-			TBID : in AlertLogIDType;
-			ci_rxd : in std_logic;
-			co_txd : out std_logic
-			);
+			TBID             : in    AlertLogIDType;
+			BarrierTestStart : inout std_logic;
+			BarrierLogStart  : inout std_logic;
+			TransRec         : inout UartRecType;
+			ci_rxd           : in    std_logic;
+			co_txd           : out   std_logic
+		);
 	end component tbc_board_uart;
-	
+
 	component tbc_pmod_7sd is
 		port(
-			TBID : in AlertLogIDType;
+			TBID             : in    AlertLogIDType;
 			BarrierTestStart : inout std_logic;
-			BarrierLogStart : inout std_logic;
-			ci_mux_ena : in std_logic;
-			ci_mux_dat : in std_logic_vector(6 downto 0)
-			);
+			BarrierLogStart  : inout std_logic;
+			ci_mux_ena       : in    std_logic;
+			ci_mux_dat       : in    std_logic_vector(6 downto 0)
+		);
 	end component tbc_pmod_7sd;
-	
-	constant c_clock_FREQ : natural := 100_000_000;
-	constant c_clock_period : time := 10 ns;
+
+	component UartRx is
+		generic (
+			DEFAULT_BAUD          : time    := UART_BAUD_PERIOD_125K ;
+			DEFAULT_NUM_DATA_BITS : integer := UARTTB_DATA_BITS_8 ;
+			DEFAULT_PARITY_MODE   : integer := UARTTB_PARITY_EVEN ;
+			DEFAULT_NUM_STOP_BITS : integer := UARTTB_STOP_BITS_1
+		);
+		port (
+			TransRec     : InOut UartRecType ;
+			SerialDataIn : In    std_logic
+		);
+	end component UartRx ;
+
+	constant c_clock_FREQ        : natural  := 100_000_000;
+	constant c_clock_period      : time     := 10 ns;
 	constant c_reset_clock_count : positive := 100;
-	
+
 	signal TBID : AlertLogIDType;
 
 	signal run_clock : boolean;
@@ -202,21 +221,23 @@ architecture simulation of fpga_serial_acl_tester_testbench is
 	signal si_uart_rx        : std_logic;
 	signal so_ssd_pmod0      : std_logic_vector(7 downto 0);
 
-	signal si_buttons : std_logic_vector(3 downto 0);
-	signal si_switches : std_logic_vector(3 downto 0);
-	signal so_led_red : std_logic_vector(3 downto 0);
+	signal si_buttons   : std_logic_vector(3 downto 0);
+	signal si_switches  : std_logic_vector(3 downto 0);
+	signal so_led_red   : std_logic_vector(3 downto 0);
 	signal so_led_green : std_logic_vector(3 downto 0);
-	signal so_led_blue : std_logic_vector(3 downto 0);
+	signal so_led_blue  : std_logic_vector(3 downto 0);
 	signal so_led_basic : std_logic_vector(3 downto 0);
 
 	signal s_barrier_test_start : std_logic;
-	signal s_barrier_log_start : std_logic;
+	signal s_barrier_log_start  : std_logic;
+
+	signal UartRxTransRec : UartRecType;
 begin
 	-- Configure alert/log log file
 	p_set_logfile : process
 		variable ID : AlertLogIDType;
 	begin
-		ID := GetAlertLogID(PathTail(fpga_serial_acl_tester_testbench'path_name), ALERTLOG_BASE_ID);
+		ID   := GetAlertLogID(PathTail(fpga_serial_acl_tester_testbench'path_name), ALERTLOG_BASE_ID);
 		TBID <= ID;
 		wait for 1 ns;
 		WaitForBarrier(s_barrier_test_start);
@@ -224,7 +245,7 @@ begin
 		TranscriptOpen(parm_log_file_name, WRITE_MODE);
 		SetTranscriptMirror;
 		SetLogEnable(INFO, TRUE);
-		SetLogEnable(DEBUG, TRUE);
+		SetLogEnable(DEBUG, FALSE);
 
 		Print("FPGA_SERIAL_ACL_TESTER_TESTBENCH starting simulation.");
 		Print("Logging enabled for ALWAYS, INFO, DEBUG.");
@@ -292,36 +313,36 @@ begin
 			parm_reset_cycle_count => c_reset_clock_count
 		)
 		port map(
-			TBID => TBID,			
+			TBID             => TBID,
 			BarrierTestStart => s_barrier_test_start,
-			BarrierLogStart => s_barrier_log_start,
-			co_main_clock => CLK100MHZ,
-			con_main_reset => si_resetn
+			BarrierLogStart  => s_barrier_log_start,
+			co_main_clock    => CLK100MHZ,
+			con_main_reset   => si_resetn
 		);
 
 	-- Drive and Watch User low-level Interface of FPGA dev-board
 	u_tbc_board_ui : tbc_board_ui
 		generic map(
-			parm_clk_freq => c_clock_FREQ,
-			parm_button_count => 4,
-			parm_switch_count => 4,
-			parm_rgb_led_count => 4,
+			parm_clk_freq        => c_clock_FREQ,
+			parm_button_count    => 4,
+			parm_switch_count    => 4,
+			parm_rgb_led_count   => 4,
 			parm_basic_led_count => 4
-			)
+		)
 		port map(
-			TBID => TBID,
+			TBID             => TBID,
 			BarrierTestStart => s_barrier_test_start,
-			BarrierLogStart => s_barrier_log_start,
-			ci_main_clock => CLK100MHZ,
-			cin_main_reset => si_resetn,
-			co_buttons => si_buttons,
-			co_switches => si_switches,
-			ci_led_blue => so_led_blue,
-			ci_led_red => so_led_red,
-			ci_led_green => so_led_green,
-			ci_led_basic => so_led_basic
-			);
-	
+			BarrierLogStart  => s_barrier_log_start,
+			ci_main_clock    => CLK100MHZ,
+			cin_main_reset   => si_resetn,
+			co_buttons       => si_buttons,
+			co_switches      => si_switches,
+			ci_led_blue      => so_led_blue,
+			ci_led_red       => so_led_red,
+			ci_led_green     => so_led_green,
+			ci_led_basic     => so_led_basic
+		);
+
 	si_btn0 <= si_buttons(0);
 	si_btn1 <= si_buttons(1);
 	si_btn2 <= si_buttons(2);
@@ -355,45 +376,61 @@ begin
 	-- Simulate the Pmod ACL2 peripheral
 	u_tbc_pmod_acl2 : tbc_pmod_acl2
 		port map(
-			TBID => TBID,
+			TBID             => TBID,
 			BarrierTestStart => s_barrier_test_start,
-			BarrierLogStart => s_barrier_log_start,
-			ci_sck => so_pmod_acl2_sck,
-			ci_csn => so_pmod_acl2_csn,
-			ci_copi => so_pmod_acl2_copi,
-			co_cipo => si_pmod_acl2_cipo,
-			co_int1 => si_pmod_acl2_int1,
-			co_int2 => si_pmod_acl2_int2
-			);
+			BarrierLogStart  => s_barrier_log_start,
+			ci_sck           => so_pmod_acl2_sck,
+			ci_csn           => so_pmod_acl2_csn,
+			ci_copi          => so_pmod_acl2_copi,
+			co_cipo          => si_pmod_acl2_cipo,
+			co_int1          => si_pmod_acl2_int1,
+			co_int2          => si_pmod_acl2_int2
+		);
 
 	-- Simulate the Pmod CLS peripheral
 	u_tbc_pmod_cls : tbc_pmod_cls
 		port map(
-			TBID => TBID,
+			TBID             => TBID,
 			BarrierTestStart => s_barrier_test_start,
-			BarrierLogStart => s_barrier_log_start,
-			ci_sck => so_pmod_cls_sck,
-			ci_csn => so_pmod_cls_csn,
-			ci_copi => so_pmod_cls_dq0,
-			co_cipo => si_pmod_cls_dq1
-			);
+			BarrierLogStart  => s_barrier_log_start,
+			ci_sck           => so_pmod_cls_sck,
+			ci_csn           => so_pmod_cls_csn,
+			ci_copi          => so_pmod_cls_dq0,
+			co_cipo          => si_pmod_cls_dq1
+		);
 
 	-- Simulate the board UART peripheral
 	u_tbc_board_uart : tbc_board_uart
 		port map(
-			TBID => TBID,
-			ci_rxd => so_uart_tx,
-			co_txd => si_uart_rx
-			);
-	
+			TBID             => TBID,
+			BarrierTestStart => s_barrier_test_start,
+			BarrierLogStart  => s_barrier_log_start,
+			TransRec         => UartRxTransRec,
+			ci_rxd           => so_uart_tx,
+			co_txd           => si_uart_rx
+		);
+
 	-- Simulate the Pmod SSD (7SD) peripheral
 	u_tbc_pmod_7sd : tbc_pmod_7sd
 		port map(
-			TBID => TBID,
+			TBID             => TBID,
 			BarrierTestStart => s_barrier_test_start,
-			BarrierLogStart => s_barrier_log_start,
-			ci_mux_ena => so_ssd_pmod0(7),
-			ci_mux_dat => so_ssd_pmod0(6 downto 0)
-			);
+			BarrierLogStart  => s_barrier_log_start,
+			ci_mux_ena       => so_ssd_pmod0(7),
+			ci_mux_dat       => so_ssd_pmod0(6 downto 0)
+		);
+
+	-- Use the OSVVM UART for checking the UART RXD line
+	u_osvvm_uart_rx : entity osvvm_uart.UartRx
+		generic map(
+			DEFAULT_BAUD          => UART_BAUD_PERIOD_115200,
+			DEFAULT_NUM_DATA_BITS => UARTTB_DATA_BITS_8,
+			DEFAULT_PARITY_MODE   => UARTTB_PARITY_NONE,
+			DEFAULT_NUM_STOP_BITS => UARTTB_STOP_BITS_1
+		)
+		port map(
+			TransRec     => UartRxTransRec,
+			SerialDataIn => so_uart_tx
+		);
 end architecture simulation;
 --------------------------------------------------------------------------------
