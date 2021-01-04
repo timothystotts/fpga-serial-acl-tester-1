@@ -173,7 +173,7 @@ begin
 				variable buffer_ovr    : inout natural;
 				variable reg_mem       : inout t_reg_array;
 				variable reg_access    : inout t_reg_array;
-				variable reg_dirty     : inout t_reg_array;
+				variable reg_pending   : inout t_reg_array;
 				constant reg_perms     : in    t_reg_perms
 			);
 	end package tbc_pmod_acl2_pkg;
@@ -191,7 +191,7 @@ begin
 				variable buffer_ovr    : inout natural;
 				variable reg_mem       : inout t_reg_array;
 				variable reg_access    : inout t_reg_array;
-				variable reg_dirty     : inout t_reg_array;
+				variable reg_pending   : inout t_reg_array;
 				constant reg_perms     : in    t_reg_perms
 			) is
 			alias in_buf  : std_logic_vector(input_buffer'length downto 1) is input_buffer;
@@ -283,9 +283,9 @@ begin
 						if (op_addr < t_op_addr'high) then
 							if ((op_write) and (buffer_len >= 24)) then
 								if ((reg_perms(op_addr) = REG_W) or (reg_perms(op_addr) = REG_RW)) then
-									reg_mem(op_addr)   := val_in_as_int;
-									reg_dirty(op_addr) := 1;
-									op_byte_slv        := std_logic_vector(to_unsigned(reg_mem(op_addr), 8));
+									reg_mem(op_addr)     := val_in_as_int;
+									reg_pending(op_addr) := 1;
+									op_byte_slv          := std_logic_vector(to_unsigned(reg_mem(op_addr), 8));
 
 									Log(ModelID, "PMOD ACL2 write addr x" & to_hstring(op_addr_slv) &
 										" value x" & to_hstring(op_byte_slv), INFO);
@@ -377,7 +377,7 @@ begin
 			variable buffer_ovr        : natural;
 			variable reg_mem           : t_reg_array(c_acl2_reg_mem'range)   := c_acl2_reg_mem;
 			variable reg_access        : t_reg_array(c_acl2_reg_mem'range)   := (others => 0);
-			variable reg_dirty         : t_reg_array(c_acl2_reg_mem'range)   := (others => 0);
+			variable reg_pending       : t_reg_array(c_acl2_reg_mem'range)   := (others => 0);
 			constant reg_perms         : t_reg_perms(c_acl2_reg_perms'range) := c_acl2_reg_perms;
 		begin
 			wait for 0 ns;
@@ -406,7 +406,7 @@ begin
 							buffer_ovr,
 							reg_mem,
 							reg_access,
-							reg_dirty,
+							reg_pending,
 							reg_perms);
 
 						v_processed_spi := true;
@@ -435,9 +435,9 @@ begin
 
 				-- Synchronize the Status Register
 				-- Step 1 - react to register write
-				if (reg_dirty(c_reg_idx_status_reg) = 1) then
+				if (reg_pending(c_reg_idx_status_reg) = 1) then
 					sv_status_reg.Set(std_logic_vector(to_unsigned(reg_mem(c_reg_idx_status_reg), 8)));
-					reg_dirty(c_reg_idx_status_reg) := 0;
+					reg_pending(c_reg_idx_status_reg) := 0;
 				end if;
 				-- Step 2 - react to register read
 				if (reg_access(c_reg_idx_status_reg) = 1) then
