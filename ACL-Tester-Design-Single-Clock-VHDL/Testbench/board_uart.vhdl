@@ -86,7 +86,7 @@ begin
 
 			if (RxStim.Data = x"0A") then
 				AlertIf(ModelID, rx_ascii_ovr, "The test model overflowed receiving UART ASCII text line. Not all characters are displayed.", ERROR);
-				Log(ModelID, "UART Received from FPGA the ASCII line: " & rx_ascii_buf, INFO);
+				Log(ModelID, "UART Received from FPGA the ASCII line: " & rx_ascii_buf(1 to rx_ascii_cnt), INFO);
 				rx_ascii_buf := (others => NUL);
 				rx_ascii_cnt := 0;
 				rx_ascii_ovr := false;
