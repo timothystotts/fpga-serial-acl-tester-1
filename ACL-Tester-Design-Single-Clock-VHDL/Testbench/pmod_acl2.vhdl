@@ -236,8 +236,12 @@ package body tbc_pmod_acl2_pkg is
 			wait on sck, csn;
 
 			if (sck'event and sck = '0') then
-				cipo <= out_buf(out_buf'left);
-
+				if (buffer_len <= 16) then
+					cipo <= 'Z';
+				else
+					cipo <= out_buf(out_buf'left);
+				end if;
+				
 				out_buf := out_buf(out_buf'left - 1 downto 1) & '0';
 			end if;
 
