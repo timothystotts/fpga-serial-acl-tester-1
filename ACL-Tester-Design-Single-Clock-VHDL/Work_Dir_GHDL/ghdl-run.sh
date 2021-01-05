@@ -42,10 +42,16 @@ function ghdl_elaborate () {
     ghdl -e --std=${1} -fsynopsys -frelaxed -O2 ${2} || exit 1
 }
 
+function ghdl_generate_optlist () {
+    # std, work unit, vcd wave dump, wave list output
+    echo "ghdl -r --std=${1} -fsynopsys -frelaxed ${2} ---vcd=${3} ---write-wave-opt=${4} --stop-time=1us"
+    ghdl -r --std=${1} -fsynopsys -frelaxed ${2} --vcd=${3} --write-wave-opt=${4} --stop-time=1us || exit 1
+}
+
 function ghdl_run () {
     # std, work unit, wave dump, wave list
-    echo "ghdl -r --std=${1} -fsynopsys -frelaxed ${2} --stop-time=100ms --vcd=s${3} --read-wave-opt=${4}"
-    ghdl -r --std=${1} -fsynopsys -frelaxed ${2} --stop-time=100ms --vcd=s${3} --read-wave-opt=${4} || exit 1
+    echo "ghdl -r --std=${1} -fsynopsys -frelaxed ${2} --stop-time=100ms --vcd=${3} --read-wave-opt=${4}"
+    ghdl -r --std=${1} -fsynopsys -frelaxed ${2} --stop-time=100ms --vcd=${3} --read-wave-opt=${4} || exit 1
 }
 
 function ghdl_run_batch () {
@@ -53,9 +59,12 @@ function ghdl_run_batch () {
     if [[ -z ${3} ]]; then
         echo "ghdl -r --std=${1} -fsynopsys -frelaxed ${2}"
         ghdl -r --std=${1} -fsynopsys -frelaxed ${2} || exit 1
-    else
+    elif [[ -z ${4} ]]; then
         echo "ghdl -r --std=${1} -fsynopsys -frelaxed ${2} --stop-time=${3}"
         ghdl -r --std=${1} -fsynopsys -frelaxed ${2} --stop-time=${3} || exit 1
+    elif [[ -z ${6} ]]; then
+        echo "ghdl -r --std=${1} -fsynopsys -frelaxed ${2} --stop-time=${3} --read-wave-opt=${4}  --vcd=${5}"
+        ghdl -r --std=${1} -fsynopsys -frelaxed ${2} --stop-time=${3} --read-wave-opt=${4} --vcd=${5} || exit 1        
     fi;
 }
 
@@ -263,9 +272,10 @@ function elab_and_run_visual () {
 function elab_and_run_batch () {
     ghdl_elaborate 08 test_default_fpga_regression
 
-    ghdl_run_batch 08 test_default_fpga_regression #750ms
+    rm -f test.opt
+    ghdl_generate_optlist 08 test_default_fpga_regression test.vcd test.opt
 
-    # --write-wave-opt=test.opt
+    ghdl_run_batch 08 test_default_fpga_regression #100ms #u_fpga_serial_acl_tester_testbench-acl2-focus.opt u_fpga_serial_acl_tester_testbench-acl2-focus.vcd
 }
 
 case "$1" in
