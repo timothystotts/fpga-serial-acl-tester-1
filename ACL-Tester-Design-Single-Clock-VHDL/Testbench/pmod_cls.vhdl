@@ -67,6 +67,8 @@ package body tbc_pmod_cls_pkg is
         buffer_ovr := 0;
         wait until csn = '0';
 
+        in_buf := (others => '0');
+
         l_spi_recv : loop
             wait on sck, csn;
 
@@ -83,6 +85,8 @@ package body tbc_pmod_cls_pkg is
             if (csn = '1') then
                 exit;
             end if;
+
+            wait for 0 ns;
         end loop l_spi_recv;
     end procedure pr_spi_recv_only;
 
@@ -171,11 +175,11 @@ begin
             pr_spi_recv_only(ci_sck, ci_csn, ci_copi, input_buffer, buf_len, buf_ovr);
 
             if (buf_len < 8) then
-                Alert(ModelID, "PMOD CLS failed a SPI transferr with a short buffer length of " & to_string(buf_len) & " bits", ERROR);
+                Alert(ModelID, "PMOD CLS failed a SPI transfer with a short buffer length of " & to_string(buf_len) & " bits", ERROR);
             elsif (buf_len mod 8 /= 0) then
-                Alert(ModelID, "PMOD CLS failed a SPI transferr with a uneven buffer length of " & to_string(buf_len) & " bits", ERROR);
+                Alert(ModelID, "PMOD CLS failed a SPI transfer with a uneven buffer length of " & to_string(buf_len) & " bits", ERROR);
             elsif (buf_ovr > 0) then
-                Alert(ModelID, "PMOD CLS failed a SPI transferr with a tbc_pmod_cls buffer overflow of " & to_string(buf_len) & " bits", ERROR);
+                Alert(ModelID, "PMOD CLS failed a SPI transfer with a tbc_pmod_cls buffer overflow of " & to_string(buf_len) & " bits", ERROR);
             else
                 start_char := input_buffer(buf_len - 1 downto buf_len - 8);
                 if (start_char = ASCII_CLS_ESC) then
