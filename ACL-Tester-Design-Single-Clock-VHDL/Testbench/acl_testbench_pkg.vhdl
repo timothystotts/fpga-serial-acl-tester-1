@@ -36,6 +36,7 @@ context osvvm.OsvvmContext;
 library work;
 --------------------------------------------------------------------------------
 package acl_testbench_types_pkg is
+    subtype t_reg_sb is std_logic_vector(63 downto 0);
 end package acl_testbench_types_pkg;
 --------------------------------------------------------------------------------
 package body acl_testbench_types_pkg is
@@ -50,11 +51,47 @@ context osvvm.OsvvmContext;
 
 library work;
 use work.acl_testbench_types_pkg.all;
+package ScoreBoardPkg_acl is new
+    osvvm.ScoreBoardGenericPkg
+    generic map(
+        ExpectedType => t_reg_sb,
+        ActualType => t_reg_sb,
+        match => ieee.std_logic_1164."=",
+        expected_to_string => to_hstring,
+        actual_to_string => to_hstring);
+---------------------------------------------------------------------------------
+library ieee;
+use ieee.std_logic_1164.all;
+use ieee.numeric_std.all;
+
+library osvvm;
+context osvvm.OsvvmContext;
+
+library work;
+use work.acl_testbench_types_pkg.all;
+use work.ScoreBoardPkg_acl.all;
 --------------------------------------------------------------------------------
 package acl_testbench_pkg is
+    shared variable SB_UART : ScoreBoardPType;
+    shared variable SB_CLS : ScoreBoardPType;
+
     function fn_convert_slv_to_ascii(
         char_as_slv : std_logic_vector(7 downto 0))
     return character;
+
+    function fn_convert_hex_to_ascii(
+        text_as_slv : std_logic_vector;
+        text_char_cnt : natural)
+    return string;
+
+    function fn_convert_hex_text_to_nibble(
+        char_as_slv : std_logic_vector(7 downto 0))
+    return std_logic_vector;
+
+    function fn_convert_hex_to_slv32(
+        text_as_slv : std_logic_vector;
+        slv_nibble_cnt : natural)
+    return std_logic_vector;
 end package acl_testbench_pkg;
 --------------------------------------------------------------------------------
 package body acl_testbench_pkg is
@@ -170,5 +207,89 @@ package body acl_testbench_pkg is
 
         return ret_char;
     end function fn_convert_slv_to_ascii;
+
+    function fn_convert_hex_to_ascii(
+        text_as_slv : std_logic_vector;
+        text_char_cnt : natural)
+    return string is
+        alias buf_slv : std_logic_vector(text_as_slv'length - 1 downto 0) is text_as_slv;
+        variable char_cnt : natural := 1;
+        variable char_pos : natural := 0;
+        variable char_str : string(1 to text_char_cnt);
+    begin
+        while (char_cnt <= text_char_cnt) loop
+            char_pos := text_char_cnt - char_cnt;
+            char_str(char_cnt) := fn_convert_slv_to_ascii(
+                buf_slv(char_pos * 8 + 7 downto char_pos * 8)
+            );
+            char_cnt := char_cnt + 1;
+        end loop;
+
+        return char_str;
+    end function fn_convert_hex_to_ascii;
+
+    function fn_convert_hex_text_to_nibble(
+        char_as_slv : std_logic_vector(7 downto 0))
+    return std_logic_vector is
+        variable ret_nibble : std_logic_vector(3 downto 0);
+    begin
+        case char_as_slv is
+            when x"30" => ret_nibble := x"0";
+            when x"31" => ret_nibble := x"1";
+            when x"32" => ret_nibble := x"2";
+            when x"33" => ret_nibble := x"3";
+            when x"34" => ret_nibble := x"4";
+            when x"35" => ret_nibble := x"5";
+            when x"36" => ret_nibble := x"6";
+            when x"37" => ret_nibble := x"7";
+            when x"38" => ret_nibble := x"8";
+            when x"39" => ret_nibble := x"9";
+
+            when x"41" => ret_nibble := x"A";
+            when x"42" => ret_nibble := x"B";
+            when x"43" => ret_nibble := x"C";
+            when x"44" => ret_nibble := x"D";
+            when x"45" => ret_nibble := x"E";
+            when x"46" => ret_nibble := x"F";
+
+            when x"61" => ret_nibble := x"a";
+            when x"62" => ret_nibble := x"b";
+            when x"63" => ret_nibble := x"c";
+            when x"64" => ret_nibble := x"d";
+            when x"65" => ret_nibble := x"e";
+            when x"66" => ret_nibble := x"f";
+
+            when others => ret_nibble := "UUUU";
+        end case;
+
+        return ret_nibble;    
+    end function fn_convert_hex_text_to_nibble;
+
+    function fn_convert_hex_to_slv32(
+        text_as_slv : std_logic_vector;
+        slv_nibble_cnt : natural)
+    return std_logic_vector is
+        alias buf_slv : std_logic_vector(text_as_slv'length - 1 downto 0) is text_as_slv;
+        variable nibble_pos : natural := 0;
+        variable value_slv : std_logic_vector(3 downto 0);
+        variable ret_cnt : natural := 0;
+        variable ret_slv : std_logic_vector(slv_nibble_cnt * 4 - 1 downto 0) := (others => 'U');
+    begin
+        while ((ret_cnt < slv_nibble_cnt) and ((nibble_pos + 1) * 8 <= buf_slv'length)) loop
+            value_slv := fn_convert_hex_text_to_nibble(
+                buf_slv((buf_slv'length - 1 - (nibble_pos * 8)) downto (buf_slv'length - ((nibble_pos + 1) * 8)))
+                );
+
+            nibble_pos := nibble_pos + 1;
+
+            if (value_slv /= "UUUU") then
+                ret_slv((ret_slv'length - 1 - (4 * ret_cnt)) downto (ret_slv'length - (4 * (ret_cnt + 1)))) := value_slv;
+                ret_cnt := ret_cnt + 1;
+            end if;
+        end loop;
+
+        return ret_slv;
+    end function fn_convert_hex_to_slv32;
+
 end package body acl_testbench_pkg;
 --------------------------------------------------------------------------------

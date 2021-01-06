@@ -235,8 +235,8 @@ function compile_work () {
         acl_testbench_pkg.vhdl \
         clock_gen.vhdl \
         board_ui.vhdl \
-        board_uart.vhdl \
         pmod_acl2.vhdl \
+        board_uart.vhdl \
         pmod_cls.vhdl \
         pmod_7sd.vhdl \
         fpga_serial_acl_tester_testbench.vhdl \
@@ -275,7 +275,7 @@ function elab_and_run_batch () {
     rm -f test.opt
     ghdl_generate_optlist 08 test_default_fpga_regression test.vcd test.opt
 
-    ghdl_run_batch 08 test_default_fpga_regression #100ms #u_fpga_serial_acl_tester_testbench-acl2-focus.opt u_fpga_serial_acl_tester_testbench-acl2-focus.vcd
+    ghdl_run_batch 08 test_default_fpga_regression #100ms u_fpga_serial_acl_tester_testbench-acl2-focus.opt u_fpga_serial_acl_tester_testbench-acl2-focus.vcd
 }
 
 case "$1" in

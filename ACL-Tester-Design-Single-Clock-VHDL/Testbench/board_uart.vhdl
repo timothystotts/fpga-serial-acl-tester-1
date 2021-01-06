@@ -36,6 +36,7 @@ library osvvm_uart;
 context osvvm_uart.UartContext;
 
 library work;
+use work.acl_testbench_types_pkg.all;
 use work.acl_testbench_pkg.all;
 --------------------------------------------------------------------------------
 entity tbc_board_uart is
@@ -62,6 +63,8 @@ begin
 		ModelID <= ID;
 
 		wait on ModelID;
+		SB_CLS.SetAlertLogID("MeasModeBoardUart", ModelID);
+
 		Log(ModelID, "Starting Board UART emulation at baud 115200.", ALWAYS);
 		wait;
 	end process p_sim_init;
@@ -73,6 +76,11 @@ begin
 		variable rx_ascii_cnt : natural         := 0;
 		variable rx_ascii_chr : character;
 		variable rx_ascii_ovr : boolean := false;
+		variable v_hex_expect : std_logic_vector(255 downto 0);
+		variable v_hex_cnt    : natural := 0;
+		variable v_slv_expect : std_logic_vector(63 downto 0);
+		constant c_all_undef : std_logic_vector(63 downto 0) := (others => 'U');
+		variable v_expect_idx : integer;
 	begin
 		WaitForBarrier(BarrierLogStart);
 		ID := ModelID;
@@ -87,10 +95,30 @@ begin
 			if (RxStim.Data = x"0A") then
 				AlertIf(ModelID, rx_ascii_ovr, "The test model overflowed receiving UART ASCII text line. Not all characters are displayed.", ERROR);
 				Log(ModelID, "UART Received from FPGA the ASCII line: " & rx_ascii_buf(1 to rx_ascii_cnt), INFO);
+
+				v_slv_expect(63 downto 32) := fn_convert_hex_to_slv32(v_hex_expect(255 downto 128), 8);
+				v_slv_expect(31 downto 0) := fn_convert_hex_to_slv32(v_hex_expect(127 downto 0), 8);
+
+				if (v_slv_expect /= c_all_undef) then
+					v_expect_idx := SB_UART.Find(v_slv_expect);
+					Log(ModelID, "BOARD UART text line matched ScoreBoard history: " & to_string(v_expect_idx), INFO);
+					SB_UART.Flush(v_expect_idx);
+				else
+					Alert(ModelID, "BOARD UART text line not tested with ScoreBoard history.", WARNING);
+				end if;
+
 				rx_ascii_buf := (others => NUL);
 				rx_ascii_cnt := 0;
 				rx_ascii_ovr := false;
+				v_hex_expect := (others => 'U');
+				v_hex_cnt := 0;
+				v_slv_expect := (others => 'U');
 			else
+				if (v_hex_cnt < v_hex_expect'length / 8) then
+					v_hex_expect := v_hex_expect((v_hex_expect'length - 1 - 8) downto 0) & RxStim.Data;
+					v_hex_cnt := v_hex_cnt + 1;
+				end if;
+
 				rx_ascii_chr := fn_convert_slv_to_ascii(RxStim.Data);
 				Log(ModelID, "UART Received ASCII byte: x" & to_hstring(RxStim.Data) &
 					" '" & rx_ascii_chr & "'", DEBUG);
