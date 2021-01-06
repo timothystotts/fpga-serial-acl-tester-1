@@ -115,17 +115,17 @@ begin
         so_buttons(3) <= '1';
         Log(ModelID, "BOARD UI button 3 depressed.", INFO);
 
-        WaitForClock(ci_main_clock, parm_clk_freq / 1000 * 120);
-        so_buttons(0) <= '1';
-        Log(ModelID, "BOARD UI button 0 depressed.", INFO);
+        --WaitForClock(ci_main_clock, parm_clk_freq / 1000 * 120);
+        --so_buttons(0) <= '1';
+        --Log(ModelID, "BOARD UI button 0 depressed.", INFO);
 
-        WaitForClock(ci_main_clock, parm_clk_freq / 1000 * 120);
-        so_buttons(0) <= '0';
-        Log(ModelID, "BOARD UI button 0 released.", INFO);
+        --WaitForClock(ci_main_clock, parm_clk_freq / 1000 * 120);
+        --so_buttons(0) <= '0';
+        --Log(ModelID, "BOARD UI button 0 released.", INFO);
 
-        WaitForClock(ci_main_clock, parm_clk_freq / 1000 * 300);
-        so_buttons(3) <= '0';
-        Log(ModelID, "BOARD UI button 3 released.", INFO);
+        --WaitForClock(ci_main_clock, parm_clk_freq / 1000 * 300);
+        --so_buttons(3) <= '0';
+        --Log(ModelID, "BOARD UI button 3 released.", INFO);
         wait;
     end process p_set_buttons;
 
