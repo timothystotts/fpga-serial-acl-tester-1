@@ -49,7 +49,10 @@ entity tbc_clock_gen is
 end entity tbc_clock_gen;
 --------------------------------------------------------------------------------
 architecture simulation_default of tbc_clock_gen is
+    -- Simulation logging ID for this architecture.
     signal ModelID : AlertLogIDType;
+
+    -- Internal clock signal.
     signal so_main_clock : std_logic;
 begin
     -- Simulation initialization for the tbc_clock_gen component.
