@@ -49,27 +49,40 @@ configuration test_default_fpga_regression of fpga_serial_acl_tester_testharness
                     use entity work.fpga_serial_acl_tester(rtl);
                 end for;
 
+                -- select
                 for u_tbc_clock_gen : tbc_clock_gen
+                    -- specify the component architecture to generate
+                    -- the clock and reset
                     use entity work.tbc_clock_gen(simulation_default);
                 end for;
 
                 for u_tbc_board_ui : tbc_board_ui
+                    -- specify the component architecture to emulate/
+                    -- monitor/check the user interface board components
                     use entity work.tbc_board_ui(simulation_default);
                 end for;
 
                 for u_tbc_pmod_acl2 : tbc_pmod_acl2
+                    -- specify the component architecture to emulate/
+                    -- monitor/check the accelerometer peripheral
                     use entity work.tbc_pmod_acl2(simulation_default);
                 end for;
 
                 for u_tbc_pmod_cls : tbc_pmod_cls
+                    -- specify the component architecture to emulate/
+                    -- monitor/check the 16x2 LCD peripheral
                     use entity work.tbc_pmod_cls(simulation_default);
                 end for;
 
                 for u_tbc_board_uart : tbc_board_uart
+                    -- specify the component architecture to emulate/
+                    -- monitor/check the UART terminal
                     use entity work.tbc_board_uart(simulation_default);
                 end for;
 
                 for u_tbc_pmod_7sd : tbc_pmod_7sd
+                    -- specify the component architecture to emulate/
+                    -- monitor/check the 2-digit 7-segment display
                     use entity work.tbc_pmod_7sd(simulation_default);
                 end for;
             end for;
