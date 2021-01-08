@@ -6,3 +6,6 @@ unisim/
 secureip/
 fpga_serial_acl_tester_tb
 simulate_fpga_serial_acl_tester.ghw
+test_default_fpga_regression
+test_default_fpga_regression.exe
+test.vcd
