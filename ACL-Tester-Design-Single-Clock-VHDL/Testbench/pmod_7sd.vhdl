@@ -46,6 +46,8 @@ entity tbc_pmod_7sd is
 end entity tbc_pmod_7sd;
 --------------------------------------------------------------------------------
 architecture simulation_default of tbc_pmod_7sd is
+    -- A function to determine the hexademical, 0-9,A-F , value of the 7SD digit
+    -- displayed.
     function ssd_to_unsigned(val : std_logic_vector(6 downto 0))
     return unsigned is
         variable v_ret : unsigned(3 downto 0);
@@ -73,6 +75,7 @@ architecture simulation_default of tbc_pmod_7sd is
         return v_ret;
     end function ssd_to_unsigned;
 
+    -- Simulation logging ID for this architecture.
     signal ModelID : AlertLogIDType;
 begin
     -- Simulation initialization
@@ -89,7 +92,10 @@ begin
         wait;
     end process p_sim_init;
 
-    -- Just print signal lines
+    -- Print the interpretation of the Pmod 7SD digit selected for display.
+    -- By monitoring the signal \ref ci_mux_ena , the process toggles between
+    -- digit 0 and digit 1 to monitor and indicate an interpretation of the
+    -- displayed digit.
     p_receive_display_value : process
         variable val_of_7sd : unsigned(3 downto 0);
         variable val_is_valid : std_logic;
@@ -104,15 +110,33 @@ begin
             val_is_valid := std_logic(val_of_7sd(0));
 
             if (val_is_valid = 'U') then
+                -- The function \ref ssd_to_unsigned found that an invalid digit
+                -- value is being driven by the FPGA, or that the display is OFF.
+
                 if (ci_mux_dat = "0000000") then
-                    Log(ModelID, "7SD Digit " & to_string(ci_mux_ena) & " is turned OFF: " & to_string(ci_mux_dat), INFO);
+                    -- Display digit is off.
+                    Log(ModelID, "7SD Digit " & to_string(ci_mux_ena) &
+                        " is turned OFF: " & to_string(ci_mux_dat),
+                        INFO);
                 else
-                    Alert(ModelID, "7SD Digit " & to_string(ci_mux_ena) & " is displaying an invalid value: " & to_string(ci_mux_dat), WARNING);
+                    -- Alert that the 7SD Digit is invalid for the purposes of
+                    -- of the DUT driving 0-9,A-F, or OFF, and no other value.
+                    Alert(ModelID, "7SD Digit " & to_string(ci_mux_ena) &
+                        " is displaying an invalid value: " &
+                        to_string(ci_mux_dat),
+                        WARNING);
                 end if;
             else
-                Log(ModelID, "7SD Digit " & to_string(ci_mux_ena) & " is displaying character: " & to_hstring(val_of_7sd) & " (" & to_string(ci_mux_dat) & ")", INFO);
+                -- Log the 7SD Digit value displayed. The enable signal
+                -- \ref ci_mux_ena determines if the display is currently
+                -- driving Digit 0 or Digit 1.
+                Log(ModelID, "7SD Digit " & to_string(ci_mux_ena) &
+                    " is displaying character: " & to_hstring(val_of_7sd) &
+                    " (" & to_string(ci_mux_dat) & ")",
+                    INFO);
             end if;
         end loop l_7seg_monitor;
+        wait;
     end process p_receive_display_value;
 end architecture simulation_default;
 --------------------------------------------------------------------------------
