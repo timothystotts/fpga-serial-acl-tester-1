@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #-------------------------------------------------------------------------------
 #- MIT License
 #-
@@ -23,6 +23,10 @@
 #- SOFTWARE.
 #-------------------------------------------------------------------------------
 
+if [[ -z ${SRC_DIR} ]]; then
+    SRC_DIR=".."
+fi
+
 function clean_work_dir () {
     rm -f *.o
     rm -f work-obj08.cf osvvm-obj08.cf osvvm_common-obj08.cf osvvm_axi4-obj08.cf osvvm_uart-obj08.cf
@@ -33,7 +37,7 @@ function clean_work_dir () {
 function ghdl_analyze () {
     # std , worklib, path
     echo "ghdl -a --std=${1} --work=${2} -O2 ${3}"
-    ghdl -a --std=${1} --work=${2} -O2 ${3} || exit 1
+    ghdl -a --std=${1} --work=${2} -O2 "${3}" || exit 1
 }
 
 function ghdl_elaborate () {
@@ -96,7 +100,7 @@ function compile_ossvm () {
         OsvvmContext.vhd \
         ; do
 
-        ghdl_analyze 08 osvvm ../OSVVM/OsvvmLibraries/osvvm/${filename}
+        ghdl_analyze 08 osvvm "${SRC_DIR}/OSVVM/OsvvmLibraries/osvvm/${filename}"
     done
 }
 
@@ -111,7 +115,7 @@ function compile_ossvm_common () {
         OsvvmCommonContext.vhd \
         ; do
 
-        ghdl_analyze 08 OSVVM_Common ../OSVVM/OsvvmLibraries/Common/src/${filename}
+        ghdl_analyze 08 OSVVM_Common "${SRC_DIR}/OSVVM/OsvvmLibraries/Common/src/${filename}"
     done
 }
 
@@ -125,7 +129,7 @@ function compile_ossvm_axi4_common () {
         Axi4VersionCompatibilityPkg.vhd \
         ; do
 
-        ghdl_analyze 08 osvvm_axi4 ../OSVVM/OsvvmLibraries/AXI4/common/src/${filename}
+        ghdl_analyze 08 osvvm_axi4 "${SRC_DIR}/OSVVM/OsvvmLibraries/AXI4/common/src/${filename}"
     done
 }
 
@@ -142,7 +146,7 @@ function compile_ossvm_axi4_axi4lite () {
         Axi4LiteMemory.vhd \
         ; do
 
-        ghdl_analyze 08 osvvm_axi4 ../OSVVM/OsvvmLibraries/AXI4/Axi4Lite/src/${filename}
+        ghdl_analyze 08 osvvm_axi4 "${SRC_DIR}/OSVVM/OsvvmLibraries/AXI4/Axi4Lite/src/${filename}"
     done
 }
 
@@ -158,7 +162,7 @@ function compile_ossvm_axi4_axi4stream () {
         AxiStreamSignalsPkg_32.vhd \
         ; do
 
-        ghdl_analyze 08 osvvm_axi4 ../OSVVM/OsvvmLibraries/AXI4/AxiStream/src/${filename}
+        ghdl_analyze 08 osvvm_axi4 "${SRC_DIR}/OSVVM/OsvvmLibraries/AXI4/AxiStream/src/${filename}"
     done
 }
 
@@ -175,7 +179,7 @@ function compile_ossvm_axi4_axi4 () {
         Axi4Memory.vhd \
         ; do
 
-        ghdl_analyze 08 osvvm_axi4 ./OSVVM/OsvvmLibraries/AXI4/Axi4/src/${filename}
+        ghdl_analyze 08 osvvm_axi4 "${SRC_DIR}/OSVVM/OsvvmLibraries/AXI4/Axi4/src/${filename}"
     done
 }
 
@@ -190,7 +194,7 @@ function compile_ossvm_uart () {
         UartRx.vhd \
         ; do
 
-        ghdl_analyze 08 osvvm_uart ../OSVVM/OsvvmLibraries/UART/src/${filename}
+        ghdl_analyze 08 osvvm_uart "${SRC_DIR}/OSVVM/OsvvmLibraries/UART/src/${filename}"
     done
 }
 
@@ -228,7 +232,7 @@ function compile_work () {
         fpga_serial_acl_tester.vhdl \
         ; do
 
-        ghdl_analyze 08 work ../RTL/${filename}
+        ghdl_analyze 08 work "${SRC_DIR}/RTL/${filename}"
     done
 
     for filename in \
@@ -244,7 +248,7 @@ function compile_work () {
         test_default_fpga_regression.vhdl \
         ; do
 
-        ghdl_analyze 08 work ../Testbench/${filename}
+        ghdl_analyze 08 work "${SRC_DIR}/Testbench/${filename}"
     done
 }
 
