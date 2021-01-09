@@ -36,6 +36,9 @@ context osvvm.OsvvmContext;
 library work;
 --------------------------------------------------------------------------------
 package acl_testbench_types_pkg is
+    -- The Pmod ACL2 generates register values of 16-bit times 4. This type is
+    -- for the raw binary data pushed to the ScoreBoard as well as found from
+    -- ScoreBoard.
     subtype t_reg_sb is std_logic_vector(63 downto 0);
 end package acl_testbench_types_pkg;
 --------------------------------------------------------------------------------
@@ -51,6 +54,8 @@ context osvvm.OsvvmContext;
 
 library work;
 use work.acl_testbench_types_pkg.all;
+-- Creates an instance of the generic ScoreBoard package with usage of scored
+-- type is \ref t_reg_sb .
 package ScoreBoardPkg_acl is new
     osvvm.ScoreBoardGenericPkg
     generic map(
