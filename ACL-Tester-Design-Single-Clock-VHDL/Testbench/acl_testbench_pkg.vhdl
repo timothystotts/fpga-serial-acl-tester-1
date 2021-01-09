@@ -72,22 +72,37 @@ use work.acl_testbench_types_pkg.all;
 use work.ScoreBoardPkg_acl.all;
 --------------------------------------------------------------------------------
 package acl_testbench_pkg is
+    -- ScoreBoard variables for pushing data values from Pmod ACL2 and finding
+    -- values in each of Board UART and Pmod CLS.
     shared variable SB_UART : ScoreBoardPType;
     shared variable SB_CLS : ScoreBoardPType;
 
+    -- Function to convert a 8-bit logic value to a VHDL character from the
+    -- ASCII table. A failure to find the value in the ASCII table causes a
+    -- returned character of decimal point.
     function fn_convert_slv_to_ascii(
         char_as_slv : std_logic_vector(7 downto 0))
     return character;
 
+    -- Function to convert a vector of 8-bit logic values to a VHDL character
+    -- string from the ASCII table.
     function fn_convert_hex_to_ascii(
         text_as_slv : std_logic_vector;
         text_char_cnt : natural)
     return string;
 
+    -- Function to convert a 8-bit logic value to a 4-bit logic nibble by
+    -- matching the 8-bit input to an ASCII table value. If the 8-bit input
+    -- is not a hexadecimal value, then the function returns "UUUU".
     function fn_convert_hex_text_to_nibble(
         char_as_slv : std_logic_vector(7 downto 0))
     return std_logic_vector;
 
+    -- Function to convert a vector of 8-bit logic values representing ASCII
+    -- hexadecimal characters to a vector of 4-bit logic values (all literal
+    -- hexadecimal/binary). Any 8-bit logic values are an ASCII character that
+    -- is not a hexadecimal value, then that 8-bit value is skipped and does
+    -- not change the output of the function.
     function fn_convert_hex_to_slv32(
         text_as_slv : std_logic_vector;
         slv_nibble_cnt : natural)
