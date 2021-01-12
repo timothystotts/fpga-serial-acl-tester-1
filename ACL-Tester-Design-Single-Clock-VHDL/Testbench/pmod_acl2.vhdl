@@ -156,8 +156,8 @@ package body tbc_pmod_acl2_types_pkg is
 
 		procedure Increment_By(constant c_val : in natural range 0 to 2**16-1;
 				variable capped : out boolean) is
-			variable v_reg_tmp : unsigned(19 downto 0) := unsigned(v_reg(15) & v_reg(15) & v_reg(15) & v_reg(15) & v_reg);
-			variable v_reg_max : unsigned(19 downto 0) := unsigned(v_max(15) & v_max(15) & v_max(15) & v_max(15) & v_max);
+			variable v_reg_tmp : signed(19 downto 0) := signed(v_reg(15) & v_reg(15) & v_reg(15) & v_reg(15) & v_reg);
+			variable v_reg_max : signed(19 downto 0) := signed(v_max(15) & v_max(15) & v_max(15) & v_max(15) & v_max);
 		begin
 			v_reg_tmp := v_reg_tmp + c_val;
 			if (v_reg_tmp > v_reg_max) then
@@ -171,8 +171,8 @@ package body tbc_pmod_acl2_types_pkg is
 
 		procedure Decrement_By(constant c_val : in natural range 0 to 2**16-1;
 				variable capped : out boolean) is
-			variable v_reg_tmp : unsigned(19 downto 0) := unsigned(v_reg(15) & v_reg(15) & v_reg(15) & v_reg(15) & v_reg);
-			variable v_reg_min : unsigned(19 downto 0) := unsigned(v_min(15) & v_min(15) & v_min(15) & v_min(15) & v_min);
+			variable v_reg_tmp : signed(19 downto 0) := signed(v_reg(15) & v_reg(15) & v_reg(15) & v_reg(15) & v_reg);
+			variable v_reg_min : signed(19 downto 0) := signed(v_min(15) & v_min(15) & v_min(15) & v_min(15) & v_min);
 		begin
 			v_reg_tmp := v_reg_tmp - c_val;
 			if (v_reg_tmp < v_reg_min) then
@@ -725,7 +725,7 @@ begin
 
 	-- This process implements an emulation of the INT1 and INT2 physical interrupt
 	-- lines of the Pmod ACL2 board, as driven by the ADXL362 chip. Three registers
-	-- determine the state of the interrrupt lines. For INT1: INTMAP1(6 downto 0)
+	-- determine the state of the interrupt lines. For INT1: INTMAP1(6 downto 0)
 	-- ANDed with the STATUS(6 downto 0), then XORed with the INTMAP1(7) for polarity
 	-- of the physical line. For INT2, the same calculation, with INTMAP2 and the
 	-- STATUS register.
@@ -748,8 +748,12 @@ begin
 
 			v_status_reg := sv_status_reg.Get;
 
-			so_int1 <= s_int1_map_reg(7) xor (or(s_int1_map_reg(6 downto 0) and v_status_reg(6 downto 0)));
-			so_int2 <= s_int2_map_reg(7) xor (or(s_int2_map_reg(6 downto 0) and v_status_reg(6 downto 0)));
+			so_int1 <= s_int1_map_reg(7) xor (
+				or(s_int1_map_reg(6 downto 0) and v_status_reg(6 downto 0)));
+
+			so_int2 <= s_int2_map_reg(7) xor (
+				or(s_int2_map_reg(6 downto 0) and v_status_reg(6 downto 0)));
+
 			wait for 1 ns;
 
 			if (so_int1 /= v_prev_int1) then
