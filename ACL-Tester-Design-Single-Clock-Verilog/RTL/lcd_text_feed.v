@@ -76,7 +76,7 @@ reg [(`c_lcd_update_fsm_bits - 1):0] s_lcd_upd_nx_state;
 localparam [(`c_lcd_update_timer_bits - 1):0] c_i_one_ms =
 	parm_fast_simulation ? 2500 : 2500;
 localparam [(`c_lcd_update_timer_bits - 1):0] c_i_subsecond =
-	parm_fast_simulation ? (2500000 / 100 - (2 * c_i_one_ms)) : (2500000 / 5 - (2 * c_i_one_ms));
+	parm_fast_simulation ? (2500000 / 20 - (2 * c_i_one_ms)) : (2500000 / 5 - (2 * c_i_one_ms));
 localparam [(`c_lcd_update_timer_bits - 1):0] c_i_max = c_i_subsecond;
 
 reg [(`c_lcd_update_timer_bits - 1):0] s_i;
