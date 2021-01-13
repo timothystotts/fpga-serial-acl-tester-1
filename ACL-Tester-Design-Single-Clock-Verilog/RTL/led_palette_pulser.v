@@ -242,7 +242,7 @@ begin: p_tester_led_display
 	end else begin
 		s_ld1_red_pulse <= s_ld1_led_pulse;
 		s_ld1_green_pulse <= 6'b000001;
-		s_ld1_blue_pulse <= 6'h000001;
+		s_ld1_blue_pulse <= 6'b000001;
 	end
 
 	// LED 2 is Red when no Activity detect, Green when Activity detect.
