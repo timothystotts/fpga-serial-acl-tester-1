@@ -1,0 +1,8 @@
+OSVVM_Common/
+compile/
+dataset.asdb
+dataset.asdbw/
+dataset.tmp
+library.cfg
+osvvm_uart/
+work/
