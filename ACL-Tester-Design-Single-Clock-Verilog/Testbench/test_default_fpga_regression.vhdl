@@ -45,9 +45,9 @@ configuration test_default_fpga_regression of fpga_serial_acl_tester_testharness
             );
 
             for simulation
-                for uut_fpga_serial_acl_tester : fpga_serial_acl_tester
-                    use entity work.fpga_serial_acl_tester(rtl);
-                end for;
+                --for uut_fpga_serial_acl_tester : fpga_serial_acl_tester
+                --    use entity work.fpga_serial_acl_tester(rtl);
+                --end for;
 
                 -- select
                 for u_tbc_clock_gen : tbc_clock_gen
