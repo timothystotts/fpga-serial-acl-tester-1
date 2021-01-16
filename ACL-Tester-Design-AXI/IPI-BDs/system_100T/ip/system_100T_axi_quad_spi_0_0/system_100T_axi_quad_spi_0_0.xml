@@ -4615,11 +4615,11 @@ This bit has no significance in dual or quad mode.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:31:46 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:22:06 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:8db98837</spirit:value>
+            <spirit:value>9:e5b10a4d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -4630,7 +4630,7 @@ This bit has no significance in dual or quad mode.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:8db98837</spirit:value>
+            <spirit:value>9:e5b10a4d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -4646,11 +4646,11 @@ This bit has no significance in dual or quad mode.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:31:46 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:22:06 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:8db98837</spirit:value>
+            <spirit:value>9:e5b10a4d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -4689,11 +4689,11 @@ This bit has no significance in dual or quad mode.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:31:46 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:22:06 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:85ce5258</spirit:value>
+            <spirit:value>9:354ec934</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -4709,11 +4709,11 @@ This bit has no significance in dual or quad mode.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:31:46 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:22:06 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:85ce5258</spirit:value>
+            <spirit:value>9:354ec934</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -4727,11 +4727,11 @@ This bit has no significance in dual or quad mode.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:31:47 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:22:06 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:8db98837</spirit:value>
+            <spirit:value>9:e5b10a4d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -4745,11 +4745,11 @@ This bit has no significance in dual or quad mode.
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:43:56 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:35:43 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:8db98837</spirit:value>
+            <spirit:value>9:e5b10a4d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>

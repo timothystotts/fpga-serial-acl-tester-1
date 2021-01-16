@@ -2,10 +2,10 @@
 <Root MajorVersion="0" MinorVersion="39">
   <CompositeFile CompositeFileTopName="system_100T" CanBeSetAsTop="false" CanDisplayChildGraph="true">
     <Description>Composite Fileset</Description>
-    <Generation Name="SYNTHESIS" State="GENERATED" Timestamp="1607808736"/>
-    <Generation Name="IMPLEMENTATION" State="GENERATED" Timestamp="1607808736"/>
-    <Generation Name="SIMULATION" State="GENERATED" Timestamp="1607808736"/>
-    <Generation Name="HW_HANDOFF" State="GENERATED" Timestamp="1607808736"/>
+    <Generation Name="SYNTHESIS" State="GENERATED" Timestamp="1610756562"/>
+    <Generation Name="IMPLEMENTATION" State="GENERATED" Timestamp="1610756562"/>
+    <Generation Name="SIMULATION" State="GENERATED" Timestamp="1610756562"/>
+    <Generation Name="HW_HANDOFF" State="GENERATED" Timestamp="1610756562"/>
     <FileCollection Name="SOURCES" Type="SOURCES">
       <File Name="ip\system_100T_clk_wiz_0_0\system_100T_clk_wiz_0_0.xci" Type="IP">
         <Instance HierarchyPath="clk_wiz_0"/>
@@ -207,22 +207,23 @@
         <UsedIn Val="IMPLEMENTATION"/>
         <UsedIn Val="SIMULATION"/>
       </File>
-      <File Name="synth\system_100T.vhd" Type="VHDL">
-        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="false" IsStatusTracked="false"/>
-        <Library Name="xil_defaultlib"/>
-        <UsedIn Val="SYNTHESIS"/>
-      </File>
-      <File Name="sim\system_100T.vhd" Type="VHDL">
-        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="false" IsStatusTracked="false"/>
-        <Library Name="xil_defaultlib"/>
-        <UsedIn Val="SIMULATION"/>
-      </File>
       <File Name="ip\system_100T_mig_7series_0_1\system_100T_mig_7series_0_1.xci" Type="IP">
         <Instance HierarchyPath="mig_7series_0"/>
         <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="true" IsStatusTracked="true"/>
         <Library Name="xil_defaultlib"/>
         <UsedIn Val="SYNTHESIS"/>
         <UsedIn Val="IMPLEMENTATION"/>
+        <UsedIn Val="SIMULATION"/>
+      </File>
+      <File Name="synth\system_100T.v" Type="Verilog">
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="false" IsStatusTracked="false"/>
+        <Library Name="xil_defaultlib"/>
+        <UsedIn Val="SYNTHESIS"/>
+        <UsedIn Val="IMPLEMENTATION"/>
+      </File>
+      <File Name="sim\system_100T.v" Type="Verilog">
+        <Properties IsEditable="false" IsVisible="true" Timestamp="0" IsTrackable="false" IsStatusTracked="false"/>
+        <Library Name="xil_defaultlib"/>
         <UsedIn Val="SIMULATION"/>
       </File>
       <File Name="system_100T.bmm" Type="BMM">

@@ -1,8 +1,8 @@
 --Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------
 --Tool Version: Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
---Date        : Sat Dec 12 16:31:32 2020
---Host        : M3ENGINEERING running 64-bit major release  (build 9200)
+--Date        : Thu Jan 14 13:46:21 2021
+--Host        : J1STUDY running 64-bit major release  (build 9200)
 --Command     : generate_target system_100T_wrapper.bd
 --Design      : system_100T_wrapper
 --Purpose     : IP block netlist
@@ -133,7 +133,7 @@ architecture STRUCTURE of system_100T_wrapper is
     jb_pin7_o : out STD_LOGIC;
     jb_pin3_t : out STD_LOGIC;
     jb_pin8_o : out STD_LOGIC;
-    seg_gpio_ja_tri_o : out STD_LOGIC_VECTOR ( 6 downto 0 );
+    dip_switches_4bits_tri_i : in STD_LOGIC_VECTOR ( 3 downto 0 );
     ddr3_sdram_dq : inout STD_LOGIC_VECTOR ( 15 downto 0 );
     ddr3_sdram_dqs_p : inout STD_LOGIC_VECTOR ( 1 downto 0 );
     ddr3_sdram_dqs_n : inout STD_LOGIC_VECTOR ( 1 downto 0 );
@@ -149,8 +149,11 @@ architecture STRUCTURE of system_100T_wrapper is
     ddr3_sdram_cs_n : out STD_LOGIC_VECTOR ( 0 to 0 );
     ddr3_sdram_dm : out STD_LOGIC_VECTOR ( 1 downto 0 );
     ddr3_sdram_odt : out STD_LOGIC_VECTOR ( 0 to 0 );
-    usb_uart_rxd : in STD_LOGIC;
-    usb_uart_txd : out STD_LOGIC;
+    eth_mdio_mdc_mdc : out STD_LOGIC;
+    eth_mdio_mdc_mdio_i : in STD_LOGIC;
+    eth_mdio_mdc_mdio_o : out STD_LOGIC;
+    eth_mdio_mdc_mdio_t : out STD_LOGIC;
+    seg_gpio_ja_tri_o : out STD_LOGIC_VECTOR ( 6 downto 0 );
     eth_mii_col : in STD_LOGIC;
     eth_mii_crs : in STD_LOGIC;
     eth_mii_rst_n : out STD_LOGIC;
@@ -161,11 +164,6 @@ architecture STRUCTURE of system_100T_wrapper is
     eth_mii_tx_clk : in STD_LOGIC;
     eth_mii_tx_en : out STD_LOGIC;
     eth_mii_txd : out STD_LOGIC_VECTOR ( 3 downto 0 );
-    eth_mdio_mdc_mdc : out STD_LOGIC;
-    eth_mdio_mdc_mdio_i : in STD_LOGIC;
-    eth_mdio_mdc_mdio_o : out STD_LOGIC;
-    eth_mdio_mdc_mdio_t : out STD_LOGIC;
-    dip_switches_4bits_tri_i : in STD_LOGIC_VECTOR ( 3 downto 0 );
     qspi_flash_io0_i : in STD_LOGIC;
     qspi_flash_io0_o : out STD_LOGIC;
     qspi_flash_io0_t : out STD_LOGIC;
@@ -184,6 +182,8 @@ architecture STRUCTURE of system_100T_wrapper is
     qspi_flash_ss_i : in STD_LOGIC;
     qspi_flash_ss_o : out STD_LOGIC;
     qspi_flash_ss_t : out STD_LOGIC;
+    usb_uart_rxd : in STD_LOGIC;
+    usb_uart_txd : out STD_LOGIC;
     ssd_mux_ja_tri_o : out STD_LOGIC
   );
   end component system_100T;

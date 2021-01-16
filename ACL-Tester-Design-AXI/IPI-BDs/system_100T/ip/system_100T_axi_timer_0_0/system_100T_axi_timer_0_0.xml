@@ -1122,11 +1122,11 @@ Read:      0 - No interrupt has occurred      1 - Interrupt has occurred  Write:
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:31:38 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:21:58 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:06dafed6</spirit:value>
+            <spirit:value>9:70381604</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1140,11 +1140,11 @@ Read:      0 - No interrupt has occurred      1 - Interrupt has occurred  Write:
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:31:38 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:21:58 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:06dafed6</spirit:value>
+            <spirit:value>9:70381604</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1160,11 +1160,11 @@ Read:      0 - No interrupt has occurred      1 - Interrupt has occurred  Write:
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:31:38 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:21:58 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:06dafed6</spirit:value>
+            <spirit:value>9:70381604</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1189,11 +1189,11 @@ Read:      0 - No interrupt has occurred      1 - Interrupt has occurred  Write:
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:31:38 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:21:58 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:ca46677d</spirit:value>
+            <spirit:value>9:1f6186e3</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1209,11 +1209,11 @@ Read:      0 - No interrupt has occurred      1 - Interrupt has occurred  Write:
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:31:38 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:21:58 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:ca46677d</spirit:value>
+            <spirit:value>9:1f6186e3</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1227,11 +1227,11 @@ Read:      0 - No interrupt has occurred      1 - Interrupt has occurred  Write:
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:39:31 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:31:01 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:06dafed6</spirit:value>
+            <spirit:value>9:70381604</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>

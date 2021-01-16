@@ -907,11 +907,11 @@ Writing a 1 to this bit position clears the receive FIFO
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:31:38 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:21:57 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:6afad080</spirit:value>
+            <spirit:value>9:1a19e94d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -925,11 +925,11 @@ Writing a 1 to this bit position clears the receive FIFO
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:31:38 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:21:57 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:6afad080</spirit:value>
+            <spirit:value>9:1a19e94d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -945,11 +945,11 @@ Writing a 1 to this bit position clears the receive FIFO
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:31:38 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:21:57 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:6afad080</spirit:value>
+            <spirit:value>9:1a19e94d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -977,11 +977,11 @@ Writing a 1 to this bit position clears the receive FIFO
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:31:38 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:21:57 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:3d033bf4</spirit:value>
+            <spirit:value>9:6ffa5a53</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -997,11 +997,11 @@ Writing a 1 to this bit position clears the receive FIFO
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:31:38 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:21:57 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:3d033bf4</spirit:value>
+            <spirit:value>9:6ffa5a53</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1015,11 +1015,11 @@ Writing a 1 to this bit position clears the receive FIFO
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:31:38 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:21:57 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:6afad080</spirit:value>
+            <spirit:value>9:1a19e94d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
@@ -1033,11 +1033,11 @@ Writing a 1 to this bit position clears the receive FIFO
         <spirit:parameters>
           <spirit:parameter>
             <spirit:name>GENtimestamp</spirit:name>
-            <spirit:value>Sat Dec 12 21:38:37 UTC 2020</spirit:value>
+            <spirit:value>Sat Jan 16 00:29:58 UTC 2021</spirit:value>
           </spirit:parameter>
           <spirit:parameter>
             <spirit:name>outputProductCRC</spirit:name>
-            <spirit:value>9:6afad080</spirit:value>
+            <spirit:value>9:1a19e94d</spirit:value>
           </spirit:parameter>
         </spirit:parameters>
       </spirit:view>
