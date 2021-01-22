@@ -22,13 +22,17 @@ The folder ACL-Tester-Design-Single-Clock-Verilog contains a Xilinx Vivado proje
 containing only Verilog-2001 modules. Plain HDL without a soft CPU or C code is authored to
 talk with board components, an accelerometer peripheral, and a 16x2 character LCD peripheral.
 The project is named "Single Clock" as clock enable pulses are used instead of clock dividers
-as much as possible throughout the design.
+as much as possible throughout the design. The design additionally includes a working OS-VVM
+test-bench in VHDL-2008 to exercise the RTL in simulation. Only a single default test is
+implemented.
 
 The folder ACL-Tester-Design-Single-Clock-VHDL contains a Xilinx Vivado project with sources
 containing only VHDL-2002 and VHDL-2008 modules. Plain HDL without a soft CPU or C code is authored to
 talk with board components, an accelerometer peripheral, and a 16x2 character LCD peripheral.
 The project is named "Single Clock" as clock enable pulses are used instead of clock dividers
-as much as possible throughout the design.
+as much as possible throughout the design. The design additionally includes a working OS-VVM
+test-bench in VHDL-2008 to exercise the RTL in simulation. Only a single default test is
+implemented.
 
 These three groupings of design provide equivalent functionality, excepting that the HDL designs provide
 additional animation effect of the board's three-emitter RGB LEDs. Additionally, work is merged from
@@ -40,7 +44,7 @@ The IPI-BD AXI design is also complete for this feature, but is not yet release 
 Checkouts for the design without a Pmod SSD peripheral should refer to release tag
 Serial_ACL_Tester_Release_A . Checkouts for the latest experimental implementation of adding
 Pmod SSD to Pmod Jack JA and using Buttons 0 and 1 to select threshold/timer presets, should
-refer to tag Serial_ACL_Tester_HDL_Prerelease_6B or the HEAD of the master branch. The AXI design
+refer to tag Serial_ACL_Tester_HDL_Prerelease_5C or the HEAD of the master branch. The AXI design
 implements an alternative IP module instead of Pmod SSD user IP, called MuxSSD. This allows the
 FreeRTOS C code to implement a software driver to update two registers on the MuxSSD that control
 the discrete segments of each of the two Seven Segment digit emitters. The MuxSSD IP in the IPI-BD
