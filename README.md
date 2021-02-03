@@ -12,11 +12,21 @@ Three peripherals are used: Digilent Inc. Pmod ACL2, Digilent Inc. Pmod CLS., Di
 The design is broken into three groupings.
 
 The folder ACL-Tester-Design-AXI contains a Xilinx Vivado IP Integrator plus
-Xilinx SDK design. A microblaze soft CPU is instantiated to talk with board components, an accelerometer peripheral,
-a 16x2 character LCD peripheral, and a two-digit Seven Segment Display.
-A Xilinx SDK project contains a very small FreeRTOS program in C; drivers
+Xilinx Vitis design.
+(Release A and Prerelease B used the Xilinx SDK; and
+prerelease C uses Xilinx Vitis.)
+A microblaze soft CPU is instantiated to talk with board components,
+an accelerometer peripheral,
+a 16x2 character LCD peripheral,
+and a two-digit Seven Segment Display.
+A Xilinx Vitis project contains a very small FreeRTOS program in C; drivers
 for the peripherals, a real-time task to operate and poll the accelerometer,
 two real-time tasks to display data, and a real-time task to color-mix RGB LEDs.
+(None of the real-time tasks demonstrate executing with a precise timer, but only
+demonstrate a best-effort execution; as such, calling these tasks real-time
+may be a misnomer. Executing these tasks with a precise timer can be achieved
+with FreeRTOS; but the benefit does not outweigh the added complexity for
+this specific implementation.)  
 
 The folder ACL-Tester-Design-Single-Clock-Verilog contains a Xilinx Vivado project with sources
 containing only Verilog-2001 modules. Plain HDL without a soft CPU or C code is authored to
