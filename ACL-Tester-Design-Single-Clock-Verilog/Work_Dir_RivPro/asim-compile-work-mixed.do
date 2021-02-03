@@ -3,10 +3,10 @@ set XILINX_DIR "D:/Xilinx/Vivado/2020.2"
 set ACOM_OPTS "-2008 -dbg"
 set ALOG_OPTS "-v2k -dbg -l unisims_ver -l unimaco_ver"
 
-amap unisim "C:\\Aldec\\Xilinx-HDL-2020.2\\Xilinx-VHDL-2020.2\\unisim"
-amap unimacro "C:\\Aldec\\Xilinx-HDL-2020.2\\Xilinx-VHDL-2020.2\\unimacro"
-amap unisims_ver "C:\\Aldec\\Xilinx-HDL-2020.2\\Xilinx-Verilog-2020.2\\unisims_ver"
-amap unimaco_ver "C:\\Aldec\\Xilinx-HDL-2020.2\\Xilinx-Verilog-2020.2\\unimacro_ver"
+amap unisim "C:\\Aldec\\Xilinx_lib_2020.2\\unisim"
+amap unimacro "C:\\Aldec\\Xilinx_lib_2020.2\\unimacro"
+amap unisims_ver "C:\\Aldec\\Xilinx_lib_2020.2\\unisims_ver"
+amap unimaco_ver "C:\\Aldec\\Xilinx_lib_2020.2\\unimacro_ver"
 
 adel -lib work -all
 alib work
