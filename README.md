@@ -19,7 +19,8 @@ A microblaze soft CPU is instantiated to talk with board components,
 an accelerometer peripheral,
 a 16x2 character LCD peripheral,
 and a two-digit Seven Segment Display.
-A Xilinx Vitis project contains a very small FreeRTOS program in C; drivers
+Sources to be incorporated into a Xilinx Vitis project contain
+a very small FreeRTOS program in C; drivers
 for the peripherals, a real-time task to operate and poll the accelerometer,
 two real-time tasks to display data, and a real-time task to color-mix RGB LEDs.
 (None of the real-time tasks demonstrate executing with a precise timer, but only
@@ -110,8 +111,11 @@ standard terminology in engineering is a priority.
 #### 4-input Multi-Debouncer for 4 exclusve inputs, such as switches or buttons, of the HDL designs:
 ![4-bit Multi-Debouncer](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-multi-debounce.svg)
 
-#### ACL2 Custom Driver Ports diagram of the HDL designs:
+#### ACL2 Custom Driver External Ports diagram of the HDL designs:
 ![ACL2 Custom Driver Ports](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-ACL2-ports.svg)
+
+#### ACL2 Custom Driver Internal Ports diagram of the HDL designs:
+![ACL2 Custom Driver Ports](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-ACL2-ports-internal.svg)
 
 #### ACL2 Custom Driver readings Stream FSM:
 ![ACL2 Custom Driver readings Stream FSM](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-StreamFSM.svg)
