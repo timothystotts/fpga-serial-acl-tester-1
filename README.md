@@ -115,7 +115,7 @@ standard terminology in engineering is a priority.
 ![ACL2 Custom Driver Ports](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-ACL2-ports.svg)
 
 #### ACL2 Custom Driver Internal Ports diagram of the HDL designs:
-![ACL2 Custom Driver Ports](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-ACL2-ports-internal.svg)
+![ACL2 Custom Driver Ports, Internal](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-ACL2-ports-internal.svg)
 
 #### ACL2 Custom Driver readings Stream FSM:
 ![ACL2 Custom Driver readings Stream FSM](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-StreamFSM.svg)
@@ -126,8 +126,11 @@ standard terminology in engineering is a priority.
 #### Generic Standard SPI Single Chip protocol bus driver, used by the ACL2 driver and the CLS driver
 ![Generic Standard SPI Single Chip bus driver](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-SPI-generic-FSM.svg)
 
-#### CLS Custom Driver Ports diagram of the HDL designs:
+#### CLS Custom Driver External Ports diagram of the HDL designs:
 ![CLS Custom Driver Ports](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-CLS-ports.svg)
+
+#### CLS Custom Driver Internal Ports diagram of the HDL designs:
+![CLS Custom Driver Ports, Internal](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-CLS-ports-internal.svg)
 
 #### Pmod CLS Standard SPI custom driver FSM for operating the standard SPI driver to send text line refreshes to the ATmega48 microcontroller chip of the Pmod CLS:
 ![CLS Custom Driver readings driver FSM](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-CLS-driver-FSM.svg)
