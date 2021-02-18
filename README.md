@@ -90,6 +90,9 @@ standard terminology in engineering is a priority.
 #### Target device assembly: Arty-A7-100T with Pmod ACL2, Pmod CLS, Pmod SSD, on extension cables
 ![Target device assembly](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/img_serial-acl-tester-assembled-20190718.jpg)
 
+#### Target device execution: Arty-A7-100T with Pmod ACL2, Pmod CLS, Pmod SSD, on extension cables
+![Target device assembly executing](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/img_serial-acl-tester-executing-a-20210217.jpg)
+
 #### Block diagram architecture of the HDL designs:
 ![ACL Tester Architecture Diagram](https://github.com/timothystotts/fpga-serial-acl-tester-1/blob/main/ACL-Tester-Design-Documents/ACL-Tester-Design-Diagrams-Architecture%201.svg)
 
