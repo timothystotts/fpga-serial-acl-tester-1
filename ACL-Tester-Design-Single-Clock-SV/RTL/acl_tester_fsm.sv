@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -29,54 +29,37 @@
 ------------------------------------------------------------------------------*/
 //Recursive Moore Machine-------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
-module acl_tester_fsm(i_clk_20mhz, i_rst_20mhz, i_acl_command_ready,
-	i_switches_debounced, o_reading_inactive, o_active_init_display,
-	o_active_run_display, o_mode_is_measur, o_mode_is_linked,
-	o_acl_cmd_init_measur_mode, o_acl_cmd_start_measur_mode,
-	o_acl_cmd_init_linked_mode, o_acl_cmd_start_linked_mode,
-	o_acl_cmd_soft_reset);
-
-input wire i_clk_20mhz;
-input wire i_rst_20mhz;
-
-input wire i_acl_command_ready;
-input wire [3:0] i_switches_debounced;
-
-output reg o_reading_inactive;
-output reg o_active_init_display;
-output reg o_active_run_display;
-output wire o_mode_is_measur;
-output wire o_mode_is_linked;
-output reg o_acl_cmd_init_measur_mode;
-output reg o_acl_cmd_start_measur_mode;
-output reg o_acl_cmd_init_linked_mode;
-output reg o_acl_cmd_start_linked_mode;
-output reg o_acl_cmd_soft_reset;
+module acl_tester_fsm(
+	input logic i_clk_20mhz,
+	input logic i_rst_20mhz,
+	input logic i_acl_command_ready,
+	input logic [3:0] i_switches_debounced,
+	output logic o_reading_inactive,
+	output logic o_active_init_display,
+	output logic o_active_run_display,
+	output logic o_mode_is_measur,
+	output logic o_mode_is_linked,
+	output logic o_acl_cmd_init_measur_mode,
+	output logic o_acl_cmd_start_measur_mode,
+	output logic o_acl_cmd_init_linked_mode,
+	output logic o_acl_cmd_start_linked_mode,
+	output logic o_acl_cmd_soft_reset);
 
 //Part 2: Declarations----------------------------------------------------------
 /* Tester FSM state declarations */
 `define c_tester_state_bits 4
-localparam [(`c_tester_state_bits - 1):0] ST_0 = 0;
-localparam [(`c_tester_state_bits - 1):0] ST_1 = 1;
-localparam [(`c_tester_state_bits - 1):0] ST_2 = 2;
-localparam [(`c_tester_state_bits - 1):0] ST_3 = 3;
-localparam [(`c_tester_state_bits - 1):0] ST_4 = 4;
-localparam [(`c_tester_state_bits - 1):0] ST_5 = 5;
-localparam [(`c_tester_state_bits - 1):0] ST_6 = 6;
-localparam [(`c_tester_state_bits - 1):0] ST_7 = 7;
-localparam [(`c_tester_state_bits - 1):0] ST_8 = 8;
-localparam [(`c_tester_state_bits - 1):0] ST_9 = 9;
-localparam [(`c_tester_state_bits - 1):0] ST_A = 10;
-localparam [(`c_tester_state_bits - 1):0] ST_B = 11;
 
-reg [(`c_tester_state_bits - 1):0] s_tester_pr_state = ST_0;
-reg [(`c_tester_state_bits - 1):0] s_tester_nx_state = ST_0;
+typedef enum logic [(`c_tester_state_bits - 1):0] {ST_0, ST_1, ST_2, ST_3,
+	ST_4, ST_5, ST_6, ST_7, ST_8, ST_9, ST_A, ST_B} t_tester_state;
+
+t_tester_state s_tester_pr_state = ST_0;
+t_tester_state s_tester_nx_state = ST_0;
 
 // Tester FSM auxiliary registers that translate to LED color display.
-reg s_mode_is_measur_val;
-reg s_mode_is_measur_aux;
-reg s_mode_is_linked_val;
-reg s_mode_is_linked_aux;
+logic s_mode_is_measur_val;
+logic s_mode_is_measur_aux;
+logic s_mode_is_linked_val;
+logic s_mode_is_linked_aux;
 
 //Part 3: Statements------------------------------------------------------------
 // State auxiliary outputs
@@ -86,7 +69,7 @@ assign o_mode_is_measur = s_mode_is_measur_aux;
 /* The top-level Tester FSM State Transition register on the system clock,
    for state and auxiliary of the FSM that sends operation mode commands to
    the PMOD ACL2 custom driver. */
-always @(posedge i_clk_20mhz)
+always_ff @(posedge i_clk_20mhz)
 begin: p_tester_fsm_state_aux
 	if (i_rst_20mhz) begin
 		s_tester_pr_state <= ST_0;
@@ -99,15 +82,13 @@ begin: p_tester_fsm_state_aux
 		s_mode_is_measur_aux <= s_mode_is_measur_val;
 		s_mode_is_linked_aux <= s_mode_is_linked_val;
 	end
-end
+end : p_tester_fsm_state_aux
 
 /* Tester FSM Combinatorial logic for initializing and starting PMOD ACL2
    according to the position of Switch 0 and the position of Switch 1. If
    Switch 0 and Not Switch 1, then Mode Measurement is executed. If Switch 1
    and Not Switch 0, then Mode Linked is executed. */
-always @(s_tester_pr_state, i_acl_command_ready,
-	i_switches_debounced,
-	s_mode_is_measur_aux, s_mode_is_linked_aux)
+always_comb
 begin: p_tester_fsm_comb
 	case (s_tester_pr_state)
 		ST_1: begin /* Step one to command initialize the ACL2 to measurement mode */
@@ -293,7 +274,7 @@ begin: p_tester_fsm_comb
 			else s_tester_nx_state = ST_0;
 		end
 	endcase
-end
+end : p_tester_fsm_comb
 
-endmodule
+endmodule : acl_tester_fsm
 //------------------------------------------------------------------------------

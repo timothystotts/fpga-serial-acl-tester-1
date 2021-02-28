@@ -104,7 +104,7 @@ output wire [3:0] o_enum_inactive;
 
 /* Include the threshold presets to define parameter values for the threshold
    preset selectors. */
-`include "thresh_presets_include.vh"
+`include "thresh_presets_include.svh"
 
 /* ACL2 SPI driver wiring to the Generic SPI driver. */
 wire s_acl2_clk_spi_4x;

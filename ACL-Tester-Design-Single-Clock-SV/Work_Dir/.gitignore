@@ -6,3 +6,6 @@ impl_?/
 proc_sys_reset_0_synth_?/
 proc_sys_reset_1_synth_?/
 synth_?/
+*.jou
+*.log
+*.str
