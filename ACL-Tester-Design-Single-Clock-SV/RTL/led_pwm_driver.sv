@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,39 +22,40 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file led_pwm_driver.v
+-- \file led_pwm_driver.sv
 --
--- \brief A 24-bit palette interface to three-filament discrete color LEDs.
+-- \brief A 24-bit palette interface to three-filament discrete color LEDs, plus
+-- a 8-bit palette interface to one-filament discrete basic LEDs.
 --
--- \description A color-mixing solution for color LEDs.
+-- \description A color-mixing solution for color LEDs. Note that the color
+-- mixing palette causes more mixing of brightness than color, except at the
+-- lower brightness levels.
 ------------------------------------------------------------------------------*/
 //Generate loops for PWMs-------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
-module led_pwm_driver(i_clk, i_srst, i_color_led_red_value, i_color_led_green_value,
-	i_color_led_blue_value, i_basic_led_lumin_value,
-	eo_color_leds_r, eo_color_leds_g, eo_color_leds_b, eo_basic_leds_l);
-
-parameter integer parm_color_led_count = 4;
-parameter integer parm_basic_led_count = 4;
-parameter integer parm_FCLK = 40_000_000;
-parameter integer parm_pwm_period_milliseconds = 10;
-
-localparam integer c_color_value_upper = 8 * parm_color_led_count - 1;
-localparam integer c_basic_value_upper = 8 * parm_basic_led_count - 1;
-localparam integer c_color_count_upper = parm_color_led_count - 1;
-localparam integer c_basic_count_upper = parm_basic_led_count - 1;
-
-input wire i_clk;
-input wire i_srst;
-input wire [c_color_value_upper:0] i_color_led_red_value;
-input wire [c_color_value_upper:0] i_color_led_green_value;
-input wire [c_color_value_upper:0] i_color_led_blue_value;
-input wire [c_basic_value_upper:0] i_basic_led_lumin_value;
-
-output reg [c_color_count_upper:0] eo_color_leds_r;
-output reg [c_color_count_upper:0] eo_color_leds_g;
-output reg [c_color_count_upper:0] eo_color_leds_b;
-output reg [c_basic_count_upper:0] eo_basic_leds_l;
+module led_pwm_driver
+	#(parameter
+		integer parm_color_led_count = 4,
+		integer parm_basic_led_count = 4,
+		integer parm_FCLK = 40_000_000,
+		integer parm_pwm_period_milliseconds = 10,
+		integer c_color_value_upper = 8 * parm_color_led_count - 1,
+		integer c_basic_value_upper = 8 * parm_basic_led_count - 1,
+		integer c_color_count_upper = parm_color_led_count - 1,
+		integer c_basic_count_upper = parm_basic_led_count - 1
+		)
+	(
+		input wire i_clk,
+		input wire i_srst,
+		input wire [c_color_value_upper:0] i_color_led_red_value,
+		input wire [c_color_value_upper:0] i_color_led_green_value,
+		input wire [c_color_value_upper:0] i_color_led_blue_value,
+		input wire [c_basic_value_upper:0] i_basic_led_lumin_value,
+		output logic [c_color_count_upper:0] eo_color_leds_r,
+		output logic [c_color_count_upper:0] eo_color_leds_g,
+		output logic [c_color_count_upper:0] eo_color_leds_b,
+		output logic [c_basic_count_upper:0] eo_basic_leds_l
+		);
 
 //Part 2: Declarations----------------------------------------------------------
 localparam integer c_pwm_period_ms = parm_FCLK / 1000 * parm_pwm_period_milliseconds;
@@ -73,9 +74,9 @@ generate
 		integer s_color_red_pwm_duty_cycles;
 		integer s_color_red_pwm_duty_cycles_1;
 		integer s_color_red_pwm_duty_cycles_2;
-        reg [7:0] s_color_led_red_value_0;
+        logic [7:0] s_color_led_red_value_0;
         
-		always @(posedge i_clk)
+		always_ff @(posedge i_clk)
 		begin: p_operate_color_red_pwm
 			if (i_srst) begin
 				eo_color_leds_r[redidx] <= c_filament_off_value;
@@ -111,8 +112,8 @@ generate
 				// Register the inferred DSP48E1 output P
 				s_color_red_pwm_duty_cycles_2 <= s_color_red_pwm_duty_cycles_1;
 			end
-		end
-	end
+		end : p_operate_color_red_pwm
+	end : redloop
 endgenerate
 
 generate
@@ -122,9 +123,9 @@ generate
 		integer s_color_green_pwm_duty_cycles;
 		integer s_color_green_pwm_duty_cycles_1;
 		integer s_color_green_pwm_duty_cycles_2;
-        reg [7:0] s_color_led_green_value_0;
+        logic [7:0] s_color_led_green_value_0;
         
-		always @(posedge i_clk)
+		always_ff @(posedge i_clk)
 		begin: p_operate_color_green_pwm
 			if (i_srst) begin
 				eo_color_leds_g[greenidx] <= c_filament_off_value;
@@ -160,8 +161,8 @@ generate
 				// Register the inferred DSP48E1 output P
 				s_color_green_pwm_duty_cycles_2 <= s_color_green_pwm_duty_cycles_1;
 			end
-		end
-	end
+		end : p_operate_color_green_pwm
+	end : greenloop
 endgenerate
 
 generate
@@ -171,9 +172,9 @@ generate
 		integer s_color_blue_pwm_duty_cycles;
 		integer s_color_blue_pwm_duty_cycles_1;
 		integer s_color_blue_pwm_duty_cycles_2;
-        reg [7:0] s_color_led_blue_value_0;
+        logic [7:0] s_color_led_blue_value_0;
         
-		always @(posedge i_clk)
+		always_ff @(posedge i_clk)
 		begin: p_operate_color_blue_pwm
 			if (i_srst) begin
 				eo_color_leds_b[blueidx] <= c_filament_off_value;
@@ -209,8 +210,8 @@ generate
 				// Register the inferred DSP48E1 output P
 				s_color_blue_pwm_duty_cycles_2 <= s_color_blue_pwm_duty_cycles_1;
 			end
-		end
-	end
+		end : p_operate_color_blue_pwm
+	end : blueloop
 endgenerate
 
 generate
@@ -220,9 +221,9 @@ generate
 		integer s_basic_lumin_pwm_duty_cycles;
 		integer s_basic_lumin_pwm_duty_cycles_1;
 		integer s_basic_lumin_pwm_duty_cycles_2;
-        reg [7:0] s_basic_led_lumin_value_0;
+        logic [7:0] s_basic_led_lumin_value_0;
         
-		always @(posedge i_clk)
+		always_ff @(posedge i_clk)
 		begin: p_operate_basic_lumin_pwm
 			if (i_srst) begin
 				eo_basic_leds_l[basicidx] <= c_filament_off_value;
@@ -258,9 +259,9 @@ generate
 				// Register the output P
 				s_basic_lumin_pwm_duty_cycles_2 <= s_basic_lumin_pwm_duty_cycles_1;
 			end
-		end
-	end
+		end : p_operate_basic_lumin_pwm
+	end : basicloop
 endgenerate
 
-endmodule
+endmodule : led_pwm_driver
 //------------------------------------------------------------------------------

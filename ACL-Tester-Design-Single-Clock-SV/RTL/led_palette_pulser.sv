@@ -24,9 +24,9 @@
 /**-----------------------------------------------------------------------------
 -- \file led_palette_pulser.sv
 --
--- \brief A simple pulser to generate palette values for \ref led_pwm_driver.v .
+-- \brief A simple pulser to generate palette values for \ref led_pwm_driver.sv .
 ------------------------------------------------------------------------------*/
-//Recursive Moore Machine-------------------------------------------------------
+//D-FF based LED pulsing--------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module led_palette_pulser
 	#(parameter
@@ -76,34 +76,34 @@ wire [7:0] s_ld0_blue_value;
 wire [7:0] s_ld1_blue_value;
 wire [7:0] s_ld2_blue_value;
 wire [7:0] s_ld3_blue_value;
-reg [7:0] s_ld4_basic_value;
-reg [7:0] s_ld5_basic_value;
-reg [7:0] s_ld6_basic_value;
-reg [7:0] s_ld7_basic_value;
+logic [7:0] s_ld4_basic_value;
+logic [7:0] s_ld5_basic_value;
+logic [7:0] s_ld6_basic_value;
+logic [7:0] s_ld7_basic_value;
 
-reg [5:0] s_ld0_red_pulse;
-reg [5:0] s_ld0_green_pulse;
-reg [5:0] s_ld0_blue_pulse;
-reg s_ld0_dir_pulse;
-reg [5:0] s_ld0_led_pulse;
+logic [5:0] s_ld0_red_pulse;
+logic [5:0] s_ld0_green_pulse;
+logic [5:0] s_ld0_blue_pulse;
+logic s_ld0_dir_pulse;
+logic [5:0] s_ld0_led_pulse;
 
-reg [5:0] s_ld1_red_pulse;
-reg [5:0] s_ld1_green_pulse;
-reg [5:0] s_ld1_blue_pulse;
-reg s_ld1_dir_pulse;
-reg [5:0] s_ld1_led_pulse;
+logic [5:0] s_ld1_red_pulse;
+logic [5:0] s_ld1_green_pulse;
+logic [5:0] s_ld1_blue_pulse;
+logic s_ld1_dir_pulse;
+logic [5:0] s_ld1_led_pulse;
 
-reg [5:0] s_ld2_red_pulse;
-reg [5:0] s_ld2_green_pulse;
-reg [5:0] s_ld2_blue_pulse;
-reg s_ld2_dir_pulse;
-reg [5:0] s_ld2_led_pulse;
+logic [5:0] s_ld2_red_pulse;
+logic [5:0] s_ld2_green_pulse;
+logic [5:0] s_ld2_blue_pulse;
+logic s_ld2_dir_pulse;
+logic [5:0] s_ld2_led_pulse;
 
-reg [5:0] s_ld3_red_pulse;
-reg [5:0] s_ld3_green_pulse;
-reg [5:0] s_ld3_blue_pulse;
-reg s_ld3_dir_pulse;
-reg [5:0] s_ld3_led_pulse;
+logic [5:0] s_ld3_red_pulse;
+logic [5:0] s_ld3_green_pulse;
+logic [5:0] s_ld3_blue_pulse;
+logic s_ld3_dir_pulse;
+logic [5:0] s_ld3_led_pulse;
 
 //Part 3: Statements------------------------------------------------------------
 // A clock enable divider for the process \ref p_tester_fsm_display .
@@ -143,7 +143,7 @@ assign s_ld3_red_value = {s_ld3_red_pulse, 2'b11};
 assign s_ld3_green_value = {s_ld3_green_pulse, 2'b11};
 assign s_ld3_blue_value = {s_ld3_blue_pulse, 2'b11};
 
-always @(posedge i_clk)
+always_ff @(posedge i_clk)
 begin: p_tester_led_pulse
 	if (i_srst) begin
 		s_ld0_dir_pulse <= 1'b0;
@@ -200,9 +200,9 @@ begin: p_tester_led_pulse
 			else
 				s_ld3_led_pulse <= s_ld3_led_pulse - 1;
 	end
-end
+end : p_tester_led_pulse
 
-always @(posedge i_clk)
+always_ff @(posedge i_clk)
 begin: p_tester_led_display
 	if (i_active_init_display) begin
 		// LED 0 will be red when tester is initializing.
@@ -280,7 +280,7 @@ begin: p_tester_led_display
 	else
 		s_ld7_basic_value <= 8'h00;
 
-end
+end : p_tester_led_display
 
 endmodule : led_palette_pulser
 //------------------------------------------------------------------------------
