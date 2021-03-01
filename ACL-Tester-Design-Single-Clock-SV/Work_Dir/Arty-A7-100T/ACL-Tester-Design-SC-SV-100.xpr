@@ -346,7 +346,7 @@
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="impl_2" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="constrs_1" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/impl_2" SynthRun="synth_2" IncludeInArchive="true" GenFullBitstream="true" AutoIncrementalDir="c:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-Verilog/Work_Dir/Arty-A7-100T/ACL-Tester-Design-SC-Verilog-100.srcs/utils_1/imports/impl_2">
+    <Run Id="impl_2" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="constrs_1" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" SynthRun="synth_2" IncludeInArchive="true" GenFullBitstream="true" AutoIncrementalDir="c:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-Verilog/Work_Dir/Arty-A7-100T/ACL-Tester-Design-SC-Verilog-100.srcs/utils_1/imports/impl_2">
       <Strategy Version="1" Minor="2">
         <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
         <Step Id="init_design"/>
@@ -361,7 +361,6 @@
           <Option Id="BinFile">1</Option>
         </Step>
       </Strategy>
-      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
       <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>

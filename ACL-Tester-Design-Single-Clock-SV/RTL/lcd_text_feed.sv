@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,43 +22,37 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file lcd_text_feed.v
+-- \file lcd_text_feed.sv
 --
 -- \brief A timed FSM to feed display updates to a two-line LCD.
 ------------------------------------------------------------------------------*/
 //Recursive Moore Machine-------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
-module lcd_text_feed(i_clk_20mhz, i_rst_20mhz, i_ce_2_5mhz,
-	i_lcd_command_ready, o_lcd_wr_clear_display, o_lcd_wr_text_line1,
-	o_lcd_wr_text_line2, o_lcd_feed_is_idle);
-
-parameter integer parm_fast_simulation = 0;
-
-input wire i_clk_20mhz;
-input wire i_rst_20mhz;
-input wire i_ce_2_5mhz;
-input wire i_lcd_command_ready;
-
-output reg o_lcd_wr_clear_display;
-output reg o_lcd_wr_text_line1;
-output reg o_lcd_wr_text_line2;
-output wire o_lcd_feed_is_idle;
+module lcd_text_feed
+	#(parameter
+		integer parm_fast_simulation = 0)
+	(
+	input wire i_clk_20mhz,
+	input wire i_rst_20mhz,
+	input wire i_ce_2_5mhz,
+	input wire i_lcd_command_ready,
+	output logic o_lcd_wr_clear_display,
+	output logic o_lcd_wr_text_line1,
+	output logic o_lcd_wr_text_line2,
+	output wire o_lcd_feed_is_idle);
 
 //Part 2: Declarations----------------------------------------------------------
 /* Connections and variables for instance of the PMOD CLS SPI SOLO driver. */
 `define c_lcd_update_fsm_bits 4
-localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_PAUSE = 0;
-localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_CLEAR_RUN = 1;
-localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_CLEAR_DLY = 2;
-localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_CLEAR_WAIT = 3;
-localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_LINE1_RUN = 4;
-localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_LINE1_DLY = 5;
-localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_LINE1_WAIT = 6;
-localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_LINE2_RUN = 7;
-localparam [(`c_lcd_update_fsm_bits - 1):0] ST_LCD_LINE2_DLY = 8;
 
-reg [(`c_lcd_update_fsm_bits - 1):0] s_lcd_upd_pr_state;
-reg [(`c_lcd_update_fsm_bits - 1):0] s_lcd_upd_nx_state;
+typedef enum logic [(`c_lcd_update_fsm_bits - 1):0] {
+	ST_LCD_PAUSE, ST_LCD_CLEAR_RUN, ST_LCD_CLEAR_DLY, ST_LCD_CLEAR_WAIT,
+	ST_LCD_LINE1_RUN, ST_LCD_LINE1_DLY, ST_LCD_LINE1_WAIT, ST_LCD_LINE2_RUN,
+	ST_LCD_LINE2_DLY
+} t_lcd_upd_state;
+
+t_lcd_upd_state s_lcd_upd_pr_state;
+t_lcd_upd_state s_lcd_upd_nx_state;
 
 /* Timer steps for the continuous refresh of the PMOD CLS display:
    Clear Display
@@ -79,11 +73,11 @@ localparam [(`c_lcd_update_timer_bits - 1):0] c_i_subsecond =
 	parm_fast_simulation ? (2500000 / 20 - (2 * c_i_one_ms)) : (2500000 / 5 - (2 * c_i_one_ms));
 localparam [(`c_lcd_update_timer_bits - 1):0] c_i_max = c_i_subsecond;
 
-reg [(`c_lcd_update_timer_bits - 1):0] s_i;
+logic [(`c_lcd_update_timer_bits - 1):0] s_i;
 
 //Part 3: Statements------------------------------------------------------------
 /* Timer (strategy #1) for timing the PMOD CLS display update */
-always @(posedge i_clk_20mhz)
+always_ff @(posedge i_clk_20mhz)
 begin: p_fsm_timer_run_display_update
 	if (i_rst_20mhz) s_i <= 0;
 	else
@@ -93,19 +87,19 @@ begin: p_fsm_timer_run_display_update
 			end else if (s_i != c_i_max) begin
 				s_i <= s_i + 1;
 			end
-end
+end : p_fsm_timer_run_display_update
 
 /* FSM state transition for timing the PMOD CLS display udpate */
-always @(posedge i_clk_20mhz)
+always_ff @(posedge i_clk_20mhz)
 begin: p_fsm_state_run_display_update
 	if (i_rst_20mhz) s_lcd_upd_pr_state <= ST_LCD_PAUSE;
 	else 
 		if (i_ce_2_5mhz)
 			s_lcd_upd_pr_state <= s_lcd_upd_nx_state;
-end
+end : p_fsm_state_run_display_update
 
 /* FSM combinatorial logic for timing the PMOD CLS display udpate */
-always @(s_lcd_upd_pr_state, i_lcd_command_ready, s_i)
+always_comb
 begin: p_fsm_comb_run_display_update
 	case (s_lcd_upd_pr_state)
 		ST_LCD_CLEAR_RUN: begin /* Issue a clear command and wait for
@@ -193,11 +187,11 @@ begin: p_fsm_comb_run_display_update
 			else s_lcd_upd_nx_state = ST_LCD_PAUSE;
 		end
 	endcase
-end
+end : p_fsm_comb_run_display_update
 
 // Indicate when the FSM is idle
 assign o_lcd_feed_is_idle = (s_lcd_upd_pr_state == ST_LCD_LINE2_DLY) ? 1'b1 : 1'b0;
 
-endmodule
+endmodule : lcd_text_feed
 //------------------------------------------------------------------------------
 

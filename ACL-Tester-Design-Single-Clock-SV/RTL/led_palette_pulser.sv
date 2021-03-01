@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,49 +22,42 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file led_palette_pulser.v
+-- \file led_palette_pulser.sv
 --
 -- \brief A simple pulser to generate palette values for \ref led_pwm_driver.v .
 ------------------------------------------------------------------------------*/
 //Recursive Moore Machine-------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
-module led_palette_pulser(i_clk, i_srst, o_color_led_red_value,
-	o_color_led_green_value, o_color_led_blue_value, o_basic_led_lumin_value,
-	i_active_init_display, i_active_run_display, i_mode_is_measur_aux,
-	i_mode_is_linked_aux, i_acl2_activity_stretched,
-	i_acl2_inactivity_stretched, i_acl2_awake_status, i_sw0_selected,
-	i_sw1_selected);
-
-parameter integer parm_color_led_count = 4;
-parameter integer parm_basic_led_count = 4;
-parameter integer parm_FCLK = 40_000_000;
-parameter integer parm_adjustments_per_second = 128;
-
-localparam integer c_color_value_upper = 8 * parm_color_led_count - 1;
-localparam integer c_basic_value_upper = 8 * parm_basic_led_count - 1;
-localparam integer c_color_count_upper = parm_color_led_count - 1;
-localparam integer c_basic_count_upper = parm_basic_led_count - 1;
-
-// clock and reset
-input wire i_clk;
-input wire i_srst;
-
-// palette out values
-output wire [c_color_value_upper:0] o_color_led_red_value;
-output wire [c_color_value_upper:0] o_color_led_green_value;
-output wire [c_color_value_upper:0] o_color_led_blue_value;
-output wire [c_basic_value_upper:0] o_basic_led_lumin_value;
-
-// system statuses to adjust LEDs by
-input wire i_active_init_display;
-input wire i_active_run_display;
-input wire i_mode_is_measur_aux;
-input wire i_mode_is_linked_aux;
-input wire i_acl2_activity_stretched;
-input wire i_acl2_inactivity_stretched;
-input wire i_acl2_awake_status;
-input wire i_sw0_selected;
-input wire i_sw1_selected;
+module led_palette_pulser
+	#(parameter
+		integer parm_color_led_count = 4,
+		integer parm_basic_led_count = 4,
+		integer parm_FCLK = 40_000_000,
+		integer parm_adjustments_per_second = 128,
+		integer c_color_value_upper = 8 * parm_color_led_count - 1,
+		integer c_basic_value_upper = 8 * parm_basic_led_count - 1,
+		integer c_color_count_upper = parm_color_led_count - 1,
+		integer c_basic_count_upper = parm_basic_led_count - 1
+		)
+	(
+		// clock and reset
+		input wire i_clk,
+		input wire i_srst,
+		// palette out values
+		output wire [c_color_value_upper:0] o_color_led_red_value,
+		output wire [c_color_value_upper:0] o_color_led_green_value,
+		output wire [c_color_value_upper:0] o_color_led_blue_value,
+		output wire [c_color_value_upper:0] o_basic_led_lumin_value,
+		// system statuses to adjust LEDs by
+		input wire i_active_init_display,
+		input wire i_active_run_display,
+		input wire i_mode_is_measur_aux,
+		input wire i_mode_is_linked_aux,
+		input wire i_acl2_activity_stretched,
+		input wire i_acl2_inactivity_stretched,
+		input wire i_acl2_awake_status,
+		input wire i_sw0_selected,
+		input wire i_sw1_selected);
 
 //Part 2: Declarations----------------------------------------------------------
 // Color LED PWM driver input scale signals for 8-bit color mixing that
@@ -289,5 +282,5 @@ begin: p_tester_led_display
 
 end
 
-endmodule
+endmodule : led_palette_pulser
 //------------------------------------------------------------------------------

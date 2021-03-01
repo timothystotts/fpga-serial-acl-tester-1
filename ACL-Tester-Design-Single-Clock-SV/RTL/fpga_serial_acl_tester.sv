@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file fpga_serial_acl_tester.v
+-- \file fpga_serial_acl_tester.sv
 --
 -- \brief A FPGA top-level design with the PMOD ACL2 custom driver.
 -- This design operates the ADXL362 in one of multiple possible operational
@@ -34,85 +34,63 @@
 //------------------------------------------------------------------------------
 //Multiple Moore Machines
 //Part 1: Module header:--------------------------------------------------------
-module fpga_serial_acl_tester (
+module fpga_serial_acl_tester
+	#(parameter
+		integer parm_fast_simulation = 0)
+	(
 	/* external clock and active-low reset */
-	CLK100MHZ, i_resetn,
+	input wire CLK100MHZ,
+	input wire i_resetn,
 	/* PMOD ACL2 SPI bus 4-wire and two interrupt signals */
-	eo_pmod_acl2_sck, eo_pmod_acl2_csn, eo_pmod_acl2_copi, ei_pmod_acl2_cipo,
-	ei_pmod_acl2_int1, ei_pmod_acl2_int2,
+	output wire eo_pmod_acl2_sck,
+	output wire eo_pmod_acl2_csn,
+	output wire eo_pmod_acl2_copi,
+	input wire ei_pmod_acl2_cipo,
+	input wire ei_pmod_acl2_int1,
+	input wire ei_pmod_acl2_int2,
 	/* blue LEDs of the multicolor */
-	eo_led0_b, eo_led1_b, eo_led2_b, eo_led3_b,
+	output wire eo_led0_b,
+	output wire eo_led1_b,
+	output wire eo_led2_b,
+	output wire eo_led3_b,
 	/* red LEDs of the multicolor */
-	eo_led0_r, eo_led1_r, eo_led2_r, eo_led3_r,
+	output wire eo_led0_r,
+	output wire eo_led1_r,
+	output wire eo_led2_r,
+	output wire eo_led3_r,
 	/* green LEDs of the multicolor */
-	eo_led0_g, eo_led1_g, eo_led2_g, eo_led3_g,
+	output wire eo_led0_g,
+	output wire eo_led1_g,
+	output wire eo_led2_g,
+	output wire eo_led3_g,
 	/* green LEDs of the regular LEDs */
-	eo_led4, eo_led5, eo_led6, eo_led7,
+	output wire eo_led4,
+	output wire eo_led5,
+	output wire eo_led6,
+	output wire eo_led7,
 	/* four switches */
-	ei_sw0, ei_sw1, ei_sw2, ei_sw3,
-  /* four buttons */
-  ei_btn0, ei_btn1, ei_btn2, ei_btn3,
+	input wire ei_sw0,
+	input wire ei_sw1,
+	input wire ei_sw2,
+	input wire ei_sw3,
+  	/* four buttons */
+  	input wire ei_btn0,
+  	input wire ei_btn1,
+  	input wire ei_btn2,
+  	input wire ei_btn3,
 	/* PMOD CLS SPI bus 4-wire */
-	eo_pmod_cls_csn, eo_pmod_cls_sck, eo_pmod_cls_dq0,
-	ei_pmod_cls_dq1,
+	output wire eo_pmod_cls_csn,
+	output wire eo_pmod_cls_sck,
+	output wire eo_pmod_cls_dq0,
+	input wire ei_pmod_cls_dq1,
 	/* Arty A7-100T UART TX and RX signals */
-	eo_uart_tx, ei_uart_rx,
-  /* PMOD SSD direct GPIO */
-  eo_ssd_pmod0);
+	output wire eo_uart_tx,
+	input wire ei_uart_rx,
+  	/* PMOD SSD direct GPIO */
+  	output wire [7:0] eo_ssd_pmod0);
 
 /* Disable or enable fast FSM delays for simulation instead of impelementation. */
-parameter integer parm_fast_simulation = 0;
 localparam integer c_FCLK = 20000000;
-
-input wire CLK100MHZ;
-input wire i_resetn;
-
-output wire eo_pmod_acl2_sck;
-output wire eo_pmod_acl2_csn;
-output wire eo_pmod_acl2_copi;
-input wire ei_pmod_acl2_cipo;
-input wire ei_pmod_acl2_int1;
-input wire ei_pmod_acl2_int2;
-
-output wire eo_led0_b;
-output wire eo_led1_b;
-output wire eo_led2_b;
-output wire eo_led3_b;
-
-output wire eo_led0_r;
-output wire eo_led1_r;
-output wire eo_led2_r;
-output wire eo_led3_r;
-
-output wire eo_led0_g;
-output wire eo_led1_g;
-output wire eo_led2_g;
-output wire eo_led3_g;
-
-output wire eo_led4;
-output wire eo_led5;
-output wire eo_led6;
-output wire eo_led7;
-
-input wire ei_sw0;
-input wire ei_sw1;
-input wire ei_sw2;
-input wire ei_sw3;
-
-input wire ei_btn0;
-input wire ei_btn1;
-input wire ei_btn2;
-input wire ei_btn3;
-
-output wire eo_pmod_cls_csn;
-output wire eo_pmod_cls_sck;
-output wire eo_pmod_cls_dq0;
-input wire ei_pmod_cls_dq1;
-
-output wire eo_uart_tx;
-input wire ei_uart_rx;
-
-output wire [7:0] eo_ssd_pmod0;
 
 //Part 2: Declarations----------------------------------------------------------
 
@@ -146,7 +124,7 @@ wire s_acl2_reg_status_activity_stretched;
 wire s_acl2_reg_status_inactivity_stretched;
 wire [63:0] s_hex_3axis_temp_measurements_final;
 wire s_hex_3axis_temp_measurements_valid;
-reg [63:0] s_hex_3axis_temp_measurements_display;
+logic [63:0] s_hex_3axis_temp_measurements_display;
 wire s_reading_inactive;
 
 /* Command to Operating Mode variables for the Tester FSM. */
@@ -176,8 +154,8 @@ wire s_cls_command_ready;
 wire s_cls_wr_clear_display;
 wire s_cls_wr_text_line1;
 wire s_cls_wr_text_line2;
-reg [(16*8-1):0] s_cls_txt_ascii_line1;
-reg [(16*8-1):0] s_cls_txt_ascii_line2;
+logic [(16*8-1):0] s_cls_txt_ascii_line1;
+logic [(16*8-1):0] s_cls_txt_ascii_line2;
 wire s_cls_feed_is_idle;
 
 /* Signals for text and data ASCII lines */
@@ -218,7 +196,7 @@ wire [(4*8-1):0] s_color_led_blue_value;
 wire [(4*8-1):0] s_basic_led_lumin_value;
 
 /* UART TX signals to connect \ref uart_tx_only and \ref uart_tx_feed */
-reg [(34*8-1):0] s_uart_dat_ascii_line;
+logic [(34*8-1):0] s_uart_dat_ascii_line;
 wire s_uart_tx_go;
 wire [7:0] s_uart_txdata;
 wire s_uart_txvalid;
@@ -458,14 +436,14 @@ acl_tester_fsm #(
    stops idling, then hold the value for display so that the display does not
    have its textual inputs changing while running the display update. This
    value capture also holds for the UART TX output of the values. */
-always @(posedge s_clk_20mhz)
+always_ff @(posedge s_clk_20mhz)
 begin: p_hold_measurements
 	if (s_rst_20mhz) s_hex_3axis_temp_measurements_display <= 64'd0;
 	else
 		if (s_hex_3axis_temp_measurements_valid && s_cls_feed_is_idle) begin
 			s_hex_3axis_temp_measurements_display <= s_hex_3axis_temp_measurements_final;
 		end
-end
+end : p_hold_measurements
 
 /* Stretch the Activity indication so it can be displayed as color LED 2. */
 pulse_stretcher_synch #(
@@ -520,7 +498,7 @@ pmod_cls_custom_driver #(
 
 /* Select the text to display on the Pmod CLS based om whether button 3
    is or is not depressed. */
-always @(posedge s_clk_20mhz)
+always_ff @(posedge s_clk_20mhz)
 begin: p_reg_cls_line
   if (s_btn_deb == 4'b1000) begin
     s_cls_txt_ascii_line1 <= s_adxl_dat_ascii_line1;
@@ -529,7 +507,7 @@ begin: p_reg_cls_line
     s_cls_txt_ascii_line1 <= s_adxl_txt_ascii_line1;
     s_cls_txt_ascii_line2 <= s_adxl_txt_ascii_line2;
   end
-end
+end : p_reg_cls_line
 
 /* LCD Update FSM */
 lcd_text_feed #(
@@ -562,7 +540,7 @@ adxl362_readings_to_ascii #(
 
 /* Select the text to display on the UART Terminal based om whether button 2
    is or is not depressed. */
-always @(posedge s_clk_20mhz)
+always_ff @(posedge s_clk_20mhz)
 begin: p_reg_uart_line
   if (s_btn_deb == 4'b0100)
     s_uart_dat_ascii_line <= {s_adxl_txt_ascii_line1, s_adxl_txt_ascii_line2,
@@ -570,7 +548,7 @@ begin: p_reg_uart_line
   else
     s_uart_dat_ascii_line <= {s_adxl_dat_ascii_line1, s_adxl_dat_ascii_line2,
                 8'h0D, 8'h0A};
-end
+end : p_reg_uart_line
 
 assign s_uart_tx_go = s_cls_wr_clear_display;
 
@@ -607,5 +585,5 @@ one_pmod_ssd_display #() u_one_pmod_ssd_display (
   .o_ssd_pmod0(eo_ssd_pmod0)
   );
 
-endmodule
+endmodule : fpga_serial_acl_tester
 //------------------------------------------------------------------------------
