@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file arty_reset_synchronizer.v
+-- \file arty_reset_synchronizer.sv
 --
 -- \brief A simple non-generic reset synchronizer for the Arty A7 board.
 -- Credit is due to a non-copied examination of VHDL EXTRAS repo on GitHub, VHDL
@@ -35,27 +35,25 @@
 //Reset Synchronizer------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module arty_reset_synchronizer(
-	i_clk_mhz, i_rstn_global, o_rst_mhz);
-
-input wire i_clk_mhz;
-input wire i_rstn_global;
-output wire o_rst_mhz;
+	input wire i_clk_mhz,
+	input wire i_rstn_global,
+	output wire o_rst_mhz);
 
 //Part 2: Declarations----------------------------------------------------------
 localparam integer c_RESET_STAGES = 14;
 
-reg [(c_RESET_STAGES - 1):0] s_rst_shift;
+logic [(c_RESET_STAGES - 1):0] s_rst_shift;
 
 //Part 3: Statements------------------------------------------------------------
-always @(posedge i_clk_mhz, negedge i_rstn_global)
+always_ff @(posedge i_clk_mhz, negedge i_rstn_global)
 begin: p_sync_reset_shift
 	if (~i_rstn_global)
 		s_rst_shift <= { c_RESET_STAGES{1'b1} };
 	else
-		s_rst_shift <= {s_rst_shift[(c_RESET_STAGES - 2)-:(c_RESET_STAGES - 1)],1'b0};
+		s_rst_shift <= {s_rst_shift[(c_RESET_STAGES - 2)-:(c_RESET_STAGES - 1)], 1'b0};
 end
 
 assign o_rst_mhz = s_rst_shift[c_RESET_STAGES-1];
 
-endmodule
+endmodule : arty_reset_synchronizer
 //------------------------------------------------------------------------------

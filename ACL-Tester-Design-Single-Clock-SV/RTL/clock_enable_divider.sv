@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file clock_enable_divider.v
+-- \file clock_enable_divider.sv
 --
 -- \brief A clock enable divider for an integer division of the source
 -- clock enable. The clock and synchronous reset are kept the same; but the
@@ -30,12 +30,15 @@
 ------------------------------------------------------------------------------*/
 //------------------------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
-module clock_enable_divider(o_ce_div, i_clk_mhz, i_rst_mhz, i_ce_mhz);
-parameter integer par_ce_divisor = 1000;
-output wire o_ce_div;
-input wire i_clk_mhz;
-input wire i_rst_mhz;
-input wire i_ce_mhz;
+module clock_enable_divider
+	#(parameter
+		integer par_ce_divisor = 1000
+		)
+	(
+		output wire o_ce_div,
+		input wire i_clk_mhz, 
+		input wire i_rst_mhz,
+		input wire i_ce_mhz);
 
 // Part 2: Declarations---------------------------------------------------------
 /* A constant representing the counter maximum which is an even division of the
@@ -50,13 +53,13 @@ integer s_clk_div_cnt;
 
 /* A clock enable at the source clock frequency which issues the periodic
    toggle of the divided clock. */
-reg s_clk_div_ce;
+logic s_clk_div_ce;
 
 //Part 3: Statements------------------------------------------------------------
 /* The even clock frequency division is operated by a clock enable signal to
    indicate the upstream clock cycle for changing the edge of the downstream
    clock enable waveform. */
-always @(posedge i_clk_mhz)
+always_ff @(posedge i_clk_mhz)
 begin: p_clk_div_cnt
 	if (i_rst_mhz) begin
 		s_clk_div_cnt <= 0;
@@ -74,9 +77,9 @@ begin: p_clk_div_cnt
 			s_clk_div_cnt <= s_clk_div_cnt;
 			s_clk_div_ce <= 1'b0;
 		end
-end
+end : p_clk_div_cnt
 
 assign o_ce_div = s_clk_div_ce;
 
-endmodule
+endmodule : clock_enable_divider
 //------------------------------------------------------------------------------

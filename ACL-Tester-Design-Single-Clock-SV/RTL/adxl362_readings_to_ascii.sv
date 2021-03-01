@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,23 +22,20 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file adxl362_readings_to_ascii.v
+-- \file adxl362_readings_to_ascii.sv
 --
 -- \brief A combinatorial block to convert ADXL362 Readings to ASCII text
 -- representations.
 ------------------------------------------------------------------------------*/
-//Recursive Moore Machine-------------------------------------------------------
+//Combinatorial measurement registers to ASCII text conversion.-----------------
 //Part 1: Module header:--------------------------------------------------------
-module adxl362_readings_to_ascii(i_3axis_temp, i_reading_inactive,
-	o_dat_ascii_line1, o_dat_ascii_line2, o_txt_ascii_line1,
-	o_txt_ascii_line2);
-
-input wire [(8*8-1):0] i_3axis_temp;
-input wire i_reading_inactive;
-output wire [(16*8-1):0] o_dat_ascii_line1;
-output wire [(16*8-1):0] o_dat_ascii_line2;
-output wire [(16*8-1):0] o_txt_ascii_line1;
-output wire [(16*8-1):0] o_txt_ascii_line2;
+module adxl362_readings_to_ascii(
+	input wire [(8*8-1):0] i_3axis_temp,
+	input wire i_reading_inactive,
+	output wire [(16*8-1):0] o_dat_ascii_line1,
+	output wire [(16*8-1):0] o_dat_ascii_line2,
+	output wire [(16*8-1):0] o_txt_ascii_line1,
+	output wire [(16*8-1):0] o_txt_ascii_line2);
 
 //Part 2: Declarations----------------------------------------------------------
 /* A re-entrant function that converts a 4-bit part-select to an 8-bit ASCII
@@ -294,4 +291,5 @@ assign o_txt_ascii_line2 = (i_reading_inactive)
 								s_char_temp_m1, s_char_temp_m0, 8'h20, 8'h20, 8'h20}
 								;
 
-endmodule
+endmodule : adxl362_readings_to_ascii
+//------------------------------------------------------------------------------

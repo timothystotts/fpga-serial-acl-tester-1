@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file clock_divider.v
+-- \file clock_divider.sv
 --
 -- \brief A clock divider for an even integer division of the source clock.
 --
@@ -35,12 +35,15 @@
 ------------------------------------------------------------------------------*/
 //------------------------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
-module clock_divider(o_clk_div, o_rst_div, i_clk_mhz, i_rst_mhz);
-parameter integer par_clk_divisor = 1000;
-output wire o_clk_div;
-output wire o_rst_div;
-input wire i_clk_mhz;
-input wire i_rst_mhz;
+module clock_divider
+	#(parameter
+		integer par_clk_divisor = 1000
+		)
+	(
+		output wire o_clk_div,
+		output wire o_rst_div,
+		input wire i_clk_mhz,
+		input wire i_rst_mhz);
 
 // Part 2: Declarations---------------------------------------------------------
 /* A constant representing the counter maximum which is an even division of the
@@ -54,17 +57,17 @@ integer s_clk_div_cnt;
 
 /* A clock enable at the source clock frequency which issues the periodic
    toggle of the divided clock. */
-reg s_clk_div_ce;
+logic s_clk_div_ce;
 
 /* Variables for the divided clock and reset. */
-reg s_clk_out;
-reg s_rst_out;
+logic s_clk_out;
+logic s_rst_out;
 
 //Part 3: Statements------------------------------------------------------------
 /* The even clock frequency division is operated by a clock enable signal to
    indicate the upstream clock cycle for changing the edge of the downstream
    clock waveform. */
-always @(posedge i_clk_mhz)
+always_ff @(posedge i_clk_mhz)
 begin: p_clk_div_cnt
 	if (i_rst_mhz) begin
 		s_clk_div_cnt <= 0;
@@ -77,14 +80,14 @@ begin: p_clk_div_cnt
 			s_clk_div_cnt <= s_clk_div_cnt + 1;
 			s_clk_div_ce <= 1'b0;
 		end
-end
+end : p_clk_div_cnt
 
 /* While the upstream clock is executing with reset held, this process will
    hold the clock at zero and the reset at active one. When the upstream reset
    signal is released, the downstream clock will have one positive edge with
    this reset output held active one, and then on the falling edge of the
    downstream clock, the reset will change from active one to inactive low. */
-always @(posedge i_clk_mhz)
+always_ff @(posedge i_clk_mhz)
 begin: p_clk_div_out
 	if (i_rst_mhz) begin
 		s_rst_out <= 1'b1;
@@ -94,10 +97,10 @@ begin: p_clk_div_out
 			s_rst_out <= s_rst_out && (~ s_clk_out);
 			s_clk_out <= ~ s_clk_out;
 		end
-end
+end : p_clk_div_out
 
 assign o_clk_div = s_clk_out;
 assign o_rst_div = s_rst_out;
 
-endmodule
+endmodule : clock_divider
 //------------------------------------------------------------------------------

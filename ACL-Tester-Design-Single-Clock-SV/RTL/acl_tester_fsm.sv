@@ -22,7 +22,7 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file acl_tester_fsm.v
+-- \file acl_tester_fsm.sv
 --
 -- \brief A simple FSM to control the execution of the ADXL362 accelerometer
 -- testing.
@@ -46,6 +46,9 @@ module acl_tester_fsm(
 	output logic o_acl_cmd_soft_reset);
 
 //Part 2: Declarations----------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 /* Tester FSM state declarations */
 `define c_tester_state_bits 4
 

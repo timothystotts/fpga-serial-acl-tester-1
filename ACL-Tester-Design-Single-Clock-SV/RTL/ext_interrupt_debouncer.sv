@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file ext_interrupt_debouncer.v
+-- \file ext_interrupt_debouncer.sv
 --
 -- \brief A simple 1 microsecond signal synchronizer and debouncer to filter-out
 --        glitches on an external Interrupt line from an external Integrated
@@ -30,28 +30,25 @@
 ------------------------------------------------------------------------------*/
 //Timed Moore machine with timer control strategy #1
 //Part 1: Module header:--------------------------------------------------------
-module ext_interrupt_debouncer(o_int_deb, i_clk_20mhz, i_rst_20mhz,
-	ei_interrupt);
-output wire o_int_deb;
-input wire i_clk_20mhz;
-input wire i_rst_20mhz;
-input wire ei_interrupt;
+module ext_interrupt_debouncer(
+	output wire o_int_deb,
+	input wire i_clk_20mhz,
+	input wire i_rst_20mhz,
+	input wire ei_interrupt);
 
 // Part 2: Declarations---------------------------------------------------------
 /* Debouncer FSM states. */
 `define c_intdeb_state_bits 2
-localparam [(`c_intdeb_state_bits - 1):0] ST_A = 0;
-localparam [(`c_intdeb_state_bits - 1):0] ST_B = 1;
-localparam [(`c_intdeb_state_bits - 1):0] ST_C = 2;
-localparam [(`c_intdeb_state_bits - 1):0] ST_D = 3;
 
 /* Xilinx attributes for Gray encoding of the FSM and safe state is Default
    State. */
+/* FSM state signals for Present and Next. */
 (* fsm_encoding = "gray" *)
 (* fsm_safe_state = "default_state" *)
-/* FSM state signals for Present and Next. */
-reg [(`c_intdeb_state_bits - 1):0] s_intdeb_pr_state;
-reg [(`c_intdeb_state_bits - 1):0] s_intdeb_nx_state;
+typedef enum logic [(`c_intdeb_state_bits - 1):0] {
+	ST_A, ST_B, ST_C, ST_D} t_intdeb_state;
+t_intdeb_state s_intdeb_pr_state;
+t_intdeb_state s_intdeb_nx_state;
 
 /* Debouncer Timer parameters. */
 `define c_intdeb_timer1_bits 5
@@ -59,14 +56,14 @@ localparam [(`c_intdeb_timer1_bits - 1):0] c_t1 = 20; /* 1 microsecond time at 2
 localparam [(`c_intdeb_timer1_bits - 1):0] c_tmax = c_t1 - 1;
 
 /* Strategy #1 timer implementation. */
-reg [(`c_intdeb_timer1_bits - 1):0] s_t;
+logic [(`c_intdeb_timer1_bits - 1):0] s_t;
 
 /* Resulting debounced interrupt signal. */
-reg s_int_deb;
+logic s_int_deb;
 
 /* Variables for synchronizing the external interrupt signal. */
-reg si_interrupt_meta;
-reg si_interrupt_sync;
+logic si_interrupt_meta;
+logic si_interrupt_sync;
 
 //Part 3: Statements------------------------------------------------------------
 
@@ -75,15 +72,15 @@ reg si_interrupt_sync;
    encoding could cause more than one location of the input value to be
    interpreted differently, causing the FSM to produce invalid behavior, (not
    according to design). */
-always @(posedge i_clk_20mhz)
+always_ff @(posedge i_clk_20mhz)
 begin: p_sync_interrupt
 	si_interrupt_sync <= si_interrupt_meta;
 	si_interrupt_meta <= ei_interrupt;
-end
+end : p_sync_interrupt
 
 /* Timer with strategy #1 implementation. The timer re-zeroes on a debouncer FSM
    state transition; and it caps at the constant parameter c_tmax. */
-always @(posedge i_clk_20mhz)
+always_ff @(posedge i_clk_20mhz)
 begin: p_fsm_timer
 	if (i_rst_20mhz)
 		s_t <= 0;
@@ -92,22 +89,22 @@ begin: p_fsm_timer
 			s_t <= 0;
 		else if (s_t != c_tmax)
 			s_t <= s_t + 1;
-end
+end : p_fsm_timer
 
 /* FSM state register for transition of the FSM next state propagating to
    current state, on the positive edge of the clock. */
-always @(posedge i_clk_20mhz)
+always_ff @(posedge i_clk_20mhz)
 begin: p_fsm_state
 	if (i_rst_20mhz)
 		s_intdeb_pr_state <= ST_A;
 	else
 		s_intdeb_pr_state <= s_intdeb_nx_state;
-end
+end : p_fsm_state
 
 /* FSM combinatorial logic providing a single output value \ref s_int_deb,
    as well as setting-up the next state value to propagate on the next
    positive clock edge. */
-always @(s_intdeb_pr_state, si_interrupt_sync, s_t)
+always_comb
 begin: p_fsm_nx_output
 	case (s_intdeb_pr_state)
 		ST_B: begin
@@ -147,7 +144,7 @@ begin: p_fsm_nx_output
 			else s_intdeb_nx_state = ST_A;
 		end
 	endcase
-end
+end : p_fsm_nx_output
 
 /* The debounced interrupt produced by the combinatorial logic is output here
    without an extra registration. */
