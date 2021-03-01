@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file pmod_acl2_custom_driver.v
+-- \file pmod_acl2_custom_driver.sv
 --
 -- \brief A wrapper for the single Chip Select, Standard SPI modules
 --        \ref pmod_acl2_stand_spi_solo and \ref pmod_generic_spi_solo ,
@@ -32,73 +32,54 @@
 ------------------------------------------------------------------------------*/
 //------------------------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
-module pmod_acl2_custom_driver (
-	/* Clock and reset, with clock at 4 times the frequency of the SPI bus */
-	i_clk_20mhz, i_rst_20mhz,
-	/* Outputs and inputs from the single SPI peripheral */
-	eo_sck_t, eo_sck_o, eo_csn_t, eo_csn_o, eo_copi_t, eo_copi_o,
-	ei_cipo,
-	ei_int1, ei_int2,
-	/* Command ready indication and five possible commands to the driver */
-	o_command_ready,
-	i_cmd_init_linked_mode,
-	i_cmd_start_linked_mode,
-	i_cmd_init_measur_mode,
-	i_cmd_start_measur_mode,
-	i_cmd_soft_reset_acl2,
-	/* Output of the measurements in a single vector, plus a valid pulse */
-	o_data_3axis_temp,
-	o_data_valid,
-	/* Output of the most recently read single byte status register,
-	   without a valid pualse. */
-	o_reg_status,
-	/* Debounced buttons input */
-	i_btn_deb,
-	/* Active and Inactive preset enumeration value */
-	o_enum_active,
-	o_enum_inactive);
-
-/* Disable or enable fast FSM delays for simulation instead of impelementation. */
-parameter integer parm_fast_simulation = 0;
-/* Actual frequency in Hz of \ref i_clk_20mhz */
-parameter integer FCLK = 20000000;
-/* Ratio of i_ext_spi_clk_x to SPI sck bus output. */
-parameter parm_ext_spi_clk_ratio = 4;
-/* LOG2 of the TX FIFO max count */
-parameter parm_tx_len_bits = 11;
-/* LOG2 of max Wait Cycles count between end of TX and start of RX */
-parameter parm_wait_cyc_bits = 2;
-/* LOG2 of the RX FIFO max count */
-parameter parm_rx_len_bits = 11;
-
-input wire i_clk_20mhz;
-input wire i_rst_20mhz;
-
-output reg eo_sck_t;
-output reg eo_sck_o;
-output reg eo_csn_t;
-output reg eo_csn_o;
-output reg eo_copi_t;
-output reg eo_copi_o;
-input wire ei_cipo;
-
-input wire ei_int1;
-input wire ei_int2;
-
-output wire o_command_ready;
-input wire i_cmd_init_linked_mode;
-input wire i_cmd_start_linked_mode;
-input wire i_cmd_init_measur_mode;
-input wire i_cmd_start_measur_mode;
-input wire i_cmd_soft_reset_acl2;
-
-output reg [63:0] o_data_3axis_temp; /* Eight bytes of measurement data. */
-output reg o_data_valid;
-output wire [7:0] o_reg_status; /* Status register is one byte. */
-
-input wire [1:0] i_btn_deb;
-output wire [3:0] o_enum_active;
-output wire [3:0] o_enum_inactive;
+module pmod_acl2_custom_driver
+	#(parameter
+		/* Disable or enable fast FSM delays for simulation instead of impelementation. */
+		integer parm_fast_simulation = 0,
+		/* Actual frequency in Hz of \ref i_clk_20mhz */
+		integer FCLK = 20000000,
+		/* Ratio of i_ext_spi_clk_x to SPI sck bus output. */
+		integer parm_ext_spi_clk_ratio = 4,
+		/* LOG2 of the TX FIFO max count */
+		integer parm_tx_len_bits = 11,
+		/* LOG2 of max Wait Cycles count between end of TX and start of RX */
+		integer parm_wait_cyc_bits = 2,
+		/* LOG2 of the RX FIFO max count */
+		integer parm_rx_len_bits = 11
+		)
+	(
+		/* Clock and reset, with clock at 4 times the frequency of the SPI bus */
+		input wire i_clk_20mhz,
+		input wire i_rst_20mhz,
+		/* Outputs and inputs from the single SPI peripheral */
+		output logic eo_sck_t,
+		output logic eo_sck_o,
+		output logic eo_csn_t,
+		output logic eo_csn_o,
+		output logic eo_copi_t,
+		output logic eo_copi_o,
+		input wire ei_cipo,
+		input wire ei_int1,
+		input wire ei_int2,
+		/* Command ready indication and five possible commands to the driver */
+		output wire o_command_ready,
+		input wire i_cmd_init_linked_mode,
+		input wire i_cmd_start_linked_mode,
+		input wire i_cmd_init_measur_mode,
+		input wire i_cmd_start_measur_mode,
+		input wire i_cmd_soft_reset_acl2,
+		/* Output of the measurements in a single vector, plus a valid pulse */
+		output logic [63:0] o_data_3axis_temp, /* Eight bytes of measurement data. */
+		output logic o_data_valid,
+		/* Output of the most recently read single byte status register,
+		   without a valid pualse. */
+		output wire [7:0] o_reg_status, /* Status register is one byte. */
+		/* Debounced buttons input */
+		input wire [1:0] i_btn_deb,
+		/* Active and Inactive preset enumeration value */
+		output wire [3:0] o_enum_active,
+		output wire [3:0] o_enum_inactive
+		);
 
 //Part 2: Declarations----------------------------------------------------------
 
@@ -126,8 +107,8 @@ wire s_acl2_rx_avail;
 wire [7:0] s_acl2_rd_data_stream;
 wire s_acl2_rd_data_byte_valid;
 wire s_acl2_rd_data_group_valid;
-reg [(8*8-1):0] s_hex_3axis_temp_measurements_val;
-reg [(8*8-1):0] s_hex_3axis_temp_measurements_aux;
+logic [(8*8-1):0] s_hex_3axis_temp_measurements_val;
+logic [(8*8-1):0] s_hex_3axis_temp_measurements_aux;
 
 /* ACL2 SPI outputs, FSM signals to register the SPI bus outputs for
    optimal timing closure and glitch minimization. */
@@ -140,8 +121,8 @@ wire sio_acl2_copi_fsm_t;
 
 /* ACL2 SPI input synchronizer signals, where the synchronizer is used to
    mitigate metastability. */
-reg sio_acl2_cipo_meta_i;
-reg sio_acl2_cipo_sync_i;
+logic sio_acl2_cipo_meta_i;
+logic sio_acl2_cipo_sync_i;
 
 /* Debounced external interrupts. */
 wire si_int1_debounced;
@@ -149,20 +130,20 @@ wire si_int2_debounced;
 
 /* Experiment FSM state declarations */
 `define c_stream_state_bits 2
-localparam [(`c_stream_state_bits - 1):0] ST_WAIT_GROUP = 0;
-localparam [(`c_stream_state_bits - 1):0] ST_WAIT_VALID = 1;
-localparam [(`c_stream_state_bits - 1):0] ST_DONE_CYCLE = 2;
 
 /* Xilinx attributes for Gray encoding of the FSM and safe state is
    Default State. */
 (* fsm_encoding = "gray" *)
 (* fsm_safe_state = "default_state" *)
-reg [(`c_stream_state_bits - 1):0] s_stream_pr_state = ST_WAIT_GROUP;
-reg [(`c_stream_state_bits - 1):0] s_stream_nx_state = ST_WAIT_GROUP;
+typedef enum logic [(`c_stream_state_bits - 1):0] {
+	ST_WAIT_GROUP, ST_WAIT_VALID, ST_DONE_CYCLE
+} t_stream_state;
+t_stream_state s_stream_pr_state = ST_WAIT_GROUP;
+t_stream_state s_stream_nx_state = ST_WAIT_GROUP;
 
 localparam [3:0] c_j_max = 8;
-reg [3:0] s_j_val;
-reg [3:0] s_j_aux;
+logic [3:0] s_j_val;
+logic [3:0] s_j_aux;
 
 /* One-shot conversion of button levels */
 wire s_btn0_one_shot;
@@ -214,7 +195,7 @@ thresh_presets_selector #(
 	);
 
 /* Register the SPI output an extra 4x-SPI-clock clock cycle. */
-always @(posedge i_clk_20mhz)
+always_ff @(posedge i_clk_20mhz)
 begin: p_reg_spi_fsm_out
 	eo_sck_o <= sio_acl2_sck_fsm_o;
 	eo_sck_t <= sio_acl2_sck_fsm_t;
@@ -224,14 +205,14 @@ begin: p_reg_spi_fsm_out
 
 	eo_copi_o <= sio_acl2_copi_fsm_o;
 	eo_copi_t <= sio_acl2_copi_fsm_t;
-end
+end : p_reg_spi_fsm_out
 
 /* Double-register the SPI input at 4x-SPI-clock cycle to prevent metastability. */
 always @(posedge i_clk_20mhz)
 begin: p_sync_spi_in
 	sio_acl2_cipo_sync_i <= sio_acl2_cipo_meta_i;
 	sio_acl2_cipo_meta_i <= ei_cipo;
-end
+end : p_sync_spi_in
 
 /* Multiple mode driver to operate the PMOD ACL2 via a stand-alone SPI driver. */
 pmod_acl2_stand_spi_solo #(
@@ -313,16 +294,22 @@ pmod_generic_spi_solo #(
 
 /* Synchronize and debounce the INT1 incoming signal from PMOD ACL2. */
 ext_interrupt_debouncer #() u_extint_deb_int1 (
-	si_int1_debounced, i_clk_20mhz, i_rst_20mhz, ei_int1);
+	.o_int_deb(si_int1_debounced),
+	.i_clk_20mhz(i_clk_20mhz),
+	.i_rst_20mhz(i_rst_20mhz),
+	.ei_interrupt(ei_int1));
 
 /* Synchronize and debounce the INT2 incoming signal from PMOD ACL2. */
 ext_interrupt_debouncer #() u_extint_deb_int2 (
-	si_int2_debounced, i_clk_20mhz, i_rst_20mhz, ei_int2);
+	.o_int_deb(si_int2_debounced),
+	.i_clk_20mhz(i_clk_20mhz),
+	.i_rst_20mhz(i_rst_20mhz),
+	.ei_interrupt(ei_int2));
 
 /* FSM states for streaming data from the PMOD ACL2 to a buffer from which
    other logic reads the hexadecimal values of the X-Axis, Y-Axis,
    Z-Axis, Temperature. */
-always @(posedge i_clk_20mhz)
+always_ff @(posedge i_clk_20mhz)
 begin: p_stream_fsm_state_aux
 	if (i_rst_20mhz) begin
 		s_stream_pr_state <= ST_WAIT_GROUP;
@@ -344,7 +331,7 @@ begin: p_stream_fsm_state_aux
 		end else
 			o_data_valid <= 1'b0;
 	end
-end
+end : p_stream_fsm_state_aux
 
 /* FSM Combinatorial for capturing streamed measurements from the PMOD ACL2
    driver output in order that a high level module may use the captured byte
@@ -358,8 +345,7 @@ end
    that belongs to the group of bytes. In this way, the GROUP VALID restarts
    receipt of byte data; and the BYTE VALID indicates when to read a valid
    incoming byte. */
-always @(s_stream_pr_state, s_acl2_rd_data_stream, s_acl2_rd_data_group_valid,
-	s_acl2_rd_data_byte_valid, s_j_aux, s_hex_3axis_temp_measurements_aux)
+always_comb
 begin: p_stream_fsm_comb
 	case (s_stream_pr_state)
 		ST_WAIT_VALID: begin
@@ -422,7 +408,7 @@ begin: p_stream_fsm_comb
 			else s_stream_nx_state = ST_WAIT_GROUP;
 		end
 	endcase
-end
+end : p_stream_fsm_comb
 
-endmodule
+endmodule : pmod_acl2_custom_driver
 //------------------------------------------------------------------------------
