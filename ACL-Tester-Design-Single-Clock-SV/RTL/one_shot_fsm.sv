@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file one_shot_fsm.v
+-- \file one_shot_fsm.sv
 --
 -- \brief A one-shot pulse generator based on level input.
 --
@@ -30,60 +30,59 @@
 -- Finite State Machines in Hardware: Theory and Design (with VHDL and
 -- SystemVerilog) by Volnei A. Pedroni.
 ------------------------------------------------------------------------------*/
-//------------------------------------------------------------------------------
+//Regular FSM-------------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
-module one_shot_fsm (y, clk, rst, x);
-input x;
-input clk;
-input rst;
-output y;
-reg y;
+module one_shot_fsm
+	(
+		input wire x,
+		input wire clk,
+		input wire rst,
+		output logic y
+		);
 
 // Part 2: Declarations---------------------------------------------------------
-localparam [1:0] ST_A = 2'b00;
-localparam [1:0] ST_B = 2'b01;
-localparam [1:0] ST_C = 2'b10;
+typedef enum logic [1:0] {ST_A, ST_B, ST_C} t_1shot_state;
+t_1shot_state s_1shot_pr_state;
+t_1shot_state s_1shot_nx_state;
 
-reg [1:0] s_pr_state;
-reg [1:0] s_nx_state;
-reg s_y_out;
+logic s_y_out;
 
 //Part 3: Statements------------------------------------------------------------
 
 // State register
-always @(posedge clk)
+always_ff @(posedge clk)
 begin : p_fsm_pr_state
-	if (rst) s_pr_state <= ST_A;
-	else s_pr_state <= s_nx_state;
-end
+	if (rst) s_1shot_pr_state <= ST_A;
+	else s_1shot_pr_state <= s_1shot_nx_state;
+end : p_fsm_pr_state
 
 // Next state assignment and output
-always @(s_pr_state, x)
+always_comb
 begin : p_fsm_nx_state_out
-	case (s_pr_state)
+	case (s_1shot_pr_state)
 		ST_B : begin
 			s_y_out = 1'b1;
-			if (x) s_nx_state = ST_C;
-			else s_nx_state = ST_A;
+			if (x) s_1shot_nx_state = ST_C;
+			else s_1shot_nx_state = ST_A;
 		end
 		ST_C : begin
 			s_y_out = 1'b0;
-			if (~x) s_nx_state = ST_A;
-			else s_nx_state = ST_C;
+			if (~x) s_1shot_nx_state = ST_A;
+			else s_1shot_nx_state = ST_C;
 		end
 		default : begin // ST_A
 			s_y_out = 1'b0;
-			if (x) s_nx_state = ST_B;
-			else s_nx_state = ST_A;
+			if (x) s_1shot_nx_state = ST_B;
+			else s_1shot_nx_state = ST_A;
 		end
-	endcase // s_pr_state
-end
+	endcase // s_1shot_pr_state
+end : p_fsm_nx_state_out
 
 // Register output to prevent possible FSM output glitch
-always @(posedge clk)
+always_ff @(posedge clk)
 begin : p_fsm_glitch_free
 	y <= s_y_out;
-end
+end : p_fsm_glitch_free
 
-endmodule // one_shot_fsm_best
+endmodule : one_shot_fsm // one_shot_fsm_best
 //------------------------------------------------------------------------------
