@@ -22,7 +22,7 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file thresh_presets_include.vh
+-- \file thresh_presets_include.svh
 --
 -- \brief Parameters for the \ref pmod_acl2_custom_driver usage of the
 -- \ref thresh_presets_selector module.

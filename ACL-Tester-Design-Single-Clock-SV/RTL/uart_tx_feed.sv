@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,33 +22,33 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file uart_tx_feed.v
+-- \file uart_tx_feed.sv
 --
 -- \brief A simple text byte feeder to the UART TX module.
 ------------------------------------------------------------------------------*/
 //Recursive Moore Machine-------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
-module uart_tx_feed(i_clk_20mhz, i_rst_20mhz, o_tx_data, o_tx_valid, i_tx_ready,
-	i_tx_go, i_dat_ascii_line);
-
-input wire i_clk_20mhz;
-input wire i_rst_20mhz;
-output reg [7:0] o_tx_data;
-output reg o_tx_valid;
-input wire i_tx_ready;
-input wire i_tx_go;
-input wire [(34*8-1):0] i_dat_ascii_line;
+module uart_tx_feed
+	(
+		input wire i_clk_20mhz,
+		input wire i_rst_20mhz,
+		output logic [7:0] o_tx_data,
+		output logic o_tx_valid,
+		input wire i_tx_ready,
+		input wire i_tx_go,
+		input wire [(34*8-1):0] i_dat_ascii_line
+	);
 
 //Part 2: Declarations----------------------------------------------------------
 /* UART TX update FSM state declarations */
 `define c_uarttx_feed_fsm_bits 2
-localparam [(`c_uarttx_feed_fsm_bits - 1):0] ST_UARTFEED_IDLE = 0;
-localparam [(`c_uarttx_feed_fsm_bits - 1):0] ST_UARTFEED_CAPT = 1;
-localparam [(`c_uarttx_feed_fsm_bits - 1):0] ST_UARTFEED_DATA = 2;
-localparam [(`c_uarttx_feed_fsm_bits - 1):0] ST_UARTFEED_WAIT = 3;
 
-reg [(`c_uarttx_feed_fsm_bits - 1):0] s_uartfeed_pr_state;
-reg [(`c_uarttx_feed_fsm_bits - 1):0] s_uartfeed_nx_state;
+typedef enum logic [(`c_uarttx_feed_fsm_bits - 1):0] {
+	ST_UARTFEED_IDLE, ST_UARTFEED_CAPT, ST_UARTFEED_DATA, ST_UARTFEED_WAIT
+} t_uartfeed_state;
+
+t_uartfeed_state s_uartfeed_pr_state;
+t_uartfeed_state s_uartfeed_nx_state;
 
 localparam [5:0] c_uart_k_preset = 34;
 
@@ -56,10 +56,10 @@ localparam [(34*8-1):0] c_line_of_spaces =
 	272'h20202020202020202020202020202020202020202020202020202020202020200D0A;
 
 /* UART TX signals for UART TX update FSM */
-reg [5:0] s_uart_k_val;
-reg [5:0] s_uart_k_aux;
-reg [(34*8-1):0] s_uart_line_val;
-reg [(34*8-1):0] s_uart_line_aux;
+logic [5:0] s_uart_k_val;
+logic [5:0] s_uart_k_aux;
+logic [(34*8-1):0] s_uart_line_val;
+logic [(34*8-1):0] s_uart_line_aux;
 
 //Part 3: Statements------------------------------------------------------------
 /* UART TX machine, the 34 bytes of \ref s_uart_dat_ascii_line
@@ -69,7 +69,7 @@ reg [(34*8-1):0] s_uart_line_aux;
    transmit them, one-at-a-time at the \ref parm_BAUD baudrate. */
 
 /* UART TX machine, synchronous state and auxiliary counting register. */
-always @(posedge i_clk_20mhz)
+always_ff @(posedge i_clk_20mhz)
 begin: p_uartfeed_fsm_state_aux
 	if (i_rst_20mhz) begin
 		s_uartfeed_pr_state <= ST_UARTFEED_IDLE;
@@ -80,12 +80,11 @@ begin: p_uartfeed_fsm_state_aux
 		s_uart_k_aux <= s_uart_k_val;
 		s_uart_line_aux <= s_uart_line_val;
 	end
-end
+end : p_uartfeed_fsm_state_aux
 
 /* UART TX machine, combinatorial next state and auxiliary counting register, and
    auxiliary 34 8-bit character line register. */
-always @(s_uartfeed_pr_state, s_uart_k_aux, s_uart_line_aux,
-	i_tx_go, i_dat_ascii_line, i_tx_ready)
+always_comb
 begin: p_uartfeed_fsm_nx_out
 	case (s_uartfeed_pr_state)
 		ST_UARTFEED_CAPT: begin
@@ -135,7 +134,7 @@ begin: p_uartfeed_fsm_nx_out
 			else s_uartfeed_nx_state = ST_UARTFEED_IDLE;
 		end
 	endcase
-end
+end : p_uartfeed_fsm_nx_out
 
-endmodule
+endmodule : uart_tx_feed
 //------------------------------------------------------------------------------

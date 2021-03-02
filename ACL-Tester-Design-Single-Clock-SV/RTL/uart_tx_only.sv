@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file uart_tx_only.v
+-- \file uart_tx_only.sv
 --
 -- \brief A simplified UART function to drive TX characters on a UART board
 --        connection, independent of any RX function (presumed to be ingored).
@@ -31,43 +31,40 @@
 ------------------------------------------------------------------------------*/
 //Recursive Moore Machine-------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
-module uart_tx_only(
-	i_clk_20mhz, i_rst_20mhz,
-	i_clk_7_37mhz, i_rst_7_37mhz,
-	eo_uart_tx,
-	i_tx_data, i_tx_valid, o_tx_ready
-	);
+module uart_tx_only
+	#(parameter
+		BAUD = 115200
+		)
+	(
+		input wire i_clk_20mhz,
+		input wire i_rst_20mhz,
+		input wire i_clk_7_37mhz,
+		input wire i_rst_7_37mhz,
+		output logic eo_uart_tx,
+		input wire [7:0] i_tx_data,
+		input wire i_tx_valid,
+		output wire o_tx_ready
+		);
 
-parameter BAUD = 115200;
-
-input wire i_clk_20mhz;
-input wire i_rst_20mhz;
-input wire i_clk_7_37mhz;
-input wire i_rst_7_37mhz;
-output reg eo_uart_tx;
-input wire [7:0] i_tx_data;
-input wire i_tx_valid;
-output wire o_tx_ready;
 
 //Part 2: Declarations----------------------------------------------------------
 
 /* State Machine constants and variables */
 `define c_uarttxonly_fsm_state_bits 2
 
-localparam [(`c_uarttxonly_fsm_state_bits - 1):0] ST_IDLE = 0;
-localparam [(`c_uarttxonly_fsm_state_bits - 1):0] ST_START = 1;
-localparam [(`c_uarttxonly_fsm_state_bits - 1):0] ST_DATA = 2;
-localparam [(`c_uarttxonly_fsm_state_bits - 1):0] ST_STOP = 3;
+typedef enum logic [(`c_uarttxonly_fsm_state_bits - 1):0] {
+	ST_IDLE, ST_START, ST_DATA, ST_STOP
+} t_uarttxonly_state;
 
-reg [(`c_uarttxonly_fsm_state_bits - 1):0] s_uarttxonly_pr_state;
-reg [(`c_uarttxonly_fsm_state_bits - 1):0] s_uarttxonly_nx_state;
+t_uarttxonly_state s_uarttxonly_pr_state;
+t_uarttxonly_state s_uarttxonly_nx_state;
 
 /* State machine output and auxiliary registers */
-reg so_uart_tx;
-reg [3:0] s_i_val;
-reg [3:0] s_i_aux;
-reg [7:0] s_data_val;
-reg [7:0] s_data_aux;
+logic so_uart_tx;
+logic [3:0] s_i_val;
+logic [3:0] s_i_aux;
+logic [7:0] s_data_val;
+logic [7:0] s_data_aux;
 
 /* internal clock for 1x the baud rate */
 wire s_ce_baud_1x;
@@ -75,11 +72,11 @@ wire s_ce_baud_1x;
 /* Mapping for FIFO TX */
 wire [7:0] s_data_fifo_tx_in;
 wire [7:0] s_data_fifo_tx_out;
-reg s_data_fifo_tx_re;
+logic s_data_fifo_tx_re;
 wire s_data_fifo_tx_we;
 wire s_data_fifo_tx_full;
 wire s_data_fifo_tx_empty;
-reg s_data_fifo_tx_valid;
+logic s_data_fifo_tx_valid;
 wire [10:0] s_data_fifo_tx_wr_count;
 wire [10:0] s_data_fifo_tx_rd_count;
 wire s_data_fifo_tx_almostempty;
@@ -104,10 +101,10 @@ assign s_data_fifo_tx_in = i_tx_data;
 assign s_data_fifo_tx_we = i_tx_valid;
 assign o_tx_ready = ((~ s_data_fifo_tx_full) && (~ s_data_fifo_tx_almostfull));
 
-always @(posedge i_clk_7_37mhz)
+always_ff @(posedge i_clk_7_37mhz)
 begin: p_gen_fifo_tx_valid
 	s_data_fifo_tx_valid <= s_data_fifo_tx_re;
-end
+end : p_gen_fifo_tx_valid
 
 // FIFO_DUALCLOCK_MACRO: Dual Clock First-In, First-Out (FIFO) RAM Buffer
 //                       Artix-7
@@ -156,7 +153,7 @@ FIFO_DUALCLOCK_MACRO  #(
 				
 
 /* FSM register and auxiliary registers */
-always @(posedge i_clk_7_37mhz)
+always_ff @(posedge i_clk_7_37mhz)
 begin: p_uarttxonly_fsm_state_aux
 	if (i_rst_7_37mhz) begin
 		s_uarttxonly_pr_state <= ST_IDLE;
@@ -169,14 +166,10 @@ begin: p_uarttxonly_fsm_state_aux
 		s_i_aux <= s_i_val;
 		s_data_aux <= s_data_val;
 	end
-end
+end : p_uarttxonly_fsm_state_aux
 
 /* FSM combinatorial logic with output and auxiliary registers */
-always @(s_uarttxonly_pr_state,
-	s_data_fifo_tx_empty,
-	s_i_aux, s_data_aux,
-	s_data_fifo_tx_out,
-	s_ce_baud_1x)
+always_comb
 begin: p_uarttxonly_fsm_nx_out
 	case (s_uarttxonly_pr_state)
 		ST_START: begin
@@ -229,14 +222,14 @@ begin: p_uarttxonly_fsm_nx_out
 			else s_uarttxonly_nx_state = ST_IDLE;
 		end
 	endcase
-end
+end : p_uarttxonly_fsm_nx_out
 
 /* Registered output for timing closure and glitch removal on the output pin */
-always @(posedge i_clk_7_37mhz)
+always_ff @(posedge i_clk_7_37mhz)
 begin: p_fsm_out_reg
 	if (i_rst_7_37mhz) eo_uart_tx <= 1'b1;
 	else if (s_ce_baud_1x) eo_uart_tx <= so_uart_tx;
-end
+end : p_fsm_out_reg
 
-endmodule
+endmodule : uart_tx_only
 //------------------------------------------------------------------------------
