@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file pmod_generic_spi_solo.v
+-- \file pmod_generic_spi_solo.sv
 --
 -- \brief A custom SPI driver for generic usage, implementing only Standard
 -- SPI operating in Mode 0, without Extended data transfer of more than the
@@ -31,91 +31,82 @@
 //------------------------------------------------------------------------------
 //Multiple Recursive Moore Machines
 //Part 1: Module header:--------------------------------------------------------
-module pmod_generic_spi_solo (
-	/* SPI bus outputs and input to top-level */
-	eo_sck_o, eo_sck_t, eo_csn_o, eo_csn_t, eo_copi_o, eo_copi_t, ei_cipo_i,
-	/* SPI state machine clock at 4x the SPI bus clock speed, with
-	   synchronous reset */
-	i_ext_spi_clk_x, i_srst, i_spi_ce_4x,
-	/* inputs and output for triggering a new SPI bus cycle */
-	i_go_stand, o_spi_idle, i_tx_len, i_wait_cyc, i_rx_len,
-	/* system interface to TX FIFO */
-	i_tx_data, i_tx_enqueue, o_tx_ready,
-	/* system interface to RX FIFO */
-	o_rx_data, i_rx_dequeue, o_rx_valid, o_rx_avail);
-
-/* Ratio of i_ext_spi_clk_x to SPI sck bus output. */
-parameter parm_ext_spi_clk_ratio = 32;
-/* LOG2 of the TX FIFO max count */
-parameter parm_tx_len_bits = 11;
-/* LOG2 of max Wait Cycles count between end of TX and start of RX */
-parameter parm_wait_cyc_bits = 2;
-/* LOG2 of the RX FIFO max count */
-parameter parm_rx_len_bits = 11; /* now ignored due to usage of MACRO */
-
-output reg eo_sck_o;
-output reg eo_sck_t;
-output reg eo_csn_o;
-output reg eo_csn_t;
-output reg eo_copi_o;
-output reg eo_copi_t;
-input wire ei_cipo_i;
-
-input wire i_ext_spi_clk_x;
-input wire i_srst;
-input wire i_spi_ce_4x;
-
-input wire i_go_stand;
-output wire o_spi_idle;
-input wire [(parm_tx_len_bits - 1):0] i_tx_len;
-input wire [(parm_wait_cyc_bits - 1):0] i_wait_cyc;
-input wire [(parm_rx_len_bits - 1):0] i_rx_len;
-
-input wire [7:0] i_tx_data;
-input wire i_tx_enqueue;
-output wire o_tx_ready;
-
-output wire [7:0] o_rx_data;
-input wire i_rx_dequeue;
-output wire o_rx_valid;
-output wire o_rx_avail;
+module pmod_generic_spi_solo
+	#(parameter
+		/* Note that these parameters should be updated to max counts instead of
+		   LOG2, and then several localparam compute the LOG2 with $clog2 . */
+		/* Ratio of i_ext_spi_clk_x to SPI sck bus output. */
+		integer parm_ext_spi_clk_ratio = 32,
+		/* LOG2 of the TX FIFO max count */
+		integer parm_tx_len_bits = 11,
+		/* LOG2 of max Wait Cycles count between end of TX and start of RX */
+		integer parm_wait_cyc_bits = 2,
+		/* LOG2 of the RX FIFO max count */
+		integer parm_rx_len_bits = 11 /* now ignored due to usage of MACRO */
+		)
+	(
+		/* SPI bus outputs and input to top-level */
+		output logic eo_sck_o,
+		output logic eo_sck_t,
+		output logic eo_csn_o,
+		output logic eo_csn_t,
+		output logic eo_copi_o,
+		output logic eo_copi_t,
+		input wire ei_cipo_i,
+		/* SPI state machine clock at 4x the SPI bus clock speed, with
+		   synchronous reset */
+		input wire i_ext_spi_clk_x,
+		input wire i_srst,
+		input wire i_spi_ce_4x,
+		/* inputs and output for triggering a new SPI bus cycle */
+		input wire i_go_stand,
+		output wire o_spi_idle,
+		input wire [(parm_tx_len_bits - 1):0] i_tx_len,
+		input wire [(parm_wait_cyc_bits - 1):0] i_wait_cyc,
+		input wire [(parm_rx_len_bits - 1):0] i_rx_len,
+		/* system interface to TX FIFO */
+		input wire [7:0] i_tx_data,
+		input wire i_tx_enqueue,
+		output wire o_tx_ready,
+		/* system interface to RX FIFO */
+		output wire [7:0] o_rx_data,
+		input wire i_rx_dequeue,
+		output wire o_rx_valid,
+		output wire o_rx_avail
+		);
 
 // Part 2: Declarations---------------------------------------------------------
 /* SPI FSM state declarations */
 `define c_spi_state_bits 3
-localparam [(`c_spi_state_bits - 1):0] ST_STAND_IDLE = 3'd0;
-localparam [(`c_spi_state_bits - 1):0] ST_STAND_START_D = 3'd1;
-localparam [(`c_spi_state_bits - 1):0] ST_STAND_START_S = 3'd2;
-localparam [(`c_spi_state_bits - 1):0] ST_STAND_TX = 3'd3;
-localparam [(`c_spi_state_bits - 1):0] ST_STAND_WAIT = 3'd4;
-localparam [(`c_spi_state_bits - 1):0] ST_STAND_RX = 3'd5;
-localparam [(`c_spi_state_bits - 1):0] ST_STAND_STOP_S = 3'd6;
-localparam [(`c_spi_state_bits - 1):0] ST_STAND_STOP_D = 3'd7;
+typedef enum logic [(`c_spi_state_bits - 1):0] {
+	ST_STAND_IDLE, ST_STAND_START_D, ST_STAND_START_S,
+	ST_STAND_TX, ST_STAND_WAIT, ST_STAND_RX,
+	ST_STAND_STOP_S, ST_STAND_STOP_D
+} t_spi_state;
 
 /* Xilinx attributes for gray encoding of the FSM and safe state is
    Default State. */
 (* fsm_encoding = "gray" *)
 (* fsm_safe_state = "default_state" *)
-reg [(`c_spi_state_bits - 1):0] s_spi_pr_state = ST_STAND_IDLE;
-reg [(`c_spi_state_bits - 1):0] s_spi_nx_state = ST_STAND_IDLE;
-reg [(`c_spi_state_bits - 1):0] s_spi_pr_state_delayed1 = ST_STAND_IDLE;
-reg [(`c_spi_state_bits - 1):0] s_spi_pr_state_delayed2 = ST_STAND_IDLE;
-reg [(`c_spi_state_bits - 1):0] s_spi_pr_state_delayed3 = ST_STAND_IDLE;
+t_spi_state s_spi_pr_state = ST_STAND_IDLE;
+t_spi_state s_spi_nx_state = ST_STAND_IDLE;
+t_spi_state s_spi_pr_state_delayed1 = ST_STAND_IDLE;
+t_spi_state s_spi_pr_state_delayed2 = ST_STAND_IDLE;
+t_spi_state s_spi_pr_state_delayed3 = ST_STAND_IDLE;
 
 /* Data start FSM state declarations */
 `define c_dat_state_bits 3
-localparam [(`c_dat_state_bits - 1):0] ST_PULSE_WAIT = 3'd0;
-localparam [(`c_dat_state_bits - 1):0] ST_PULSE_HOLD_0 = 3'd1;
-localparam [(`c_dat_state_bits - 1):0] ST_PULSE_HOLD_1 = 3'd2;
-localparam [(`c_dat_state_bits - 1):0] ST_PULSE_HOLD_2 = 3'd3;
-localparam [(`c_dat_state_bits - 1):0] ST_PULSE_HOLD_3 = 3'd4;
+typedef enum logic [(`c_dat_state_bits - 1):0] {
+	ST_PULSE_WAIT, ST_PULSE_HOLD_0, ST_PULSE_HOLD_1,
+	ST_PULSE_HOLD_2, ST_PULSE_HOLD_3
+} t_dat_state;
 
 /* Xilinx attributes for Gray encoding of the FSM and safe state is
    Default State. */
 (* fsm_encoding = "gray" *)
 (* fsm_safe_state = "default_state" *)
-reg [(`c_dat_state_bits - 1):0] s_dat_pr_state = ST_PULSE_WAIT;
-reg [(`c_dat_state_bits - 1):0] s_dat_nx_state = ST_PULSE_WAIT;
+t_dat_state s_dat_pr_state = ST_PULSE_WAIT;
+t_dat_state s_dat_nx_state = ST_PULSE_WAIT;
 
 /* Timer signals and constants */
 `define c_tim_value_bits 13
@@ -126,10 +117,10 @@ localparam [(`c_tim_value_bits - 1):0] c_t_stand_max_rx = 4136;
 localparam [(`c_tim_value_bits - 1):0] c_tmax = c_t_stand_max_tx;
 localparam [(`c_tim_value_bits - 1):0] c_t_inc = 1;
 
-reg [(`c_tim_value_bits - 1):0] s_t;
-reg [(`c_tim_value_bits - 1):0] s_t_delayed1;
-reg [(`c_tim_value_bits - 1):0] s_t_delayed2;
-reg [(`c_tim_value_bits - 1):0] s_t_delayed3;
+logic [(`c_tim_value_bits - 1):0] s_t;
+logic [(`c_tim_value_bits - 1):0] s_t_delayed1;
+logic [(`c_tim_value_bits - 1):0] s_t_delayed2;
+logic [(`c_tim_value_bits - 1):0] s_t_delayed3;
 
 /* SPI 4x and 1x clocking signals and enables */
 wire s_spi_ce_4x;
@@ -144,26 +135,26 @@ wire s_spi_clk_ce3;
 wire s_go_stand;
 
 /* FSM auxiliary registers */
-reg [(parm_tx_len_bits - 1):0] s_tx_len_val;
-reg [(parm_tx_len_bits - 1):0] s_tx_len_aux;
-reg [(parm_rx_len_bits - 1):0] s_rx_len_val;
-reg [(parm_rx_len_bits - 1):0] s_rx_len_aux;
-reg [(parm_wait_cyc_bits - 1):0] s_wait_cyc_val;
-reg [(parm_wait_cyc_bits - 1):0] s_wait_cyc_aux;
-reg s_go_stand_val;
-reg s_go_stand_aux;
+logic [(parm_tx_len_bits - 1):0] s_tx_len_val;
+logic [(parm_tx_len_bits - 1):0] s_tx_len_aux;
+logic [(parm_rx_len_bits - 1):0] s_rx_len_val;
+logic [(parm_rx_len_bits - 1):0] s_rx_len_aux;
+logic [(parm_wait_cyc_bits - 1):0] s_wait_cyc_val;
+logic [(parm_wait_cyc_bits - 1):0] s_wait_cyc_aux;
+logic s_go_stand_val;
+logic s_go_stand_aux;
 
 /* FSM output status */
-reg s_spi_idle;
+logic s_spi_idle;
 
 /* Mapping for FIFO RX */
-reg [7:0] s_data_fifo_rx_in;
+logic [7:0] s_data_fifo_rx_in;
 wire [7:0] s_data_fifo_rx_out;
 wire s_data_fifo_rx_re;
-reg s_data_fifo_rx_we;
+logic s_data_fifo_rx_we;
 wire s_data_fifo_rx_full;
 wire s_data_fifo_rx_empty;
-reg s_data_fifo_rx_valid;
+logic s_data_fifo_rx_valid;
 wire [10:0] s_data_fifo_rx_rdcount;
 wire [10:0] s_data_fifo_rx_wrcount;
 wire s_data_fifo_rx_almostfull;
@@ -174,11 +165,11 @@ wire s_data_fifo_rx_rderr;
 /* Mapping for FIFO TX */
 wire [7:0] s_data_fifo_tx_in;
 wire [7:0] s_data_fifo_tx_out;
-reg s_data_fifo_tx_re;
+logic s_data_fifo_tx_re;
 wire s_data_fifo_tx_we;
 wire s_data_fifo_tx_full;
 wire s_data_fifo_tx_empty;
-reg s_data_fifo_tx_valid;
+logic s_data_fifo_tx_valid;
 wire [10:0] s_data_fifo_tx_rdcount;
 wire [10:0] s_data_fifo_tx_wrcount;
 wire s_data_fifo_tx_almostfull;
@@ -205,10 +196,10 @@ assign o_rx_valid = s_data_fifo_rx_valid & s_spi_ce_4x;
 assign s_data_fifo_rx_re = i_rx_dequeue & s_spi_ce_4x;
 assign o_rx_data = s_data_fifo_rx_out;
 
-always @(posedge i_ext_spi_clk_x)
+always_ff @(posedge i_ext_spi_clk_x)
 begin: p_gen_fifo_rx_valid
 	s_data_fifo_rx_valid <= s_data_fifo_rx_re;
-end
+end : p_gen_fifo_rx_valid
 
 // FIFO_SYNC_MACRO: Synchronous First-In, First-Out (FIFO) RAM Buffer
 //                  Artix-7
@@ -259,10 +250,10 @@ assign s_data_fifo_tx_in = i_tx_data;
 assign s_data_fifo_tx_we = i_tx_enqueue & s_spi_ce_4x;
 assign o_tx_ready = (~ s_data_fifo_tx_full) & s_spi_ce_4x;
 
-always @(posedge i_ext_spi_clk_x)
+always_ff @(posedge i_ext_spi_clk_x)
 begin: p_gen_fifo_tx_valid
 	s_data_fifo_tx_valid <= s_data_fifo_tx_re;
-end
+end : p_gen_fifo_tx_valid
 
 // FIFO_SYNC_MACRO: Synchronous First-In, First-Out (FIFO) RAM Buffer
 //                  Artix-7
@@ -309,7 +300,8 @@ FIFO_SYNC_MACRO  #(
 
 /* spi clock for SCK output, generated clock
    requires create_generated_clock constraint in XDC */
-clock_divider #(.par_clk_divisor(parm_ext_spi_clk_ratio)) u_spi_1x_clock_divider (
+clock_divider #(.par_clk_divisor(parm_ext_spi_clk_ratio)
+	) u_spi_1x_clock_divider (
 	.o_clk_div(s_spi_clk_1x),
 	.o_rst_div(),
 	.i_clk_mhz(i_ext_spi_clk_x),
@@ -318,7 +310,7 @@ clock_divider #(.par_clk_divisor(parm_ext_spi_clk_ratio)) u_spi_1x_clock_divider
 integer v_phase_counter;
 
 /* 25% point clock enables for period of 4 times SPI CLK output based on s_spi_ce_4x */
-always @(posedge i_ext_spi_clk_x)
+always_ff @(posedge i_ext_spi_clk_x)
 begin: p_phase_4x_ce
 	if (i_srst)
 		v_phase_counter <= 0;
@@ -327,7 +319,7 @@ begin: p_phase_4x_ce
 			v_phase_counter <= v_phase_counter + 1;
 		else
 			v_phase_counter <= 0;
-end
+end : p_phase_4x_ce
 
 assign s_spi_clk_ce0 = (v_phase_counter == parm_ext_spi_clk_ratio / 4 * 0) && s_spi_ce_4x;
 assign s_spi_clk_ce1 = (v_phase_counter == parm_ext_spi_clk_ratio / 4 * 1) && s_spi_ce_4x;
@@ -335,7 +327,7 @@ assign s_spi_clk_ce2 = (v_phase_counter == parm_ext_spi_clk_ratio / 4 * 2) && s_
 assign s_spi_clk_ce3 = (v_phase_counter == parm_ext_spi_clk_ratio / 4 * 3) && s_spi_ce_4x;
 
 /* Timer 1 (Strategy #1) with comstant timer increment */
-always @(posedge i_ext_spi_clk_x)
+always_ff @(posedge i_ext_spi_clk_x)
 begin: p_timer_1
 	if (i_srst) begin
 		s_t <= 0;
@@ -354,12 +346,12 @@ begin: p_timer_1
 			if (s_spi_pr_state != s_spi_nx_state) s_t <= 0;
 			else if (s_t < c_tmax) s_t <= s_t + c_t_inc;
 	end
-end
+end : p_timer_1
 
 /* System Data GO data value holder and i_go_stand pulse stretcher for duration
    of all four clock enables duration of the 4x clock, starting at a clock
    enable position. State assignment and Auxiliary register assignment. */
-always @(posedge i_ext_spi_clk_x)
+always_ff @(posedge i_ext_spi_clk_x)
 begin: p_dat_fsm_state_aux
 	if (i_srst) begin
 		s_dat_pr_state <= ST_PULSE_WAIT;
@@ -379,7 +371,7 @@ begin: p_dat_fsm_state_aux
 			s_wait_cyc_aux <= s_wait_cyc_val;
 			s_go_stand_aux <= s_go_stand_val;
 		end
-end
+end : p_dat_fsm_state_aux
 
 /* Pass the auxiliary signal that lasts for a single iteration of all four
    s_spi_clk_4x clock enables on to the \ref p_spi_fsm_comb machine. */
@@ -389,10 +381,7 @@ assign s_go_stand = s_go_stand_aux;
    four clock enables duration of the 4x clock, starting at an clock enable
    position. Combinatorial logic paired with the \ref p_dat_fsm_state
    assignments. */
-always @(s_dat_pr_state, i_go_stand,
-	i_tx_len, i_rx_len, i_wait_cyc,
-	s_tx_len_aux, s_rx_len_aux, s_wait_cyc_aux,
-	s_go_stand_aux)
+always_comb
 begin: p_dat_fsm_comb
 	case (s_dat_pr_state)
 		ST_PULSE_HOLD_0: begin
@@ -447,12 +436,12 @@ begin: p_dat_fsm_comb
 			end
 		end
 	endcase
-end
+end : p_dat_fsm_comb
 
 /* SPI bus control state machine assignments for falling edge of 1x clock
    assignment of state value, plus delayed state value for the RX capture
    on the SPI rising edge of 1x clock in a different process. */
-always @(posedge i_ext_spi_clk_x)
+always_ff @(posedge i_ext_spi_clk_x)
 begin: p_spi_fsm_state
 	if (i_srst) begin
 		s_spi_pr_state_delayed3 <= ST_STAND_IDLE;
@@ -473,18 +462,14 @@ begin: p_spi_fsm_state
 			                */
 			s_spi_pr_state <= s_spi_nx_state;
 	end
-end
+end : p_spi_fsm_state
 
 /* SPI bus control state machine assignments for combinatorial assignment to
    SPI bus outputs, timing of chip select, transmission of TX data,
    holding for wait cycles, and timing for RX data where RX data is captured
    in a different synchronous state machine delayed from the state of this
    machine. */
-always @(s_spi_pr_state, s_spi_clk_1x, s_go_stand,
-		 s_tx_len_aux, s_rx_len_aux, s_wait_cyc_aux,
-	     s_t,
-		 s_data_fifo_tx_empty, s_data_fifo_tx_out,
-		 s_spi_clk_ce2, s_spi_clk_ce3)
+always_comb
 begin: p_spi_fsm_comb
 	case (s_spi_pr_state)
 		ST_STAND_START_D: begin
@@ -663,7 +648,7 @@ begin: p_spi_fsm_comb
 			else s_spi_nx_state = ST_STAND_IDLE;	
 		end
 	endcase
-end
+end : p_spi_fsm_comb
 
 /* Captures the RX inputs into the RX fifo.
    Note that the RX inputs are delayed by 3 clk_4x clock cycles
@@ -673,7 +658,7 @@ end
    RX only and the clock enable to process on the effective falling edge of
    the bus SCK as perceived from propagation out and back in, is 3 clock
    cycles, thus CE 3 instead of CE 0. */
-always @(posedge i_ext_spi_clk_x)
+always_ff @(posedge i_ext_spi_clk_x)
 begin: p_spi_fsm_inputs
 	if (i_srst) begin
 		s_data_fifo_rx_we <= 1'b0;
@@ -697,7 +682,7 @@ begin: p_spi_fsm_inputs
 			s_data_fifo_rx_we <= 1'b0;
 			s_data_fifo_rx_in <= s_data_fifo_rx_in;
 		end
-end
+end : p_spi_fsm_inputs
 
-endmodule
+endmodule : pmod_generic_spi_solo
 //------------------------------------------------------------------------------
