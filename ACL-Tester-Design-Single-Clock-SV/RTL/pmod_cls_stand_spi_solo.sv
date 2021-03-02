@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file pmod_cls_stand_spi_solo.v
+-- \file pmod_cls_stand_spi_solo.sv
 --
 -- \brief A SPI interface to Digilent Inc. PMOD CLS lcd display operating in
 -- SPI Mode 0. The design only enables clearing the display, or writing a full
@@ -31,61 +31,49 @@
 //------------------------------------------------------------------------------
 //Recursive Moore Machine
 //Part 1: Module header:--------------------------------------------------------
-module pmod_cls_stand_spi_solo(
-	/* system clock and synchronous reset */
-	i_ext_spi_clk_x, i_srst, i_spi_ce_4x,
-	/* system interface to the \ref pmod_generic_spi_solo module. */
-	o_go_stand, i_spi_idle, o_tx_len, o_wait_cyc, o_rx_len,
-	/* TX FIFO interface to the \ref pmod_generic_spi_solo module. */
-	o_tx_data, o_tx_enqueue, i_tx_ready,
-	/* RX FIFO interface to the \ref pmod_generic_spi_solo module. */
-	i_rx_data, o_rx_dequeue, i_rx_valid, i_rx_avail,
-	/* FPGA system interface to CLS operation */
-	o_command_ready,
-	i_cmd_wr_clear_display,
-	i_cmd_wr_text_line1,
-	i_cmd_wr_text_line2,
-	i_dat_ascii_line1,
-	i_dat_ascii_line2);
-
-/* Disable or enable fast FSM delays for simulation instead of impelementation. */
-parameter integer parm_fast_simulation = 0;
-/* Actual frequency in Hz of \ref i_ext_spi_clk_4x */
-parameter integer FCLK = 20000000;
-/* Actual frequency in Hz of \ref i_ext_spi_clk_4x */
-parameter integer FCLK_ce = 2500000;
-/* LOG2 of the TX FIFO max count */
-parameter parm_tx_len_bits = 11;
-/* LOG2 of max Wait Cycles count between end of TX and start of RX */
-parameter parm_wait_cyc_bits = 2;
-/* LOG2 of the RX FIFO max count */
-parameter parm_rx_len_bits = 11;
-
-input wire i_ext_spi_clk_x;
-input wire i_srst;
-input wire i_spi_ce_4x;
-
-output reg o_go_stand;
-input wire i_spi_idle;
-output reg [(parm_tx_len_bits - 1):0] o_tx_len;
-output reg [(parm_wait_cyc_bits - 1):0] o_wait_cyc;
-output reg [(parm_rx_len_bits - 1):0] o_rx_len;
-
-output reg [7:0] o_tx_data;
-output reg o_tx_enqueue;
-input wire i_tx_ready;
-
-input wire [7:0] i_rx_data;
-output reg o_rx_dequeue;
-input wire i_rx_valid;
-input wire i_rx_avail;
-
-output reg o_command_ready;
-input wire i_cmd_wr_clear_display;
-input wire i_cmd_wr_text_line1;
-input wire i_cmd_wr_text_line2;
-input wire [(16 * 8 - 1):0] i_dat_ascii_line1;
-input wire [(16 * 8 - 1):0] i_dat_ascii_line2;
+module pmod_cls_stand_spi_solo
+	#(parameter
+		/* Disable or enable fast FSM delays for simulation instead of impelementation. */
+		integer parm_fast_simulation = 0,
+		/* Actual frequency in Hz of \ref i_ext_spi_clk_4x */
+		integer FCLK = 20000000,
+		/* Actual frequency in Hz of \ref i_ext_spi_clk_4x */
+		integer FCLK_ce = 2500000,
+		/* LOG2 of the TX FIFO max count */
+		integer parm_tx_len_bits = 11,
+		/* LOG2 of max Wait Cycles count between end of TX and start of RX */
+		integer parm_wait_cyc_bits = 2,
+		/* LOG2 of the RX FIFO max count */
+		integer parm_rx_len_bits = 11
+		)
+	(
+		/* system clock and synchronous reset */
+		input wire i_ext_spi_clk_x,
+		input wire i_srst,
+		input wire i_spi_ce_4x,
+		/* system interface to the \ref pmod_generic_spi_solo module. */
+		output logic o_go_stand,
+		input wire i_spi_idle,
+		output logic [(parm_tx_len_bits - 1):0] o_tx_len,
+		output logic [(parm_wait_cyc_bits - 1):0] o_wait_cyc,
+		output logic [(parm_rx_len_bits - 1):0] o_rx_len,
+		/* TX FIFO interface to the \ref pmod_generic_spi_solo module. */
+		output logic [7:0] o_tx_data,
+		output logic o_tx_enqueue,
+		input wire i_tx_ready,
+		/* RX FIFO interface to the \ref pmod_generic_spi_solo module. */
+		input wire [7:0] i_rx_data,
+		output logic o_rx_dequeue,
+		input wire i_rx_valid,
+		input wire i_rx_avail,
+		/* FPGA system interface to CLS operation */
+		output logic o_command_ready,
+		input wire i_cmd_wr_clear_display,
+		input wire i_cmd_wr_text_line1,
+		input wire i_cmd_wr_text_line2,
+		input wire [(16 * 8 - 1):0] i_dat_ascii_line1,
+		input wire [(16 * 8 - 1):0] i_dat_ascii_line2
+		);
 
 // Part 2: Declarations---------------------------------------------------------
 /* Timer signals and constants. */
@@ -98,41 +86,36 @@ localparam [(`c_cls_drv_time_value_bits - 1):0] c_t_pmodcls_boot =
 	parm_fast_simulation ? (FCLK_ce / 1000 * 2) : (FCLK_ce / 1000 * 800);
 localparam [(`c_cls_drv_time_value_bits - 1):0] c_tmax = c_t_pmodcls_boot - 1;
 
-reg [(`c_cls_drv_time_value_bits - 1):0] s_t;
+logic [(`c_cls_drv_time_value_bits - 1):0] s_t;
 
 /* Driver FSM state declarations */
 `define c_cls_drv_state_bits 4
-
-localparam [(`c_cls_drv_state_bits - 1):0] ST_CLS_BOOT0 = 0;
-localparam [(`c_cls_drv_state_bits - 1):0] ST_CLS_IDLE = 1;
-localparam [(`c_cls_drv_state_bits - 1):0] ST_CLS_LOAD_CLEAR = 2;
-localparam [(`c_cls_drv_state_bits - 1):0] ST_CLS_LOAD_LINE1 = 3;
-localparam [(`c_cls_drv_state_bits - 1):0] ST_CLS_LOAD_LINE2 = 4;
-localparam [(`c_cls_drv_state_bits - 1):0] ST_CLS_CMD_RUN = 5;
-localparam [(`c_cls_drv_state_bits - 1):0] ST_CLS_CMD_WAIT = 6;
-localparam [(`c_cls_drv_state_bits - 1):0] ST_CLS_DAT_RUN = 7;
-localparam [(`c_cls_drv_state_bits - 1):0] ST_CLS_DAT_WAIT = 8;
 
 /* Xilinx attributes for auto encoding of the FSM and safe state is
    Default State. */
 (* fsm_encoding = "auto" *)
 (* fsm_safe_state = "default_state" *)
-reg [(`c_cls_drv_state_bits - 1):0] s_cls_drv_pr_state = ST_CLS_BOOT0;
-reg [(`c_cls_drv_state_bits - 1):0] s_cls_drv_nx_state = ST_CLS_BOOT0;
+typedef enum logic [(`c_cls_drv_state_bits - 1):0] {
+	ST_CLS_BOOT0, ST_CLS_IDLE, ST_CLS_LOAD_CLEAR, ST_CLS_LOAD_LINE1,
+	ST_CLS_LOAD_LINE2, ST_CLS_CMD_RUN, ST_CLS_CMD_WAIT, ST_CLS_DAT_RUN,
+	ST_CLS_DAT_WAIT	
+} t_cls_drv_state;
+t_cls_drv_state s_cls_drv_pr_state = ST_CLS_BOOT0;
+t_cls_drv_state s_cls_drv_nx_state = ST_CLS_BOOT0;
 
 /* Auxiliary state machine registers for recursive state machine operation. */
-reg [3:0] s_cls_cmd_len_aux;
-reg [3:0] s_cls_cmd_len_val;
-reg [4:0] s_cls_dat_len_aux;
-reg [4:0] s_cls_dat_len_val;
-reg [55:0] s_cls_cmd_tx_aux;
-reg [55:0] s_cls_cmd_tx_val;
-reg [4:0] s_cls_cmd_txlen_aux;
-reg [4:0] s_cls_cmd_txlen_val;
-reg [127:0] s_cls_dat_tx_aux;
-reg [127:0] s_cls_dat_tx_val;
-reg [5:0] s_cls_dat_txlen_aux;
-reg [5:0] s_cls_dat_txlen_val;
+logic [3:0] s_cls_cmd_len_aux;
+logic [3:0] s_cls_cmd_len_val;
+logic [4:0] s_cls_dat_len_aux;
+logic [4:0] s_cls_dat_len_val;
+logic [55:0] s_cls_cmd_tx_aux;
+logic [55:0] s_cls_cmd_tx_val;
+logic [4:0] s_cls_cmd_txlen_aux;
+logic [4:0] s_cls_cmd_txlen_val;
+logic [127:0] s_cls_dat_tx_aux;
+logic [127:0] s_cls_dat_tx_val;
+logic [5:0] s_cls_dat_txlen_aux;
+logic [5:0] s_cls_dat_txlen_val;
 
 /* ASCII constant characters for ESC codes. */
 localparam [7:0] ASCII_CLS_ESC = 8'h1b;
@@ -145,7 +128,7 @@ localparam [7:0] ASCII_CLS_CURSOR_POS_CMD = 8'h48;
 //Part 3: Statements------------------------------------------------------------
 
 /* Timer 1 (Strategy #1), for timing the boot wait for PMOD CLS communication */
-always @(posedge i_ext_spi_clk_x)
+always_ff @(posedge i_ext_spi_clk_x)
 begin: p_timer_1
 	if (i_srst) s_t <= 0;
 	else
@@ -153,12 +136,12 @@ begin: p_timer_1
 			if (s_cls_drv_pr_state != s_cls_drv_nx_state) s_t <= 0;
 			else if (s_t < c_tmax) s_t <= s_t + 1;
 		end
-end
+end : p_timer_1
 
 /* FSM state register plus auxiliary registers, for propagating the next state
    as well as the next recursive auxiliary register value for use within
    one or more state combinatorial logic decisions. */
-always @(posedge i_ext_spi_clk_x)
+always_ff @(posedge i_ext_spi_clk_x)
 begin: p_fsm_state_aux
 	if (i_srst) begin
 		s_cls_drv_pr_state <= ST_CLS_BOOT0;
@@ -180,20 +163,14 @@ begin: p_fsm_state_aux
 			s_cls_cmd_txlen_aux <= s_cls_cmd_txlen_val;
 			s_cls_dat_txlen_aux <= s_cls_dat_txlen_val;
 		end
-end
+end : p_fsm_state_aux
 
 
 /* FSM combinatorial logic providing multiple outputs, assigned in every state,
    as well as changes in auxiliary values, and calculation of the next FSM
    state. Refer to the FSM state machine drawings in document:
    \ref exercise-14-10-drawing.pdf . */
-always @(s_cls_drv_pr_state,
-	s_cls_cmd_len_aux, s_cls_dat_len_aux, s_cls_cmd_tx_aux, s_cls_dat_tx_aux,
-	s_cls_cmd_txlen_aux, s_cls_dat_txlen_aux,
-	s_t,
-	i_cmd_wr_clear_display, i_cmd_wr_text_line1, i_cmd_wr_text_line2,
-	i_dat_ascii_line1, i_dat_ascii_line2,
-	i_tx_ready, i_spi_idle)
+always_comb
 begin: p_fsm_comb
 	case (s_cls_drv_pr_state)
 		ST_CLS_LOAD_CLEAR: begin
@@ -430,7 +407,7 @@ begin: p_fsm_comb
 			else s_cls_drv_nx_state = ST_CLS_BOOT0;
 		end
 	endcase
-end
+end : p_fsm_comb
 
-endmodule
+endmodule : pmod_cls_stand_spi_solo
 //------------------------------------------------------------------------------
