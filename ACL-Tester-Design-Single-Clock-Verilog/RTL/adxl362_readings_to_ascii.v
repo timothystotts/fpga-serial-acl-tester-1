@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -27,7 +27,7 @@
 -- \brief A combinatorial block to convert ADXL362 Readings to ASCII text
 -- representations.
 ------------------------------------------------------------------------------*/
-//Recursive Moore Machine-------------------------------------------------------
+//Combinatorial measurement registers to ASCII text conversion.-----------------
 //Part 1: Module header:--------------------------------------------------------
 module adxl362_readings_to_ascii(i_3axis_temp, i_reading_inactive,
 	o_dat_ascii_line1, o_dat_ascii_line2, o_txt_ascii_line1,

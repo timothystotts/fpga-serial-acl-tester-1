@@ -26,7 +26,7 @@
 --
 -- \brief A simple pulser to generate palette values for \ref led_pwm_driver.v .
 ------------------------------------------------------------------------------*/
-//Recursive Moore Machine-------------------------------------------------------
+//D-FF based LED pulsing--------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module led_palette_pulser(i_clk, i_srst, o_color_led_red_value,
 	o_color_led_green_value, o_color_led_blue_value, o_basic_led_lumin_value,
