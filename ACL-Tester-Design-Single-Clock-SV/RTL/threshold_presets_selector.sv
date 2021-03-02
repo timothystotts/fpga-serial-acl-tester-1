@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,60 +22,50 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file thresh_presets_selector.v
+-- \file thresh_presets_selector.sv
 --
 -- \brief A threshold presets selector with a parameter input of the
 -- configuration values.
 ------------------------------------------------------------------------------*/
 //------------------------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
-module thresh_presets_selector(i_clk_20mhz, i_rst_20mhz, i_btn_chg_preset,
-	o_value_enum, o_value_thresh, o_value_timer);
+module thresh_presets_selector
+	#(parameter
+		logic [16*16-1:0] parm_presets_config_thresholds = {
+			16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 
+			16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000},
+		logic [16*16-1:0] parm_presets_config_timers = {
+			16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 
+			16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000}
+		)
+	(
+		input wire i_clk_20mhz,
+		input wire i_rst_20mhz,
+		input wire i_btn_chg_preset,
+		output logic [3:0] o_value_enum,
+		output logic [15:0] o_value_thresh,
+		output logic [15:0] o_value_timer
+		);
 
-parameter [16*16-1:0] parm_presets_config_thresholds = {
-	16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 
-	16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000};
-parameter [16*16-1:0] parm_presets_config_timers = {
-	16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 
-	16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000};
-
-input wire i_clk_20mhz;
-input wire i_rst_20mhz;
-input wire i_btn_chg_preset;
-output reg [3:0] o_value_enum;
-output reg [15:0] o_value_thresh;
-output reg [15:0] o_value_timer;
 
 // Part 2: Declarations---------------------------------------------------------
-localparam [3:0] ST_0 = 0;
-localparam [3:0] ST_1 = 1;
-localparam [3:0] ST_2 = 2;
-localparam [3:0] ST_3 = 3;
-localparam [3:0] ST_4 = 4;
-localparam [3:0] ST_5 = 5;
-localparam [3:0] ST_6 = 6;
-localparam [3:0] ST_7 = 7;
-localparam [3:0] ST_8 = 8;
-localparam [3:0] ST_9 = 9;
-localparam [3:0] ST_A = 10;
-localparam [3:0] ST_B = 11;
-localparam [3:0] ST_C = 12;
-localparam [3:0] ST_D = 13;
-localparam [3:0] ST_E = 14;
-localparam [3:0] ST_F = 15;
+typedef enum logic [3:0] {
+	ST_0, ST_1, ST_2, ST_3, ST_4, ST_5, ST_6, ST_7, ST_8,
+	ST_9, ST_A, ST_B, ST_C, ST_D, ST_E, ST_F
+} t_thrpset_state;
 
-reg [3:0] s_thrpset_pr_state;
-reg [3:0] s_thrpset_nx_state;
+t_thrpset_state s_thrpset_pr_state;
+t_thrpset_state s_thrpset_nx_state;
 
 /* FSM state register */
-always @(posedge i_clk_20mhz)
+always_ff @(posedge i_clk_20mhz)
 begin: p_fsm_state
 	if (i_rst_20mhz) s_thrpset_pr_state <= ST_0;
 	else s_thrpset_pr_state <= s_thrpset_nx_state;
-end
+end : p_fsm_state
 
 /* FSM combinatorial logic: */
-always @(s_thrpset_pr_state, i_btn_chg_preset)
+always_comb
 begin: p_fsm_comb
 	case (s_thrpset_pr_state)
 		ST_1: begin
@@ -149,7 +139,7 @@ begin: p_fsm_comb
 			else s_thrpset_nx_state = ST_0;
 		end
 	endcase // s_thrpset_pr_state
-end
+end : p_fsm_comb
 
-endmodule
+endmodule : thresh_presets_selector
 //------------------------------------------------------------------------------

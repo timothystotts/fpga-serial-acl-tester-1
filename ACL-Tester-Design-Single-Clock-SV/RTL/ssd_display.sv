@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,20 +22,21 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /*------------------------------------------------------------------------------
--- \file ssd_display.v
+-- \file ssd_display.sv
 --
 -- \brief A Seven Segment Display driver for a single Pmod SSD. The input is a
 -- 8-bit hexademical value which is display as hexadecimal on the Pmod SSD.
 ------------------------------------------------------------------------------*/
 //------------------------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
-module two_digit_ssd_out(o_disp0, o_disp1, i_clk_20mhz, i_rst_20mhz, i_value);
-
-output reg [6:0] o_disp0;
-output reg [6:0] o_disp1;
-input wire i_clk_20mhz;
-input wire i_rst_20mhz;
-input wire [7:0] i_value;
+module two_digit_ssd_out
+	(
+		output logic [6:0] o_disp0,
+		output logic [6:0] o_disp1,
+		input wire i_clk_20mhz,
+		input wire i_rst_20mhz,
+		input wire [7:0] i_value
+		);
 
 // Part 2: Declarations---------------------------------------------------------
 /* A function to convert a 4-bit hexadecimal value to a single hexadecimal
@@ -85,7 +86,7 @@ assign so_disp0 = unsigned_to_ssd(s_value_part0);
 assign so_disp1 = unsigned_to_ssd(s_value_part1);
 
 /* Register the combinatorial pre-output */
-always @(posedge i_clk_20mhz)
+always_ff @(posedge i_clk_20mhz)
 begin: p_reg_out
 	if (i_clk_20mhz) begin
 		if (i_rst_20mhz) begin
@@ -96,9 +97,9 @@ begin: p_reg_out
 			o_disp1 <= so_disp1;
 		end
 	end
-end
+end : p_reg_out
 
-endmodule
+endmodule : two_digit_ssd_out
 //------------------------------------------------------------------------------
 /*------------------------------------------------------------------------------
 -- \module pmod_ssd_out
@@ -110,21 +111,22 @@ endmodule
 -- \description None
 ------------------------------------------------------------------------------*/
 //Part 1: Module header:--------------------------------------------------------
-module pmod_ssd_out(o_dispA, o_selA, i_clk_20mhz, i_rst_20mhz, i_disp0,
-	i_disp1);
+module pmod_ssd_out
+	(
+		output wire [6:0] o_dispA,
+		output wire o_selA,
+		input wire i_clk_20mhz,
+		input wire i_rst_20mhz,
+		input wire [6:0] i_disp0,
+		input wire [6:0] i_disp1
+	);
 
-output wire [6:0] o_dispA;
-output wire o_selA;
-input wire i_clk_20mhz;
-input wire i_rst_20mhz;
-input wire [6:0] i_disp0;
-input wire [6:0] i_disp1;
 
 // Part 2: Declarations---------------------------------------------------------
 wire s_clk_100hz;
 wire s_rst_100hz;
-reg [6:0] s_curr_disp;
-reg s_curr_sel;
+logic [6:0] s_curr_disp;
+logic s_curr_sel;
 
 //Part 3: Statements------------------------------------------------------------
 
@@ -142,7 +144,7 @@ clock_divider #(.par_clk_divisor(200000)) u_clock_divider(
 /* A process to multiplex the registered output of inputs \ref i_disp0
    and \ref i_disp1 to a single LED segment value of \ref o_dispA and
    digit select of \ref o_selA; */
-always @(posedge s_clk_100hz)
+always_ff @(posedge s_clk_100hz)
 begin: p_mux_disp_out
 	if (s_clk_100hz) begin
 		if (s_rst_100hz) begin
@@ -158,12 +160,12 @@ begin: p_mux_disp_out
 			end
 		end
 	end
-end
+end : p_mux_disp_out
 
 assign o_dispA = s_curr_disp;
 assign o_selA = s_curr_sel;
 
-endmodule
+endmodule : pmod_ssd_out
 //------------------------------------------------------------------------------
 /*------------------------------------------------------------------------------
 -- \module two_pmod_ssd_display
@@ -175,14 +177,15 @@ endmodule
 -- \description None
 ------------------------------------------------------------------------------*/
 //Part 1: Module header:--------------------------------------------------------
-module one_pmod_ssd_display(o_ssd_pmod0, i_clk_20mhz, i_rst_20mhz, i_value0,
-	i_value1);
+module one_pmod_ssd_display
+	(
+		output wire [7:0] o_ssd_pmod0,
+		input wire i_clk_20mhz,
+		input wire i_rst_20mhz,
+		input wire [3:0] i_value0,
+		input wire [3:0] i_value1
+		);
 
-output wire [7:0] o_ssd_pmod0;
-input wire i_clk_20mhz;
-input wire i_rst_20mhz;
-input wire [3:0] i_value0;
-input wire [3:0] i_value1;
 
 // Part 2: Declarations---------------------------------------------------------
 wire [6:0] s_disp0;
@@ -212,5 +215,5 @@ pmod_ssd_out #() u_pmod_ssd_out (
 	.o_dispA(o_ssd_pmod0[6-:7]),
 	.o_selA(o_ssd_pmod0[7]));
 
-endmodule
+endmodule : one_pmod_ssd_display
 //------------------------------------------------------------------------------
