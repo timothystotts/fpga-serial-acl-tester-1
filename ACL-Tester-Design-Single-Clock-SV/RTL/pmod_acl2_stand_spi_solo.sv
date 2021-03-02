@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file pmod_acl2_stand_spi_solo.v
+-- \file pmod_acl2_stand_spi_solo.sv
 --
 -- \brief A custom driver to operate the PMOD ACL2 accelerometer with ADXL362,
 -- that relies upon \ref pmod_generic_spi_solo to implement the Standard SPI
@@ -31,78 +31,57 @@
 //------------------------------------------------------------------------------
 //Recursive Moore Machine
 //Part 1: Module header:--------------------------------------------------------
-module pmod_acl2_stand_spi_solo (
-	/* system clock and synchronous reset */
-	i_ext_spi_clk_x, i_srst, i_spi_ce_4x,
-	/* interrupt lines of the PMOD ACL2 */
-	ei_int1, ei_int2,
-	/* system interface to the \ref pmod_generic_spi_solo module. */
-	o_go_stand, i_spi_idle, o_tx_len, o_wait_cyc, o_rx_len,
-	/* TX FIFO interface to the \ref pmod_generic_spi_solo module. */
-	o_tx_data, o_tx_enqueue, i_tx_ready,
-	/* RX FIFO interface to the \ref pmod_generic_spi_solo module. */
-	i_rx_data, o_rx_dequeue, i_rx_valid, i_rx_avail,
-	/* FPGA system interface to ACL2 operation */
-	o_command_ready,
-	i_cmd_init_linked_mode,
-	i_cmd_start_linked_mode,
-	i_cmd_init_measur_mode,
-	i_cmd_start_measur_mode,
-	i_cmd_soft_reset_acl2,
-	/* measurement data streaming output of the accelerometer */
-	o_rd_data_stream, o_rd_data_byte_valid, o_rd_data_group_valid,
-	/* data status of accelerometer */
-	o_reg_status,
-	/* run-time dynamic configuration */
-	i_tx_ax_cfg0_lm);
-
-/* Disable or enable fast FSM delays for simulation instead of impelementation. */
-parameter integer parm_fast_simulation = 0;
-/* Actual frequency in Hz of \ref i_ext_spi_clk_4x */
-parameter integer FCLK = 20000000;
-/* LOG2 of the TX FIFO max count */
-parameter parm_tx_len_bits = 11;
-/* LOG2 of max Wait Cycles count between end of TX and start of RX */
-parameter parm_wait_cyc_bits = 2;
-/* LOG2 of the RX FIFO max count */
-parameter parm_rx_len_bits = 11;
-
-input wire i_ext_spi_clk_x;
-input wire i_srst;
-input wire i_spi_ce_4x;
-
-input wire ei_int1;
-input wire ei_int2;
-
-output reg o_go_stand;
-input wire i_spi_idle;
-output reg [(parm_tx_len_bits - 1):0] o_tx_len;
-output reg [(parm_wait_cyc_bits - 1):0] o_wait_cyc;
-output reg [(parm_rx_len_bits - 1):0] o_rx_len;
-
-output reg [7:0] o_tx_data;
-output reg o_tx_enqueue;
-input wire i_tx_ready;
-
-input wire [7:0] i_rx_data;
-output reg o_rx_dequeue;
-input wire i_rx_valid;
-input wire i_rx_avail;
-
-output reg o_command_ready;
-input wire i_cmd_init_linked_mode;
-input wire i_cmd_start_linked_mode;
-input wire i_cmd_init_measur_mode;
-input wire i_cmd_start_measur_mode;
-input wire i_cmd_soft_reset_acl2;
-
-output reg [7:0] o_rd_data_stream;
-output reg o_rd_data_byte_valid;
-output reg o_rd_data_group_valid;
-
-output wire [7:0] o_reg_status;
-
-input wire [7*8-1:0] i_tx_ax_cfg0_lm;
+module pmod_acl2_stand_spi_solo
+	#(parameter
+		/* Disable or enable fast FSM delays for simulation instead of impelementation. */
+		integer parm_fast_simulation = 0,
+		/* Actual frequency in Hz of \ref i_ext_spi_clk_4x */
+		integer FCLK = 20000000,
+		/* LOG2 of the TX FIFO max count */
+		integer parm_tx_len_bits = 11,
+		/* LOG2 of max Wait Cycles count between end of TX and start of RX */
+		integer parm_wait_cyc_bits = 2,
+		/* LOG2 of the RX FIFO max count */
+		integer parm_rx_len_bits = 11
+		)
+	(
+		/* system clock and synchronous reset */
+		input wire i_ext_spi_clk_x,
+		input wire i_srst,
+		input wire i_spi_ce_4x,
+		/* interrupt lines of the PMOD ACL2 */
+		input wire ei_int1,
+		input wire ei_int2,
+		/* system interface to the \ref pmod_generic_spi_solo module. */
+		output logic o_go_stand,
+		input wire i_spi_idle,
+		output logic [(parm_tx_len_bits - 1):0] o_tx_len,
+		output logic [(parm_wait_cyc_bits - 1):0] o_wait_cyc,
+		output logic [(parm_rx_len_bits - 1):0] o_rx_len,
+		/* TX FIFO interface to the \ref pmod_generic_spi_solo module. */
+		output logic [7:0] o_tx_data,
+		output logic o_tx_enqueue,
+		input wire i_tx_ready,
+		/* RX FIFO interface to the \ref pmod_generic_spi_solo module. */
+		input wire [7:0] i_rx_data,
+		output logic o_rx_dequeue,
+		input wire i_rx_valid,
+		input wire i_rx_avail,
+		/* FPGA system interface to ACL2 operation */
+		output logic o_command_ready,
+		input wire i_cmd_init_linked_mode,
+		input wire i_cmd_start_linked_mode,
+		input wire i_cmd_init_measur_mode,
+		input wire i_cmd_start_measur_mode,
+		input wire i_cmd_soft_reset_acl2,
+		/* measurement data streaming output of the accelerometer */
+		output logic [7:0] o_rd_data_stream,
+		output logic o_rd_data_byte_valid,
+		output logic o_rd_data_group_valid,
+		/* data status of accelerometer */
+		output wire [7:0] o_reg_status,
+		/* run-time dynamic configuration */
+		input wire [7*8-1:0] i_tx_ax_cfg0_lm);
 
 // Part 2: Declarations---------------------------------------------------------
 /* Timer signals and constants */
@@ -116,87 +95,8 @@ localparam [(`c_drv_time_value_bits - 1):0] c_t_adxl362_boot =
 	parm_fast_simulation ? (FCLK * 1 / 10000) : (FCLK * 100 / 1000);
 localparam [(`c_drv_time_value_bits - 1):0] c_tmax = c_t_adxl362_boot - 1;
 
-reg [(`c_drv_time_value_bits - 1):0] s_t;
+logic [(`c_drv_time_value_bits - 1):0] s_t;
 
-/* Driver FSM state declarations */
-`define c_drv_state_bits 6
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_BOOT0 = 0;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_IDLE0 = 1;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_INIT_LM = 2;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_INIT_MM = 3;
-
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG0_CMD = 4;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG0_ADDR = 5;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG0_DATA = 6;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WAIT_AX_CFG0 = 7;
-
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG1_CMD = 8;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG1_ADDR = 9;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG1_DATA = 10;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WAIT_AX_CFG1 = 11;
-
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG2_CMD = 12;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG2_ADDR = 13;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG2_DATA = 14;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WAIT_AX_CFG2 = 15;
-
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG3_CMD = 16;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG3_ADDR = 17;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG3_DATA = 18;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WAIT_AX_CFG3 = 19;
-
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG4_CMD = 20;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG4_ADDR = 21;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG4_DATA = 22;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WAIT_AX_CFG4 = 23;
-
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG5_CMD = 24;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG5_ADDR = 25;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WR_AX_CFG5_DATA = 26;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WAIT_AX_CFG5 = 27;
-
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_IDLE1 = 28;
-
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WAIT_DR_INT1 = 29;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_MEASU_CMD = 30;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_MEASU_ADDR = 31;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_MEASU_DATA = 32;
-
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_WAIT0 = 33;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_CLEAR_MEASU_CMD = 34;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_CLEAR_MEASU_ADDR= 35;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_CLEAR_MEASU_DATA = 36;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_WAIT1 = 37;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_WAIT2 = 38;
-
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WAIT_AT_INT1 = 39;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_INACT0_CMD = 40;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_INACT0_ADDR = 41;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_INACT0_DATA = 42;
-
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_WAIT3 = 43;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_CLEAR_AWAKE0_CMD = 44;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_CLEAR_AWAKE0_ADDR = 45;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_CLEAR_AWAKE0_DATA = 46;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_WAIT4 = 47;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_WAIT5 = 48;
-
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_WAIT_AT_INT2 = 49;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_ACT0_CMD = 50;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_ACT0_ADDR = 51;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_ACT0_DATA = 52;
-
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_WAIT6 = 53;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_CLEAR_AWAKE1_CMD = 54;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_CLEAR_AWAKE1_ADDR = 55;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_CLEAR_AWAKE1_DATA = 56;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_WAIT7 = 57;
-localparam [(`c_drv_state_bits - 1):0] ST_DRV_READ_WAIT8 = 58;
-
-localparam [(`c_drv_state_bits - 1):0]  ST_DRV_SOFTRESET_CMD = 59;
-localparam [(`c_drv_state_bits - 1):0]  ST_DRV_SOFTRESET_ADDR = 60;
-localparam [(`c_drv_state_bits - 1):0]  ST_DRV_SOFTRESET_DATA = 61;
-localparam [(`c_drv_state_bits - 1):0]  ST_DRV_SOFTRESET_WAIT9 = 62;
 
 /* ADXL362 command bytes. */
 localparam [7:0] c_adxl362_cmd_write = 8'h0A;
@@ -303,44 +203,66 @@ localparam [((1 * 8) - 1):0] c_tx_ax_cfg5_mm =
    Default State. */
 (* fsm_encoding = "auto" *)
 (* fsm_safe_state = "default_state" *)
-reg [(`c_drv_state_bits - 1):0] s_drv_pr_state = ST_DRV_BOOT0;
-reg [(`c_drv_state_bits - 1):0] s_drv_nx_state = ST_DRV_BOOT0;
+/* Driver FSM state declarations */
+`define c_drv_state_bits 6
+typedef enum logic [(`c_drv_state_bits - 1):0] {
+	ST_DRV_BOOT0, ST_DRV_IDLE0, ST_DRV_INIT_LM, ST_DRV_INIT_MM,
+	ST_DRV_WR_AX_CFG0_CMD, ST_DRV_WR_AX_CFG0_ADDR, ST_DRV_WR_AX_CFG0_DATA, ST_DRV_WAIT_AX_CFG0,
+	ST_DRV_WR_AX_CFG1_CMD, ST_DRV_WR_AX_CFG1_ADDR, ST_DRV_WR_AX_CFG1_DATA, ST_DRV_WAIT_AX_CFG1,
+	ST_DRV_WR_AX_CFG2_CMD, ST_DRV_WR_AX_CFG2_ADDR, ST_DRV_WR_AX_CFG2_DATA, ST_DRV_WAIT_AX_CFG2,
+	ST_DRV_WR_AX_CFG3_CMD, ST_DRV_WR_AX_CFG3_ADDR, ST_DRV_WR_AX_CFG3_DATA, ST_DRV_WAIT_AX_CFG3,
+	ST_DRV_WR_AX_CFG4_CMD, ST_DRV_WR_AX_CFG4_ADDR, ST_DRV_WR_AX_CFG4_DATA, ST_DRV_WAIT_AX_CFG4,
+	ST_DRV_WR_AX_CFG5_CMD, ST_DRV_WR_AX_CFG5_ADDR, ST_DRV_WR_AX_CFG5_DATA, ST_DRV_WAIT_AX_CFG5,
+	ST_DRV_IDLE1,
+	ST_DRV_WAIT_DR_INT1, ST_DRV_READ_MEASU_CMD, ST_DRV_READ_MEASU_ADDR, ST_DRV_READ_MEASU_DATA,
+	ST_DRV_READ_WAIT0, ST_DRV_CLEAR_MEASU_CMD, ST_DRV_CLEAR_MEASU_ADDR,
+	ST_DRV_CLEAR_MEASU_DATA, ST_DRV_READ_WAIT1, ST_DRV_READ_WAIT2,
+	ST_DRV_WAIT_AT_INT1, ST_DRV_READ_INACT0_CMD, ST_DRV_READ_INACT0_ADDR, ST_DRV_READ_INACT0_DATA,
+	ST_DRV_READ_WAIT3, ST_DRV_CLEAR_AWAKE0_CMD, ST_DRV_CLEAR_AWAKE0_ADDR,
+	ST_DRV_CLEAR_AWAKE0_DATA, ST_DRV_READ_WAIT4, ST_DRV_READ_WAIT5,
+	ST_DRV_WAIT_AT_INT2, ST_DRV_READ_ACT0_CMD, ST_DRV_READ_ACT0_ADDR, ST_DRV_READ_ACT0_DATA,
+	ST_DRV_READ_WAIT6, ST_DRV_CLEAR_AWAKE1_CMD, ST_DRV_CLEAR_AWAKE1_ADDR,
+	ST_DRV_CLEAR_AWAKE1_DATA, ST_DRV_READ_WAIT7, ST_DRV_READ_WAIT8,
+	ST_DRV_SOFTRESET_CMD, ST_DRV_SOFTRESET_ADDR, ST_DRV_SOFTRESET_DATA, ST_DRV_SOFTRESET_WAIT9
+} t_drv_state;
+t_drv_state s_drv_pr_state;
+t_drv_state s_drv_nx_state;
 
 /* Auxiliary state machine registers for recursive state machine operation. */
-reg [((7 * 8) - 1):0] s_tx_ax_cfg0_val;
-reg [((7 * 8) - 1):0] s_tx_ax_cfg0_aux;
-reg [((1 * 8) - 1):0] s_tx_ax_cfg1_val;
-reg [((1 * 8) - 1):0] s_tx_ax_cfg1_aux;
-reg [((2 * 8) - 1):0] s_tx_ax_cfg2_val;
-reg [((2 * 8) - 1):0] s_tx_ax_cfg2_aux;
-reg [((2 * 8) - 1):0] s_tx_ax_cfg3_val;
-reg [((2 * 8) - 1):0] s_tx_ax_cfg3_aux;
-reg [((1 * 8) - 1):0] s_tx_ax_cfg4_val;
-reg [((1 * 8) - 1):0] s_tx_ax_cfg4_aux;
-reg [((1 * 8) - 1):0] s_tx_ax_cfg5_val;
-reg [((1 * 8) - 1):0] s_tx_ax_cfg5_aux;
-reg [7:0] s_byte_index_val;
-reg [7:0] s_byte_index_aux;
-reg [7:0] s_reg_status_val;
-reg [7:0] s_reg_status_aux;
+logic [((7 * 8) - 1):0] s_tx_ax_cfg0_val;
+logic [((7 * 8) - 1):0] s_tx_ax_cfg0_aux;
+logic [((1 * 8) - 1):0] s_tx_ax_cfg1_val;
+logic [((1 * 8) - 1):0] s_tx_ax_cfg1_aux;
+logic [((2 * 8) - 1):0] s_tx_ax_cfg2_val;
+logic [((2 * 8) - 1):0] s_tx_ax_cfg2_aux;
+logic [((2 * 8) - 1):0] s_tx_ax_cfg3_val;
+logic [((2 * 8) - 1):0] s_tx_ax_cfg3_aux;
+logic [((1 * 8) - 1):0] s_tx_ax_cfg4_val;
+logic [((1 * 8) - 1):0] s_tx_ax_cfg4_aux;
+logic [((1 * 8) - 1):0] s_tx_ax_cfg5_val;
+logic [((1 * 8) - 1):0] s_tx_ax_cfg5_aux;
+logic [7:0] s_byte_index_val;
+logic [7:0] s_byte_index_aux;
+logic [7:0] s_reg_status_val;
+logic [7:0] s_reg_status_aux;
 
 //Part 3: Statements------------------------------------------------------------
 assign o_reg_status = s_reg_status_aux;
 
 /* Timer 1 (Strategy #1), for timing the boot wait for PMOD ACL2 communication */
-always @(posedge i_ext_spi_clk_x)
+always_ff @(posedge i_ext_spi_clk_x)
 begin: p_timer_1
 	if (i_srst)	s_t <= 0;
 	else
 		if (i_spi_ce_4x)
 			if (s_drv_pr_state != s_drv_nx_state) s_t <= 0;
 			else if (s_t < c_tmax) s_t <= s_t + 1;
-end
+end : p_timer_1
 
 /* FSM state register plus auxiliary registers, for propagating the next state
    as well as the next recursive auxiliary register value for use within
    one or more state combinatorial logic decisions. */
-always @(posedge i_ext_spi_clk_x)
+always_ff @(posedge i_ext_spi_clk_x)
 begin: p_fsm_state_aux
 	if (i_srst) begin
 		s_drv_pr_state <= ST_DRV_BOOT0;
@@ -366,23 +288,13 @@ begin: p_fsm_state_aux
 			s_byte_index_aux <= s_byte_index_val;
 			s_reg_status_aux <= s_reg_status_val;
 		end
-end
+end : p_fsm_state_aux
 
 /* FSM combinatorial logic providing multiple outputs, assigned in every state,
    as well as changes in auxiliary values, and calculation of the next FSM
    state. Refer to the FSM state machine drawings in document:
    \ref exercise-14-10-drawing.pdf . */
-always @(s_drv_pr_state,
-	s_tx_ax_cfg0_aux, s_tx_ax_cfg1_aux, s_tx_ax_cfg2_aux,
-	s_tx_ax_cfg3_aux, s_tx_ax_cfg4_aux, s_tx_ax_cfg5_aux,
-	s_byte_index_aux, s_reg_status_aux, ei_int1, ei_int2,
-	i_cmd_start_measur_mode, i_cmd_start_linked_mode,
-	i_cmd_init_measur_mode, i_cmd_init_linked_mode,
-	i_cmd_soft_reset_acl2,
-	i_tx_ready, i_rx_avail, i_rx_valid, i_rx_data,
-	i_spi_idle, s_t,
-	i_tx_ax_cfg0_lm
-	)
+always_comb
 begin: p_fsm_comb
 	/* default values were not set here with blocking assignment,
 	   because it is anticipated to do so would cause potential glitches
@@ -2182,7 +2094,7 @@ begin: p_fsm_comb
 			else s_drv_nx_state = ST_DRV_BOOT0;
 		end
 	endcase
-end
+end : p_fsm_comb
 
-endmodule
+endmodule : pmod_acl2_stand_spi_solo
 //------------------------------------------------------------------------------
