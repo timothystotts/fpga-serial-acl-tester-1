@@ -9,7 +9,7 @@ A small FPGA project of different implementations for testing Measurement and Ac
 The design targets the Digilent Inc. Arty-A7-100T FPGA development board containing a Xilinx Artix-7 FPGA.
 Three peripherals are used: Digilent Inc. Pmod ACL2, Digilent Inc. Pmod CLS., Digilent Inc. Pmod SSD.
 
-The design is broken into three groupings.
+The design is broken into four groupings.
 
 The folder ACL-Tester-Design-AXI contains a Xilinx Vivado IP Integrator plus
 Xilinx Vitis design.
@@ -29,39 +29,50 @@ may be a misnomer. Executing these tasks with a precise timer can be achieved
 with FreeRTOS; but the benefit does not outweigh the added complexity for
 this specific implementation.)  
 
-The folder ACL-Tester-Design-Single-Clock-Verilog contains a Xilinx Vivado project with sources
-containing only Verilog-2001 modules. Plain HDL without a soft CPU or C code is authored to
+The folder ACL-Tester-Design-Single-Clock-SV contains a Xilinx Vivado project with sources
+containing only SystemVerilog RTL modules. Plain HDL without a soft CPU or C code is authored to
 talk with board components, an accelerometer peripheral, and a 16x2 character LCD peripheral.
 The project is named "Single Clock" as clock enable pulses are used instead of clock dividers
 as much as possible throughout the design. The design additionally includes a working OS-VVM
 test-bench in VHDL-2008 to exercise the RTL in simulation. Only a single default test is
-implemented.
+implemented; and the test-bench is almost the same for SystemVerilog, Verilog, and VHDL RTL
+variants.
+
+The folder ACL-Tester-Design-Single-Clock-Verilog contains a Xilinx Vivado project with sources
+containing only Verilog RTL modules. Plain HDL without a soft CPU or C code is authored to
+talk with board components, an accelerometer peripheral, and a 16x2 character LCD peripheral.
+The project is named "Single Clock" as clock enable pulses are used instead of clock dividers
+as much as possible throughout the design. The design additionally includes a working OS-VVM
+test-bench in VHDL-2008 to exercise the RTL in simulation. Only a single default test is
+implemented; and the test-bench is almost the same for SystemVerilog, Verilog, and VHDL RTL
+variants.
 
 The folder ACL-Tester-Design-Single-Clock-VHDL contains a Xilinx Vivado project with sources
-containing only VHDL-2002 and VHDL-2008 modules. Plain HDL without a soft CPU or C code is authored to
+containing only VHDL-2002 and VHDL-2008 RTL modules. Plain HDL without a soft CPU or C code
+is authored to
 talk with board components, an accelerometer peripheral, and a 16x2 character LCD peripheral.
 The project is named "Single Clock" as clock enable pulses are used instead of clock dividers
 as much as possible throughout the design. The design additionally includes a working OS-VVM
 test-bench in VHDL-2008 to exercise the RTL in simulation. Only a single default test is
-implemented.
+implemented; and the test-bench is almost the same for SystemVerilog, Verilog, and VHDL RTL
+variants.
 
-These three groupings of design provide equivalent functionality, excepting that the HDL designs provide
+These four groupings of design provide equivalent functionality, excepting that the HDL designs provide
 additional animation effect of the board's three-emitter RGB LEDs. Additionally, work is merged from
 the feature/ssd_with_presets branch to add a single Pmod SSD to the Pmod Jack A for the purpose of
 selecting among ten ADXL362 configuration preset values for each of Activity Detection threshold/timer
-and Inactivity Detection threshold/timer. The VHDL code is complete for this feature, but is not yet
-release ready. The Verilog code is also complete for this feature, but is not yet release ready.
-The IPI-BD AXI design is also complete for this feature, but is not yet release ready.
+and Inactivity Detection threshold/timer. The RTL code is complete in each language for this feature,
+but is not yet release ready.
 Checkouts for the design without a Pmod SSD peripheral should refer to release tag
 Serial_ACL_Tester_Release_A . Checkouts for the latest experimental implementation of adding
 Pmod SSD to Pmod Jack JA and using Buttons 0 and 1 to select threshold/timer presets, should
-refer to tag Serial_ACL_Tester_HDL_Prerelease_5C or the HEAD of the master branch. The AXI design
+refer to tag Serial_ACL_Tester_HDL_Prerelease_1D or the HEAD of the master branch. The AXI design
 implements an alternative IP module instead of Pmod SSD user IP, called MuxSSD. This allows the
 FreeRTOS C code to implement a software driver to update two registers on the MuxSSD that control
 the discrete segments of each of the two Seven Segment digit emitters. The MuxSSD IP in the IPI-BD
 takes care of multiplexing the two digits with only 8 general purpose signals. The FreeRTOS
 program can write one or both digits at any time and expect continued display of both digits
-and no necessary timer usage for GPIO multiplexing in the user code.
+with no necessary timer usage for GPIO multiplexing in the user code.
 
 ### Naming conventions notice
 The Pmod peripherals used in this project connect via a standard bus technology design called SPI.
