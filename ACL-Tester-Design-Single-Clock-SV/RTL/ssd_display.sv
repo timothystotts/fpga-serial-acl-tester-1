@@ -33,9 +33,9 @@ module two_digit_ssd_out
 	(
 		output logic [6:0] o_disp0,
 		output logic [6:0] o_disp1,
-		input wire i_clk_20mhz,
-		input wire i_rst_20mhz,
-		input wire [7:0] i_value
+		input logic i_clk_20mhz,
+		input logic i_rst_20mhz,
+		input logic [7:0] i_value
 		);
 
 // Part 2: Declarations---------------------------------------------------------
@@ -64,16 +64,16 @@ function automatic [6:0] unsigned_to_ssd(input [3:0] val);
 endfunction
 
 /* The right (LSByte) hexadecimal value. */
-wire [3:0] s_value_part0;
+logic [3:0] s_value_part0;
 
 /* The left (MSByte) hexadecimal value. */
-wire [3:0] s_value_part1;
+logic [3:0] s_value_part1;
 
 /* The right segment display value. */
-wire [6:0] so_disp0;
+logic [6:0] so_disp0;
 
 /* The left segment display value. */
-wire [6:0] so_disp1;
+logic [6:0] so_disp1;
 
 //Part 3: Statements------------------------------------------------------------
 
@@ -113,18 +113,18 @@ endmodule : two_digit_ssd_out
 //Part 1: Module header:--------------------------------------------------------
 module pmod_ssd_out
 	(
-		output wire [6:0] o_dispA,
-		output wire o_selA,
-		input wire i_clk_20mhz,
-		input wire i_rst_20mhz,
-		input wire [6:0] i_disp0,
-		input wire [6:0] i_disp1
+		output logic [6:0] o_dispA,
+		output logic o_selA,
+		input logic i_clk_20mhz,
+		input logic i_rst_20mhz,
+		input logic [6:0] i_disp0,
+		input logic [6:0] i_disp1
 	);
 
 
 // Part 2: Declarations---------------------------------------------------------
-wire s_clk_100hz;
-wire s_rst_100hz;
+logic s_clk_100hz;
+logic s_rst_100hz;
 logic [6:0] s_curr_disp;
 logic s_curr_sel;
 
@@ -179,17 +179,17 @@ endmodule : pmod_ssd_out
 //Part 1: Module header:--------------------------------------------------------
 module one_pmod_ssd_display
 	(
-		output wire [7:0] o_ssd_pmod0,
-		input wire i_clk_20mhz,
-		input wire i_rst_20mhz,
-		input wire [3:0] i_value0,
-		input wire [3:0] i_value1
+		output logic [7:0] o_ssd_pmod0,
+		input logic i_clk_20mhz,
+		input logic i_rst_20mhz,
+		input logic [3:0] i_value0,
+		input logic [3:0] i_value1
 		);
 
 
 // Part 2: Declarations---------------------------------------------------------
-wire [6:0] s_disp0;
-wire [6:0] s_disp1;
+logic [6:0] s_disp0;
+logic [6:0] s_disp1;
 
 //Part 3: Statements------------------------------------------------------------
 

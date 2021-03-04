@@ -39,55 +39,55 @@ module fpga_serial_acl_tester
 		integer parm_fast_simulation = 0)
 	(
 	/* external clock and active-low reset */
-	input wire CLK100MHZ,
-	input wire i_resetn,
+	input logic CLK100MHZ,
+	input logic i_resetn,
 	/* PMOD ACL2 SPI bus 4-wire and two interrupt signals */
-	output wire eo_pmod_acl2_sck,
-	output wire eo_pmod_acl2_csn,
-	output wire eo_pmod_acl2_copi,
-	input wire ei_pmod_acl2_cipo,
-	input wire ei_pmod_acl2_int1,
-	input wire ei_pmod_acl2_int2,
+	output logic eo_pmod_acl2_sck,
+	output logic eo_pmod_acl2_csn,
+	output logic eo_pmod_acl2_copi,
+	input logic ei_pmod_acl2_cipo,
+	input logic ei_pmod_acl2_int1,
+	input logic ei_pmod_acl2_int2,
 	/* blue LEDs of the multicolor */
-	output wire eo_led0_b,
-	output wire eo_led1_b,
-	output wire eo_led2_b,
-	output wire eo_led3_b,
+	output logic eo_led0_b,
+	output logic eo_led1_b,
+	output logic eo_led2_b,
+	output logic eo_led3_b,
 	/* red LEDs of the multicolor */
-	output wire eo_led0_r,
-	output wire eo_led1_r,
-	output wire eo_led2_r,
-	output wire eo_led3_r,
+	output logic eo_led0_r,
+	output logic eo_led1_r,
+	output logic eo_led2_r,
+	output logic eo_led3_r,
 	/* green LEDs of the multicolor */
-	output wire eo_led0_g,
-	output wire eo_led1_g,
-	output wire eo_led2_g,
-	output wire eo_led3_g,
+	output logic eo_led0_g,
+	output logic eo_led1_g,
+	output logic eo_led2_g,
+	output logic eo_led3_g,
 	/* green LEDs of the regular LEDs */
-	output wire eo_led4,
-	output wire eo_led5,
-	output wire eo_led6,
-	output wire eo_led7,
+	output logic eo_led4,
+	output logic eo_led5,
+	output logic eo_led6,
+	output logic eo_led7,
 	/* four switches */
-	input wire ei_sw0,
-	input wire ei_sw1,
-	input wire ei_sw2,
-	input wire ei_sw3,
+	input logic ei_sw0,
+	input logic ei_sw1,
+	input logic ei_sw2,
+	input logic ei_sw3,
   	/* four buttons */
-  	input wire ei_btn0,
-  	input wire ei_btn1,
-  	input wire ei_btn2,
-  	input wire ei_btn3,
+  	input logic ei_btn0,
+  	input logic ei_btn1,
+  	input logic ei_btn2,
+  	input logic ei_btn3,
 	/* PMOD CLS SPI bus 4-wire */
-	output wire eo_pmod_cls_csn,
-	output wire eo_pmod_cls_sck,
-	output wire eo_pmod_cls_dq0,
-	input wire ei_pmod_cls_dq1,
+	output logic eo_pmod_cls_csn,
+	output logic eo_pmod_cls_sck,
+	output logic eo_pmod_cls_dq0,
+	input logic ei_pmod_cls_dq1,
 	/* Arty A7-100T UART TX and RX signals */
-	output wire eo_uart_tx,
-	input wire ei_uart_rx,
+	output logic eo_uart_tx,
+	input logic ei_uart_rx,
   	/* PMOD SSD direct GPIO */
-  	output wire [7:0] eo_ssd_pmod0);
+  	output logic [7:0] eo_ssd_pmod0);
 
 /* Disable or enable fast FSM delays for simulation instead of impelementation. */
 localparam integer c_FCLK = 20000000;
@@ -98,12 +98,12 @@ localparam integer c_FCLK = 20000000;
 /* MMCM and Processor System Reset signals for PLL clock generation from the
    Clocking Wizard and Synchronous Reset generation from the Processor System
    Reset module. */
-wire s_mmcm_locked;
-wire s_clk_20mhz;
-wire s_rst_20mhz;
-wire s_clk_7_37mhz;
-wire s_rst_7_37mhz;
-wire s_ce_2_5mhz;
+logic s_mmcm_locked;
+logic s_clk_20mhz;
+logic s_rst_20mhz;
+logic s_clk_7_37mhz;
+logic s_rst_7_37mhz;
+logic s_ce_2_5mhz;
 
 /* Definitions of the Standard SPI driver to pass to the ACL2 and CLS drivers */
 `define c_stand_spi_tx_fifo_count_bits 5
@@ -111,100 +111,100 @@ wire s_ce_2_5mhz;
 `define c_stand_spi_wait_count_bits 2
 
 /* Tri-state connectivity with the PMOD ACL2. */
-wire so_pmod_acl2_sck_o;
-wire so_pmod_acl2_sck_t;
-wire so_pmod_acl2_csn_o;
-wire so_pmod_acl2_csn_t;
-wire so_pmod_acl2_copi_o;
-wire so_pmod_acl2_copi_t;
+logic so_pmod_acl2_sck_o;
+logic so_pmod_acl2_sck_t;
+logic so_pmod_acl2_csn_o;
+logic so_pmod_acl2_csn_t;
+logic so_pmod_acl2_copi_o;
+logic so_pmod_acl2_copi_t;
 
 /* Data and indications to be displayed on the LEDs and CLS. */
-wire [7:0] s_acl2_reg_status;
-wire s_acl2_reg_status_activity_stretched;
-wire s_acl2_reg_status_inactivity_stretched;
-wire [63:0] s_hex_3axis_temp_measurements_final;
-wire s_hex_3axis_temp_measurements_valid;
+logic [7:0] s_acl2_reg_status;
+logic s_acl2_reg_status_activity_stretched;
+logic s_acl2_reg_status_inactivity_stretched;
+logic [63:0] s_hex_3axis_temp_measurements_final;
+logic s_hex_3axis_temp_measurements_valid;
 logic [63:0] s_hex_3axis_temp_measurements_display;
-wire s_reading_inactive;
+logic s_reading_inactive;
 
 /* Command to Operating Mode variables for the Tester FSM. */
-wire s_acl2_command_ready;
-wire s_acl2_cmd_init_linked_mode;
-wire s_acl2_cmd_start_linked_mode;
-wire s_acl2_cmd_init_measur_mode;
-wire s_acl2_cmd_start_measur_mode;
-wire s_acl2_cmd_soft_reset_acl2;
+logic s_acl2_command_ready;
+logic s_acl2_cmd_init_linked_mode;
+logic s_acl2_cmd_start_linked_mode;
+logic s_acl2_cmd_init_measur_mode;
+logic s_acl2_cmd_start_measur_mode;
+logic s_acl2_cmd_soft_reset_acl2;
 
 /* Tester FSM general outputs that translate to LED color display. */
-wire s_active_init_display;
-wire s_active_run_display;
-wire s_mode_is_measur;
-wire s_mode_is_linked;
+logic s_active_init_display;
+logic s_active_run_display;
+logic s_mode_is_measur;
+logic s_mode_is_linked;
 
 /* switch inputs debounced */
-wire [3:0] si_switches;
-wire [3:0] s_sw_deb;
+logic [3:0] si_switches;
+logic [3:0] s_sw_deb;
 
 /* switch inputs debounced */
-wire [3:0] si_buttons;
-wire [3:0] s_btn_deb;
+logic [3:0] si_buttons;
+logic [3:0] s_btn_deb;
 
 /* Connections and variables for controlling the PMOD CLS custom driver. */
-wire s_cls_command_ready;
-wire s_cls_wr_clear_display;
-wire s_cls_wr_text_line1;
-wire s_cls_wr_text_line2;
+logic s_cls_command_ready;
+logic s_cls_wr_clear_display;
+logic s_cls_wr_text_line1;
+logic s_cls_wr_text_line2;
 logic [(16*8-1):0] s_cls_txt_ascii_line1;
 logic [(16*8-1):0] s_cls_txt_ascii_line2;
-wire s_cls_feed_is_idle;
+logic s_cls_feed_is_idle;
 
 /* Signals for text and data ASCII lines */
-wire [(16*8-1):0] s_adxl_dat_ascii_line1;
-wire [(16*8-1):0] s_adxl_dat_ascii_line2;
-wire [(16*8-1):0] s_adxl_txt_ascii_line1;
-wire [(16*8-1):0] s_adxl_txt_ascii_line2;
+logic [(16*8-1):0] s_adxl_dat_ascii_line1;
+logic [(16*8-1):0] s_adxl_dat_ascii_line2;
+logic [(16*8-1):0] s_adxl_txt_ascii_line1;
+logic [(16*8-1):0] s_adxl_txt_ascii_line2;
 
 /* Connections for inferring tri-state buffer for CLS SPI bus outputs. */
-wire so_pmod_cls_sck_o;
-wire so_pmod_cls_sck_t;
-wire so_pmod_cls_csn_o;
-wire so_pmod_cls_csn_t;
-wire so_pmod_cls_copi_o;
-wire so_pmod_cls_copi_t;
+logic so_pmod_cls_sck_o;
+logic so_pmod_cls_sck_t;
+logic so_pmod_cls_csn_o;
+logic so_pmod_cls_csn_t;
+logic so_pmod_cls_copi_o;
+logic so_pmod_cls_copi_t;
 
 /* Extra MMCM signals for full port map to the MMCM primative,
    where these signals will remain disconnected. */
-wire s_clk_ignore_clk0b;
-wire s_clk_ignore_clk1b;
-wire s_clk_ignore_clk2;
-wire s_clk_ignore_clk2b;
-wire s_clk_ignore_clk3;
-wire s_clk_ignore_clk3b;
-wire s_clk_ignore_clk4;
-wire s_clk_ignore_clk5;
-wire s_clk_ignore_clk6;
-wire s_clk_ignore_clkfboutb;
-wire s_clk_clkfbout;
-wire s_clk_pwrdwn;
-wire s_clk_resetin;
+logic s_clk_ignore_clk0b;
+logic s_clk_ignore_clk1b;
+logic s_clk_ignore_clk2;
+logic s_clk_ignore_clk2b;
+logic s_clk_ignore_clk3;
+logic s_clk_ignore_clk3b;
+logic s_clk_ignore_clk4;
+logic s_clk_ignore_clk5;
+logic s_clk_ignore_clk6;
+logic s_clk_ignore_clkfboutb;
+logic s_clk_clkfbout;
+logic s_clk_pwrdwn;
+logic s_clk_resetin;
 
 /* Color palette signals to connect \ref led_palette_pulser to \ref
    led_pwm_driver . */
-wire [(4*8-1):0] s_color_led_red_value;
-wire [(4*8-1):0] s_color_led_green_value;
-wire [(4*8-1):0] s_color_led_blue_value;
-wire [(4*8-1):0] s_basic_led_lumin_value;
+logic [(4*8-1):0] s_color_led_red_value;
+logic [(4*8-1):0] s_color_led_green_value;
+logic [(4*8-1):0] s_color_led_blue_value;
+logic [(4*8-1):0] s_basic_led_lumin_value;
 
 /* UART TX signals to connect \ref uart_tx_only and \ref uart_tx_feed */
 logic [(34*8-1):0] s_uart_dat_ascii_line;
-wire s_uart_tx_go;
-wire [7:0] s_uart_txdata;
-wire s_uart_txvalid;
-wire s_uart_txready;
+logic s_uart_tx_go;
+logic [7:0] s_uart_txdata;
+logic s_uart_txvalid;
+logic s_uart_txready;
 
 /* Values for display on the Pmod SSD */
-wire [3:0] s_thresh_value0;
-wire [3:0] s_thresh_value1;
+logic [3:0] s_thresh_value0;
+logic [3:0] s_thresh_value1;
 
 //Part 3: Statements------------------------------------------------------------
 assign s_clk_pwrdwn = 1'b0;

@@ -48,31 +48,31 @@ module pmod_cls_stand_spi_solo
 		)
 	(
 		/* system clock and synchronous reset */
-		input wire i_ext_spi_clk_x,
-		input wire i_srst,
-		input wire i_spi_ce_4x,
+		input logic i_ext_spi_clk_x,
+		input logic i_srst,
+		input logic i_spi_ce_4x,
 		/* system interface to the \ref pmod_generic_spi_solo module. */
 		output logic o_go_stand,
-		input wire i_spi_idle,
+		input logic i_spi_idle,
 		output logic [(parm_tx_len_bits - 1):0] o_tx_len,
 		output logic [(parm_wait_cyc_bits - 1):0] o_wait_cyc,
 		output logic [(parm_rx_len_bits - 1):0] o_rx_len,
 		/* TX FIFO interface to the \ref pmod_generic_spi_solo module. */
 		output logic [7:0] o_tx_data,
 		output logic o_tx_enqueue,
-		input wire i_tx_ready,
+		input logic i_tx_ready,
 		/* RX FIFO interface to the \ref pmod_generic_spi_solo module. */
-		input wire [7:0] i_rx_data,
+		input logic [7:0] i_rx_data,
 		output logic o_rx_dequeue,
-		input wire i_rx_valid,
-		input wire i_rx_avail,
+		input logic i_rx_valid,
+		input logic i_rx_avail,
 		/* FPGA system interface to CLS operation */
 		output logic o_command_ready,
-		input wire i_cmd_wr_clear_display,
-		input wire i_cmd_wr_text_line1,
-		input wire i_cmd_wr_text_line2,
-		input wire [(16 * 8 - 1):0] i_dat_ascii_line1,
-		input wire [(16 * 8 - 1):0] i_dat_ascii_line2
+		input logic i_cmd_wr_clear_display,
+		input logic i_cmd_wr_text_line1,
+		input logic i_cmd_wr_text_line2,
+		input logic [(16 * 8 - 1):0] i_dat_ascii_line1,
+		input logic [(16 * 8 - 1):0] i_dat_ascii_line2
 		);
 
 // Part 2: Declarations---------------------------------------------------------

@@ -51,9 +51,9 @@ module pmod_cls_custom_driver
 	(
 		/* Clock and reset, with clock at 32 times the frequency of the SPI bus,
 		   with a clock enable that is 4 times the frequency of the SPI bus. */
-		input wire i_clk_20mhz,
-		input wire i_rst_20mhz,
-		input wire i_ce_2_5mhz,
+		input logic i_clk_20mhz,
+		input logic i_rst_20mhz,
+		input logic i_ce_2_5mhz,
 		/* Outputs and inputs from the single SPI peripheral */
 		output logic eo_sck_t,
 		output logic eo_sck_o,
@@ -61,39 +61,39 @@ module pmod_cls_custom_driver
 		output logic eo_csn_o,
 		output logic eo_copi_t,
 		output logic eo_copi_o,
-		input wire ei_cipo,
+		input logic ei_cipo,
 		/* Command ready indication and five possible commands to the driver */
-		output wire o_command_ready,
-		input wire i_cmd_wr_clear_display,
-		input wire i_cmd_wr_text_line1,
-		input wire i_cmd_wr_text_line2,
-		input wire [127:0] i_dat_ascii_line1,
-		input wire [127:0] i_dat_ascii_line2
+		output logic o_command_ready,
+		input logic i_cmd_wr_clear_display,
+		input logic i_cmd_wr_text_line1,
+		input logic i_cmd_wr_text_line2,
+		input logic [127:0] i_dat_ascii_line1,
+		input logic [127:0] i_dat_ascii_line2
 		);
 
 //Part 2: Declarations----------------------------------------------------------
 /* CLS SPI driver wiring to the Generic SPI driver. */
-wire s_cls_go_stand;
-wire s_cls_spi_idle;
-wire [(parm_tx_len_bits - 1):0] s_cls_tx_len;
-wire [(parm_wait_cyc_bits - 1):0] s_cls_wait_cyc;
-wire [(parm_rx_len_bits - 1):0] s_cls_rx_len;
-wire [7:0] s_cls_tx_data;
-wire s_cls_tx_enqueue;
-wire s_cls_tx_ready;
-wire [7:0] s_cls_rx_data;
-wire s_cls_rx_dequeue;
-wire s_cls_rx_valid;
-wire s_cls_rx_avail;
+logic s_cls_go_stand;
+logic s_cls_spi_idle;
+logic [(parm_tx_len_bits - 1):0] s_cls_tx_len;
+logic [(parm_wait_cyc_bits - 1):0] s_cls_wait_cyc;
+logic [(parm_rx_len_bits - 1):0] s_cls_rx_len;
+logic [7:0] s_cls_tx_data;
+logic s_cls_tx_enqueue;
+logic s_cls_tx_ready;
+logic [7:0] s_cls_rx_data;
+logic s_cls_rx_dequeue;
+logic s_cls_rx_valid;
+logic s_cls_rx_avail;
 
 /* CLS SPI outputs, FSM signals to register the SPI bus outputs for
    optimal timing closure and glitch minimization. */
-wire sio_cls_sck_fsm_o;
-wire sio_cls_sck_fsm_t;
-wire sio_cls_csn_fsm_o;
-wire sio_cls_csn_fsm_t;
-wire sio_cls_copi_fsm_o;
-wire sio_cls_copi_fsm_t;
+logic sio_cls_sck_fsm_o;
+logic sio_cls_sck_fsm_t;
+logic sio_cls_csn_fsm_o;
+logic sio_cls_csn_fsm_t;
+logic sio_cls_copi_fsm_o;
+logic sio_cls_copi_fsm_t;
 
 /* CLS SPI input synchronizer signals, where the synchronizer is used to
    mitigate metastability. */

@@ -46,42 +46,42 @@ module pmod_acl2_stand_spi_solo
 		)
 	(
 		/* system clock and synchronous reset */
-		input wire i_ext_spi_clk_x,
-		input wire i_srst,
-		input wire i_spi_ce_4x,
+		input logic i_ext_spi_clk_x,
+		input logic i_srst,
+		input logic i_spi_ce_4x,
 		/* interrupt lines of the PMOD ACL2 */
-		input wire ei_int1,
-		input wire ei_int2,
+		input logic ei_int1,
+		input logic ei_int2,
 		/* system interface to the \ref pmod_generic_spi_solo module. */
 		output logic o_go_stand,
-		input wire i_spi_idle,
+		input logic i_spi_idle,
 		output logic [(parm_tx_len_bits - 1):0] o_tx_len,
 		output logic [(parm_wait_cyc_bits - 1):0] o_wait_cyc,
 		output logic [(parm_rx_len_bits - 1):0] o_rx_len,
 		/* TX FIFO interface to the \ref pmod_generic_spi_solo module. */
 		output logic [7:0] o_tx_data,
 		output logic o_tx_enqueue,
-		input wire i_tx_ready,
+		input logic i_tx_ready,
 		/* RX FIFO interface to the \ref pmod_generic_spi_solo module. */
-		input wire [7:0] i_rx_data,
+		input logic [7:0] i_rx_data,
 		output logic o_rx_dequeue,
-		input wire i_rx_valid,
-		input wire i_rx_avail,
+		input logic i_rx_valid,
+		input logic i_rx_avail,
 		/* FPGA system interface to ACL2 operation */
 		output logic o_command_ready,
-		input wire i_cmd_init_linked_mode,
-		input wire i_cmd_start_linked_mode,
-		input wire i_cmd_init_measur_mode,
-		input wire i_cmd_start_measur_mode,
-		input wire i_cmd_soft_reset_acl2,
+		input logic i_cmd_init_linked_mode,
+		input logic i_cmd_start_linked_mode,
+		input logic i_cmd_init_measur_mode,
+		input logic i_cmd_start_measur_mode,
+		input logic i_cmd_soft_reset_acl2,
 		/* measurement data streaming output of the accelerometer */
 		output logic [7:0] o_rd_data_stream,
 		output logic o_rd_data_byte_valid,
 		output logic o_rd_data_group_valid,
 		/* data status of accelerometer */
-		output wire [7:0] o_reg_status,
+		output logic [7:0] o_reg_status,
 		/* run-time dynamic configuration */
-		input wire [7*8-1:0] i_tx_ax_cfg0_lm);
+		input logic [7*8-1:0] i_tx_ax_cfg0_lm);
 
 // Part 2: Declarations---------------------------------------------------------
 /* Timer signals and constants */

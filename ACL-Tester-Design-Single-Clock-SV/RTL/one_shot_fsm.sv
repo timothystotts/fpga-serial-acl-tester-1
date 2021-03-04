@@ -34,9 +34,9 @@
 //Part 1: Module header:--------------------------------------------------------
 module one_shot_fsm
 	(
-		input wire x,
-		input wire clk,
-		input wire rst,
+		input logic x,
+		input logic clk,
+		input logic rst,
 		output logic y
 		);
 

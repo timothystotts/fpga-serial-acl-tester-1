@@ -36,14 +36,14 @@ module uart_tx_only
 		BAUD = 115200
 		)
 	(
-		input wire i_clk_20mhz,
-		input wire i_rst_20mhz,
-		input wire i_clk_7_37mhz,
-		input wire i_rst_7_37mhz,
+		input logic i_clk_20mhz,
+		input logic i_rst_20mhz,
+		input logic i_clk_7_37mhz,
+		input logic i_rst_7_37mhz,
 		output logic eo_uart_tx,
-		input wire [7:0] i_tx_data,
-		input wire i_tx_valid,
-		output wire o_tx_ready
+		input logic [7:0] i_tx_data,
+		input logic i_tx_valid,
+		output logic o_tx_ready
 		);
 
 
@@ -67,22 +67,22 @@ logic [7:0] s_data_val;
 logic [7:0] s_data_aux;
 
 /* internal clock for 1x the baud rate */
-wire s_ce_baud_1x;
+logic s_ce_baud_1x;
 
 /* Mapping for FIFO TX */
-wire [7:0] s_data_fifo_tx_in;
-wire [7:0] s_data_fifo_tx_out;
+logic [7:0] s_data_fifo_tx_in;
+logic [7:0] s_data_fifo_tx_out;
 logic s_data_fifo_tx_re;
-wire s_data_fifo_tx_we;
-wire s_data_fifo_tx_full;
-wire s_data_fifo_tx_empty;
+logic s_data_fifo_tx_we;
+logic s_data_fifo_tx_full;
+logic s_data_fifo_tx_empty;
 logic s_data_fifo_tx_valid;
-wire [10:0] s_data_fifo_tx_wr_count;
-wire [10:0] s_data_fifo_tx_rd_count;
-wire s_data_fifo_tx_almostempty;
-wire s_data_fifo_tx_almostfull;
-wire s_data_fifo_tx_rd_err;
-wire s_data_fifo_tx_wr_err;
+logic [10:0] s_data_fifo_tx_wr_count;
+logic [10:0] s_data_fifo_tx_rd_count;
+logic s_data_fifo_tx_almostempty;
+logic s_data_fifo_tx_almostfull;
+logic s_data_fifo_tx_rd_err;
+logic s_data_fifo_tx_wr_err;
 
 //Part 3: Statements------------------------------------------------------------
 

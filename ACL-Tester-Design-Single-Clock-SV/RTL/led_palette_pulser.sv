@@ -41,41 +41,41 @@ module led_palette_pulser
 		)
 	(
 		// clock and reset
-		input wire i_clk,
-		input wire i_srst,
+		input logic i_clk,
+		input logic i_srst,
 		// palette out values
-		output wire [c_color_value_upper:0] o_color_led_red_value,
-		output wire [c_color_value_upper:0] o_color_led_green_value,
-		output wire [c_color_value_upper:0] o_color_led_blue_value,
-		output wire [c_color_value_upper:0] o_basic_led_lumin_value,
+		output logic [c_color_value_upper:0] o_color_led_red_value,
+		output logic [c_color_value_upper:0] o_color_led_green_value,
+		output logic [c_color_value_upper:0] o_color_led_blue_value,
+		output logic [c_color_value_upper:0] o_basic_led_lumin_value,
 		// system statuses to adjust LEDs by
-		input wire i_active_init_display,
-		input wire i_active_run_display,
-		input wire i_mode_is_measur_aux,
-		input wire i_mode_is_linked_aux,
-		input wire i_acl2_activity_stretched,
-		input wire i_acl2_inactivity_stretched,
-		input wire i_acl2_awake_status,
-		input wire i_sw0_selected,
-		input wire i_sw1_selected);
+		input logic i_active_init_display,
+		input logic i_active_run_display,
+		input logic i_mode_is_measur_aux,
+		input logic i_mode_is_linked_aux,
+		input logic i_acl2_activity_stretched,
+		input logic i_acl2_inactivity_stretched,
+		input logic i_acl2_awake_status,
+		input logic i_sw0_selected,
+		input logic i_sw1_selected);
 
 //Part 2: Declarations----------------------------------------------------------
 // Color LED PWM driver input scale signals for 8-bit color mixing that
 // makes the color LEDs appear to pulse in luminostiry and hue.
-wire s_tester_led_ce;
+logic s_tester_led_ce;
 
-wire [7:0] s_ld0_red_value;
-wire [7:0] s_ld1_red_value;
-wire [7:0] s_ld2_red_value;
-wire [7:0] s_ld3_red_value;
-wire [7:0] s_ld0_green_value;
-wire [7:0] s_ld1_green_value;
-wire [7:0] s_ld2_green_value;
-wire [7:0] s_ld3_green_value;
-wire [7:0] s_ld0_blue_value;
-wire [7:0] s_ld1_blue_value;
-wire [7:0] s_ld2_blue_value;
-wire [7:0] s_ld3_blue_value;
+logic [7:0] s_ld0_red_value;
+logic [7:0] s_ld1_red_value;
+logic [7:0] s_ld2_red_value;
+logic [7:0] s_ld3_red_value;
+logic [7:0] s_ld0_green_value;
+logic [7:0] s_ld1_green_value;
+logic [7:0] s_ld2_green_value;
+logic [7:0] s_ld3_green_value;
+logic [7:0] s_ld0_blue_value;
+logic [7:0] s_ld1_blue_value;
+logic [7:0] s_ld2_blue_value;
+logic [7:0] s_ld3_blue_value;
 logic [7:0] s_ld4_basic_value;
 logic [7:0] s_ld5_basic_value;
 logic [7:0] s_ld6_basic_value;

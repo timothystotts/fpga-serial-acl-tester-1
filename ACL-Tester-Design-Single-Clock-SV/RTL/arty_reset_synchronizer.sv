@@ -35,9 +35,9 @@
 //Reset Synchronizer------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module arty_reset_synchronizer(
-	input wire i_clk_mhz,
-	input wire i_rstn_global,
-	output wire o_rst_mhz);
+	input logic i_clk_mhz,
+	input logic i_rstn_global,
+	output logic o_rst_mhz);
 
 //Part 2: Declarations----------------------------------------------------------
 localparam integer c_RESET_STAGES = 14;

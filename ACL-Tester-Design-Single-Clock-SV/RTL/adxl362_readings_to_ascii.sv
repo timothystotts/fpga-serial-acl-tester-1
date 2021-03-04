@@ -30,12 +30,12 @@
 //Combinatorial measurement registers to ASCII text conversion.-----------------
 //Part 1: Module header:--------------------------------------------------------
 module adxl362_readings_to_ascii(
-	input wire [(8*8-1):0] i_3axis_temp,
-	input wire i_reading_inactive,
-	output wire [(16*8-1):0] o_dat_ascii_line1,
-	output wire [(16*8-1):0] o_dat_ascii_line2,
-	output wire [(16*8-1):0] o_txt_ascii_line1,
-	output wire [(16*8-1):0] o_txt_ascii_line2);
+	input logic [(8*8-1):0] i_3axis_temp,
+	input logic i_reading_inactive,
+	output logic [(16*8-1):0] o_dat_ascii_line1,
+	output logic [(16*8-1):0] o_dat_ascii_line2,
+	output logic [(16*8-1):0] o_txt_ascii_line1,
+	output logic [(16*8-1):0] o_txt_ascii_line2);
 
 //Part 2: Declarations----------------------------------------------------------
 /* A re-entrant function that converts a 4-bit part-select to an 8-bit ASCII
@@ -48,89 +48,89 @@ function automatic [7:0] ascii_of_hdigit(input [3:0] bchex_val);
 endfunction
 
 /* Connections for reparse of the eight PMOD ACL2 measurement reading bytes */
-wire [7:0] s_hex_xaxis_msb;
-wire [7:0] s_hex_xaxis_lsb;
-wire [7:0] s_hex_yaxis_msb;
-wire [7:0] s_hex_yaxis_lsb;
-wire [7:0] s_hex_zaxis_msb;
-wire [7:0] s_hex_zaxis_lsb;
-wire [7:0] s_hex_temp_msb;
-wire [7:0] s_hex_temp_lsb;
+logic [7:0] s_hex_xaxis_msb;
+logic [7:0] s_hex_xaxis_lsb;
+logic [7:0] s_hex_yaxis_msb;
+logic [7:0] s_hex_yaxis_lsb;
+logic [7:0] s_hex_zaxis_msb;
+logic [7:0] s_hex_zaxis_lsb;
+logic [7:0] s_hex_temp_msb;
+logic [7:0] s_hex_temp_lsb;
 
 /* Connections for reparse of the eight PMOD ACL2 measurement reading bytes */
 localparam signed [15:0] c_signed_zero = 0;
-wire signed [15:0] s_txt_xaxis_s16;
-wire signed [15:0] s_txt_yaxis_s16;
-wire signed [15:0] s_txt_zaxis_s16;
-wire signed [15:0] s_txt_temp_s16;
-wire [15:0] s_txt_xaxis_u16;
-wire [15:0] s_txt_yaxis_u16;
-wire [15:0] s_txt_zaxis_u16;
-wire [15:0] s_txt_temp_u16;
+logic signed [15:0] s_txt_xaxis_s16;
+logic signed [15:0] s_txt_yaxis_s16;
+logic signed [15:0] s_txt_zaxis_s16;
+logic signed [15:0] s_txt_temp_s16;
+logic [15:0] s_txt_xaxis_u16;
+logic [15:0] s_txt_yaxis_u16;
+logic [15:0] s_txt_zaxis_u16;
+logic [15:0] s_txt_temp_u16;
 
 /* Connections for Hex to ASCII reparse of the sixteen digits of the eight
    PMOD ACL2 measurement reading bytes */
-wire [7:0] s_char_xaxis_msb_3;
-wire [7:0] s_char_xaxis_msb_2;
-wire [7:0] s_char_xaxis_lsb_1;
-wire [7:0] s_char_xaxis_lsb_0;
-wire [7:0] s_char_yaxis_msb_3;
-wire [7:0] s_char_yaxis_msb_2;
-wire [7:0] s_char_yaxis_lsb_1;
-wire [7:0] s_char_yaxis_lsb_0;
-wire [7:0] s_char_zaxis_msb_3;
-wire [7:0] s_char_zaxis_msb_2;
-wire [7:0] s_char_zaxis_lsb_1;
-wire [7:0] s_char_zaxis_lsb_0;
-wire [7:0] s_char_temp_msb_3;
-wire [7:0] s_char_temp_msb_2;
-wire [7:0] s_char_temp_lsb_1;
-wire [7:0] s_char_temp_lsb_0;
+logic [7:0] s_char_xaxis_msb_3;
+logic [7:0] s_char_xaxis_msb_2;
+logic [7:0] s_char_xaxis_lsb_1;
+logic [7:0] s_char_xaxis_lsb_0;
+logic [7:0] s_char_yaxis_msb_3;
+logic [7:0] s_char_yaxis_msb_2;
+logic [7:0] s_char_yaxis_lsb_1;
+logic [7:0] s_char_yaxis_lsb_0;
+logic [7:0] s_char_zaxis_msb_3;
+logic [7:0] s_char_zaxis_msb_2;
+logic [7:0] s_char_zaxis_lsb_1;
+logic [7:0] s_char_zaxis_lsb_0;
+logic [7:0] s_char_temp_msb_3;
+logic [7:0] s_char_temp_msb_2;
+logic [7:0] s_char_temp_lsb_1;
+logic [7:0] s_char_temp_lsb_0;
 
 /* Signals for Decimal to ASCII reparse of the sixteen digits of the eight
    PMOD ACL2 measurement reading bytes */
-wire [15:0] s_dat_xaxis_m0;
-wire [15:0] s_dat_xaxis_f0;
-wire [15:0] s_dat_xaxis_f1;
-wire [15:0] s_dat_xaxis_f2;
+logic [15:0] s_dat_xaxis_m0;
+logic [15:0] s_dat_xaxis_f0;
+logic [15:0] s_dat_xaxis_f1;
+logic [15:0] s_dat_xaxis_f2;
 
-wire [7:0] s_char_xaxis_sg;
-wire [7:0] s_char_xaxis_m0;
-wire [7:0] s_char_xaxis_f0;
-wire [7:0] s_char_xaxis_f1;
-wire [7:0] s_char_xaxis_f2;
+logic [7:0] s_char_xaxis_sg;
+logic [7:0] s_char_xaxis_m0;
+logic [7:0] s_char_xaxis_f0;
+logic [7:0] s_char_xaxis_f1;
+logic [7:0] s_char_xaxis_f2;
 
-wire [15:0] s_dat_yaxis_m0;
-wire [15:0] s_dat_yaxis_f0;
-wire [15:0] s_dat_yaxis_f1;
-wire [15:0] s_dat_yaxis_f2;
+logic [15:0] s_dat_yaxis_m0;
+logic [15:0] s_dat_yaxis_f0;
+logic [15:0] s_dat_yaxis_f1;
+logic [15:0] s_dat_yaxis_f2;
 
-wire [7:0] s_char_yaxis_sg;
-wire [7:0] s_char_yaxis_m0;
-wire [7:0] s_char_yaxis_f0;
-wire [7:0] s_char_yaxis_f1;
-wire [7:0] s_char_yaxis_f2;
+logic [7:0] s_char_yaxis_sg;
+logic [7:0] s_char_yaxis_m0;
+logic [7:0] s_char_yaxis_f0;
+logic [7:0] s_char_yaxis_f1;
+logic [7:0] s_char_yaxis_f2;
 
-wire [15:0] s_dat_zaxis_m0;
-wire [15:0] s_dat_zaxis_f0;
-wire [15:0] s_dat_zaxis_f1;
-wire [15:0] s_dat_zaxis_f2;
+logic [15:0] s_dat_zaxis_m0;
+logic [15:0] s_dat_zaxis_f0;
+logic [15:0] s_dat_zaxis_f1;
+logic [15:0] s_dat_zaxis_f2;
 
-wire [7:0] s_char_zaxis_sg;
-wire [7:0] s_char_zaxis_m0;
-wire [7:0] s_char_zaxis_f0;
-wire [7:0] s_char_zaxis_f1;
-wire [7:0] s_char_zaxis_f2;
+logic [7:0] s_char_zaxis_sg;
+logic [7:0] s_char_zaxis_m0;
+logic [7:0] s_char_zaxis_f0;
+logic [7:0] s_char_zaxis_f1;
+logic [7:0] s_char_zaxis_f2;
 
-wire [15:0] s_dat_temp_m3;
-wire [15:0] s_dat_temp_m2;
-wire [15:0] s_dat_temp_m1;
-wire [15:0] s_dat_temp_m0;
+logic [15:0] s_dat_temp_m3;
+logic [15:0] s_dat_temp_m2;
+logic [15:0] s_dat_temp_m1;
+logic [15:0] s_dat_temp_m0;
 
-wire [7:0] s_char_temp_m3;
-wire [7:0] s_char_temp_m2;
-wire [7:0] s_char_temp_m1;
-wire [7:0] s_char_temp_m0;
+logic [7:0] s_char_temp_m3;
+logic [7:0] s_char_temp_m2;
+logic [7:0] s_char_temp_m1;
+logic [7:0] s_char_temp_m0;
 
 //Part 3: Statements------------------------------------------------------------
 /* Parse out the hexadecimal reading of mg force and temperature from the

@@ -31,10 +31,10 @@
 //Timed Moore machine with timer control strategy #1
 //Part 1: Module header:--------------------------------------------------------
 module ext_interrupt_debouncer(
-	output wire o_int_deb,
-	input wire i_clk_20mhz,
-	input wire i_rst_20mhz,
-	input wire ei_interrupt);
+	output logic o_int_deb,
+	input logic i_clk_20mhz,
+	input logic i_rst_20mhz,
+	input logic ei_interrupt);
 
 // Part 2: Declarations---------------------------------------------------------
 /* Debouncer FSM states. */

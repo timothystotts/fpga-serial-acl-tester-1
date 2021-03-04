@@ -36,10 +36,10 @@ module multi_input_debounce
 		integer FCLK = 20000000
 		)
 	(	
-		input wire i_clk_mhz,
-		input wire i_rst_mhz,
-		input wire [3:0] ei_buttons,
-		output wire [3:0] o_btns_deb
+		input logic i_clk_mhz,
+		input logic i_rst_mhz,
+		input logic [3:0] ei_buttons,
+		output logic [3:0] o_btns_deb
 		);
 
 //Part 2: Declarations----------------------------------------------------------

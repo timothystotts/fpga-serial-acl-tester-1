@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file pulse_stretcher_synch.v
+-- \file pulse_stretcher_synch.sv
 --
 -- \brief A synchronous pulse stretcher implementation
 --
@@ -32,18 +32,22 @@
 ------------------------------------------------------------------------------*/
 //Timed Moore machine with timer control strategy #1
 //Part 1: Module header:--------------------------------------------------------
-module pulse_stretcher_synch(o_y, i_clk, i_rst, i_x);
-/* The exact count of clock cycles to hold Y as a one immediately after
-   a single clock cycle of X being a value of one. */
-parameter integer par_T_stretch_bits = 7; /* LOG2 of \ref par_T_stretch_val */
-parameter integer par_T_stretch_val = 64;
-/* The stretched output */
-output reg o_y;
-/* Clock and reset */
-input wire i_clk;
-input wire i_rst;
-/* The input value to stretch upon value of one. */
-input wire i_x;
+module pulse_stretcher_synch
+	#(parameter
+		/* The exact count of clock cycles to hold Y as a one immediately after
+		   a single clock cycle of X being a value of one. */
+		integer par_T_stretch_bits = 7, /* LOG2 of \ref par_T_stretch_val */
+		integer par_T_stretch_val = 64
+		)
+	(
+		/* The stretched output */
+		output logic o_y,
+		/* Clock and reset */
+		input logic i_clk,
+		input logic i_rst,
+		/* The input value to stretch upon value of one. */
+		input logic i_x
+		);
 
 // Part 2: Declarations---------------------------------------------------------
 /* Stretcher FSM state values */
@@ -57,15 +61,15 @@ localparam [(par_T_stretch_bits - 1):0] c_tmax = c_t_stretch - 1;
 /* Stretcher FSM state register and next state signal */
 (* fsm_encoding = "gray" *)
 (* fsm_safe_state = "default_state" *)
-reg [0:0] s_stretch_pr_state;
-reg [0:0] s_stretch_nx_state;
+logic [0:0] s_stretch_pr_state;
+logic [0:0] s_stretch_nx_state;
 
 /* Stretcher FSM timing signal */
-reg [(par_T_stretch_bits - 1):0] s_t;
+logic [(par_T_stretch_bits - 1):0] s_t;
 
 //Part 3: Statements------------------------------------------------------------
 //Timer (strategy #1)
-always @(posedge i_clk)
+always_ff @(posedge i_clk)
 begin: p_fsm_timer
 	if (i_rst) s_t <= 0;
 	else
@@ -74,17 +78,17 @@ begin: p_fsm_timer
 			s_t <= 0;
 		else if (s_t != c_tmax)
 			s_t <= s_t + 1;
-end
+end : p_fsm_timer
 
 //FSM state register
-always @(posedge i_clk)
+always_ff @(posedge i_clk)
 begin: p_fsm_state
 	if (i_rst) s_stretch_pr_state <= ST_A;
 	else s_stretch_pr_state <= s_stretch_nx_state;
-end
+end : p_fsm_state
 
 //FSM combinatorial
-always @(s_stretch_pr_state, i_x, s_t)
+always_comb
 begin: p_fsm_comb
 	case (s_stretch_pr_state)
 		ST_B: begin
@@ -103,7 +107,7 @@ begin: p_fsm_comb
 			else s_stretch_nx_state = ST_A;
 		end
 	endcase // s_stretch_pr_state
-end
+end : p_fsm_comb
 
-endmodule
+endmodule : pulse_stretcher_synch
 //------------------------------------------------------------------------------

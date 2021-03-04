@@ -49,8 +49,8 @@ module pmod_acl2_custom_driver
 		)
 	(
 		/* Clock and reset, with clock at 4 times the frequency of the SPI bus */
-		input wire i_clk_20mhz,
-		input wire i_rst_20mhz,
+		input logic i_clk_20mhz,
+		input logic i_rst_20mhz,
 		/* Outputs and inputs from the single SPI peripheral */
 		output logic eo_sck_t,
 		output logic eo_sck_o,
@@ -58,27 +58,27 @@ module pmod_acl2_custom_driver
 		output logic eo_csn_o,
 		output logic eo_copi_t,
 		output logic eo_copi_o,
-		input wire ei_cipo,
-		input wire ei_int1,
-		input wire ei_int2,
+		input logic ei_cipo,
+		input logic ei_int1,
+		input logic ei_int2,
 		/* Command ready indication and five possible commands to the driver */
-		output wire o_command_ready,
-		input wire i_cmd_init_linked_mode,
-		input wire i_cmd_start_linked_mode,
-		input wire i_cmd_init_measur_mode,
-		input wire i_cmd_start_measur_mode,
-		input wire i_cmd_soft_reset_acl2,
+		output logic o_command_ready,
+		input logic i_cmd_init_linked_mode,
+		input logic i_cmd_start_linked_mode,
+		input logic i_cmd_init_measur_mode,
+		input logic i_cmd_start_measur_mode,
+		input logic i_cmd_soft_reset_acl2,
 		/* Output of the measurements in a single vector, plus a valid pulse */
 		output logic [63:0] o_data_3axis_temp, /* Eight bytes of measurement data. */
 		output logic o_data_valid,
 		/* Output of the most recently read single byte status register,
 		   without a valid pualse. */
-		output wire [7:0] o_reg_status, /* Status register is one byte. */
+		output logic [7:0] o_reg_status, /* Status register is one byte. */
 		/* Debounced buttons input */
-		input wire [1:0] i_btn_deb,
+		input logic [1:0] i_btn_deb,
 		/* Active and Inactive preset enumeration value */
-		output wire [3:0] o_enum_active,
-		output wire [3:0] o_enum_inactive
+		output logic [3:0] o_enum_active,
+		output logic [3:0] o_enum_inactive
 		);
 
 //Part 2: Declarations----------------------------------------------------------
@@ -88,36 +88,36 @@ module pmod_acl2_custom_driver
 `include "thresh_presets_include.svh"
 
 /* ACL2 SPI driver wiring to the Generic SPI driver. */
-wire s_acl2_clk_spi_4x;
-wire s_acl2_rst_spi_4x;
-wire s_acl2_go_stand;
-wire s_acl2_spi_idle;
-wire [(parm_tx_len_bits - 1):0] s_acl2_tx_len;
-wire [(parm_wait_cyc_bits - 1):0] s_acl2_wait_cyc;
-wire [(parm_rx_len_bits - 1):0] s_acl2_rx_len;
-wire [7:0] s_acl2_tx_data;
-wire s_acl2_tx_enqueue;
-wire s_acl2_tx_ready;
-wire [7:0] s_acl2_rx_data;
-wire s_acl2_rx_dequeue;
-wire s_acl2_rx_valid;
-wire s_acl2_rx_avail;
+logic s_acl2_clk_spi_4x;
+logic s_acl2_rst_spi_4x;
+logic s_acl2_go_stand;
+logic s_acl2_spi_idle;
+logic [(parm_tx_len_bits - 1):0] s_acl2_tx_len;
+logic [(parm_wait_cyc_bits - 1):0] s_acl2_wait_cyc;
+logic [(parm_rx_len_bits - 1):0] s_acl2_rx_len;
+logic [7:0] s_acl2_tx_data;
+logic s_acl2_tx_enqueue;
+logic s_acl2_tx_ready;
+logic [7:0] s_acl2_rx_data;
+logic s_acl2_rx_dequeue;
+logic s_acl2_rx_valid;
+logic s_acl2_rx_avail;
 
 /* ACL2 SPI driver variables for streaming the 8 bytes of measurement values. */
-wire [7:0] s_acl2_rd_data_stream;
-wire s_acl2_rd_data_byte_valid;
-wire s_acl2_rd_data_group_valid;
+logic [7:0] s_acl2_rd_data_stream;
+logic s_acl2_rd_data_byte_valid;
+logic s_acl2_rd_data_group_valid;
 logic [(8*8-1):0] s_hex_3axis_temp_measurements_val;
 logic [(8*8-1):0] s_hex_3axis_temp_measurements_aux;
 
 /* ACL2 SPI outputs, FSM signals to register the SPI bus outputs for
    optimal timing closure and glitch minimization. */
-wire sio_acl2_sck_fsm_o;
-wire sio_acl2_sck_fsm_t;
-wire sio_acl2_csn_fsm_o;
-wire sio_acl2_csn_fsm_t;
-wire sio_acl2_copi_fsm_o;
-wire sio_acl2_copi_fsm_t;
+logic sio_acl2_sck_fsm_o;
+logic sio_acl2_sck_fsm_t;
+logic sio_acl2_csn_fsm_o;
+logic sio_acl2_csn_fsm_t;
+logic sio_acl2_copi_fsm_o;
+logic sio_acl2_copi_fsm_t;
 
 /* ACL2 SPI input synchronizer signals, where the synchronizer is used to
    mitigate metastability. */
@@ -125,8 +125,8 @@ logic sio_acl2_cipo_meta_i;
 logic sio_acl2_cipo_sync_i;
 
 /* Debounced external interrupts. */
-wire si_int1_debounced;
-wire si_int2_debounced;
+logic si_int1_debounced;
+logic si_int2_debounced;
 
 /* Experiment FSM state declarations */
 `define c_stream_state_bits 2
@@ -146,12 +146,12 @@ logic [3:0] s_j_val;
 logic [3:0] s_j_aux;
 
 /* One-shot conversion of button levels */
-wire s_btn0_one_shot;
-wire s_btn1_one_shot;
+logic s_btn0_one_shot;
+logic s_btn1_one_shot;
 
 /* Presets binary encoding for the seven registers on the ADXL362 chip */
-wire [7*8-1:0] s_tx_ax_cfg0_lm;
-wire [7:0] s_tx_ax_cfg0_discard;
+logic [7*8-1:0] s_tx_ax_cfg0_lm;
+logic [7:0] s_tx_ax_cfg0_discard;
 
 //Part 3: Statements------------------------------------------------------------
 /* One shot generation of Button 0 */

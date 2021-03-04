@@ -30,13 +30,13 @@
 //Part 1: Module header:--------------------------------------------------------
 module uart_tx_feed
 	(
-		input wire i_clk_20mhz,
-		input wire i_rst_20mhz,
+		input logic i_clk_20mhz,
+		input logic i_rst_20mhz,
 		output logic [7:0] o_tx_data,
 		output logic o_tx_valid,
-		input wire i_tx_ready,
-		input wire i_tx_go,
-		input wire [(34*8-1):0] i_dat_ascii_line
+		input logic i_tx_ready,
+		input logic i_tx_go,
+		input logic [(34*8-1):0] i_dat_ascii_line
 	);
 
 //Part 2: Declarations----------------------------------------------------------

@@ -52,27 +52,27 @@ module pmod_generic_spi_solo
 		output logic eo_csn_t,
 		output logic eo_copi_o,
 		output logic eo_copi_t,
-		input wire ei_cipo_i,
+		input logic ei_cipo_i,
 		/* SPI state machine clock at 4x the SPI bus clock speed, with
 		   synchronous reset */
-		input wire i_ext_spi_clk_x,
-		input wire i_srst,
-		input wire i_spi_ce_4x,
+		input logic i_ext_spi_clk_x,
+		input logic i_srst,
+		input logic i_spi_ce_4x,
 		/* inputs and output for triggering a new SPI bus cycle */
-		input wire i_go_stand,
-		output wire o_spi_idle,
-		input wire [(parm_tx_len_bits - 1):0] i_tx_len,
-		input wire [(parm_wait_cyc_bits - 1):0] i_wait_cyc,
-		input wire [(parm_rx_len_bits - 1):0] i_rx_len,
+		input logic i_go_stand,
+		output logic o_spi_idle,
+		input logic [(parm_tx_len_bits - 1):0] i_tx_len,
+		input logic [(parm_wait_cyc_bits - 1):0] i_wait_cyc,
+		input logic [(parm_rx_len_bits - 1):0] i_rx_len,
 		/* system interface to TX FIFO */
-		input wire [7:0] i_tx_data,
-		input wire i_tx_enqueue,
-		output wire o_tx_ready,
+		input logic [7:0] i_tx_data,
+		input logic i_tx_enqueue,
+		output logic o_tx_ready,
 		/* system interface to RX FIFO */
-		output wire [7:0] o_rx_data,
-		input wire i_rx_dequeue,
-		output wire o_rx_valid,
-		output wire o_rx_avail
+		output logic [7:0] o_rx_data,
+		input logic i_rx_dequeue,
+		output logic o_rx_valid,
+		output logic o_rx_avail
 		);
 
 // Part 2: Declarations---------------------------------------------------------
@@ -123,16 +123,16 @@ logic [(`c_tim_value_bits - 1):0] s_t_delayed2;
 logic [(`c_tim_value_bits - 1):0] s_t_delayed3;
 
 /* SPI 4x and 1x clocking signals and enables */
-wire s_spi_ce_4x;
-wire s_spi_clk_1x;
+logic s_spi_ce_4x;
+logic s_spi_clk_1x;
 
-wire s_spi_clk_ce0;
-wire s_spi_clk_ce1;
-wire s_spi_clk_ce2;
-wire s_spi_clk_ce3;
+logic s_spi_clk_ce0;
+logic s_spi_clk_ce1;
+logic s_spi_clk_ce2;
+logic s_spi_clk_ce3;
 
 /* FSM pulse stretched */
-wire s_go_stand;
+logic s_go_stand;
 
 /* FSM auxiliary registers */
 logic [(parm_tx_len_bits - 1):0] s_tx_len_val;
@@ -149,33 +149,33 @@ logic s_spi_idle;
 
 /* Mapping for FIFO RX */
 logic [7:0] s_data_fifo_rx_in;
-wire [7:0] s_data_fifo_rx_out;
-wire s_data_fifo_rx_re;
+logic [7:0] s_data_fifo_rx_out;
+logic s_data_fifo_rx_re;
 logic s_data_fifo_rx_we;
-wire s_data_fifo_rx_full;
-wire s_data_fifo_rx_empty;
+logic s_data_fifo_rx_full;
+logic s_data_fifo_rx_empty;
 logic s_data_fifo_rx_valid;
-wire [10:0] s_data_fifo_rx_rdcount;
-wire [10:0] s_data_fifo_rx_wrcount;
-wire s_data_fifo_rx_almostfull;
-wire s_data_fifo_rx_almostempty;
-wire s_data_fifo_rx_wrerr;
-wire s_data_fifo_rx_rderr;
+logic [10:0] s_data_fifo_rx_rdcount;
+logic [10:0] s_data_fifo_rx_wrcount;
+logic s_data_fifo_rx_almostfull;
+logic s_data_fifo_rx_almostempty;
+logic s_data_fifo_rx_wrerr;
+logic s_data_fifo_rx_rderr;
 
 /* Mapping for FIFO TX */
-wire [7:0] s_data_fifo_tx_in;
-wire [7:0] s_data_fifo_tx_out;
+logic [7:0] s_data_fifo_tx_in;
+logic [7:0] s_data_fifo_tx_out;
 logic s_data_fifo_tx_re;
-wire s_data_fifo_tx_we;
-wire s_data_fifo_tx_full;
-wire s_data_fifo_tx_empty;
+logic s_data_fifo_tx_we;
+logic s_data_fifo_tx_full;
+logic s_data_fifo_tx_empty;
 logic s_data_fifo_tx_valid;
-wire [10:0] s_data_fifo_tx_rdcount;
-wire [10:0] s_data_fifo_tx_wrcount;
-wire s_data_fifo_tx_almostfull;
-wire s_data_fifo_tx_almostempty;
-wire s_data_fifo_tx_wrerr;
-wire s_data_fifo_tx_rderr;
+logic [10:0] s_data_fifo_tx_rdcount;
+logic [10:0] s_data_fifo_tx_wrcount;
+logic s_data_fifo_tx_almostfull;
+logic s_data_fifo_tx_almostempty;
+logic s_data_fifo_tx_wrerr;
+logic s_data_fifo_tx_rderr;
 
 //Part 3: Statements------------------------------------------------------------
 /* The SPI driver is IDLE only if the state signals as IDLE and more than four

@@ -35,10 +35,10 @@ module clock_enable_divider
 		integer par_ce_divisor = 1000
 		)
 	(
-		output wire o_ce_div,
-		input wire i_clk_mhz, 
-		input wire i_rst_mhz,
-		input wire i_ce_mhz);
+		output logic o_ce_div,
+		input logic i_clk_mhz, 
+		input logic i_rst_mhz,
+		input logic i_ce_mhz);
 
 // Part 2: Declarations---------------------------------------------------------
 /* A constant representing the counter maximum which is an even division of the

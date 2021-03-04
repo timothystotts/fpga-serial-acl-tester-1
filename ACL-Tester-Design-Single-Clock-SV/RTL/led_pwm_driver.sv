@@ -45,12 +45,12 @@ module led_pwm_driver
 		integer c_basic_count_upper = parm_basic_led_count - 1
 		)
 	(
-		input wire i_clk,
-		input wire i_srst,
-		input wire [c_color_value_upper:0] i_color_led_red_value,
-		input wire [c_color_value_upper:0] i_color_led_green_value,
-		input wire [c_color_value_upper:0] i_color_led_blue_value,
-		input wire [c_basic_value_upper:0] i_basic_led_lumin_value,
+		input logic i_clk,
+		input logic i_srst,
+		input logic [c_color_value_upper:0] i_color_led_red_value,
+		input logic [c_color_value_upper:0] i_color_led_green_value,
+		input logic [c_color_value_upper:0] i_color_led_blue_value,
+		input logic [c_basic_value_upper:0] i_basic_led_lumin_value,
 		output logic [c_color_count_upper:0] eo_color_leds_r,
 		output logic [c_color_count_upper:0] eo_color_leds_g,
 		output logic [c_color_count_upper:0] eo_color_leds_b,

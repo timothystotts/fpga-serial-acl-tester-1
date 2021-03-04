@@ -32,14 +32,14 @@ module lcd_text_feed
 	#(parameter
 		integer parm_fast_simulation = 0)
 	(
-	input wire i_clk_20mhz,
-	input wire i_rst_20mhz,
-	input wire i_ce_2_5mhz,
-	input wire i_lcd_command_ready,
+	input logic i_clk_20mhz,
+	input logic i_rst_20mhz,
+	input logic i_ce_2_5mhz,
+	input logic i_lcd_command_ready,
 	output logic o_lcd_wr_clear_display,
 	output logic o_lcd_wr_text_line1,
 	output logic o_lcd_wr_text_line2,
-	output wire o_lcd_feed_is_idle);
+	output logic o_lcd_feed_is_idle);
 
 //Part 2: Declarations----------------------------------------------------------
 /* Connections and variables for instance of the PMOD CLS SPI SOLO driver. */

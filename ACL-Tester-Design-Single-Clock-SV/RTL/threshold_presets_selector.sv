@@ -39,9 +39,9 @@ module thresh_presets_selector
 			16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000, 16'd65000}
 		)
 	(
-		input wire i_clk_20mhz,
-		input wire i_rst_20mhz,
-		input wire i_btn_chg_preset,
+		input logic i_clk_20mhz,
+		input logic i_rst_20mhz,
+		input logic i_btn_chg_preset,
 		output logic [3:0] o_value_enum,
 		output logic [15:0] o_value_thresh,
 		output logic [15:0] o_value_timer

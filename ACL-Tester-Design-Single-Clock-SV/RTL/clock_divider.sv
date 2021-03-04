@@ -40,10 +40,10 @@ module clock_divider
 		integer par_clk_divisor = 1000
 		)
 	(
-		output wire o_clk_div,
-		output wire o_rst_div,
-		input wire i_clk_mhz,
-		input wire i_rst_mhz);
+		output logic o_clk_div,
+		output logic o_rst_div,
+		input logic i_clk_mhz,
+		input logic i_rst_mhz);
 
 // Part 2: Declarations---------------------------------------------------------
 /* A constant representing the counter maximum which is an even division of the
