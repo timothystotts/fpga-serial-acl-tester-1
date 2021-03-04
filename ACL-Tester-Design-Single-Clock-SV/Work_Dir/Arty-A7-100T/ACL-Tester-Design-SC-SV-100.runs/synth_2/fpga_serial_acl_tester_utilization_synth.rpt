@@ -1,7 +1,7 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
-| Date         : Tue Mar  2 13:06:38 2021
+| Date         : Thu Mar  4 16:33:21 2021
 | Host         : l4study running 64-bit Ubuntu 18.04.5 LTS
 | Command      : report_utilization -file fpga_serial_acl_tester_utilization_synth.rpt -pb fpga_serial_acl_tester_utilization_synth.pb
 | Design       : fpga_serial_acl_tester

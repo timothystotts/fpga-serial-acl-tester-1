@@ -1,7 +1,7 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
-| Date         : Tue Mar  2 13:07:20 2021
+| Date         : Thu Mar  4 16:34:16 2021
 | Host         : l4study running 64-bit Ubuntu 18.04.5 LTS
 | Command      : report_control_sets -verbose -file fpga_serial_acl_tester_control_sets_placed.rpt
 | Design       : fpga_serial_acl_tester
