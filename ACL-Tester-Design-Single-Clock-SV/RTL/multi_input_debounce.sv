@@ -75,10 +75,13 @@ begin: p_fsm_timer1
 	if (i_rst_mhz)
 		s_t <= 0;
 	else
-		if (s_mideb_pr_state != s_mideb_nx_state)
+		if (s_mideb_pr_state != s_mideb_nx_state) begin : if_chg_state
 			s_t <= 0;
-		else if (s_t != c_tmax)
+		end : if_chg_state
+
+		else if (s_t != c_tmax) begin : if_not_timer_max
 			s_t <= s_t + 1;
+		end : if_not_timer_max
 end : p_fsm_timer1
 
 // FSM state register:
@@ -88,14 +91,14 @@ begin: p_fsm_state
 		s_mideb_pr_state <= ST_A;
 		si_buttons_prev <= 4'b0000;
 		si_buttons_store <= 4'b0000;
-	end else begin
+	end else begin : if_fsm_state_and_storage
 		if ((s_mideb_nx_state == ST_C) && (s_mideb_pr_state == ST_B))
 			si_buttons_store <= si_buttons_prev;
 
 		si_buttons_prev <= si_buttons_sync;
 
 		s_mideb_pr_state <= s_mideb_nx_state;
-	end
+	end : if_fsm_state_and_storage
 end : p_fsm_state
 
 // FSM combinational logic:

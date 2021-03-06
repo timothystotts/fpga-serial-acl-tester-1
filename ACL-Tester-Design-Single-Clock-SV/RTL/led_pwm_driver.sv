@@ -86,7 +86,7 @@ generate
 				s_color_red_pwm_duty_cycles_1 <= 0;
 				s_color_red_pwm_duty_cycles_2 <= 0;
 
-			end else begin
+			end else begin : if_incr_pwm_on_or_off_red
 				if (s_color_red_pwm_period_count > 0) begin
 					if (s_color_red_pwm_period_count < s_color_red_pwm_duty_cycles)
 						eo_color_leds_r[redidx] <= c_filament_on_value;
@@ -111,7 +111,7 @@ generate
 				
 				// Register the inferred DSP48E1 output P
 				s_color_red_pwm_duty_cycles_2 <= s_color_red_pwm_duty_cycles_1;
-			end
+			end : if_incr_pwm_on_or_off_red
 		end : p_operate_color_red_pwm
 	end : redloop
 endgenerate
@@ -135,7 +135,7 @@ generate
 				s_color_green_pwm_duty_cycles_1 <= 0;
 				s_color_green_pwm_duty_cycles_2 <= 0;
 
-			end else begin
+			end else begin : if_incr_pwm_on_or_off_green
 				if (s_color_green_pwm_period_count > 0) begin
 					if (s_color_green_pwm_period_count < s_color_green_pwm_duty_cycles)
 						eo_color_leds_g[greenidx] <= c_filament_on_value;
@@ -160,7 +160,7 @@ generate
 				
 				// Register the inferred DSP48E1 output P
 				s_color_green_pwm_duty_cycles_2 <= s_color_green_pwm_duty_cycles_1;
-			end
+			end : if_incr_pwm_on_or_off_green
 		end : p_operate_color_green_pwm
 	end : greenloop
 endgenerate
@@ -184,7 +184,7 @@ generate
 				s_color_blue_pwm_duty_cycles_1 <= 0;
 				s_color_blue_pwm_duty_cycles_2 <= 0;
 
-			end else begin
+			end else begin : if_incr_pwm_on_or_off_blue
 				if (s_color_blue_pwm_period_count > 0) begin
 					if (s_color_blue_pwm_period_count < s_color_blue_pwm_duty_cycles)
 						eo_color_leds_b[blueidx] <= c_filament_on_value;
@@ -209,7 +209,7 @@ generate
 				
 				// Register the inferred DSP48E1 output P
 				s_color_blue_pwm_duty_cycles_2 <= s_color_blue_pwm_duty_cycles_1;
-			end
+			end : if_incr_pwm_on_or_off_blue
 		end : p_operate_color_blue_pwm
 	end : blueloop
 endgenerate
@@ -233,7 +233,7 @@ generate
 				s_basic_lumin_pwm_duty_cycles_1 <= 0;
 				s_basic_lumin_pwm_duty_cycles_2 <= 0;
 
-			end else begin
+			end else begin : if_incr_pwm_on_or_off_basic
 				if (s_basic_lumin_pwm_period_count > 0) begin
 					if (s_basic_lumin_pwm_period_count < s_basic_lumin_pwm_duty_cycles)
 						eo_basic_leds_l[basicidx] <= c_filament_on_value;
@@ -258,7 +258,7 @@ generate
 				
 				// Register the output P
 				s_basic_lumin_pwm_duty_cycles_2 <= s_basic_lumin_pwm_duty_cycles_1;
-			end
+			end : if_incr_pwm_on_or_off_basic
 		end : p_operate_basic_lumin_pwm
 	end : basicloop
 endgenerate

@@ -82,17 +82,21 @@ begin: p_fsm_timer_run_display_update
 	if (i_rst_20mhz) s_i <= 0;
 	else
 		if (i_ce_2_5mhz)
-			if (s_lcd_upd_pr_state != s_lcd_upd_nx_state) begin
+			if (s_lcd_upd_pr_state != s_lcd_upd_nx_state) begin : if_chg_state
 				s_i <= 0;
-			end else if (s_i != c_i_max) begin
+			end : if_chg_state
+
+			else if (s_i != c_i_max) begin : if_not_iter_max
 				s_i <= s_i + 1;
-			end
+			end : if_not_iter_max
+
 end : p_fsm_timer_run_display_update
 
 /* FSM state transition for timing the PMOD CLS display udpate */
 always_ff @(posedge i_clk_20mhz)
 begin: p_fsm_state_run_display_update
-	if (i_rst_20mhz) s_lcd_upd_pr_state <= ST_LCD_PAUSE;
+	if (i_rst_20mhz)
+		s_lcd_upd_pr_state <= ST_LCD_PAUSE;
 	else 
 		if (i_ce_2_5mhz)
 			s_lcd_upd_pr_state <= s_lcd_upd_nx_state;
@@ -194,4 +198,3 @@ assign o_lcd_feed_is_idle = (s_lcd_upd_pr_state == ST_LCD_LINE2_DLY) ? 1'b1 : 1'
 
 endmodule : lcd_text_feed
 //------------------------------------------------------------------------------
-

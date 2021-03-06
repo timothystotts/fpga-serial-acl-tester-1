@@ -73,13 +73,15 @@ begin: p_clk_div_cnt
 		s_clk_div_cnt <= 0;
 		s_clk_div_ce <= 1'b1;
 	end else
-		if (s_clk_div_cnt == c_clk_max) begin
+		if (s_clk_div_cnt == c_clk_max) begin : if_counter_max_reset
 			s_clk_div_cnt <= 0;
 			s_clk_div_ce <= 1'b1;
-		end else begin
+		end : if_counter_max_reset
+
+		else begin : if_counter_lt_max_inc
 			s_clk_div_cnt <= s_clk_div_cnt + 1;
 			s_clk_div_ce <= 1'b0;
-		end
+		end : if_counter_lt_max_inc
 end : p_clk_div_cnt
 
 /* While the upstream clock is executing with reset held, this process will

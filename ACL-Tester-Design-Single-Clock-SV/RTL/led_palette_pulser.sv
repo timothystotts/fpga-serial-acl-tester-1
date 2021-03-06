@@ -154,7 +154,7 @@ begin: p_tester_led_pulse
 		s_ld2_led_pulse <= 6'b101010;
 		s_ld3_dir_pulse <= 1'b0;
 		s_ld3_led_pulse <= 6'b111111;
-	end else if (s_tester_led_ce) begin
+	end else if (s_tester_led_ce) begin : if_tester_clk_enable
 		// Rotate up and down a pulse value to be used for LD0
 		if (s_ld0_dir_pulse)
 			if (s_ld0_led_pulse == 6'b111111)
@@ -199,7 +199,7 @@ begin: p_tester_led_pulse
 				s_ld3_dir_pulse <= 1'b1;
 			else
 				s_ld3_led_pulse <= s_ld3_led_pulse - 1;
-	end
+	end : if_tester_clk_enable
 end : p_tester_led_pulse
 
 always_ff @(posedge i_clk)

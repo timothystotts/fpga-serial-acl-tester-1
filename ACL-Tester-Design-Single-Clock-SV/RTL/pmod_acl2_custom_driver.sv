@@ -317,7 +317,8 @@ begin: p_stream_fsm_state_aux
 		s_j_aux <= 0;
 		s_hex_3axis_temp_measurements_aux <= 0;
 		o_data_3axis_temp <= 0;
-	end else begin
+	end
+	else begin : if_fsm_state_and_storage
 		s_stream_pr_state <= s_stream_nx_state;
 
 		s_j_aux <= s_j_val;
@@ -330,7 +331,7 @@ begin: p_stream_fsm_state_aux
 			o_data_valid <= 1'b1;
 		end else
 			o_data_valid <= 1'b0;
-	end
+	end : if_fsm_state_and_storage
 end : p_stream_fsm_state_aux
 
 /* FSM Combinatorial for capturing streamed measurements from the PMOD ACL2

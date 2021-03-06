@@ -255,8 +255,14 @@ begin: p_timer_1
 	if (i_srst)	s_t <= 0;
 	else
 		if (i_spi_ce_4x)
-			if (s_drv_pr_state != s_drv_nx_state) s_t <= 0;
-			else if (s_t < c_tmax) s_t <= s_t + 1;
+			if (s_drv_pr_state != s_drv_nx_state) begin : if_chg_state
+				s_t <= 0;
+			end : if_chg_state
+
+			else if (s_t < c_tmax) begin : if_not_timer_max
+				s_t <= s_t + 1;
+			end : if_not_timer_max
+
 end : p_timer_1
 
 /* FSM state register plus auxiliary registers, for propagating the next state
@@ -276,7 +282,7 @@ begin: p_fsm_state_aux
 		s_byte_index_aux <= 0;
 		s_reg_status_aux <= 8'b00;
 	end else 
-		if (i_spi_ce_4x) begin
+		if (i_spi_ce_4x) begin : if_fsm_state_and_storage
 			s_drv_pr_state <= s_drv_nx_state;
 
 			s_tx_ax_cfg0_aux <= s_tx_ax_cfg0_val;
@@ -287,7 +293,7 @@ begin: p_fsm_state_aux
 			s_tx_ax_cfg5_aux <= s_tx_ax_cfg5_val;
 			s_byte_index_aux <= s_byte_index_val;
 			s_reg_status_aux <= s_reg_status_val;
-		end
+		end : if_fsm_state_and_storage
 end : p_fsm_state_aux
 
 /* FSM combinatorial logic providing multiple outputs, assigned in every state,
