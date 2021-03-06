@@ -92,10 +92,10 @@ begin: p_reg_out
 		if (i_rst_20mhz) begin
 			o_disp0 <= 7'b0000000;
 			o_disp1 <= 7'b0000000;
-		end else begin
+		end else begin : if_register_outputs
 			o_disp0 <= so_disp0;
 			o_disp1 <= so_disp1;
-		end
+		end : if_register_outputs
 	end
 end : p_reg_out
 
@@ -151,10 +151,10 @@ begin: p_mux_disp_out
 			s_curr_sel <= 1'b0;
 			s_curr_disp <= 7'b0000000;
 		end else begin
-			if (s_curr_sel) begin
+			if (s_curr_sel) begin : if_mux_digit_0
 				s_curr_sel <= 1'b0;
 				s_curr_disp <= i_disp0;
-			end else begin
+			end else begin  :if_mux_digit_1
 				s_curr_sel <= 1'b1;
 				s_curr_disp <= i_disp1;
 			end

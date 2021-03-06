@@ -75,11 +75,13 @@ begin: p_uartfeed_fsm_state_aux
 		s_uartfeed_pr_state <= ST_UARTFEED_IDLE;
 		s_uart_k_aux <= 0;
 		s_uart_line_aux <= c_line_of_spaces;
-	end else begin
+	end
+	else begin : if_fsm_state_and_storage
 		s_uartfeed_pr_state <= s_uartfeed_nx_state;
+
 		s_uart_k_aux <= s_uart_k_val;
 		s_uart_line_aux <= s_uart_line_val;
-	end
+	end : if_fsm_state_and_storage
 end : p_uartfeed_fsm_state_aux
 
 /* UART TX machine, combinatorial next state and auxiliary counting register, and

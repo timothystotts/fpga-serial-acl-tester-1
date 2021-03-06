@@ -132,10 +132,15 @@ always_ff @(posedge i_ext_spi_clk_x)
 begin: p_timer_1
 	if (i_srst) s_t <= 0;
 	else
-		if (i_spi_ce_4x) begin
-			if (s_cls_drv_pr_state != s_cls_drv_nx_state) s_t <= 0;
-			else if (s_t < c_tmax) s_t <= s_t + 1;
-		end
+		if (i_spi_ce_4x)
+			if (s_cls_drv_pr_state != s_cls_drv_nx_state) begin : if_chg_state
+				s_t <= 0;
+			end : if_chg_state
+
+			else if (s_t < c_tmax) begin : if_lt_timer_max
+				s_t <= s_t + 1;
+			end : if_lt_timer_max
+
 end : p_timer_1
 
 /* FSM state register plus auxiliary registers, for propagating the next state
@@ -153,7 +158,7 @@ begin: p_fsm_state_aux
 		s_cls_cmd_txlen_aux <= 0;
 		s_cls_dat_txlen_aux <= 0;
 	end else
-		if (i_spi_ce_4x) begin
+		if (i_spi_ce_4x) begin : if_fsm_state_and_storage
 			s_cls_drv_pr_state <= s_cls_drv_nx_state;
 
 			s_cls_cmd_len_aux <= s_cls_cmd_len_val;
@@ -162,7 +167,7 @@ begin: p_fsm_state_aux
 			s_cls_dat_tx_aux <= s_cls_dat_tx_val;
 			s_cls_cmd_txlen_aux <= s_cls_cmd_txlen_val;
 			s_cls_dat_txlen_aux <= s_cls_dat_txlen_val;
-		end
+		end : if_fsm_state_and_storage
 end : p_fsm_state_aux
 
 

@@ -68,16 +68,21 @@ logic [0:0] s_stretch_nx_state;
 logic [(par_T_stretch_bits - 1):0] s_t;
 
 //Part 3: Statements------------------------------------------------------------
-//Timer (strategy #1)
+/* Timer with strategy #1 implementation. The timer re-zeroes on a Stretch FSM
+   state transition; and it caps at the constant parameter c_tmax. */
 always_ff @(posedge i_clk)
 begin: p_fsm_timer
-	if (i_rst) s_t <= 0;
+	if (i_rst)
+		s_t <= 0;
 	else
-		// reset and increment the timer
-		if (s_stretch_pr_state != s_stretch_nx_state)
+		if (s_stretch_pr_state != s_stretch_nx_state) begin : if_chg_state
 			s_t <= 0;
-		else if (s_t != c_tmax)
+		end : if_chg_state
+
+		else if (s_t != c_tmax) begin : if_not_timer_max
 			s_t <= s_t + 1;
+		end : if_not_timer_max
+
 end : p_fsm_timer
 
 //FSM state register

@@ -160,12 +160,13 @@ begin: p_uarttxonly_fsm_state_aux
 
 		s_i_aux <= 0;
 		s_data_aux <= 8'h00;
-	end else if (s_ce_baud_1x) begin
+	end
+	else if (s_ce_baud_1x) begin : if_fsm_state_and_storage
 		s_uarttxonly_pr_state <= s_uarttxonly_nx_state;
 
 		s_i_aux <= s_i_val;
 		s_data_aux <= s_data_val;
-	end
+	end : if_fsm_state_and_storage
 end : p_uarttxonly_fsm_state_aux
 
 /* FSM combinatorial logic with output and auxiliary registers */

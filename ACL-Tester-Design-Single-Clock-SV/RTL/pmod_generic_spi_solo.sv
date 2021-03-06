@@ -361,7 +361,7 @@ begin: p_dat_fsm_state_aux
 		s_wait_cyc_aux <= 0;
 		s_go_stand_aux <= 1'b0;
 	end else
-		if (s_spi_ce_4x) begin
+		if (s_spi_ce_4x) begin : if_fsm_state_and_storage
 			/* no clock enable as this is a system-side interface */
 			s_dat_pr_state <= s_dat_nx_state;
 
@@ -370,7 +370,7 @@ begin: p_dat_fsm_state_aux
 			s_rx_len_aux <= s_rx_len_val;
 			s_wait_cyc_aux <= s_wait_cyc_val;
 			s_go_stand_aux <= s_go_stand_val;
-		end
+		end : if_fsm_state_and_storage
 end : p_dat_fsm_state_aux
 
 /* Pass the auxiliary signal that lasts for a single iteration of all four
@@ -448,7 +448,7 @@ begin: p_spi_fsm_state
 		s_spi_pr_state_delayed2 <= ST_STAND_IDLE;
 		s_spi_pr_state_delayed1 <= ST_STAND_IDLE;
 		s_spi_pr_state <= ST_STAND_IDLE;
-	end else begin
+	end else begin  : if_fsm_state_and_delayed
 		/* The delayed state value allows for registration of TX clock
 		   and double registration of RX value to capture after the
 		   registration of outputs and synchronization of inputs. */
@@ -461,7 +461,7 @@ begin: p_spi_fsm_state
 		if (s_spi_clk_ce2) /* clock enable on falling SPI edge for state change
 			                */
 			s_spi_pr_state <= s_spi_nx_state;
-	end
+	end : if_fsm_state_and_delayed
 end : p_spi_fsm_state
 
 /* SPI bus control state machine assignments for combinatorial assignment to
@@ -678,10 +678,10 @@ begin: p_spi_fsm_inputs
 				s_data_fifo_rx_we <= 1'b0;
 				s_data_fifo_rx_in <= 8'h00;
 			end
-		else begin
-			s_data_fifo_rx_we <= 1'b0;
-			s_data_fifo_rx_in <= s_data_fifo_rx_in;
-		end
+		// else begin
+		// 	s_data_fifo_rx_we <= 1'b0;
+		// 	s_data_fifo_rx_in <= s_data_fifo_rx_in;
+		// end
 end : p_spi_fsm_inputs
 
 endmodule : pmod_generic_spi_solo

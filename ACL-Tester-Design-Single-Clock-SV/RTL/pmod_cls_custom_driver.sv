@@ -106,7 +106,7 @@ logic sio_cls_cipo_sync_i;
    timing closure and glitch mitigation. */
 always_ff @(posedge i_clk_20mhz)
 begin: p_reg_spi_fsm_out
-	if (i_ce_2_5mhz) begin
+	if (i_ce_2_5mhz) begin : register_outputs
 		eo_sck_o <= sio_cls_sck_fsm_o;
 		eo_sck_t <= sio_cls_sck_fsm_t;
 
@@ -115,16 +115,16 @@ begin: p_reg_spi_fsm_out
 
 		eo_copi_o <= sio_cls_copi_fsm_o;
 		eo_copi_t <= sio_cls_copi_fsm_t;
-	end
+	end : register_outputs
 end : p_reg_spi_fsm_out
 
 /* Double-register the SPI input at 4x-SPI-clock cycle to prevent metastability. */
 always_ff @(posedge i_clk_20mhz)
 begin: p_sync_spi_in
-	if (i_ce_2_5mhz) begin
+	if (i_ce_2_5mhz) begin : sync_meta_stable
 		sio_cls_cipo_sync_i <= sio_cls_cipo_meta_i;
 		sio_cls_cipo_meta_i <= ei_cipo;
-	end
+	end : sync_meta_stable
 end : p_sync_spi_in
 
 /* Single mode driver to operate the PMOD CLS via a stand-alone SPI driver. */
