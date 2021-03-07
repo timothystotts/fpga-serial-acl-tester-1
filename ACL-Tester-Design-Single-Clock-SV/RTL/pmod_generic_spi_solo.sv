@@ -109,18 +109,21 @@ t_dat_state s_dat_pr_state = ST_PULSE_WAIT;
 t_dat_state s_dat_nx_state = ST_PULSE_WAIT;
 
 /* Timer signals and constants */
-`define c_tim_value_bits 13
-localparam [(`c_tim_value_bits - 1):0] c_t_stand_wait_ss = 4;
-localparam [(`c_tim_value_bits - 1):0] c_t_stand_max_tx = 4144;
-localparam [(`c_tim_value_bits - 1):0] c_t_stand_max_wait = 31;
-localparam [(`c_tim_value_bits - 1):0] c_t_stand_max_rx = 4136;
-localparam [(`c_tim_value_bits - 1):0] c_tmax = c_t_stand_max_tx;
-localparam [(`c_tim_value_bits - 1):0] c_t_inc = 1;
+localparam integer c_timer_stand_value_maximum = ((512 + 6) * 8);
+localparam integer c_timer_stand_value_bits = $clog2(c_timer_stand_value_maximum);
+typedef logic [(c_timer_stand_value_bits - 1):0] t_timer_stand_value;
 
-logic [(`c_tim_value_bits - 1):0] s_t;
-logic [(`c_tim_value_bits - 1):0] s_t_delayed1;
-logic [(`c_tim_value_bits - 1):0] s_t_delayed2;
-logic [(`c_tim_value_bits - 1):0] s_t_delayed3;
+localparam t_timer_stand_value c_t_stand_wait_ss = 4;
+localparam t_timer_stand_value c_t_stand_max_tx = (512 + 6) * 8;
+localparam t_timer_stand_value c_t_stand_max_wait = 31;
+localparam t_timer_stand_value c_t_stand_max_rx = (512 + 5) * 8;
+localparam t_timer_stand_value c_tmax = c_t_stand_max_tx;
+localparam t_timer_stand_value c_t_inc = 1;
+
+t_timer_stand_value s_t;
+t_timer_stand_value s_t_delayed1;
+t_timer_stand_value s_t_delayed2;
+t_timer_stand_value s_t_delayed3;
 
 /* SPI 4x and 1x clocking signals and enables */
 logic s_spi_ce_4x;

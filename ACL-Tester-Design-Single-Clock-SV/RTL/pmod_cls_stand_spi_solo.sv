@@ -32,6 +32,7 @@
 //Recursive Moore Machine
 //Part 1: Module header:--------------------------------------------------------
 module pmod_cls_stand_spi_solo
+	import pmod_stand_spi_solo_pkg::*;
 	#(parameter
 		/* Disable or enable fast FSM delays for simulation instead of impelementation. */
 		integer parm_fast_simulation = 0,
@@ -71,31 +72,33 @@ module pmod_cls_stand_spi_solo
 		input logic i_cmd_wr_clear_display,
 		input logic i_cmd_wr_text_line1,
 		input logic i_cmd_wr_text_line2,
-		input logic [(16 * 8 - 1):0] i_dat_ascii_line1,
-		input logic [(16 * 8 - 1):0] i_dat_ascii_line2
+		input t_pmod_cls_ascii_line_16 i_dat_ascii_line1,
+		input t_pmod_cls_ascii_line_16 i_dat_ascii_line2
 		);
 
 // Part 2: Declarations---------------------------------------------------------
 /* Timer signals and constants. */
-`define c_cls_drv_time_value_bits 24
+localparam integer c_cls_drv_time_value_bits = 24;
+typedef logic [(c_cls_drv_time_value_bits - 1):0] t_cls_drv_time_value;
+
 /* Boot time should be in hundreds of milliseconds as the PMOD CLS
    datasheet does not indicate boot-up time of the PMOD CLS microcontroller. */
 /* This constant can be temporarily changed iby parameter to shorten the
    boot-up time of the project's simulation. */
-localparam [(`c_cls_drv_time_value_bits - 1):0] c_t_pmodcls_boot =
+t_cls_drv_time_value c_t_pmodcls_boot =
 	parm_fast_simulation ? (FCLK_ce / 1000 * 2) : (FCLK_ce / 1000 * 800);
-localparam [(`c_cls_drv_time_value_bits - 1):0] c_tmax = c_t_pmodcls_boot - 1;
+t_cls_drv_time_value c_tmax = c_t_pmodcls_boot - 1;
 
-logic [(`c_cls_drv_time_value_bits - 1):0] s_t;
+t_cls_drv_time_value s_t;
 
 /* Driver FSM state declarations */
-`define c_cls_drv_state_bits 4
+localparam integer c_cls_drv_state_bits = 4;
 
 /* Xilinx attributes for auto encoding of the FSM and safe state is
    Default State. */
 (* fsm_encoding = "auto" *)
 (* fsm_safe_state = "default_state" *)
-typedef enum logic [(`c_cls_drv_state_bits - 1):0] {
+typedef enum logic [(c_cls_drv_state_bits - 1):0] {
 	ST_CLS_BOOT0, ST_CLS_IDLE, ST_CLS_LOAD_CLEAR, ST_CLS_LOAD_LINE1,
 	ST_CLS_LOAD_LINE2, ST_CLS_CMD_RUN, ST_CLS_CMD_WAIT, ST_CLS_DAT_RUN,
 	ST_CLS_DAT_WAIT	
@@ -104,26 +107,19 @@ t_cls_drv_state s_cls_drv_pr_state = ST_CLS_BOOT0;
 t_cls_drv_state s_cls_drv_nx_state = ST_CLS_BOOT0;
 
 /* Auxiliary state machine registers for recursive state machine operation. */
-logic [3:0] s_cls_cmd_len_aux;
-logic [3:0] s_cls_cmd_len_val;
-logic [4:0] s_cls_dat_len_aux;
-logic [4:0] s_cls_dat_len_val;
-logic [55:0] s_cls_cmd_tx_aux;
-logic [55:0] s_cls_cmd_tx_val;
-logic [4:0] s_cls_cmd_txlen_aux;
-logic [4:0] s_cls_cmd_txlen_val;
-logic [127:0] s_cls_dat_tx_aux;
-logic [127:0] s_cls_dat_tx_val;
-logic [5:0] s_cls_dat_txlen_aux;
-logic [5:0] s_cls_dat_txlen_val;
+t_pmod_cls_cmd_len s_cls_cmd_len_aux;
+t_pmod_cls_cmd_len s_cls_cmd_len_val;
+t_pmod_cls_dat_len s_cls_dat_len_aux;
+t_pmod_cls_dat_len s_cls_dat_len_val;
+t_pmod_cls_ansi_line_7 s_cls_cmd_tx_aux;
+t_pmod_cls_ansi_line_7 s_cls_cmd_tx_val;
+t_pmod_cls_cmd_len s_cls_cmd_txlen_aux;
+t_pmod_cls_cmd_len s_cls_cmd_txlen_val;
+t_pmod_cls_ascii_line_16 s_cls_dat_tx_aux;
+t_pmod_cls_ascii_line_16 s_cls_dat_tx_val;
+t_pmod_cls_dat_len s_cls_dat_txlen_aux;
+t_pmod_cls_dat_len s_cls_dat_txlen_val;
 
-/* ASCII constant characters for ESC codes. */
-localparam [7:0] ASCII_CLS_ESC = 8'h1b;
-localparam [7:0] ASCII_CLS_BRACKET = 8'h5b;
-localparam [7:0] ASCII_CLS_CHAR_ZERO = 8'h30;
-localparam [7:0] ASCII_CLS_CHAR_SEMICOLON = 8'h3b;
-localparam [7:0] ASCII_CLS_DISP_CLR_CMD = 8'h6a;
-localparam [7:0] ASCII_CLS_CURSOR_POS_CMD = 8'h48;
 
 //Part 3: Statements------------------------------------------------------------
 
@@ -151,10 +147,10 @@ begin: p_fsm_state_aux
 	if (i_srst) begin
 		s_cls_drv_pr_state <= ST_CLS_BOOT0;
 
-		s_cls_cmd_len_aux <= 4'd0;
-		s_cls_dat_len_aux <= 5'd0;
-		s_cls_cmd_tx_aux <= 56'd0;
-		s_cls_dat_tx_aux <= 128'd0;
+		s_cls_cmd_len_aux <= '0;
+		s_cls_dat_len_aux <= '0;
+		s_cls_cmd_tx_aux <= '0;
+		s_cls_dat_tx_aux <= '0;
 		s_cls_cmd_txlen_aux <= 0;
 		s_cls_dat_txlen_aux <= 0;
 	end else
@@ -198,7 +194,7 @@ begin: p_fsm_comb
 				ASCII_CLS_CHAR_ZERO,
 				ASCII_CLS_DISP_CLR_CMD};
 			s_cls_dat_len_val = 0;
-			s_cls_dat_tx_val = 128'd0;
+			s_cls_dat_tx_val = '0;
 			s_cls_cmd_txlen_val = 4;
 			s_cls_dat_txlen_val = 0;
 
