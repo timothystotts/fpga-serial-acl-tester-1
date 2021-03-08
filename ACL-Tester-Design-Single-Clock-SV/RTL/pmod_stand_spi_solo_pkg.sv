@@ -31,6 +31,8 @@ package pmod_stand_spi_solo_pkg;
 
 	typedef logic [3:0] t_pmod_cls_cmd_len;
 	typedef logic [4:0] t_pmod_cls_dat_len;
+	typedef logic [4:0] t_pmod_cls_cmd_txlen;
+	typedef logic [5:0] t_pmod_cls_dat_txlen;
 	typedef logic [(7 * 8 - 1):0] t_pmod_cls_ansi_line_7;
 	typedef logic [(16 * 8 - 1):0] t_pmod_cls_ascii_line_16;
 

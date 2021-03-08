@@ -85,9 +85,9 @@ typedef logic [(c_cls_drv_time_value_bits - 1):0] t_cls_drv_time_value;
    datasheet does not indicate boot-up time of the PMOD CLS microcontroller. */
 /* This constant can be temporarily changed iby parameter to shorten the
    boot-up time of the project's simulation. */
-t_cls_drv_time_value c_t_pmodcls_boot =
+localparam t_cls_drv_time_value c_t_pmodcls_boot =
 	parm_fast_simulation ? (FCLK_ce / 1000 * 2) : (FCLK_ce / 1000 * 800);
-t_cls_drv_time_value c_tmax = c_t_pmodcls_boot - 1;
+localparam t_cls_drv_time_value c_tmax = c_t_pmodcls_boot - 1;
 
 t_cls_drv_time_value s_t;
 
@@ -113,12 +113,12 @@ t_pmod_cls_dat_len s_cls_dat_len_aux;
 t_pmod_cls_dat_len s_cls_dat_len_val;
 t_pmod_cls_ansi_line_7 s_cls_cmd_tx_aux;
 t_pmod_cls_ansi_line_7 s_cls_cmd_tx_val;
-t_pmod_cls_cmd_len s_cls_cmd_txlen_aux;
-t_pmod_cls_cmd_len s_cls_cmd_txlen_val;
+t_pmod_cls_cmd_txlen s_cls_cmd_txlen_aux;
+t_pmod_cls_cmd_txlen s_cls_cmd_txlen_val;
 t_pmod_cls_ascii_line_16 s_cls_dat_tx_aux;
 t_pmod_cls_ascii_line_16 s_cls_dat_tx_val;
-t_pmod_cls_dat_len s_cls_dat_txlen_aux;
-t_pmod_cls_dat_len s_cls_dat_txlen_val;
+t_pmod_cls_dat_txlen s_cls_dat_txlen_aux;
+t_pmod_cls_dat_txlen s_cls_dat_txlen_val;
 
 
 //Part 3: Statements------------------------------------------------------------

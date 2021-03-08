@@ -668,7 +668,7 @@ begin: p_spi_fsm_inputs
 		s_data_fifo_rx_in <= 8'h00;
 	end else
 		if (s_spi_clk_ce3)
-			if (s_spi_pr_state_delayed3 == ST_STAND_RX) begin
+			if (s_spi_pr_state_delayed3 == ST_STAND_RX) begin : if_shift_in_rx_data_to_fifo
 				/* input current byte to enqueue, one bit at a time, shifting */
 				s_data_fifo_rx_in <= (s_t_delayed3 < (8 * s_rx_len_aux)) ?
 					{s_data_fifo_rx_in[6-:7], ei_cipo_i} : 8'h00;
@@ -677,14 +677,15 @@ begin: p_spi_fsm_inputs
 				/* only if RX FIFO is not full, enqueue another byte */
 				s_data_fifo_rx_we = ((s_t_delayed3 % 8 == 7) &&
 					(s_data_fifo_rx_full == 1'b0)) ? 1'b1 : 1'b0;
-			end else begin
+			end : if_shift_in_rx_data_to_fifo
+			else begin : if_rx_hold_we_low_without_data
 				s_data_fifo_rx_we <= 1'b0;
 				s_data_fifo_rx_in <= 8'h00;
-			end
-		// else begin
-		// 	s_data_fifo_rx_we <= 1'b0;
-		// 	s_data_fifo_rx_in <= s_data_fifo_rx_in;
-		// end
+			end : if_rx_hold_we_low_without_data
+		else begin : if_rx_hold_we_low_with_data
+			s_data_fifo_rx_we <= 1'b0;
+			s_data_fifo_rx_in <= s_data_fifo_rx_in;
+		end : if_rx_hold_we_low_with_data
 end : p_spi_fsm_inputs
 
 endmodule : pmod_generic_spi_solo

@@ -75,6 +75,12 @@ begin: p_clk_div_cnt
 				s_clk_div_cnt <= s_clk_div_cnt + 1;
 				s_clk_div_ce <= 1'b0;
 			end : if_counter_lt_max_inc
+
+		else begin : if_hold_ce_low
+			s_clk_div_cnt <= s_clk_div_cnt;
+			s_clk_div_ce <= 1'b0;
+		end : if_hold_ce_low
+
 end : p_clk_div_cnt
 
 assign o_ce_div = s_clk_div_ce;
