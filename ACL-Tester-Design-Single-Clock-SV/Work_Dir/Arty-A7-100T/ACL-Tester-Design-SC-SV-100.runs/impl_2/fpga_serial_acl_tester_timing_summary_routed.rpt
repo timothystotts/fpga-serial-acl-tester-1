@@ -1,7 +1,7 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
-| Date         : Thu Mar  4 16:34:44 2021
+| Date         : Mon Mar  8 17:11:51 2021
 | Host         : l4study running 64-bit Ubuntu 18.04.5 LTS
 | Command      : report_timing_summary -max_paths 10 -file fpga_serial_acl_tester_timing_summary_routed.rpt -pb fpga_serial_acl_tester_timing_summary_routed.pb -rpx fpga_serial_acl_tester_timing_summary_routed.rpx -warn_on_violation
 | Design       : fpga_serial_acl_tester

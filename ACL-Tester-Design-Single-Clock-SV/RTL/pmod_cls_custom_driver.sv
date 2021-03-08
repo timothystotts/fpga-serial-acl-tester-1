@@ -32,6 +32,7 @@
 //------------------------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module pmod_cls_custom_driver
+	import pmod_stand_spi_solo_pkg::*;
 	#(parameter
 		/* Disable or enable fast FSM delays for simulation instead of impelementation. */
 		integer parm_fast_simulation = 0,
@@ -40,13 +41,7 @@ module pmod_cls_custom_driver
 		/* Clock enable frequency in Hz of \ref i_ext_spi_clk_4x with i_spi_ce_4x */
 		integer FCLK_ce = 2500000,
 		/* Ratio of i_ext_spi_clk_x to SPI sck bus output. */
-		integer parm_ext_spi_clk_ratio = 32,
-		/* LOG2 of the TX FIFO max count */
-		integer parm_tx_len_bits = 11,
-		/* LOG2 of max Wait Cycles count between end of TX and start of RX */
-		integer parm_wait_cyc_bits = 2,
-		/* LOG2 of the RX FIFO max count */
-		integer parm_rx_len_bits = 11
+		integer parm_ext_spi_clk_ratio = 32
 		)
 	(
 		/* Clock and reset, with clock at 32 times the frequency of the SPI bus,
@@ -67,21 +62,21 @@ module pmod_cls_custom_driver
 		input logic i_cmd_wr_clear_display,
 		input logic i_cmd_wr_text_line1,
 		input logic i_cmd_wr_text_line2,
-		input logic [127:0] i_dat_ascii_line1,
-		input logic [127:0] i_dat_ascii_line2
+		input t_pmod_cls_ascii_line_16 i_dat_ascii_line1,
+		input t_pmod_cls_ascii_line_16 i_dat_ascii_line2
 		);
 
 //Part 2: Declarations----------------------------------------------------------
 /* CLS SPI driver wiring to the Generic SPI driver. */
 logic s_cls_go_stand;
 logic s_cls_spi_idle;
-logic [(parm_tx_len_bits - 1):0] s_cls_tx_len;
-logic [(parm_wait_cyc_bits - 1):0] s_cls_wait_cyc;
-logic [(parm_rx_len_bits - 1):0] s_cls_rx_len;
-logic [7:0] s_cls_tx_data;
+t_pmod_cls_tx_len s_cls_tx_len;
+t_pmod_cls_wait_cyc s_cls_wait_cyc;
+t_pmod_cls_rx_len s_cls_rx_len;
+t_pmod_cls_data_byte s_cls_tx_data;
 logic s_cls_tx_enqueue;
 logic s_cls_tx_ready;
-logic [7:0] s_cls_rx_data;
+t_pmod_cls_data_byte s_cls_rx_data;
 logic s_cls_rx_dequeue;
 logic s_cls_rx_valid;
 logic s_cls_rx_avail;
@@ -131,10 +126,7 @@ end : p_sync_spi_in
 pmod_cls_stand_spi_solo #(
 	.parm_fast_simulation(parm_fast_simulation),
 	.FCLK (FCLK),
-	.FCLK_ce (FCLK_ce),
-	.parm_tx_len_bits (parm_tx_len_bits),
-	.parm_wait_cyc_bits(parm_wait_cyc_bits),
-	.parm_rx_len_bits (parm_rx_len_bits)
+	.FCLK_ce (FCLK_ce)
 	) u_pmod_cls_stand_spi_solo (
 	.i_ext_spi_clk_x(i_clk_20mhz),
 	.i_srst(i_rst_20mhz),
@@ -161,9 +153,9 @@ pmod_cls_stand_spi_solo #(
 /* Stand-alone SPI bus driver for a single bus-peripheral. */
 pmod_generic_spi_solo #(
 	.parm_ext_spi_clk_ratio (parm_ext_spi_clk_ratio),
-	.parm_tx_len_bits  (parm_tx_len_bits),
-	.parm_wait_cyc_bits (parm_wait_cyc_bits),
-	.parm_rx_len_bits  (parm_rx_len_bits)
+	.parm_tx_len_bits  (c_pmod_cls_tx_len_bits),
+	.parm_wait_cyc_bits (c_pmod_cls_wait_cyc_bits),
+	.parm_rx_len_bits  (c_pmod_cls_rx_len_bits)
 	) u_pmod_generic_spi_solo (
 	.eo_sck_o(sio_cls_sck_fsm_o),
 	.eo_sck_t(sio_cls_sck_fsm_t),

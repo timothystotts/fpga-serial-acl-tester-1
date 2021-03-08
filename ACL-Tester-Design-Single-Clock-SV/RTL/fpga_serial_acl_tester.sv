@@ -35,6 +35,7 @@
 //Multiple Moore Machines
 //Part 1: Module header:--------------------------------------------------------
 module fpga_serial_acl_tester
+	import pmod_stand_spi_solo_pkg::*;
 	#(parameter
 		integer parm_fast_simulation = 0)
 	(
@@ -105,11 +106,6 @@ logic s_clk_7_37mhz;
 logic s_rst_7_37mhz;
 logic s_ce_2_5mhz;
 
-/* Definitions of the Standard SPI driver to pass to the ACL2 and CLS drivers */
-`define c_stand_spi_tx_fifo_count_bits 5
-`define c_stand_spi_rx_fifo_count_bits 5
-`define c_stand_spi_wait_count_bits 2
-
 /* Tri-state connectivity with the PMOD ACL2. */
 logic so_pmod_acl2_sck_o;
 logic so_pmod_acl2_sck_t;
@@ -119,12 +115,12 @@ logic so_pmod_acl2_copi_o;
 logic so_pmod_acl2_copi_t;
 
 /* Data and indications to be displayed on the LEDs and CLS. */
-logic [7:0] s_acl2_reg_status;
+t_pmod_acl2_reg_1 s_acl2_reg_status;
 logic s_acl2_reg_status_activity_stretched;
 logic s_acl2_reg_status_inactivity_stretched;
-logic [63:0] s_hex_3axis_temp_measurements_final;
+t_pmod_acl2_reg_8 s_hex_3axis_temp_measurements_final;
 logic s_hex_3axis_temp_measurements_valid;
-logic [63:0] s_hex_3axis_temp_measurements_display;
+t_pmod_acl2_reg_8 s_hex_3axis_temp_measurements_display;
 logic s_reading_inactive;
 
 /* Command to Operating Mode variables for the Tester FSM. */
@@ -154,15 +150,15 @@ logic s_cls_command_ready;
 logic s_cls_wr_clear_display;
 logic s_cls_wr_text_line1;
 logic s_cls_wr_text_line2;
-logic [(16*8-1):0] s_cls_txt_ascii_line1;
-logic [(16*8-1):0] s_cls_txt_ascii_line2;
+t_pmod_cls_ascii_line_16 s_cls_txt_ascii_line1;
+t_pmod_cls_ascii_line_16 s_cls_txt_ascii_line2;
 logic s_cls_feed_is_idle;
 
 /* Signals for text and data ASCII lines */
-logic [(16*8-1):0] s_adxl_dat_ascii_line1;
-logic [(16*8-1):0] s_adxl_dat_ascii_line2;
-logic [(16*8-1):0] s_adxl_txt_ascii_line1;
-logic [(16*8-1):0] s_adxl_txt_ascii_line2;
+t_pmod_cls_ascii_line_16 s_adxl_dat_ascii_line1;
+t_pmod_cls_ascii_line_16 s_adxl_dat_ascii_line2;
+t_pmod_cls_ascii_line_16 s_adxl_txt_ascii_line1;
+t_pmod_cls_ascii_line_16 s_adxl_txt_ascii_line2;
 
 /* Connections for inferring tri-state buffer for CLS SPI bus outputs. */
 logic so_pmod_cls_sck_o;
@@ -196,7 +192,7 @@ logic [(4*8-1):0] s_color_led_blue_value;
 logic [(4*8-1):0] s_basic_led_lumin_value;
 
 /* UART TX signals to connect \ref uart_tx_only and \ref uart_tx_feed */
-logic [(34*8-1):0] s_uart_dat_ascii_line;
+t_pmod_acl2_txt_34 s_uart_dat_ascii_line;
 logic s_uart_tx_go;
 logic [7:0] s_uart_txdata;
 logic s_uart_txvalid;
@@ -384,8 +380,7 @@ assign eo_pmod_acl2_copi = so_pmod_acl2_copi_t ? 1'bz : so_pmod_acl2_copi_o;
 pmod_acl2_custom_driver #(
 	.parm_fast_simulation(parm_fast_simulation),
 	.FCLK(c_FCLK),
-	.parm_ext_spi_clk_ratio(4),
-	.parm_wait_cyc_bits(`c_stand_spi_wait_count_bits)
+	.parm_ext_spi_clk_ratio(4)
 	) u_pmod_acl2_custom_driver (
 	.i_clk_20mhz(s_clk_20mhz),
 	.i_rst_20mhz(s_rst_20mhz),
@@ -475,9 +470,8 @@ assign eo_pmod_cls_dq0 = so_pmod_cls_copi_t ? 1'bz : so_pmod_cls_copi_o;
 pmod_cls_custom_driver #(
 	.parm_fast_simulation(parm_fast_simulation),
 	.FCLK(c_FCLK),
-  .FCLK_ce(2500000),
-	.parm_ext_spi_clk_ratio(32),
-	.parm_wait_cyc_bits(`c_stand_spi_wait_count_bits)
+	.FCLK_ce(2500000),
+	.parm_ext_spi_clk_ratio(32)
 	) u_pmod_cls_custom_driver (
 	.i_clk_20mhz(s_clk_20mhz),
 	.i_rst_20mhz(s_rst_20mhz),

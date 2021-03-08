@@ -39,13 +39,7 @@ module pmod_cls_stand_spi_solo
 		/* Actual frequency in Hz of \ref i_ext_spi_clk_4x */
 		integer FCLK = 20000000,
 		/* Actual frequency in Hz of \ref i_ext_spi_clk_4x */
-		integer FCLK_ce = 2500000,
-		/* LOG2 of the TX FIFO max count */
-		integer parm_tx_len_bits = 11,
-		/* LOG2 of max Wait Cycles count between end of TX and start of RX */
-		integer parm_wait_cyc_bits = 2,
-		/* LOG2 of the RX FIFO max count */
-		integer parm_rx_len_bits = 11
+		integer FCLK_ce = 2500000
 		)
 	(
 		/* system clock and synchronous reset */
@@ -55,15 +49,15 @@ module pmod_cls_stand_spi_solo
 		/* system interface to the \ref pmod_generic_spi_solo module. */
 		output logic o_go_stand,
 		input logic i_spi_idle,
-		output logic [(parm_tx_len_bits - 1):0] o_tx_len,
-		output logic [(parm_wait_cyc_bits - 1):0] o_wait_cyc,
-		output logic [(parm_rx_len_bits - 1):0] o_rx_len,
+		output t_pmod_cls_tx_len o_tx_len,
+		output t_pmod_cls_wait_cyc o_wait_cyc,
+		output t_pmod_cls_rx_len o_rx_len,
 		/* TX FIFO interface to the \ref pmod_generic_spi_solo module. */
-		output logic [7:0] o_tx_data,
+		output t_pmod_cls_data_byte o_tx_data,
 		output logic o_tx_enqueue,
 		input logic i_tx_ready,
 		/* RX FIFO interface to the \ref pmod_generic_spi_solo module. */
-		input logic [7:0] i_rx_data,
+		input t_pmod_cls_data_byte i_rx_data,
 		output logic o_rx_dequeue,
 		input logic i_rx_valid,
 		input logic i_rx_avail,
@@ -113,12 +107,12 @@ t_pmod_cls_dat_len s_cls_dat_len_aux;
 t_pmod_cls_dat_len s_cls_dat_len_val;
 t_pmod_cls_ansi_line_7 s_cls_cmd_tx_aux;
 t_pmod_cls_ansi_line_7 s_cls_cmd_tx_val;
-t_pmod_cls_cmd_txlen s_cls_cmd_txlen_aux;
-t_pmod_cls_cmd_txlen s_cls_cmd_txlen_val;
+t_pmod_cls_tx_len s_cls_cmd_txlen_aux;
+t_pmod_cls_tx_len s_cls_cmd_txlen_val;
 t_pmod_cls_ascii_line_16 s_cls_dat_tx_aux;
 t_pmod_cls_ascii_line_16 s_cls_dat_tx_val;
-t_pmod_cls_dat_txlen s_cls_dat_txlen_aux;
-t_pmod_cls_dat_txlen s_cls_dat_txlen_val;
+t_pmod_cls_tx_len s_cls_dat_txlen_aux;
+t_pmod_cls_tx_len s_cls_dat_txlen_val;
 
 
 //Part 3: Statements------------------------------------------------------------

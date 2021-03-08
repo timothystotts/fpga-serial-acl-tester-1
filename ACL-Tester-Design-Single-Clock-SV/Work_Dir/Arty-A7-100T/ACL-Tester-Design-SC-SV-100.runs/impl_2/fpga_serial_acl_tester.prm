@@ -10,5 +10,5 @@ Checksum           0xEC25968E
 Fill Value         0xFF
 
 Addr1         Addr2         Date                    File(s)                                                                                                                                                                                                   Checksum
-0x00000000    0x00138D53    Mar  4 16:39:30 2021    /home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-SV/Work_Dir/Arty-A7-100T/ACL-Tester-Design-SC-SV-100.runs/impl_2/fpga_serial_acl_tester.bit    0x009F5D3A
+0x00000000    0x00138D53    Mar  8 17:12:07 2021    /home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-SV/Work_Dir/Arty-A7-100T/ACL-Tester-Design-SC-SV-100.runs/impl_2/fpga_serial_acl_tester.bit    0x009F5D3A
 File Checksum Total                                                                                                                                                                                                                                           0x009F5D3A

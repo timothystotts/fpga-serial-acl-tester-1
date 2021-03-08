@@ -33,19 +33,14 @@
 //------------------------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module pmod_acl2_custom_driver
+	import pmod_stand_spi_solo_pkg::*;
 	#(parameter
 		/* Disable or enable fast FSM delays for simulation instead of impelementation. */
 		integer parm_fast_simulation = 0,
 		/* Actual frequency in Hz of \ref i_clk_20mhz */
 		integer FCLK = 20000000,
 		/* Ratio of i_ext_spi_clk_x to SPI sck bus output. */
-		integer parm_ext_spi_clk_ratio = 4,
-		/* LOG2 of the TX FIFO max count */
-		integer parm_tx_len_bits = 11,
-		/* LOG2 of max Wait Cycles count between end of TX and start of RX */
-		integer parm_wait_cyc_bits = 2,
-		/* LOG2 of the RX FIFO max count */
-		integer parm_rx_len_bits = 11
+		integer parm_ext_spi_clk_ratio = 4
 		)
 	(
 		/* Clock and reset, with clock at 4 times the frequency of the SPI bus */
@@ -69,11 +64,11 @@ module pmod_acl2_custom_driver
 		input logic i_cmd_start_measur_mode,
 		input logic i_cmd_soft_reset_acl2,
 		/* Output of the measurements in a single vector, plus a valid pulse */
-		output logic [63:0] o_data_3axis_temp, /* Eight bytes of measurement data. */
+		output t_pmod_acl2_reg_8 o_data_3axis_temp, /* Eight bytes of measurement data. */
 		output logic o_data_valid,
 		/* Output of the most recently read single byte status register,
 		   without a valid pualse. */
-		output logic [7:0] o_reg_status, /* Status register is one byte. */
+		output t_pmod_acl2_reg_1 o_reg_status, /* Status register is one byte. */
 		/* Debounced buttons input */
 		input logic [1:0] i_btn_deb,
 		/* Active and Inactive preset enumeration value */
@@ -92,23 +87,23 @@ logic s_acl2_clk_spi_4x;
 logic s_acl2_rst_spi_4x;
 logic s_acl2_go_stand;
 logic s_acl2_spi_idle;
-logic [(parm_tx_len_bits - 1):0] s_acl2_tx_len;
-logic [(parm_wait_cyc_bits - 1):0] s_acl2_wait_cyc;
-logic [(parm_rx_len_bits - 1):0] s_acl2_rx_len;
-logic [7:0] s_acl2_tx_data;
+t_pmod_acl2_tx_len s_acl2_tx_len;
+t_pmod_acl2_wait_cyc s_acl2_wait_cyc;
+t_pmod_acl2_rx_len s_acl2_rx_len;
+t_pmod_acl2_data_byte s_acl2_tx_data;
 logic s_acl2_tx_enqueue;
 logic s_acl2_tx_ready;
-logic [7:0] s_acl2_rx_data;
+t_pmod_acl2_data_byte s_acl2_rx_data;
 logic s_acl2_rx_dequeue;
 logic s_acl2_rx_valid;
 logic s_acl2_rx_avail;
 
 /* ACL2 SPI driver variables for streaming the 8 bytes of measurement values. */
-logic [7:0] s_acl2_rd_data_stream;
+t_pmod_acl2_data_byte s_acl2_rd_data_stream;
 logic s_acl2_rd_data_byte_valid;
 logic s_acl2_rd_data_group_valid;
-logic [(8*8-1):0] s_hex_3axis_temp_measurements_val;
-logic [(8*8-1):0] s_hex_3axis_temp_measurements_aux;
+t_pmod_acl2_reg_8 s_hex_3axis_temp_measurements_val;
+t_pmod_acl2_reg_8 s_hex_3axis_temp_measurements_aux;
 
 /* ACL2 SPI outputs, FSM signals to register the SPI bus outputs for
    optimal timing closure and glitch minimization. */
@@ -150,8 +145,8 @@ logic s_btn0_one_shot;
 logic s_btn1_one_shot;
 
 /* Presets binary encoding for the seven registers on the ADXL362 chip */
-logic [7*8-1:0] s_tx_ax_cfg0_lm;
-logic [7:0] s_tx_ax_cfg0_discard;
+t_pmod_acl2_reg_7 s_tx_ax_cfg0_lm;
+t_pmod_acl2_reg_1 s_tx_ax_cfg0_discard;
 
 //Part 3: Statements------------------------------------------------------------
 /* One shot generation of Button 0 */
@@ -217,10 +212,7 @@ end : p_sync_spi_in
 /* Multiple mode driver to operate the PMOD ACL2 via a stand-alone SPI driver. */
 pmod_acl2_stand_spi_solo #(
 	.parm_fast_simulation (parm_fast_simulation),
-	.FCLK (FCLK),
-	.parm_tx_len_bits  (parm_tx_len_bits),
-	.parm_wait_cyc_bits (parm_wait_cyc_bits),
-	.parm_rx_len_bits  (parm_rx_len_bits)
+	.FCLK (FCLK)
 	) u_pmod_acl2_stand_spi_solo (
 	.i_ext_spi_clk_x(i_clk_20mhz),
 	.i_srst(i_rst_20mhz),
@@ -261,9 +253,9 @@ pmod_acl2_stand_spi_solo #(
 /* Stand-alone SPI bus driver for a single bus-peripheral. */
 pmod_generic_spi_solo #(
 	.parm_ext_spi_clk_ratio (parm_ext_spi_clk_ratio),
-	.parm_tx_len_bits  (parm_tx_len_bits),
-	.parm_wait_cyc_bits (parm_wait_cyc_bits),
-	.parm_rx_len_bits  (parm_rx_len_bits)
+	.parm_tx_len_bits  (c_pmod_acl2_tx_len_bits),
+	.parm_wait_cyc_bits (c_pmod_acl2_wait_cyc_bits),
+	.parm_rx_len_bits  (c_pmod_acl2_rx_len_bits)
 	) u_pmod_generic_spi_solo (
 	.eo_sck_o(sio_acl2_sck_fsm_o),
 	.eo_sck_t(sio_acl2_sck_fsm_t),

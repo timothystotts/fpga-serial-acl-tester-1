@@ -32,17 +32,12 @@
 //Recursive Moore Machine
 //Part 1: Module header:--------------------------------------------------------
 module pmod_acl2_stand_spi_solo
+	import pmod_stand_spi_solo_pkg::*;
 	#(parameter
 		/* Disable or enable fast FSM delays for simulation instead of impelementation. */
 		integer parm_fast_simulation = 0,
 		/* Actual frequency in Hz of \ref i_ext_spi_clk_4x */
-		integer FCLK = 20000000,
-		/* LOG2 of the TX FIFO max count */
-		integer parm_tx_len_bits = 11,
-		/* LOG2 of max Wait Cycles count between end of TX and start of RX */
-		integer parm_wait_cyc_bits = 2,
-		/* LOG2 of the RX FIFO max count */
-		integer parm_rx_len_bits = 11
+		integer FCLK = 20000000
 		)
 	(
 		/* system clock and synchronous reset */
@@ -55,15 +50,15 @@ module pmod_acl2_stand_spi_solo
 		/* system interface to the \ref pmod_generic_spi_solo module. */
 		output logic o_go_stand,
 		input logic i_spi_idle,
-		output logic [(parm_tx_len_bits - 1):0] o_tx_len,
-		output logic [(parm_wait_cyc_bits - 1):0] o_wait_cyc,
-		output logic [(parm_rx_len_bits - 1):0] o_rx_len,
+		output t_pmod_acl2_tx_len o_tx_len,
+		output t_pmod_acl2_wait_cyc o_wait_cyc,
+		output t_pmod_acl2_rx_len o_rx_len,
 		/* TX FIFO interface to the \ref pmod_generic_spi_solo module. */
-		output logic [7:0] o_tx_data,
+		output t_pmod_acl2_data_byte o_tx_data,
 		output logic o_tx_enqueue,
 		input logic i_tx_ready,
 		/* RX FIFO interface to the \ref pmod_generic_spi_solo module. */
-		input logic [7:0] i_rx_data,
+		input  t_pmod_acl2_data_byte i_rx_data,
 		output logic o_rx_dequeue,
 		input logic i_rx_valid,
 		input logic i_rx_avail,
@@ -75,27 +70,29 @@ module pmod_acl2_stand_spi_solo
 		input logic i_cmd_start_measur_mode,
 		input logic i_cmd_soft_reset_acl2,
 		/* measurement data streaming output of the accelerometer */
-		output logic [7:0] o_rd_data_stream,
+		output t_pmod_acl2_data_byte o_rd_data_stream,
 		output logic o_rd_data_byte_valid,
 		output logic o_rd_data_group_valid,
 		/* data status of accelerometer */
-		output logic [7:0] o_reg_status,
+		output t_pmod_acl2_reg_1 o_reg_status,
 		/* run-time dynamic configuration */
-		input logic [7*8-1:0] i_tx_ax_cfg0_lm);
+		input t_pmod_acl2_reg_7 i_tx_ax_cfg0_lm);
 
 // Part 2: Declarations---------------------------------------------------------
 /* Timer signals and constants */
-`define c_drv_time_value_bits 24
+localparam integer c_acl2_drv_time_value_bits = 24;
+typedef logic [(c_acl2_drv_time_value_bits - 1):0] t_acl2_drv_time_value;
+
 /* Boot time should be in hundreds of milliseconds as the ADXL362 lists on
    page 5 of datasheet Rev. F that the Power-Up to Standby time is
    5 milliseconds typical, and does not list a maximum time. */
 /* This constant can be overriden with a fast boot delay by passing a non-zero
    to the parameter \ref parm_fast_simulation */
-localparam [(`c_drv_time_value_bits - 1):0] c_t_adxl362_boot =
+localparam t_acl2_drv_time_value c_t_adxl362_boot =
 	parm_fast_simulation ? (FCLK * 1 / 10000) : (FCLK * 100 / 1000);
-localparam [(`c_drv_time_value_bits - 1):0] c_tmax = c_t_adxl362_boot - 1;
+localparam t_acl2_drv_time_value c_tmax = c_t_adxl362_boot - 1;
 
-logic [(`c_drv_time_value_bits - 1):0] s_t;
+t_acl2_drv_time_value s_t;
 
 
 /* ADXL362 command bytes. */
@@ -118,83 +115,83 @@ localparam [7:0] c_adxl362_data_sr = 8'h52;
 
 /* Count of bytes to TX and count of bytes to RX, for each operation of the
    state machine. */
-localparam [(parm_tx_len_bits - 1):0] c_tx_ax_cfg0_length = 2 + 7;
-localparam [(parm_tx_len_bits - 1):0] c_tx_ax_cfg1_length = 2 + 1;
-localparam [(parm_tx_len_bits - 1):0] c_tx_ax_cfg2_length = 2 + 2;
-localparam [(parm_tx_len_bits - 1):0] c_tx_ax_cfg3_length = 2 + 2;
-localparam [(parm_tx_len_bits - 1):0] c_tx_ax_cfg4_length = 2 + 1;
-localparam [(parm_tx_len_bits - 1):0] c_tx_ax_cfg5_length = 2 + 1;
-localparam [(parm_tx_len_bits - 1):0] c_tx_ax_sr_length = 2 + 1;
-localparam [(parm_tx_len_bits - 1):0] c_tx_ax_readmm_length = 2;
-localparam [(parm_rx_len_bits - 1):0] c_rx_ax_readmm_length = 8;
-localparam [(parm_tx_len_bits - 1):0] c_tx_ax_clearmm_length = 2;
-localparam [(parm_rx_len_bits - 1):0] c_rx_ax_clearmm_length = 1;
-localparam [(parm_tx_len_bits - 1):0] c_tx_ax_readlm_length = 2;
-localparam [(parm_rx_len_bits - 1):0] c_rx_ax_readlm_length = 8;
-localparam [(parm_tx_len_bits - 1):0] c_tx_ax_clearlm_length = 2;
-localparam [(parm_rx_len_bits - 1):0] c_rx_ax_clearlm_length = 1;
+localparam t_pmod_acl2_tx_len c_tx_ax_cfg0_length = 2 + 7;
+localparam t_pmod_acl2_tx_len c_tx_ax_cfg1_length = 2 + 1;
+localparam t_pmod_acl2_tx_len c_tx_ax_cfg2_length = 2 + 2;
+localparam t_pmod_acl2_tx_len c_tx_ax_cfg3_length = 2 + 2;
+localparam t_pmod_acl2_tx_len c_tx_ax_cfg4_length = 2 + 1;
+localparam t_pmod_acl2_tx_len c_tx_ax_cfg5_length = 2 + 1;
+localparam t_pmod_acl2_tx_len c_tx_ax_sr_length = 2 + 1;
+localparam t_pmod_acl2_tx_len c_tx_ax_readmm_length = 2;
+localparam t_pmod_acl2_rx_len c_rx_ax_readmm_length = 8;
+localparam t_pmod_acl2_tx_len c_tx_ax_clearmm_length = 2;
+localparam t_pmod_acl2_rx_len c_rx_ax_clearmm_length = 1;
+localparam t_pmod_acl2_tx_len c_tx_ax_readlm_length = 2;
+localparam t_pmod_acl2_rx_len c_rx_ax_readlm_length = 8;
+localparam t_pmod_acl2_tx_len c_tx_ax_clearlm_length = 2;
+localparam t_pmod_acl2_rx_len c_rx_ax_clearlm_length = 1;
 
 /* 0x20 : 0x26 */
-localparam [((7 * 8) - 1):0] c_tx_ax_cfg0_lm =
+localparam t_pmod_acl2_reg_7 c_tx_ax_cfg0_lm =
 	/* THRESH_ACT_L, THRESH_ACT_H, TIME_ACT, THRESH_INACT_L, THRESH_INACT_H,
 	   TIME_INACT_L, TIME_INACT_H */
 	{8'h20, 8'h00, 8'h64, 8'h1A, 8'h00,
 	 8'h64, 8'h00};
 
 /* 0x27 */
-localparam [((1 * 8) - 1):0] c_tx_ax_cfg1_lm =
+localparam t_pmod_acl2_reg_1 c_tx_ax_cfg1_lm =
 	/* ACT_INACT_CTL */
 	8'b00011111;
 
 /* 0x28 : 0x29 */
-localparam [((2 * 8) - 1):0] c_tx_ax_cfg2_lm =
+localparam t_pmod_acl2_reg_2 c_tx_ax_cfg2_lm =
 	/* FIFO_CONTROL, FIFO_SAMPLES */
 	{8'b00000000, 8'b00000000};
 
 /* 0x2A : 0x2B */
-localparam [((2 * 8) - 1):0] c_tx_ax_cfg3_lm =
+localparam t_pmod_acl2_reg_2 c_tx_ax_cfg3_lm =
 	/* INTMAP1, INTMAP2 */
 	{8'h20, 8'h10};
 
 /* 0x2C */
-localparam [((1 * 8) - 1):0] c_tx_ax_cfg4_lm =
+localparam t_pmod_acl2_reg_1 c_tx_ax_cfg4_lm =
 	/* FILTER_CTL */
 	{8'b00010011};
 
 /* 0x2D */
-localparam [((1 * 8) - 1):0] c_tx_ax_cfg5_lm =
+localparam t_pmod_acl2_reg_1 c_tx_ax_cfg5_lm =
 	/* POWER_CTL */
 	{8'b00100010};
 
 /* 0x20 : 0x26 */
-localparam [((7 * 8) - 1):0] c_tx_ax_cfg0_mm =
+localparam t_pmod_acl2_reg_7 c_tx_ax_cfg0_mm =
 	/* THRESH_ACT_L, THRESH_ACT_H, TIME_ACT, THRESH_INACT_L, THRESH_INACT_H,
 	   TIME_INACT_L, TIME_INACT_H */
 	{8'h14, 8'h00, 8'h64, 8'h10, 8'h00,
 	 8'h64, 8'h00};
 
 /* 0x27 */
-localparam [((1 * 8) - 1):0] c_tx_ax_cfg1_mm =
+localparam t_pmod_acl2_reg_1 c_tx_ax_cfg1_mm =
 	/* ACT_INACT_CTL */
 	8'b00000101;
 
 /* 0x28 : 0x29 */
-localparam [((2 * 8) - 1):0] c_tx_ax_cfg2_mm =
+localparam t_pmod_acl2_reg_2 c_tx_ax_cfg2_mm =
 	/* FIFO_CONTROL, FIFO_SAMPLES */
 	{8'b00000000, 8'b00000000};
 
 /* 0x2A : 0x2B */
-localparam [((2 * 8) - 1):0] c_tx_ax_cfg3_mm =
+localparam t_pmod_acl2_reg_2 c_tx_ax_cfg3_mm =
 	/* INTMAP1, INTMAP2 */
 	{8'h01, 8'h00};
 
 /* 0x2C */
-localparam [((1 * 8) - 1):0] c_tx_ax_cfg4_mm =
+localparam t_pmod_acl2_reg_1 c_tx_ax_cfg4_mm =
 	/* FILTER_CTL */
 	{8'b00010011};
 
 /* 0x2D */
-localparam [((1 * 8) - 1):0] c_tx_ax_cfg5_mm =
+localparam t_pmod_acl2_reg_1 c_tx_ax_cfg5_mm =
 	/* POWER_CTL */
 	{8'b00100010};
 
@@ -229,22 +226,22 @@ t_drv_state s_drv_pr_state;
 t_drv_state s_drv_nx_state;
 
 /* Auxiliary state machine registers for recursive state machine operation. */
-logic [((7 * 8) - 1):0] s_tx_ax_cfg0_val;
-logic [((7 * 8) - 1):0] s_tx_ax_cfg0_aux;
-logic [((1 * 8) - 1):0] s_tx_ax_cfg1_val;
-logic [((1 * 8) - 1):0] s_tx_ax_cfg1_aux;
-logic [((2 * 8) - 1):0] s_tx_ax_cfg2_val;
-logic [((2 * 8) - 1):0] s_tx_ax_cfg2_aux;
-logic [((2 * 8) - 1):0] s_tx_ax_cfg3_val;
-logic [((2 * 8) - 1):0] s_tx_ax_cfg3_aux;
-logic [((1 * 8) - 1):0] s_tx_ax_cfg4_val;
-logic [((1 * 8) - 1):0] s_tx_ax_cfg4_aux;
-logic [((1 * 8) - 1):0] s_tx_ax_cfg5_val;
-logic [((1 * 8) - 1):0] s_tx_ax_cfg5_aux;
+t_pmod_acl2_reg_7 s_tx_ax_cfg0_val;
+t_pmod_acl2_reg_7 s_tx_ax_cfg0_aux;
+t_pmod_acl2_reg_1 s_tx_ax_cfg1_val;
+t_pmod_acl2_reg_1 s_tx_ax_cfg1_aux;
+t_pmod_acl2_reg_2 s_tx_ax_cfg2_val;
+t_pmod_acl2_reg_2 s_tx_ax_cfg2_aux;
+t_pmod_acl2_reg_2 s_tx_ax_cfg3_val;
+t_pmod_acl2_reg_2 s_tx_ax_cfg3_aux;
+t_pmod_acl2_reg_1 s_tx_ax_cfg4_val;
+t_pmod_acl2_reg_1 s_tx_ax_cfg4_aux;
+t_pmod_acl2_reg_1 s_tx_ax_cfg5_val;
+t_pmod_acl2_reg_1 s_tx_ax_cfg5_aux;
 logic [7:0] s_byte_index_val;
 logic [7:0] s_byte_index_aux;
-logic [7:0] s_reg_status_val;
-logic [7:0] s_reg_status_aux;
+t_pmod_acl2_reg_1 s_reg_status_val;
+t_pmod_acl2_reg_1 s_reg_status_aux;
 
 //Part 3: Statements------------------------------------------------------------
 assign o_reg_status = s_reg_status_aux;
@@ -273,14 +270,14 @@ begin: p_fsm_state_aux
 	if (i_srst) begin
 		s_drv_pr_state <= ST_DRV_BOOT0;
 
-		s_tx_ax_cfg0_aux <= 56'h00000000000000;
-		s_tx_ax_cfg1_aux <= 8'h00;
-		s_tx_ax_cfg2_aux <= 16'h0000;
-		s_tx_ax_cfg3_aux <= 16'h0000;
-		s_tx_ax_cfg4_aux <= 8'h00;
-		s_tx_ax_cfg5_aux <= 8'h00;
+		s_tx_ax_cfg0_aux <= '0;
+		s_tx_ax_cfg1_aux <= '0;
+		s_tx_ax_cfg2_aux <= '0;
+		s_tx_ax_cfg3_aux <= '0;
+		s_tx_ax_cfg4_aux <= '0;
+		s_tx_ax_cfg5_aux <= '0;
 		s_byte_index_aux <= 0;
-		s_reg_status_aux <= 8'b00;
+		s_reg_status_aux <= '0;
 	end else 
 		if (i_spi_ce_4x) begin : if_fsm_state_and_storage
 			s_drv_pr_state <= s_drv_nx_state;
