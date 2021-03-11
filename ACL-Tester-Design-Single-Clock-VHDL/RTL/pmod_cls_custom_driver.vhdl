@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +33,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 library work;
+use work.pmod_stand_spi_solo_pkg.all;
 --------------------------------------------------------------------------------
 entity pmod_cls_custom_driver is
 	generic(
@@ -43,13 +44,7 @@ entity pmod_cls_custom_driver is
 		-- Clock enable frequency in Hz of \ref i_ext_spi_clk_4x with i_spi_ce_4x
 		parm_FCLK_ce : natural := 2_500_000;
 		-- Ratio of i_ext_spi_clk_x to SPI sck bus output
-		parm_ext_spi_clk_ratio : natural := 32;
-		-- LOG2 of the TX FIFO max count
-		parm_tx_len_bits : natural := 11;
-		-- LOG2 of max Wait Cycles count between end of TX and start of RX
-		parm_wait_cyc_bits : natural := 2;
-		-- LOG2 of the RX FIFO max count
-		parm_rx_len_bits : natural := 11
+		parm_ext_spi_clk_ratio : natural := 32
 	);
 	port(
 		-- Clock and reset, with clock at X*4 times the frequency of the SPI bus
@@ -70,8 +65,8 @@ entity pmod_cls_custom_driver is
 		i_cmd_wr_clear_display : in  std_logic;
 		i_cmd_wr_text_line1    : in  std_logic;
 		i_cmd_wr_text_line2    : in  std_logic;
-		i_dat_ascii_line1      : in  std_logic_vector(127 downto 0);
-		i_dat_ascii_line2      : in  std_logic_vector(127 downto 0)
+		i_dat_ascii_line1      : in  t_pmod_cls_ascii_line_16;
+		i_dat_ascii_line2      : in  t_pmod_cls_ascii_line_16
 	);
 end entity pmod_cls_custom_driver;
 --------------------------------------------------------------------------------
@@ -81,13 +76,13 @@ architecture rtl of pmod_cls_custom_driver is
 	-- CLS SPI driver wiring to the Generic SPI driver.
 	signal s_cls_go_stand   : std_logic;
 	signal s_cls_spi_idle   : std_logic;
-	signal s_cls_tx_len     : std_logic_vector((parm_tx_len_bits - 1) downto 0);
-	signal s_cls_wait_cyc   : std_logic_vector((parm_wait_cyc_bits - 1) downto 0);
-	signal s_cls_rx_len     : std_logic_vector((parm_rx_len_bits - 1) downto 0);
-	signal s_cls_tx_data    : std_logic_vector(7 downto 0);
+	signal s_cls_tx_len     : t_pmod_cls_tx_len;
+	signal s_cls_wait_cyc   : t_pmod_cls_wait_cyc;
+	signal s_cls_rx_len     : t_pmod_cls_rx_len;
+	signal s_cls_tx_data    : t_pmod_cls_data_byte;
 	signal s_cls_tx_enqueue : std_logic;
 	signal s_cls_tx_ready   : std_logic;
-	signal s_cls_rx_data    : std_logic_vector(7 downto 0);
+	signal s_cls_rx_data    : t_pmod_cls_data_byte;
 	signal s_cls_rx_dequeue : std_logic;
 	signal s_cls_rx_valid   : std_logic;
 	signal s_cls_rx_avail   : std_logic;
@@ -141,10 +136,7 @@ begin
 		generic map (
 			parm_fast_simulation => parm_fast_simulation,
 			parm_FCLK            => parm_FCLK,
-			parm_FCLK_ce         => parm_FCLK_ce,
-			parm_tx_len_bits     => parm_tx_len_bits,
-			parm_wait_cyc_bits   => parm_wait_cyc_bits,
-			parm_rx_len_bits     => parm_rx_len_bits
+			parm_FCLK_ce         => parm_FCLK_ce
 		)
 		port map (
 			i_ext_spi_clk_x        => i_clk_20mhz,
@@ -174,9 +166,9 @@ begin
 	u_pmod_generic_spi_solo : entity work.pmod_generic_spi_solo(moore_fsm_recursive)
 		generic map (
 			parm_ext_spi_clk_ratio => parm_ext_spi_clk_ratio,
-			parm_tx_len_bits       => parm_tx_len_bits,
-			parm_wait_cyc_bits     => parm_wait_cyc_bits,
-			parm_rx_len_bits       => parm_rx_len_bits
+			parm_tx_len_bits       => c_pmod_cls_tx_len_bits,
+			parm_wait_cyc_bits     => c_pmod_cls_wait_cyc_bits,
+			parm_rx_len_bits       => c_pmod_cls_rx_len_bits
 		)
 		port map (
 			eo_sck_o        => sio_cls_sck_fsm_o,

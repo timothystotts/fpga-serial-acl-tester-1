@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +34,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 library work;
+use work.pmod_stand_spi_solo_pkg.all;
 use work.pmod_acl2_stand_spi_solo_pkg.c_tx_ax_cfg0_lm;
 use work.thresh_presets_pkg.all;
 --------------------------------------------------------------------------------
@@ -44,13 +45,7 @@ entity pmod_acl2_custom_driver is
 		-- Actual frequency in Hz of \ref i_clk_20mhz
 		parm_FCLK : natural := 20_000_000;
 		-- Ratio of i_ext_spi_clk_x to SPI sck bus output. */
-		parm_ext_spi_clk_ratio : integer := 4;
-		-- LOG2 of the TX FIFO max count
-		parm_tx_len_bits : natural := 11;
-		-- LOG2 of max Wait Cycles count between end of TX and start of RX
-		parm_wait_cyc_bits : natural := 2;
-		-- LOG2 of the RX FIFO max count
-		parm_rx_len_bits : natural := 11
+		parm_ext_spi_clk_ratio : integer := 4
 	);
 	port(
 		-- Clock and reset, with clock at 4 times the frequency of the SPI bus
@@ -74,11 +69,11 @@ entity pmod_acl2_custom_driver is
 		i_cmd_start_measur_mode : in  std_logic;
 		i_cmd_soft_reset_acl2   : in  std_logic;
 		-- Output of the measurements in a single vector, plus a valid pulse
-		o_data_3axis_temp : out std_logic_vector(63 downto 0);
+		o_data_3axis_temp : out t_pmod_acl2_reg_8;
 		o_data_valid      : out std_logic;
 		-- Output of the most recently read single byte status register,
 		-- without a valid pualse.
-		o_reg_status : out std_logic_vector(7 downto 0);
+		o_reg_status : out t_pmod_acl2_reg_1;
 		-- Debounced buttons input
 		i_btn_deb : in std_logic_vector(1 downto 0);
 		-- Active and Inactive preset enumeration value
@@ -93,23 +88,23 @@ architecture rtl of pmod_acl2_custom_driver is
 	-- ACL2 SPI driver wiring to the Generic SPI driver.
 	signal s_acl2_go_stand   : std_logic;
 	signal s_acl2_spi_idle   : std_logic;
-	signal s_acl2_tx_len     : std_logic_vector((parm_tx_len_bits - 1) downto 0);
-	signal s_acl2_wait_cyc   : std_logic_vector((parm_wait_cyc_bits - 1) downto 0);
-	signal s_acl2_rx_len     : std_logic_vector((parm_rx_len_bits - 1) downto 0);
-	signal s_acl2_tx_data    : std_logic_vector(7 downto 0);
+	signal s_acl2_tx_len     : t_pmod_acl2_tx_len;
+	signal s_acl2_wait_cyc   : t_pmod_acl2_wait_cyc;
+	signal s_acl2_rx_len     : t_pmod_acl2_rx_len;
+	signal s_acl2_tx_data    : t_pmod_acl2_data_byte;
 	signal s_acl2_tx_enqueue : std_logic;
 	signal s_acl2_tx_ready   : std_logic;
-	signal s_acl2_rx_data    : std_logic_vector(7 downto 0);
+	signal s_acl2_rx_data    : t_pmod_acl2_data_byte;
 	signal s_acl2_rx_dequeue : std_logic;
 	signal s_acl2_rx_valid   : std_logic;
 	signal s_acl2_rx_avail   : std_logic;
 
 	-- ACL2 SPI driver signals for streaming the 8 bytes of measurement values.
-	signal s_acl2_rd_data_stream             : std_logic_vector(7 downto 0);
+	signal s_acl2_rd_data_stream             : t_pmod_acl2_data_byte;
 	signal s_acl2_rd_data_byte_valid         : std_logic;
 	signal s_acl2_rd_data_group_valid        : std_logic;
-	signal s_hex_3axis_temp_measurements_val : std_logic_vector((8 * 8 - 1) downto 0);
-	signal s_hex_3axis_temp_measurements_aux : std_logic_vector((8 * 8 - 1) downto 0);
+	signal s_hex_3axis_temp_measurements_val : t_pmod_acl2_reg_8;
+	signal s_hex_3axis_temp_measurements_aux : t_pmod_acl2_reg_8;
 
 	-- ACL2 SPI outputs, FSM signals to register the SPI bus outputs for
 	-- optimal timing closure and glitch minimization.
@@ -150,8 +145,8 @@ architecture rtl of pmod_acl2_custom_driver is
 	signal s_btn1_one_shot : std_logic;
 
 	-- Presets binary encoding for the seven registers on the ADXL362 chip
-	signal s_tx_ax_cfg0_lm : std_logic_vector(c_tx_ax_cfg0_lm'range);
-	signal s_tx_ax_cfg0_discard : std_logic_vector(7 downto 0);
+	signal s_tx_ax_cfg0_lm : t_pmod_acl2_reg_7;
+	signal s_tx_ax_cfg0_discard : t_pmod_acl2_reg_1;
 begin
 
 	-- One shot generation of Button 0
@@ -232,10 +227,7 @@ begin
 	u_pmod_acl2_stand_spi_solo : entity work.pmod_acl2_stand_spi_solo(moore_fsm_recursive)
 		generic map (
 			parm_fast_simulation => parm_fast_simulation,
-			parm_FCLK            => parm_FCLK,
-			parm_tx_len_bits     => parm_tx_len_bits,
-			parm_wait_cyc_bits   => parm_wait_cyc_bits,
-			parm_rx_len_bits     => parm_rx_len_bits
+			parm_FCLK            => parm_FCLK
 		)
 		port map (
 			i_ext_spi_clk_x         => i_clk_20mhz,
@@ -272,9 +264,9 @@ begin
 	u_pmod_generic_spi_solo : entity work.pmod_generic_spi_solo(moore_fsm_recursive)
 		generic map (
 			parm_ext_spi_clk_ratio => parm_ext_spi_clk_ratio,
-			parm_tx_len_bits       => parm_tx_len_bits,
-			parm_wait_cyc_bits     => parm_wait_cyc_bits,
-			parm_rx_len_bits       => parm_rx_len_bits
+			parm_tx_len_bits       => c_pmod_acl2_tx_len_bits,
+			parm_wait_cyc_bits     => c_pmod_acl2_wait_cyc_bits,
+			parm_rx_len_bits       => c_pmod_acl2_rx_len_bits
 		)
 		port map (
 			eo_sck_o        => sio_acl2_sck_fsm_o,

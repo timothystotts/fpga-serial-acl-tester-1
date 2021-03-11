@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -32,6 +32,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 library work;
+use work.pmod_stand_spi_solo_pkg.all;
 --------------------------------------------------------------------------------
 entity pmod_cls_stand_spi_solo is
 	generic(
@@ -40,13 +41,7 @@ entity pmod_cls_stand_spi_solo is
 		-- Actual frequency in Hz of \ref i_ext_spi_clk_4x
 		parm_FCLK : natural := 20_000_000;
 		-- Clock enable frequency in Hz of \ref i_ext_spi_clk_4x with i_spi_ce_4x
-		parm_FCLK_ce : natural := 2_500_000;
-		-- LOG2 of the TX FIFO max count
-		parm_tx_len_bits : natural := 11;
-		-- LOG2 of max Wait Cycles count between end of TX and start of RX
-		parm_wait_cyc_bits : natural := 2;
-		-- LOG2 of the RX FIFO max count
-		parm_rx_len_bits : natural := 11
+		parm_FCLK_ce : natural := 2_500_000
 	);
 	port(
 		-- system clock and synchronous reset
@@ -57,15 +52,15 @@ entity pmod_cls_stand_spi_solo is
 		-- system interface to the \ref pmod_generic_spi_solo module.
 		o_go_stand : out std_logic;
 		i_spi_idle : in  std_logic;
-		o_tx_len   : out std_logic_vector((parm_tx_len_bits - 1) downto 0);
-		o_wait_cyc : out std_logic_vector((parm_wait_cyc_bits - 1) downto 0);
-		o_rx_len   : out std_logic_vector((parm_rx_len_bits - 1) downto 0);
+		o_tx_len   : out t_pmod_cls_tx_len;
+		o_wait_cyc : out t_pmod_cls_wait_cyc;
+		o_rx_len   : out t_pmod_cls_rx_len;
 		-- TX FIFO interface to the \ref pmod_generic_spi_solo module.
-		o_tx_data    : out std_logic_vector(7 downto 0);
+		o_tx_data    : out t_pmod_cls_data_byte;
 		o_tx_enqueue : out std_logic;
 		i_tx_ready   : in  std_logic;
 		-- RX FIFO interface to the \ref pmod_generic_spi_solo module.
-		i_rx_data    : in  std_logic_vector(7 downto 0);
+		i_rx_data    : in  t_pmod_cls_data_byte;
 		o_rx_dequeue : out std_logic;
 		i_rx_valid   : in  std_logic;
 		i_rx_avail   : in  std_logic;
@@ -74,8 +69,8 @@ entity pmod_cls_stand_spi_solo is
 		i_cmd_wr_clear_display : in  std_logic;
 		i_cmd_wr_text_line1    : in  std_logic;
 		i_cmd_wr_text_line2    : in  std_logic;
-		i_dat_ascii_line1      : in  std_logic_vector((16 * 8 - 1) downto 0);
-		i_dat_ascii_line2      : in  std_logic_vector((16 * 8 - 1) downto 0)
+		i_dat_ascii_line1      : in  t_pmod_cls_ascii_line_16;
+		i_dat_ascii_line2      : in  t_pmod_cls_ascii_line_16
 	);
 end entity pmod_cls_stand_spi_solo;
 --------------------------------------------------------------------------------
@@ -108,27 +103,18 @@ architecture moore_fsm_recursive of pmod_cls_stand_spi_solo is
 	attribute fsm_safe_state of s_cls_drv_pr_state : signal is "default_state";
 
 	-- Auxiliary state machine registers for recursive state machine operation.
-	signal s_cls_cmd_len_aux   : natural range 0 to 15;
-	signal s_cls_cmd_len_val   : natural range 0 to 15;
-	signal s_cls_dat_len_aux   : natural range 0 to 31;
-	signal s_cls_dat_len_val   : natural range 0 to 31;
-	signal s_cls_cmd_tx_aux    : std_logic_vector(55 downto 0);
-	signal s_cls_cmd_tx_val    : std_logic_vector(55 downto 0);
-	signal s_cls_cmd_txlen_aux : natural range 0 to 31;
-	signal s_cls_cmd_txlen_val : natural range 0 to 31;
-	signal s_cls_dat_tx_aux    : std_logic_vector(127 downto 0);
-	signal s_cls_dat_tx_val    : std_logic_vector(127 downto 0);
-	signal s_cls_dat_txlen_aux : natural range 0 to 63;
-	signal s_cls_dat_txlen_val : natural range 0 to 63;
-
-	-- ASCII constant characters for ESC codes.
-	constant ASCII_CLS_ESC            : std_logic_vector(7 downto 0) := x"1B";
-	constant ASCII_CLS_BRACKET        : std_logic_vector(7 downto 0) := x"5B";
-	constant ASCII_CLS_CHAR_ZERO      : std_logic_vector(7 downto 0) := x"30";
-	constant ASCII_CLS_CHAR_ONE       : std_logic_vector(7 downto 0) := x"31";
-	constant ASCII_CLS_CHAR_SEMICOLON : std_logic_vector(7 downto 0) := x"3B";
-	constant ASCII_CLS_DISP_CLR_CMD   : std_logic_vector(7 downto 0) := x"6a";
-	constant ASCII_CLS_CURSOR_POS_CMD : std_logic_vector(7 downto 0) := x"48";
+	signal s_cls_cmd_len_aux   : t_pmod_cls_cmd_len;
+	signal s_cls_cmd_len_val   : t_pmod_cls_cmd_len;
+	signal s_cls_dat_len_aux   : t_pmod_cls_dat_len;
+	signal s_cls_dat_len_val   : t_pmod_cls_dat_len;
+	signal s_cls_cmd_tx_aux    : t_pmod_cls_ansi_line_7;
+	signal s_cls_cmd_tx_val    : t_pmod_cls_ansi_line_7;
+	signal s_cls_cmd_txlen_aux : t_pmod_cls_cmd_txlen;
+	signal s_cls_cmd_txlen_val : t_pmod_cls_cmd_txlen;
+	signal s_cls_dat_tx_aux    : t_pmod_cls_ascii_line_16;
+	signal s_cls_dat_tx_val    : t_pmod_cls_ascii_line_16;
+	signal s_cls_dat_txlen_aux : t_pmod_cls_dat_txlen;
+	signal s_cls_dat_txlen_val : t_pmod_cls_dat_txlen;
 
 begin
 	-- Timer 1 (Strategy #1), for timing the boot wait for PMOD CLS communication

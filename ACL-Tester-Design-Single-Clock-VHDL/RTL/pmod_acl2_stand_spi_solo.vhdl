@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -32,6 +32,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 library work;
+use work.pmod_stand_spi_solo_pkg.all;
 --------------------------------------------------------------------------------
 package pmod_acl2_stand_spi_solo_pkg is
 	-- ADXL362 command bytes.
@@ -73,65 +74,65 @@ package pmod_acl2_stand_spi_solo_pkg is
 	-- 0x20 : 0x26
 	-- THRESH_ACT_L, THRESH_ACT_H, TIME_ACT, THRESH_INACT_L, THRESH_INACT_H,
 	-- TIME_INACT_L, TIME_INACT_H
-	constant c_tx_ax_cfg0_lm : std_logic_vector((7 * 8 - 1) downto 0) :=
+	constant c_tx_ax_cfg0_lm : t_pmod_acl2_reg_7 :=
 		x"20" & x"00" & x"64" & x"1A" & x"00" &
 		x"64" & x"00";
 
 	-- 0x27
 	-- ACT_INACT_CTL
-	constant c_tx_ax_cfg1_lm : std_logic_vector(7 downto 0) :=
+	constant c_tx_ax_cfg1_lm : t_pmod_acl2_reg_1 :=
 		"00011111";
 
 	-- 0x28 : 0x29
 	-- FIFO_CONTROL, FIFO_SAMPLES
-	constant c_tx_ax_cfg2_lm : std_logic_vector(15 downto 0) :=
+	constant c_tx_ax_cfg2_lm : t_pmod_acl2_reg_2 :=
 		"00000000" & "00000000";
 
 	-- 0x2A : 0x2B
 	-- INTMAP1, INTMAP2
-	constant c_tx_ax_cfg3_lm : std_logic_vector(15 downto 0) :=
+	constant c_tx_ax_cfg3_lm : t_pmod_acl2_reg_2 :=
 		x"20" & x"10";
 
 	-- 0x2C
 	-- FILTER_CTL
-	constant c_tx_ax_cfg4_lm : std_logic_vector(7 downto 0) :=
+	constant c_tx_ax_cfg4_lm : t_pmod_acl2_reg_1 :=
 		"00010011";
 
 	-- 0x2D
 	-- POWER_CTL
-	constant c_tx_ax_cfg5_lm : std_logic_vector(7 downto 0) :=
+	constant c_tx_ax_cfg5_lm : t_pmod_acl2_reg_1 :=
 		"00100010";
 
 	-- 0x20 : 0x26
 	-- THRESH_ACT_L, THRESH_ACT_H, TIME_ACT, THRESH_INACT_L, THRESH_INACT_H,
 	-- TIME_INACT_L, TIME_INACT_H
-	constant c_tx_ax_cfg0_mm : std_logic_vector((7 * 8 - 1) downto 0) :=
+	constant c_tx_ax_cfg0_mm : t_pmod_acl2_reg_7 :=
 		x"14" & x"00" & x"64" & x"10" & x"00" &
 		x"64" & x"00";
 
 	-- 0x27
 	-- ACT_INACT_CTL
-	constant c_tx_ax_cfg1_mm : std_logic_vector(7 downto 0) :=
+	constant c_tx_ax_cfg1_mm : t_pmod_acl2_reg_1 :=
 		"00000101";
 
 	-- 0x28 : 0x29
 	-- FIFO_CONTROL, FIFO_SAMPLES
-	constant c_tx_ax_cfg2_mm : std_logic_vector(15 downto 0) :=
+	constant c_tx_ax_cfg2_mm : t_pmod_acl2_reg_2 :=
 		"00000000" & "00000000";
 
 	-- 0x2A : 0x2B
 	-- INTMAP1, INTMAP2
-	constant c_tx_ax_cfg3_mm : std_logic_vector(15 downto 0) :=
+	constant c_tx_ax_cfg3_mm : t_pmod_acl2_reg_2 :=
 		x"01" & x"00";
 
 	-- 0x2C
 	-- FILTER_CTL
-	constant c_tx_ax_cfg4_mm : std_logic_vector(7 downto 0) :=
+	constant c_tx_ax_cfg4_mm : t_pmod_acl2_reg_1 :=
 		"00010011";
 
 	-- 0x2D
 	-- POWER_CTL
-	constant c_tx_ax_cfg5_mm : std_logic_vector(7 downto 0) :=
+	constant c_tx_ax_cfg5_mm : t_pmod_acl2_reg_1 :=
 		"00100010";
 
 end package pmod_acl2_stand_spi_solo_pkg;
@@ -141,6 +142,7 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 library work;
+use work.pmod_stand_spi_solo_pkg.all;
 use work.pmod_acl2_stand_spi_solo_pkg.all;
 --------------------------------------------------------------------------------
 entity pmod_acl2_stand_spi_solo is
@@ -148,13 +150,7 @@ entity pmod_acl2_stand_spi_solo is
 		-- Disable or enable fast FSM delays for simulation instead of impelementation.
 		parm_fast_simulation : integer := 0;
 		-- Actual frequency in Hz of \ref i_ext_spi_clk_4x
-		parm_FCLK : natural := 20_000_000;
-		-- LOG2 of the TX FIFO max count
-		parm_tx_len_bits : natural := 11;
-		-- LOG2 of max Wait Cycles count between end of TX and start of RX
-		parm_wait_cyc_bits : natural := 2;
-		-- LOG2 of the RX FIFO max count
-		parm_rx_len_bits : natural := 11
+		parm_FCLK : natural := 20_000_000
 	);
 	port(
 		-- system clock and synchronous reset
@@ -167,15 +163,15 @@ entity pmod_acl2_stand_spi_solo is
 		-- system interface to the \ref pmod_generic_spi_solo module.
 		o_go_stand : out std_logic;
 		i_spi_idle : in  std_logic;
-		o_tx_len   : out std_logic_vector((parm_tx_len_bits - 1) downto 0);
-		o_wait_cyc : out std_logic_vector((parm_wait_cyc_bits - 1) downto 0);
-		o_rx_len   : out std_logic_vector((parm_rx_len_bits - 1) downto 0);
+		o_tx_len   : out t_pmod_acl2_tx_len;
+		o_wait_cyc : out t_pmod_acl2_wait_cyc;
+		o_rx_len   : out t_pmod_acl2_rx_len;
 		-- TX FIFO interface to the \ref pmod_generic_spi_solo module.
-		o_tx_data    : out std_logic_vector(7 downto 0);
+		o_tx_data    : out t_pmod_acl2_data_byte;
 		o_tx_enqueue : out std_logic;
 		i_tx_ready   : in  std_logic;
 		-- RX FIFO interface to the \ref pmod_generic_spi_solo module.
-		i_rx_data    : in  std_logic_vector(7 downto 0);
+		i_rx_data    : in  t_pmod_acl2_data_byte;
 		o_rx_dequeue : out std_logic;
 		i_rx_valid   : in  std_logic;
 		i_rx_avail   : in  std_logic;
@@ -187,13 +183,13 @@ entity pmod_acl2_stand_spi_solo is
 		i_cmd_start_measur_mode : in  std_logic;
 		i_cmd_soft_reset_acl2   : in  std_logic;
 		-- measurement data streaming output of the accelerometer
-		o_rd_data_stream      : out std_logic_vector(7 downto 0);
+		o_rd_data_stream      : out t_pmod_acl2_data_byte;
 		o_rd_data_byte_valid  : out std_logic;
 		o_rd_data_group_valid : out std_logic;
 		-- data status of accelerometer
-		o_reg_status : out std_logic_vector(7 downto 0);
+		o_reg_status : out t_pmod_acl2_reg_1;
 		-- run-time dynamic configuration
-		i_tx_ax_cfg0_lm : in std_logic_vector(c_tx_ax_cfg0_lm'range)
+		i_tx_ax_cfg0_lm : in t_pmod_acl2_reg_7
 	);
 end entity pmod_acl2_stand_spi_solo;
 --------------------------------------------------------------------------------
@@ -239,22 +235,22 @@ architecture moore_fsm_recursive of pmod_acl2_stand_spi_solo is
 	attribute fsm_encoding of s_acl2_drv_pr_state   : signal is "auto";
 	attribute fsm_safe_state of s_acl2_drv_pr_state : signal is "default_state";
 
-	signal s_tx_ax_cfg0_val : std_logic_vector((7 * 8 - 1) downto 0);
-	signal s_tx_ax_cfg0_aux : std_logic_vector((7 * 8 - 1) downto 0);
-	signal s_tx_ax_cfg1_val : std_logic_vector((1 * 8 - 1) downto 0);
-	signal s_tx_ax_cfg1_aux : std_logic_vector((1 * 8 - 1) downto 0);
-	signal s_tx_ax_cfg2_val : std_logic_vector((2 * 8 - 1) downto 0);
-	signal s_tx_ax_cfg2_aux : std_logic_vector((2 * 8 - 1) downto 0);
-	signal s_tx_ax_cfg3_val : std_logic_vector((2 * 8 - 1) downto 0);
-	signal s_tx_ax_cfg3_aux : std_logic_vector((2 * 8 - 1) downto 0);
-	signal s_tx_ax_cfg4_val : std_logic_vector((1 * 8 - 1) downto 0);
-	signal s_tx_ax_cfg4_aux : std_logic_vector((1 * 8 - 1) downto 0);
-	signal s_tx_ax_cfg5_val : std_logic_vector((1 * 8 - 1) downto 0);
-	signal s_tx_ax_cfg5_aux : std_logic_vector((1 * 8 - 1) downto 0);
+	signal s_tx_ax_cfg0_val : t_pmod_acl2_reg_7;
+	signal s_tx_ax_cfg0_aux : t_pmod_acl2_reg_7;
+	signal s_tx_ax_cfg1_val : t_pmod_acl2_reg_1;
+	signal s_tx_ax_cfg1_aux : t_pmod_acl2_reg_1;
+	signal s_tx_ax_cfg2_val : t_pmod_acl2_reg_2;
+	signal s_tx_ax_cfg2_aux : t_pmod_acl2_reg_2;
+	signal s_tx_ax_cfg3_val : t_pmod_acl2_reg_2;
+	signal s_tx_ax_cfg3_aux : t_pmod_acl2_reg_2;
+	signal s_tx_ax_cfg4_val : t_pmod_acl2_reg_1;
+	signal s_tx_ax_cfg4_aux : t_pmod_acl2_reg_1;
+	signal s_tx_ax_cfg5_val : t_pmod_acl2_reg_1;
+	signal s_tx_ax_cfg5_aux : t_pmod_acl2_reg_1;
 	signal s_byte_index_val : natural range 0 to 255;
 	signal s_byte_index_aux : natural range 0 to 255;
-	signal s_reg_status_val : std_logic_vector(7 downto 0);
-	signal s_reg_status_aux : std_logic_vector(7 downto 0);
+	signal s_reg_status_val : t_pmod_acl2_reg_1;
+	signal s_reg_status_aux : t_pmod_acl2_reg_1;
 begin
 
 	o_reg_status <= s_reg_status_aux;

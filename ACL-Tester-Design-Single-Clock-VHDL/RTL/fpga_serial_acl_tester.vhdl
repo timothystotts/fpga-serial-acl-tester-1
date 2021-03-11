@@ -1,7 +1,7 @@
 --------------------------------------------------------------------------------
 -- MIT License
 --
--- Copyright (c) 2020 Timothy Stotts
+-- Copyright (c) 2020-2021 Timothy Stotts
 --
 -- Permission is hereby granted, free of charge, to any person obtaining a copy
 -- of this software and associated documentation files (the "Software"), to deal
@@ -41,6 +41,7 @@ library UNIMACRO;
 use UNIMACRO.vcomponents.all;
 
 library work;
+use work.pmod_stand_spi_solo_pkg.all;
 use work.led_pwm_driver_pkg.t_led_color_values;
 --------------------------------------------------------------------------------
 entity fpga_serial_acl_tester is
@@ -132,12 +133,12 @@ architecture rtl of fpga_serial_acl_tester is
 	signal so_pmod_acl2_copi_t : std_logic;
 
 	-- Data and indications to be displayed on the LEDs and CLS.
-	signal s_acl2_reg_status                      : std_logic_vector(7 downto 0);
+	signal s_acl2_reg_status                      : t_pmod_acl2_reg_1;
 	signal s_acl2_reg_status_activity_stretched   : std_logic;
 	signal s_acl2_reg_status_inactivity_stretched : std_logic;
-	signal s_hex_3axis_temp_measurements_final    : std_logic_vector(63 downto 0);
+	signal s_hex_3axis_temp_measurements_final    : t_pmod_acl2_reg_8;
 	signal s_hex_3axis_temp_measurements_valid    : std_logic;
-	signal s_hex_3axis_temp_measurements_display  : std_logic_vector(63 downto 0);
+	signal s_hex_3axis_temp_measurements_display  : t_pmod_acl2_reg_8;
 	signal s_reading_inactive                     : std_logic;
 
 	-- Command to Operating Mode signals for the Tester FSM.
@@ -167,15 +168,15 @@ architecture rtl of fpga_serial_acl_tester is
 	signal s_cls_wr_clear_display : std_logic;
 	signal s_cls_wr_text_line1    : std_logic;
 	signal s_cls_wr_text_line2    : std_logic;
-	signal s_cls_txt_ascii_line1  : std_logic_vector((16*8-1) downto 0);
-	signal s_cls_txt_ascii_line2  : std_logic_vector((16*8-1) downto 0);
+	signal s_cls_txt_ascii_line1  : t_pmod_cls_ascii_line_16;
+	signal s_cls_txt_ascii_line2  : t_pmod_cls_ascii_line_16;
 	signal s_cls_feed_is_idle     : std_logic;
 
 	-- Signals for text and data ASCII lines
-	signal s_adxl_dat_ascii_line1 : std_logic_vector((16*8-1) downto 0);
-	signal s_adxl_dat_ascii_line2 : std_logic_vector((16*8-1) downto 0);
-	signal s_adxl_txt_ascii_line1 : std_logic_vector((16*8-1) downto 0);
-	signal s_adxl_txt_ascii_line2 : std_logic_vector((16*8-1) downto 0);
+	signal s_adxl_dat_ascii_line1 : t_pmod_cls_ascii_line_16;
+	signal s_adxl_dat_ascii_line2 : t_pmod_cls_ascii_line_16;
+	signal s_adxl_txt_ascii_line1 : t_pmod_cls_ascii_line_16;
+	signal s_adxl_txt_ascii_line2 : t_pmod_cls_ascii_line_16;
 
 	-- Signals for inferring tri-state buffer for CLS SPI bus outputs.
 	signal so_pmod_cls_sck_o  : std_logic;
@@ -422,8 +423,7 @@ begin
 		generic map (
 			parm_fast_simulation   => parm_fast_simulation,
 			parm_FCLK              => c_FCLK,
-			parm_ext_spi_clk_ratio => 4,
-			parm_wait_cyc_bits     => c_stand_spi_wait_count_bits
+			parm_ext_spi_clk_ratio => 4
 		)
 		port map (
 			i_clk_20mhz             => s_clk_20mhz,
@@ -521,8 +521,7 @@ begin
 			parm_fast_simulation   => parm_fast_simulation,
 			parm_FCLK              => c_FCLK,
 			parm_FCLK_ce           => 2_500_000,
-			parm_ext_spi_clk_ratio => 32,
-			parm_wait_cyc_bits     => c_stand_spi_wait_count_bits
+			parm_ext_spi_clk_ratio => 32
 		)
 		port map (
 			i_clk_20mhz            => s_clk_20mhz,
