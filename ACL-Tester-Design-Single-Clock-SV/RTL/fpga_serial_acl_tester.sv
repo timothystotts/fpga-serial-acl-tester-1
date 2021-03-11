@@ -74,11 +74,11 @@ module fpga_serial_acl_tester
 	input logic ei_sw1,
 	input logic ei_sw2,
 	input logic ei_sw3,
-  	/* four buttons */
-  	input logic ei_btn0,
-  	input logic ei_btn1,
-  	input logic ei_btn2,
-  	input logic ei_btn3,
+	/* four buttons */
+	input logic ei_btn0,
+	input logic ei_btn1,
+	input logic ei_btn2,
+	input logic ei_btn3,
 	/* PMOD CLS SPI bus 4-wire */
 	output logic eo_pmod_cls_csn,
 	output logic eo_pmod_cls_sck,
@@ -87,8 +87,8 @@ module fpga_serial_acl_tester
 	/* Arty A7-100T UART TX and RX signals */
 	output logic eo_uart_tx,
 	input logic ei_uart_rx,
-  	/* PMOD SSD direct GPIO */
-  	output logic [7:0] eo_ssd_pmod0);
+	/* PMOD SSD direct GPIO */
+	output logic [7:0] eo_ssd_pmod0);
 
 /* Disable or enable fast FSM delays for simulation instead of impelementation. */
 localparam integer c_FCLK = 20000000;
