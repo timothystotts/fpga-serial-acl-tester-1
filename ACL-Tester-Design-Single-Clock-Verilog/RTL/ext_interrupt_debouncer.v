@@ -116,7 +116,7 @@ begin: p_fsm_nx_output
 			   timer elapses for a full duration of the signal being one, then
 			   transition the state to State C. */
 			s_int_deb = 1'b0;
-			if (~ si_interrupt_sync) s_intdeb_nx_state = ST_A;
+			if (! si_interrupt_sync) s_intdeb_nx_state = ST_A;
 			else if (s_t >= c_t1 - 2) s_intdeb_nx_state = ST_C;
 			else s_intdeb_nx_state = ST_B;
 		end
@@ -125,7 +125,7 @@ begin: p_fsm_nx_output
 			   transitions to zero, then transition to State D to count a timer
 			   time while waiting to change the debounced output to zero. */
 			s_int_deb = 1'b1;
-			if (~ si_interrupt_sync) s_intdeb_nx_state = ST_D;
+			if (! si_interrupt_sync) s_intdeb_nx_state = ST_D;
 			else s_intdeb_nx_state = ST_C;
 		end
 		ST_D: begin

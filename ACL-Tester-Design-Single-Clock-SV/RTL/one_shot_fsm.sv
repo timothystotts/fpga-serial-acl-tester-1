@@ -67,7 +67,7 @@ begin : p_fsm_nx_state_out
 		end
 		ST_C : begin
 			s_y_out = 1'b0;
-			if (~x) s_1shot_nx_state = ST_A;
+			if (! x) s_1shot_nx_state = ST_A;
 			else s_1shot_nx_state = ST_C;
 		end
 		default : begin // ST_A

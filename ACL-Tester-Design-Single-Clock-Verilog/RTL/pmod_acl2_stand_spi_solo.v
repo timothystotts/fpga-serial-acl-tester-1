@@ -1399,7 +1399,7 @@ begin: p_fsm_comb
 			s_byte_index_val = s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (~ ei_int1) s_drv_nx_state = ST_DRV_WAIT_DR_INT1;
+			if (! ei_int1) s_drv_nx_state = ST_DRV_WAIT_DR_INT1;
 			else s_drv_nx_state = ST_DRV_CLEAR_MEASU_CMD;
 		end
 
@@ -1687,7 +1687,7 @@ begin: p_fsm_comb
 			s_byte_index_val = s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (~ ei_int1) s_drv_nx_state = ST_DRV_WAIT_AT_INT2;
+			if (! ei_int1) s_drv_nx_state = ST_DRV_WAIT_AT_INT2;
 			else s_drv_nx_state = ST_DRV_CLEAR_AWAKE0_CMD;
 		end
 
@@ -1975,7 +1975,7 @@ begin: p_fsm_comb
 			s_byte_index_val = s_byte_index_aux;
 			s_reg_status_val = s_reg_status_aux;
 
-			if (~ ei_int2) s_drv_nx_state = ST_DRV_WAIT_AT_INT1;
+			if (! ei_int2) s_drv_nx_state = ST_DRV_WAIT_AT_INT1;
 			else s_drv_nx_state = ST_DRV_CLEAR_AWAKE1_CMD;
 		end
 

@@ -122,7 +122,7 @@ begin: p_uartfeed_fsm_nx_out
 			s_uart_k_val = s_uart_k_aux;
 			s_uart_line_val = s_uart_line_aux;
 
-			if (~ i_tx_go) s_uartfeed_nx_state = ST_UARTFEED_IDLE;
+			if (! i_tx_go) s_uartfeed_nx_state = ST_UARTFEED_IDLE;
 			else s_uartfeed_nx_state = ST_UARTFEED_WAIT;
 		end
 		default: begin // ST_UARTFEED_IDLE

@@ -62,18 +62,20 @@ t_lcd_upd_state s_lcd_upd_nx_state;
    Write Line 2
    Wait 0.2 seconds
    Repeat the above. */
-`define c_lcd_update_timer_bits 24
+localparam c_lcd_update_timer_bits = 24;
 /* The sub-second refresh is actually 1/5 of a second to have a 5 Hz refresh,
    approximately. If \ref parm_fast_simulation is defined, then tne once
    second refresh is actually 1/100 of a second to have a 100 Hz refresh
    for waveform viewing. */
-localparam [(`c_lcd_update_timer_bits - 1):0] c_i_one_ms =
-	parm_fast_simulation ? 2500 : 2500;
-localparam [(`c_lcd_update_timer_bits - 1):0] c_i_subsecond =
-	parm_fast_simulation ? (2500000 / 20 - (2 * c_i_one_ms)) : (2500000 / 5 - (2 * c_i_one_ms));
-localparam [(`c_lcd_update_timer_bits - 1):0] c_i_max = c_i_subsecond;
+typedef logic [(c_lcd_update_timer_bits - 1):0] t_cnt_i_value;
 
-logic [(`c_lcd_update_timer_bits - 1):0] s_i;
+localparam t_cnt_i_value c_i_one_ms =
+	parm_fast_simulation ? 2500 : 2500;
+localparam t_cnt_i_value c_i_subsecond =
+	parm_fast_simulation ? (2500000 / 20 - (2 * c_i_one_ms)) : (2500000 / 5 - (2 * c_i_one_ms));
+localparam t_cnt_i_value c_i_max = c_i_subsecond;
+
+t_cnt_i_value s_i;
 
 //Part 3: Statements------------------------------------------------------------
 /* Timer (strategy #1) for timing the PMOD CLS display update */
@@ -113,7 +115,7 @@ begin: p_fsm_comb_run_display_update
 			o_lcd_wr_text_line1 = 1'b0;
 			o_lcd_wr_text_line2 = 1'b0;
 
-			if (~ i_lcd_command_ready) s_lcd_upd_nx_state = ST_LCD_CLEAR_DLY;
+			if (! i_lcd_command_ready) s_lcd_upd_nx_state = ST_LCD_CLEAR_DLY;
 			else s_lcd_upd_nx_state = ST_LCD_CLEAR_RUN;
 		end
 		ST_LCD_CLEAR_DLY: begin /* Now that the Clear command is running,
@@ -141,7 +143,7 @@ begin: p_fsm_comb_run_display_update
 			o_lcd_wr_text_line1 = 1'b1;
 			o_lcd_wr_text_line2 = 1'b0;
 
-			if (~ i_lcd_command_ready) s_lcd_upd_nx_state = ST_LCD_LINE1_DLY;
+			if (! i_lcd_command_ready) s_lcd_upd_nx_state = ST_LCD_LINE1_DLY;
 			else s_lcd_upd_nx_state = ST_LCD_LINE1_RUN;
 		end
 		ST_LCD_LINE1_DLY: begin /* Now that the write Line 1 command is running,
@@ -169,7 +171,7 @@ begin: p_fsm_comb_run_display_update
 			o_lcd_wr_text_line1 = 1'b0;
 			o_lcd_wr_text_line2 = 1'b1;
 
-			if (~ i_lcd_command_ready) s_lcd_upd_nx_state = ST_LCD_LINE2_DLY;
+			if (! i_lcd_command_ready) s_lcd_upd_nx_state = ST_LCD_LINE2_DLY;
 			else s_lcd_upd_nx_state = ST_LCD_LINE2_RUN;
 		end
 		ST_LCD_LINE2_DLY: begin /* Now that the write Line 2 command is running,

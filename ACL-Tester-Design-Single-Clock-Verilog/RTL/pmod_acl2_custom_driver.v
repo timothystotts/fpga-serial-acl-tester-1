@@ -407,7 +407,7 @@ begin: p_stream_fsm_comb
 			/* wait for GROUP VALID to deassert, and on this state
 			   transition, the synchronous state process will capture
 			   the 8 bytes of measurement value. */
-			if (~ s_acl2_rd_data_group_valid) s_stream_nx_state = ST_WAIT_GROUP;
+			if (! s_acl2_rd_data_group_valid) s_stream_nx_state = ST_WAIT_GROUP;
 			else s_stream_nx_state = ST_DONE_CYCLE;
 		end
 		default: begin // ST_WAIT_GROUP

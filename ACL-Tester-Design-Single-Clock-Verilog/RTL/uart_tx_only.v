@@ -102,7 +102,7 @@ clock_enable_divider #(.par_ce_divisor(4 * 16 * 115200 / BAUD))
    The FIFO must implement read-ahead output on rd_en. */
 assign s_data_fifo_tx_in = i_tx_data;
 assign s_data_fifo_tx_we = i_tx_valid;
-assign o_tx_ready = ((~ s_data_fifo_tx_full) && (~ s_data_fifo_tx_almostfull));
+assign o_tx_ready = ((! s_data_fifo_tx_full) && (! s_data_fifo_tx_almostfull));
 
 always @(posedge i_clk_7_37mhz)
 begin: p_gen_fifo_tx_valid
@@ -213,7 +213,7 @@ begin: p_uarttxonly_fsm_nx_out
 
 			so_uart_tx = 1'b1;
 
-			if (~ s_data_fifo_tx_empty) s_uarttxonly_nx_state = ST_START;
+			if (! s_data_fifo_tx_empty) s_uarttxonly_nx_state = ST_START;
 			else s_uarttxonly_nx_state = ST_IDLE;
 		end
 		default: begin // ST_IDLE
@@ -225,7 +225,7 @@ begin: p_uarttxonly_fsm_nx_out
 
 			so_uart_tx = 1'b1;
 
-			if (~ s_data_fifo_tx_empty) s_uarttxonly_nx_state = ST_START;
+			if (! s_data_fifo_tx_empty) s_uarttxonly_nx_state = ST_START;
 			else s_uarttxonly_nx_state = ST_IDLE;
 		end
 	endcase

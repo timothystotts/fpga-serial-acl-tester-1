@@ -121,7 +121,7 @@ begin: p_tester_fsm_comb
 			s_mode_is_measur_val = s_mode_is_measur_aux;
 			s_mode_is_linked_val = s_mode_is_linked_aux;
 			
-			if (~ i_acl_command_ready) s_tester_nx_state = ST_2;
+			if (! i_acl_command_ready) s_tester_nx_state = ST_2;
 			else s_tester_nx_state = ST_3;
 		end
 		ST_3: begin /* Step three to command start the ACL2 to measurement mode */
@@ -181,7 +181,7 @@ begin: p_tester_fsm_comb
 			s_mode_is_measur_val = s_mode_is_measur_aux;
 			s_mode_is_linked_val = s_mode_is_linked_aux;
 			
-			if (~ i_acl_command_ready) s_tester_nx_state = ST_6;
+			if (! i_acl_command_ready) s_tester_nx_state = ST_6;
 			else s_tester_nx_state = ST_7;
 		end
 		ST_7: begin /* Step three to command start the ACL2 to linked mode */
