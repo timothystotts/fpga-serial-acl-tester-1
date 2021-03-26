@@ -1,8 +1,8 @@
 Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| Tool Version     : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
-| Date             : Tue Mar  9 16:08:50 2021
-| Host             : J1STUDY running 64-bit major release  (build 9200)
+| Tool Version     : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
+| Date             : Thu Mar 25 21:12:01 2021
+| Host             : l4study running 64-bit Ubuntu 18.04.5 LTS
 | Command          : report_power -file fpga_serial_acl_tester_power_routed.rpt -pb fpga_serial_acl_tester_power_summary_routed.pb -rpx fpga_serial_acl_tester_power_routed.rpx
 | Design           : fpga_serial_acl_tester
 | Device           : xc7a100ticsg324-1L
@@ -54,7 +54,7 @@ Table of Contents
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |     0.003 |       14 |       --- |             --- |
 | Slice Logic    |     0.001 |     7862 |       --- |             --- |
-|   LUT as Logic |     0.001 |     3560 |     63400 |            5.62 |
+|   LUT as Logic |     0.001 |     3564 |     63400 |            5.62 |
 |   CARRY4       |    <0.001 |      573 |     15850 |            3.62 |
 |   Register     |    <0.001 |     2477 |    126800 |            1.95 |
 |   F7/F8 Muxes  |    <0.001 |       12 |     63400 |            0.02 |

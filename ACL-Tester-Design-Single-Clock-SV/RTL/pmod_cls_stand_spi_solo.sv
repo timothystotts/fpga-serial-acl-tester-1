@@ -46,21 +46,8 @@ module pmod_cls_stand_spi_solo
 		input logic i_ext_spi_clk_x,
 		input logic i_srst,
 		input logic i_spi_ce_4x,
-		/* system interface to the \ref pmod_generic_spi_solo module. */
-		output logic o_go_stand,
-		input logic i_spi_idle,
-		output t_pmod_cls_tx_len o_tx_len,
-		output t_pmod_cls_wait_cyc o_wait_cyc,
-		output t_pmod_cls_rx_len o_rx_len,
-		/* TX FIFO interface to the \ref pmod_generic_spi_solo module. */
-		output t_pmod_cls_data_byte o_tx_data,
-		output logic o_tx_enqueue,
-		input logic i_tx_ready,
-		/* RX FIFO interface to the \ref pmod_generic_spi_solo module. */
-		input t_pmod_cls_data_byte i_rx_data,
-		output logic o_rx_dequeue,
-		input logic i_rx_valid,
-		input logic i_rx_avail,
+		/* Interface pmod_generic_spi_solo_intf */
+		pmod_generic_spi_solo_intf.spi_sysdrv sdrv,
 		/* FPGA system interface to CLS operation */
 		output logic o_command_ready,
 		input logic i_cmd_wr_clear_display,
@@ -174,13 +161,13 @@ begin: p_fsm_comb
 			   the \ref s_cls_dat_tx_aux auxiliary register for additional data
 			   transfer. */
 			o_command_ready = 1'b0;
-			o_tx_data = 8'h00;
-			o_tx_enqueue = 1'b0;
-			o_tx_len = 0;
-			o_rx_len = 0;
-			o_wait_cyc = 0;
-			o_rx_dequeue = 1'b0;
-			o_go_stand = 1'b0;
+			sdrv.tx_data = 8'h00;
+			sdrv.tx_enqueue = 1'b0;
+			sdrv.tx_len = 0;
+			sdrv.rx_len = 0;
+			sdrv.wait_cyc = 0;
+			sdrv.rx_dequeue = 1'b0;
+			sdrv.go_stand = 1'b0;
 			s_cls_cmd_len_val = 4;
 			s_cls_cmd_tx_val = {24'h000000,
 				ASCII_CLS_ESC,
@@ -200,13 +187,13 @@ begin: p_fsm_comb
 			   the \ref s_cls_cmd_tx_aux auxiliary register, and load the 16-byte text into
 			   the \ref s_cls_dat_tx_aux auxiliary register for additional data transfer. */
 			o_command_ready = 1'b0;
-			o_tx_data = 8'h00;
-			o_tx_enqueue = 1'b0;
-			o_tx_len = 0;
-			o_rx_len = 0;
-			o_wait_cyc = 0;
-			o_rx_dequeue = 1'b0;
-			o_go_stand = 1'b0;
+			sdrv.tx_data = 8'h00;
+			sdrv.tx_enqueue = 1'b0;
+			sdrv.tx_len = 0;
+			sdrv.rx_len = 0;
+			sdrv.wait_cyc = 0;
+			sdrv.rx_dequeue = 1'b0;
+			sdrv.go_stand = 1'b0;
 			s_cls_cmd_len_val = 7;
 			s_cls_cmd_tx_val = {
 				ASCII_CLS_ESC,
@@ -229,13 +216,13 @@ begin: p_fsm_comb
 			   the \ref s_cls_cmd_tx_aux auxiliary register, and load the 16-byte text into
 			   the \ref s_cls_dat_tx_aux auxiliary register for additional data transfer. */
 			o_command_ready = 1'b0;
-			o_tx_data = 8'h00;
-			o_tx_enqueue = 1'b0;
-			o_tx_len = 0;
-			o_rx_len = 0;
-			o_wait_cyc = 0;
-			o_rx_dequeue = 1'b0;
-			o_go_stand = 1'b0;
+			sdrv.tx_data = 8'h00;
+			sdrv.tx_enqueue = 1'b0;
+			sdrv.tx_len = 0;
+			sdrv.rx_len = 0;
+			sdrv.wait_cyc = 0;
+			sdrv.rx_dequeue = 1'b0;
+			sdrv.go_stand = 1'b0;
 			s_cls_cmd_len_val = 7;
 			s_cls_cmd_tx_val = {
 				ASCII_CLS_ESC,
@@ -258,21 +245,21 @@ begin: p_fsm_comb
 			   \ref s_cls_cmd_tx_aux auxiliary register, and then on the
 			   loading of the last byte, command the SPI operation to start. */
 			o_command_ready = 1'b0;
-			o_tx_data = s_cls_cmd_tx_aux[((s_cls_cmd_len_aux * 8) - 1) -: 8];
-			o_tx_enqueue = i_tx_ready;
-			o_tx_len = s_cls_cmd_txlen_aux;
-			o_rx_len = 0;
-			o_wait_cyc = 0;
-			o_rx_dequeue = 1'b0;
-			o_go_stand = (s_cls_cmd_len_aux > 1) ? 1'b0 : (i_tx_ready ? 1'b1 : 1'b0);
-			s_cls_cmd_len_val = i_tx_ready ? (s_cls_cmd_len_aux - 1) : s_cls_cmd_len_aux;
+			sdrv.tx_data = s_cls_cmd_tx_aux[((s_cls_cmd_len_aux * 8) - 1) -: 8];
+			sdrv.tx_enqueue = sdrv.tx_ready;
+			sdrv.tx_len = s_cls_cmd_txlen_aux;
+			sdrv.rx_len = 0;
+			sdrv.wait_cyc = 0;
+			sdrv.rx_dequeue = 1'b0;
+			sdrv.go_stand = (s_cls_cmd_len_aux > 1) ? 1'b0 : (sdrv.tx_ready ? 1'b1 : 1'b0);
+			s_cls_cmd_len_val = sdrv.tx_ready ? (s_cls_cmd_len_aux - 1) : s_cls_cmd_len_aux;
 			s_cls_cmd_tx_val = s_cls_cmd_tx_aux;
 			s_cls_dat_len_val = s_cls_dat_len_aux;
 			s_cls_dat_tx_val = s_cls_dat_tx_aux;
 			s_cls_cmd_txlen_val = s_cls_cmd_txlen_aux;
 			s_cls_dat_txlen_val = s_cls_dat_txlen_aux;
 
-			if ((i_tx_ready == 1'b1) && (s_cls_cmd_len_aux <= 1))
+			if ((sdrv.tx_ready == 1'b1) && (s_cls_cmd_len_aux <= 1))
 				s_cls_drv_nx_state = ST_CLS_CMD_WAIT;
 			else
 				s_cls_drv_nx_state = ST_CLS_CMD_RUN;
@@ -282,13 +269,13 @@ begin: p_fsm_comb
 			/* Wait for the command sequence to end and for the SPI operation
 			   to return to IDLE. */
 			o_command_ready = 1'b0;
-			o_tx_enqueue = 1'b0;
-			o_tx_data = 8'h00;
-			o_tx_len = 0;
-			o_rx_len = 0;
-			o_wait_cyc = 0;
-			o_rx_dequeue = 1'b0;
-			o_go_stand = 1'b0;
+			sdrv.tx_enqueue = 1'b0;
+			sdrv.tx_data = 8'h00;
+			sdrv.tx_len = 0;
+			sdrv.rx_len = 0;
+			sdrv.wait_cyc = 0;
+			sdrv.rx_dequeue = 1'b0;
+			sdrv.go_stand = 1'b0;
 			s_cls_cmd_len_val = s_cls_cmd_len_aux;
 			s_cls_cmd_tx_val = s_cls_cmd_tx_aux;
 			s_cls_dat_len_val = s_cls_dat_len_aux;
@@ -296,7 +283,7 @@ begin: p_fsm_comb
 			s_cls_cmd_txlen_val = s_cls_cmd_txlen_aux;
 			s_cls_dat_txlen_val = s_cls_dat_txlen_aux;
 
-			if (i_spi_idle)
+			if (sdrv.spi_idle)
 				if (s_cls_dat_txlen_aux > 0)
 					s_cls_drv_nx_state = ST_CLS_DAT_RUN;
 				else
@@ -310,21 +297,21 @@ begin: p_fsm_comb
 			   \ref s_cls_dat_tx_aux auxiliary register, and then on the
 			   loading of the last byte, command the SPI operation to start. */
 			o_command_ready = 1'b0;
-			o_tx_data = s_cls_dat_tx_aux[((s_cls_dat_len_aux * 8) - 1) -: 8];
-			o_tx_enqueue = i_tx_ready;
-			o_tx_len = s_cls_dat_txlen_aux;
-			o_rx_len = 0;
-			o_wait_cyc = 0;
-			o_rx_dequeue = 1'b0;
-			o_go_stand = (s_cls_dat_len_aux > 1) ? 1'b0 : (i_tx_ready ? 1'b1 : 1'b0);
+			sdrv.tx_data = s_cls_dat_tx_aux[((s_cls_dat_len_aux * 8) - 1) -: 8];
+			sdrv.tx_enqueue = sdrv.tx_ready;
+			sdrv.tx_len = s_cls_dat_txlen_aux;
+			sdrv.rx_len = 0;
+			sdrv.wait_cyc = 0;
+			sdrv.rx_dequeue = 1'b0;
+			sdrv.go_stand = (s_cls_dat_len_aux > 1) ? 1'b0 : (sdrv.tx_ready ? 1'b1 : 1'b0);
 			s_cls_cmd_len_val = s_cls_cmd_len_aux;
-			s_cls_dat_len_val = i_tx_ready ? (s_cls_dat_len_aux - 1) : s_cls_dat_len_aux;
+			s_cls_dat_len_val = sdrv.tx_ready ? (s_cls_dat_len_aux - 1) : s_cls_dat_len_aux;
 			s_cls_cmd_tx_val = s_cls_cmd_tx_aux;
 			s_cls_dat_tx_val = s_cls_dat_tx_aux;
 			s_cls_cmd_txlen_val = s_cls_cmd_txlen_aux;
 			s_cls_dat_txlen_val = s_cls_dat_txlen_aux;
 
-			if ((i_tx_ready == 1'b1) && (s_cls_dat_len_aux <= 1))
+			if ((sdrv.tx_ready == 1'b1) && (s_cls_dat_len_aux <= 1))
 				s_cls_drv_nx_state = ST_CLS_DAT_WAIT;
 			else
 				s_cls_drv_nx_state = ST_CLS_DAT_RUN;
@@ -334,13 +321,13 @@ begin: p_fsm_comb
 			/* Wait for the data sequence to end and for the SPI operation
 			   to return to IDLE. */
 			o_command_ready = 1'b0;
-			o_tx_enqueue = 1'b0;
-			o_tx_data = 8'h00;
-			o_tx_len = 0;
-			o_rx_len = 0;
-			o_wait_cyc = 0;
-			o_rx_dequeue = 1'b0;
-			o_go_stand = 1'b0;
+			sdrv.tx_enqueue = 1'b0;
+			sdrv.tx_data = 8'h00;
+			sdrv.tx_len = 0;
+			sdrv.rx_len = 0;
+			sdrv.wait_cyc = 0;
+			sdrv.rx_dequeue = 1'b0;
+			sdrv.go_stand = 1'b0;
 			s_cls_cmd_len_val = s_cls_cmd_len_aux;
 			s_cls_cmd_tx_val = s_cls_cmd_tx_aux;
 			s_cls_dat_len_val = s_cls_dat_len_aux;
@@ -348,7 +335,7 @@ begin: p_fsm_comb
 			s_cls_cmd_txlen_val = s_cls_cmd_txlen_aux;
 			s_cls_dat_txlen_val = s_cls_dat_txlen_aux;
 
-			if (i_spi_idle) s_cls_drv_nx_state = ST_CLS_IDLE;
+			if (sdrv.spi_idle) s_cls_drv_nx_state = ST_CLS_IDLE;
 			else s_cls_drv_nx_state = ST_CLS_DAT_WAIT;
 		end
 
@@ -358,13 +345,13 @@ begin: p_fsm_comb
 			   (b) write display text line 1
 			   (c) write display text line 2 */
 			o_command_ready = 1'b1;
-			o_tx_enqueue = 1'b0;
-			o_tx_data = 8'h00;
-			o_tx_len = 0;
-			o_rx_len = 0;
-			o_wait_cyc = 0;
-			o_rx_dequeue = 1'b0;
-			o_go_stand = 1'b0;
+			sdrv.tx_enqueue = 1'b0;
+			sdrv.tx_data = 8'h00;
+			sdrv.tx_len = 0;
+			sdrv.rx_len = 0;
+			sdrv.wait_cyc = 0;
+			sdrv.rx_dequeue = 1'b0;
+			sdrv.go_stand = 1'b0;
 			s_cls_cmd_len_val = s_cls_cmd_len_aux;
 			s_cls_cmd_tx_val = s_cls_cmd_tx_aux;
 			s_cls_dat_len_val = s_cls_dat_len_aux;
@@ -384,13 +371,13 @@ begin: p_fsm_comb
 			   a time of \ref c_t_pmodcls_boot before accepting commands to operate
 			   the PMOD CLS display. */
 			o_command_ready = 1'b0;
-			o_tx_data = 8'h00;
-			o_tx_enqueue = 1'b0;
-			o_tx_len = 0;
-			o_rx_len = 0;
-			o_wait_cyc = 0;
-			o_rx_dequeue = 1'b0;
-			o_go_stand = 1'b0;
+			sdrv.tx_data = 8'h00;
+			sdrv.tx_enqueue = 1'b0;
+			sdrv.tx_len = 0;
+			sdrv.rx_len = 0;
+			sdrv.wait_cyc = 0;
+			sdrv.rx_dequeue = 1'b0;
+			sdrv.go_stand = 1'b0;
 			s_cls_cmd_len_val = s_cls_cmd_len_aux;
 			s_cls_cmd_tx_val = s_cls_cmd_tx_aux;
 			s_cls_dat_len_val = s_cls_dat_len_aux;

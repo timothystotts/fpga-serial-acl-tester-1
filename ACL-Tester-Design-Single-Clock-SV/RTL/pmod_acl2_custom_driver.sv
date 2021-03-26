@@ -82,21 +82,13 @@ module pmod_acl2_custom_driver
    preset selectors. */
 `include "thresh_presets_include.svh"
 
-/* ACL2 SPI driver wiring to the Generic SPI driver. */
-logic s_acl2_clk_spi_4x;
-logic s_acl2_rst_spi_4x;
-logic s_acl2_go_stand;
-logic s_acl2_spi_idle;
-t_pmod_acl2_tx_len s_acl2_tx_len;
-t_pmod_acl2_wait_cyc s_acl2_wait_cyc;
-t_pmod_acl2_rx_len s_acl2_rx_len;
-t_pmod_acl2_data_byte s_acl2_tx_data;
-logic s_acl2_tx_enqueue;
-logic s_acl2_tx_ready;
-t_pmod_acl2_data_byte s_acl2_rx_data;
-logic s_acl2_rx_dequeue;
-logic s_acl2_rx_valid;
-logic s_acl2_rx_avail;
+/* Pmod ACL2 SPI driver wiring to the Generic SPI driver. */
+pmod_generic_spi_solo_intf #(
+	.parm_tx_len_bits  (c_pmod_acl2_tx_len_bits),
+	.parm_wait_cyc_bits (c_pmod_acl2_wait_cyc_bits),
+	.parm_rx_len_bits  (c_pmod_acl2_rx_len_bits)
+	)
+	intf_acl2_spi();
 
 /* ACL2 SPI driver variables for streaming the 8 bytes of measurement values. */
 t_pmod_acl2_data_byte s_acl2_rd_data_stream;
@@ -220,20 +212,7 @@ pmod_acl2_stand_spi_solo #(
 	.ei_int1(si_int1_debounced),
 	.ei_int2(si_int2_debounced),
 
-	.o_go_stand(s_acl2_go_stand),
-	.i_spi_idle(s_acl2_spi_idle),
-	.o_tx_len(s_acl2_tx_len),
-	.o_wait_cyc(s_acl2_wait_cyc),
-	.o_rx_len(s_acl2_rx_len),
-
-	.o_tx_data(s_acl2_tx_data),
-	.o_tx_enqueue(s_acl2_tx_enqueue),
-	.i_tx_ready(s_acl2_tx_ready),
-
-	.i_rx_data(s_acl2_rx_data),
-	.o_rx_dequeue(s_acl2_rx_dequeue),
-	.i_rx_valid(s_acl2_rx_valid),
-	.i_rx_avail(s_acl2_rx_avail),
+	.sdrv(intf_acl2_spi),
 
 	.o_command_ready(o_command_ready),
 	.i_cmd_init_linked_mode (i_cmd_init_linked_mode),
@@ -252,10 +231,7 @@ pmod_acl2_stand_spi_solo #(
 
 /* Stand-alone SPI bus driver for a single bus-peripheral. */
 pmod_generic_spi_solo #(
-	.parm_ext_spi_clk_ratio (parm_ext_spi_clk_ratio),
-	.parm_tx_len_bits  (c_pmod_acl2_tx_len_bits),
-	.parm_wait_cyc_bits (c_pmod_acl2_wait_cyc_bits),
-	.parm_rx_len_bits  (c_pmod_acl2_rx_len_bits)
+	.parm_ext_spi_clk_ratio (parm_ext_spi_clk_ratio)
 	) u_pmod_generic_spi_solo (
 	.eo_sck_o(sio_acl2_sck_fsm_o),
 	.eo_sck_t(sio_acl2_sck_fsm_t),
@@ -269,20 +245,8 @@ pmod_generic_spi_solo #(
 	.i_srst(i_rst_20mhz),
 	.i_spi_ce_4x(1'b1), /* 20 MHz is 4x the SPI speed, so CE is held '1' */
 
-	.i_go_stand(s_acl2_go_stand),
-	.o_spi_idle(s_acl2_spi_idle),
-	.i_tx_len(s_acl2_tx_len),
-	.i_wait_cyc(s_acl2_wait_cyc),
-	.i_rx_len(s_acl2_rx_len),
-
-	.i_tx_data(s_acl2_tx_data),
-	.i_tx_enqueue(s_acl2_tx_enqueue),
-	.o_tx_ready(s_acl2_tx_ready),
-
-	.o_rx_data(s_acl2_rx_data),
-	.i_rx_dequeue(s_acl2_rx_dequeue),
-	.o_rx_valid(s_acl2_rx_valid),
-	.o_rx_avail(s_acl2_rx_avail));
+	.sdrv(intf_acl2_spi)
+	);
 
 /* Synchronize and debounce the INT1 incoming signal from PMOD ACL2. */
 ext_interrupt_debouncer #() u_extint_deb_int1 (

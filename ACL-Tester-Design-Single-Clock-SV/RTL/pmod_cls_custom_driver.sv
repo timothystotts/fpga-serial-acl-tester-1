@@ -67,19 +67,13 @@ module pmod_cls_custom_driver
 		);
 
 //Part 2: Declarations----------------------------------------------------------
-/* CLS SPI driver wiring to the Generic SPI driver. */
-logic s_cls_go_stand;
-logic s_cls_spi_idle;
-t_pmod_cls_tx_len s_cls_tx_len;
-t_pmod_cls_wait_cyc s_cls_wait_cyc;
-t_pmod_cls_rx_len s_cls_rx_len;
-t_pmod_cls_data_byte s_cls_tx_data;
-logic s_cls_tx_enqueue;
-logic s_cls_tx_ready;
-t_pmod_cls_data_byte s_cls_rx_data;
-logic s_cls_rx_dequeue;
-logic s_cls_rx_valid;
-logic s_cls_rx_avail;
+/* Pmod CLS SPI driver wiring to the Generic SPI driver. */
+pmod_generic_spi_solo_intf #(
+	.parm_tx_len_bits  (c_pmod_cls_tx_len_bits),
+	.parm_wait_cyc_bits (c_pmod_cls_wait_cyc_bits),
+	.parm_rx_len_bits  (c_pmod_cls_rx_len_bits)
+	)
+	intf_cls_spi();
 
 /* CLS SPI outputs, FSM signals to register the SPI bus outputs for
    optimal timing closure and glitch minimization. */
@@ -131,18 +125,9 @@ pmod_cls_stand_spi_solo #(
 	.i_ext_spi_clk_x(i_clk_20mhz),
 	.i_srst(i_rst_20mhz),
 	.i_spi_ce_4x(i_ce_2_5mhz),
-	.o_go_stand(s_cls_go_stand),
-	.i_spi_idle(s_cls_spi_idle),
-	.o_tx_len(s_cls_tx_len),
-	.o_wait_cyc(s_cls_wait_cyc),
-	.o_rx_len(s_cls_rx_len),
-	.o_tx_data(s_cls_tx_data),
-	.o_tx_enqueue(s_cls_tx_enqueue),
-	.i_tx_ready(s_cls_tx_ready),
-	.i_rx_data(s_cls_rx_data),
-	.o_rx_dequeue(s_cls_rx_dequeue),
-	.i_rx_valid(s_cls_rx_valid),
-	.i_rx_avail(s_cls_rx_avail),
+
+	.sdrv(intf_cls_spi),
+
 	.o_command_ready(o_command_ready),
 	.i_cmd_wr_clear_display(i_cmd_wr_clear_display),
 	.i_cmd_wr_text_line1(i_cmd_wr_text_line1),
@@ -152,10 +137,7 @@ pmod_cls_stand_spi_solo #(
 
 /* Stand-alone SPI bus driver for a single bus-peripheral. */
 pmod_generic_spi_solo #(
-	.parm_ext_spi_clk_ratio (parm_ext_spi_clk_ratio),
-	.parm_tx_len_bits  (c_pmod_cls_tx_len_bits),
-	.parm_wait_cyc_bits (c_pmod_cls_wait_cyc_bits),
-	.parm_rx_len_bits  (c_pmod_cls_rx_len_bits)
+	.parm_ext_spi_clk_ratio (parm_ext_spi_clk_ratio)
 	) u_pmod_generic_spi_solo (
 	.eo_sck_o(sio_cls_sck_fsm_o),
 	.eo_sck_t(sio_cls_sck_fsm_t),
@@ -167,18 +149,9 @@ pmod_generic_spi_solo #(
 	.i_ext_spi_clk_x(i_clk_20mhz),
 	.i_srst(i_rst_20mhz),
 	.i_spi_ce_4x(i_ce_2_5mhz),
-	.i_go_stand(s_cls_go_stand),
-	.o_spi_idle(s_cls_spi_idle),
-	.i_tx_len(s_cls_tx_len),
-	.i_wait_cyc(s_cls_wait_cyc),
-	.i_rx_len(s_cls_rx_len),
-	.i_tx_data(s_cls_tx_data),
-	.i_tx_enqueue(s_cls_tx_enqueue),
-	.o_tx_ready(s_cls_tx_ready),
-	.o_rx_data(s_cls_rx_data),
-	.i_rx_dequeue(s_cls_rx_dequeue),
-	.o_rx_valid(s_cls_rx_valid),
-	.o_rx_avail(s_cls_rx_avail));
+
+	.sdrv(intf_cls_spi)
+	);
 
 endmodule : pmod_cls_custom_driver
 //------------------------------------------------------------------------------

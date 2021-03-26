@@ -6,9 +6,9 @@ Interface          SPIX4
 Size               16M
 Start Address      0x00000000
 End Address        0x00FFFFFF
-Checksum           0xEC25968E
+Checksum           0xECCB6CE0
 Fill Value         0xFF
 
-Addr1         Addr2         Date                    File(s)                                                                                                                                                      Checksum
-0x00000000    0x00138D53    Mar  9 16:09:14 2021    W:/wa/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-SV/Work_Dir/Arty-A7-100T/ACL-Tester-Design-SC-SV-100.runs/impl_1/fpga_serial_acl_tester.bit    0x009F5D3A
-File Checksum Total                                                                                                                                                                                              0x009F5D3A
+Addr1         Addr2         Date                    File(s)                                                                                                                                                                                                   Checksum
+0x00000000    0x0012E6C7    Mar 25 21:12:15 2021    /home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-Single-Clock-SV/Work_Dir/Arty-A7-100T/ACL-Tester-Design-SC-SV-100.runs/impl_1/fpga_serial_acl_tester.bit    0x009F4E18
+File Checksum Total                                                                                                                                                                                                                                           0x009F4E18

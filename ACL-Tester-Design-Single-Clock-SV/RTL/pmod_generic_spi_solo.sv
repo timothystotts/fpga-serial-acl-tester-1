@@ -58,22 +58,9 @@ module pmod_generic_spi_solo
 		input logic i_ext_spi_clk_x,
 		input logic i_srst,
 		input logic i_spi_ce_4x,
-		/* inputs and output for triggering a new SPI bus cycle */
-		input logic i_go_stand,
-		output logic o_spi_idle,
-		input logic [(parm_tx_len_bits - 1):0] i_tx_len,
-		input logic [(parm_wait_cyc_bits - 1):0] i_wait_cyc,
-		input logic [(parm_rx_len_bits - 1):0] i_rx_len,
-		/* system interface to TX FIFO */
-		input logic [7:0] i_tx_data,
-		input logic i_tx_enqueue,
-		output logic o_tx_ready,
-		/* system interface to RX FIFO */
-		output logic [7:0] o_rx_data,
-		input logic i_rx_dequeue,
-		output logic o_rx_valid,
-		output logic o_rx_avail
-		);
+		/* Interface pmod_generic_spi_solo_intf */
+		pmod_generic_spi_solo_intf.spi_solo sdrv
+	);
 
 // Part 2: Declarations---------------------------------------------------------
 /* SPI FSM state declarations */
@@ -183,10 +170,10 @@ logic s_data_fifo_tx_rderr;
 //Part 3: Statements------------------------------------------------------------
 /* The SPI driver is IDLE only if the state signals as IDLE and more than four
    clock cycles have elapsed since a system clock pulse on input
-   \ref i_go_stand.
+   \ref sdrv.go_stand.
    */
-assign o_spi_idle = ((s_spi_idle == 1'b1) &&
-					 (s_dat_pr_state == ST_PULSE_WAIT)) ? 1'b1 : 1'b0;
+assign sdrv.spi_idle = ((s_spi_idle == 1'b1) &&
+						(s_dat_pr_state == ST_PULSE_WAIT)) ? 1'b1 : 1'b0;
 
 /* In this implementation, the 4x SPI clock is operated by a clock enable against
    the system clock \ref i_ext_spi_clk_x . */
@@ -194,10 +181,10 @@ assign s_spi_ce_4x = i_spi_ce_4x;
 
 /* Mapping of the RX FIFO to external control and reception of data for
    reading operations */
-assign o_rx_avail = (~ s_data_fifo_rx_empty) & s_spi_ce_4x;
-assign o_rx_valid = s_data_fifo_rx_valid & s_spi_ce_4x;
-assign s_data_fifo_rx_re = i_rx_dequeue & s_spi_ce_4x;
-assign o_rx_data = s_data_fifo_rx_out;
+assign sdrv.rx_avail = (~ s_data_fifo_rx_empty) & s_spi_ce_4x;
+assign sdrv.rx_valid = s_data_fifo_rx_valid & s_spi_ce_4x;
+assign s_data_fifo_rx_re = sdrv.rx_dequeue & s_spi_ce_4x;
+assign sdrv.rx_data = s_data_fifo_rx_out;
 
 always_ff @(posedge i_ext_spi_clk_x)
 begin: p_gen_fifo_rx_valid
@@ -249,9 +236,9 @@ FIFO_SYNC_MACRO  #(
 				
 /* Mapping of the TX FIFO to external control and transmission of data for
    writing operations */
-assign s_data_fifo_tx_in = i_tx_data;
-assign s_data_fifo_tx_we = i_tx_enqueue & s_spi_ce_4x;
-assign o_tx_ready = (~ s_data_fifo_tx_full) & s_spi_ce_4x;
+assign s_data_fifo_tx_in = sdrv.tx_data;
+assign s_data_fifo_tx_we = sdrv.tx_enqueue & s_spi_ce_4x;
+assign sdrv.tx_ready = (~ s_data_fifo_tx_full) & s_spi_ce_4x;
 
 always_ff @(posedge i_ext_spi_clk_x)
 begin: p_gen_fifo_tx_valid
@@ -351,7 +338,7 @@ begin: p_timer_1
 	end
 end : p_timer_1
 
-/* System Data GO data value holder and i_go_stand pulse stretcher for duration
+/* System Data GO data value holder and sdrv.go_stand pulse stretcher for duration
    of all four clock enables duration of the 4x clock, starting at a clock
    enable position. State assignment and Auxiliary register assignment. */
 always_ff @(posedge i_ext_spi_clk_x)
@@ -380,7 +367,7 @@ end : p_dat_fsm_state_aux
    s_spi_clk_4x clock enables on to the \ref p_spi_fsm_comb machine. */
 assign s_go_stand = s_go_stand_aux;
 
-/* System Data GO data value holder and i_go_stand pulse stretcher for all
+/* System Data GO data value holder and sdrv.go_stand pulse stretcher for all
    four clock enables duration of the 4x clock, starting at an clock enable
    position. Combinatorial logic paired with the \ref p_dat_fsm_state
    assignments. */
@@ -424,11 +411,11 @@ begin: p_dat_fsm_comb
 			/* If GO signal is 1, assign it and the auxiliary on the
 			   transition to the first HOLD state. Otherwise, hold
 			   the values already assigned. */
-			if (i_go_stand) begin
-				s_go_stand_val = i_go_stand;
-				s_tx_len_val = i_tx_len;
-				s_rx_len_val = i_rx_len;
-				s_wait_cyc_val = i_wait_cyc;
+			if (sdrv.go_stand) begin
+				s_go_stand_val = sdrv.go_stand;
+				s_tx_len_val = sdrv.tx_len;
+				s_rx_len_val = sdrv.rx_len;
+				s_wait_cyc_val = sdrv.wait_cyc;
 				s_dat_nx_state = ST_PULSE_HOLD_0;
 			end else begin
 				s_go_stand_val = s_go_stand_aux;
@@ -539,7 +526,7 @@ begin: p_spi_fsm_comb
 			s_data_fifo_tx_re = ((s_t != (8 * s_tx_len_aux) - c_t_inc) && (s_t % 8 == 7) &&
 				(s_data_fifo_tx_empty == 1'b0)) ? s_spi_clk_ce2 : 1'b0;
 			
-			/* If every bit from the FIFO according to i_tx_len value captured
+			/* If every bit from the FIFO according to sdrv.tx_len value captured
 			   in s_tx_len_aux, then move to either WAIT, RX, or STOP. */
 			if (s_t == (8 * s_tx_len_aux) - c_t_inc)
 				if (s_rx_len_aux > 0)
