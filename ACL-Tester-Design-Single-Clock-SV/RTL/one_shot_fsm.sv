@@ -30,6 +30,7 @@
 -- Finite State Machines in Hardware: Theory and Design (with VHDL and
 -- SystemVerilog) by Volnei A. Pedroni.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //Regular FSM-------------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module one_shot_fsm
@@ -41,6 +42,9 @@ module one_shot_fsm
 		);
 
 // Part 2: Declarations---------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 typedef enum logic [1:0] {ST_A, ST_B, ST_C} t_1shot_state;
 t_1shot_state s_1shot_pr_state;
 t_1shot_state s_1shot_nx_state;
@@ -86,3 +90,4 @@ end : p_fsm_glitch_free
 
 endmodule : one_shot_fsm // one_shot_fsm_best
 //------------------------------------------------------------------------------
+`end_keywords

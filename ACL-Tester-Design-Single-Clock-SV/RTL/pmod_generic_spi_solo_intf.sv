@@ -29,6 +29,7 @@
 -- Standard SPI operating in Mode 0, without Extended data transfer of more
 -- than the standard COPI and CIPO data signals.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //------------------------------------------------------------------------------
 interface pmod_generic_spi_solo_intf #(
 	parameter integer parm_tx_len_bits = 11,
@@ -37,6 +38,9 @@ interface pmod_generic_spi_solo_intf #(
 	/* LOG2 of the RX FIFO max count */
 	integer parm_rx_len_bits = 11 /* now ignored due to usage of MACRO */
 	) ();
+
+	timeunit 1ns;
+	timeprecision 1ps;
 
 	/* system interface to the \ref pmod_generic_spi_solo module. */
 	logic go_stand;
@@ -75,3 +79,5 @@ interface pmod_generic_spi_solo_intf #(
 		input rx_valid, rx_avail);
 
 endinterface : pmod_generic_spi_solo_intf
+//------------------------------------------------------------------------------
+`end_keywords

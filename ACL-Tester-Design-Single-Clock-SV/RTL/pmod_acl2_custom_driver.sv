@@ -30,6 +30,7 @@
 --        Digilent Inc with SPI bus communication and two GPIO level interrupts
 --        input from the PMOD ACL2.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //------------------------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module pmod_acl2_custom_driver
@@ -77,6 +78,8 @@ module pmod_acl2_custom_driver
 		);
 
 //Part 2: Declarations----------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
 
 /* Include the threshold presets to define parameter values for the threshold
    preset selectors. */
@@ -369,3 +372,4 @@ end : p_stream_fsm_comb
 
 endmodule : pmod_acl2_custom_driver
 //------------------------------------------------------------------------------
+`end_keywords

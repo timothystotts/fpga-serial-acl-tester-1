@@ -26,6 +26,7 @@
 --
 -- \brief A simple text byte feeder to the UART TX module.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //Recursive Moore Machine-------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module uart_tx_feed
@@ -40,6 +41,9 @@ module uart_tx_feed
 	);
 
 //Part 2: Declarations----------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 /* UART TX update FSM state declarations */
 `define c_uarttx_feed_fsm_bits 2
 
@@ -140,3 +144,4 @@ end : p_uartfeed_fsm_nx_out
 
 endmodule : uart_tx_feed
 //------------------------------------------------------------------------------
+`end_keywords

@@ -26,6 +26,7 @@
 --
 -- \brief A simple pulser to generate palette values for \ref led_pwm_driver.sv .
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //D-FF based LED pulsing--------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module led_palette_pulser
@@ -60,6 +61,9 @@ module led_palette_pulser
 		input logic i_sw1_selected);
 
 //Part 2: Declarations----------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 // Color LED PWM driver input scale signals for 8-bit color mixing that
 // makes the color LEDs appear to pulse in luminostiry and hue.
 logic s_tester_led_ce;
@@ -284,3 +288,4 @@ end : p_tester_led_display
 
 endmodule : led_palette_pulser
 //------------------------------------------------------------------------------
+`end_keywords

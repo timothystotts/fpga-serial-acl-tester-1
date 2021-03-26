@@ -30,6 +30,7 @@
 -- the FSM of Figure 8.28a from the text Finite State Machines in Hardware:
 -- Theory and Design (with VHDL and SystemVerilog) by Volnei A. Pedroni..
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //Timed Moore machine with timer control strategy #1
 //Part 1: Module header:--------------------------------------------------------
 module pulse_stretcher_synch
@@ -50,6 +51,9 @@ module pulse_stretcher_synch
 		);
 
 // Part 2: Declarations---------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 /* Stretcher FSM state values */
 localparam [0:0] ST_A = 1'b0;
 localparam [0:0] ST_B = 1'b1;
@@ -116,3 +120,4 @@ end : p_fsm_comb
 
 endmodule : pulse_stretcher_synch
 //------------------------------------------------------------------------------
+`end_keywords

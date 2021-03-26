@@ -26,8 +26,11 @@
 --
 -- \brief A package of definitions used by the SPI drivers.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //------------------------------------------------------------------------------
 package pmod_stand_spi_solo_pkg;
+	timeunit 1ns;
+	timeprecision 1ps;
 
 	// Typedefs for Pmod CLS custom driver
 	typedef logic [3:0] t_pmod_cls_cmd_len;
@@ -76,3 +79,4 @@ package pmod_stand_spi_solo_pkg;
 
 endpackage
 //------------------------------------------------------------------------------
+`end_keywords

@@ -28,6 +28,7 @@
 -- clock enable. The clock and synchronous reset are kept the same; but the
 -- clock enable is further divided.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //------------------------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module clock_enable_divider
@@ -41,6 +42,9 @@ module clock_enable_divider
 		input logic i_ce_mhz);
 
 // Part 2: Declarations---------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 /* A constant representing the counter maximum which is an even division of the
    source clock, per paramter \ref par_ce_divisor . */
 localparam integer c_clk_max = par_ce_divisor - 1;
@@ -87,3 +91,4 @@ assign o_ce_div = s_clk_div_ce;
 
 endmodule : clock_enable_divider
 //------------------------------------------------------------------------------
+`end_keywords

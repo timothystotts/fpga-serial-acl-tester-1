@@ -29,6 +29,7 @@
 --        implementing a custom single-mode operation of the PMOD CLS by
 --        Digilent Inc.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //------------------------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module pmod_cls_custom_driver
@@ -67,6 +68,9 @@ module pmod_cls_custom_driver
 		);
 
 //Part 2: Declarations----------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 /* Pmod CLS SPI driver wiring to the Generic SPI driver. */
 pmod_generic_spi_solo_intf #(
 	.parm_tx_len_bits  (c_pmod_cls_tx_len_bits),
@@ -155,3 +159,4 @@ pmod_generic_spi_solo #(
 
 endmodule : pmod_cls_custom_driver
 //------------------------------------------------------------------------------
+`end_keywords

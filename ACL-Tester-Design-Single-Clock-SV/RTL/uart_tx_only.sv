@@ -29,6 +29,8 @@
 --        Maximum baudrate is 115200; input clock is 7.37 MHz to support divison
 --        to modem clock rates.
 ------------------------------------------------------------------------------*/
+//------------------------------------------------------------------------------
+`begin_keywords "1800-2017"
 //Recursive Moore Machine-------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module uart_tx_only
@@ -48,6 +50,8 @@ module uart_tx_only
 
 
 //Part 2: Declarations----------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
 
 /* State Machine constants and variables */
 `define c_uarttxonly_fsm_state_bits 2
@@ -234,3 +238,4 @@ end : p_fsm_out_reg
 
 endmodule : uart_tx_only
 //------------------------------------------------------------------------------
+`end_keywords

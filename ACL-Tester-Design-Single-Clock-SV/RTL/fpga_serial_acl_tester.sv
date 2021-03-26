@@ -32,6 +32,7 @@
 -- motion detection.
 ------------------------------------------------------------------------------*/
 //------------------------------------------------------------------------------
+`begin_keywords "1800-2017"
 //Multiple Moore Machines
 //Part 1: Module header:--------------------------------------------------------
 module fpga_serial_acl_tester
@@ -90,11 +91,12 @@ module fpga_serial_acl_tester
 	/* PMOD SSD direct GPIO */
 	output logic [7:0] eo_ssd_pmod0);
 
+//Part 2: Declarations----------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 /* Disable or enable fast FSM delays for simulation instead of impelementation. */
 localparam integer c_FCLK = 20000000;
-
-//Part 2: Declarations----------------------------------------------------------
-
 
 /* MMCM and Processor System Reset signals for PLL clock generation from the
    Clocking Wizard and Synchronous Reset generation from the Processor System
@@ -581,3 +583,4 @@ one_pmod_ssd_display #() u_one_pmod_ssd_display (
 
 endmodule : fpga_serial_acl_tester
 //------------------------------------------------------------------------------
+`end_keywords

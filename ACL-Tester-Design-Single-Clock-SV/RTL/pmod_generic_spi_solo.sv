@@ -28,6 +28,7 @@
 -- SPI operating in Mode 0, without Extended data transfer of more than the
 -- standard COPI and CIPO data signals.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //------------------------------------------------------------------------------
 //Multiple Recursive Moore Machines
 //Part 1: Module header:--------------------------------------------------------
@@ -63,6 +64,9 @@ module pmod_generic_spi_solo
 	);
 
 // Part 2: Declarations---------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 /* SPI FSM state declarations */
 `define c_spi_state_bits 3
 typedef enum logic [(`c_spi_state_bits - 1):0] {
@@ -677,3 +681,4 @@ end : p_spi_fsm_inputs
 
 endmodule : pmod_generic_spi_solo
 //------------------------------------------------------------------------------
+`end_keywords

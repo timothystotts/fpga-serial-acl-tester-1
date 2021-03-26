@@ -29,6 +29,7 @@
 -- interface.
 ------------------------------------------------------------------------------*/
 //------------------------------------------------------------------------------
+`begin_keywords "1800-2017"
 //Recursive Moore Machine
 //Part 1: Module header:--------------------------------------------------------
 module pmod_acl2_stand_spi_solo
@@ -66,6 +67,9 @@ module pmod_acl2_stand_spi_solo
 		input t_pmod_acl2_reg_7 i_tx_ax_cfg0_lm);
 
 // Part 2: Declarations---------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 /* Timer signals and constants */
 localparam integer c_acl2_drv_time_value_bits = 24;
 typedef logic [(c_acl2_drv_time_value_bits - 1):0] t_acl2_drv_time_value;
@@ -2088,3 +2092,4 @@ end : p_fsm_comb
 
 endmodule : pmod_acl2_stand_spi_solo
 //------------------------------------------------------------------------------
+`end_keywords

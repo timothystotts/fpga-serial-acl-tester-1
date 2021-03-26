@@ -29,6 +29,7 @@
 -- \brief This FSM is the full 4-button mutual-exclusive debouncer, level
 -- output, without embedded one-shot, with 1 millisecond debounce.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //Timed FSM---------------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module multi_input_debounce
@@ -43,6 +44,9 @@ module multi_input_debounce
 		);
 
 //Part 2: Declarations----------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 (* fsm_encoding = "auto" *)
 (* fsm_safe_state = "default_state" *)
 typedef enum logic [1:0] {ST_A, ST_B, ST_C, ST_D} t_mideb_state;
@@ -148,3 +152,4 @@ assign o_btns_deb = so_btns_deb;
 
 endmodule : multi_input_debounce
 //------------------------------------------------------------------------------
+`end_keywords

@@ -27,6 +27,7 @@
 -- \brief A combinatorial block to convert ADXL362 Readings to ASCII text
 -- representations.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //Combinatorial measurement registers to ASCII text conversion.-----------------
 //Part 1: Module header:--------------------------------------------------------
 module adxl362_readings_to_ascii(
@@ -38,6 +39,9 @@ module adxl362_readings_to_ascii(
 	output logic [(16*8-1):0] o_txt_ascii_line2);
 
 //Part 2: Declarations----------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 /* A re-entrant function that converts a 4-bit part-select to an 8-bit ASCII
    hexadecimal character. */
 function automatic [7:0] ascii_of_hdigit(input [3:0] bchex_val);
@@ -293,3 +297,4 @@ assign o_txt_ascii_line2 = (i_reading_inactive)
 
 endmodule : adxl362_readings_to_ascii
 //------------------------------------------------------------------------------
+`end_keywords

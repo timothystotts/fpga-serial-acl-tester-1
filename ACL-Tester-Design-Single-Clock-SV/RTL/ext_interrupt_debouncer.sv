@@ -28,6 +28,7 @@
 --        glitches on an external Interrupt line from an external Integrated
 --        Circuit.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //Timed Moore machine with timer control strategy #1
 //Part 1: Module header:--------------------------------------------------------
 module ext_interrupt_debouncer(
@@ -37,6 +38,9 @@ module ext_interrupt_debouncer(
 	input logic ei_interrupt);
 
 // Part 2: Declarations---------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 /* Debouncer FSM states. */
 `define c_intdeb_state_bits 2
 
@@ -156,3 +160,4 @@ assign o_int_deb = s_int_deb;
 
 endmodule
 //------------------------------------------------------------------------------
+`end_keywords

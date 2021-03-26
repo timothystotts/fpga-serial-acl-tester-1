@@ -27,6 +27,7 @@
 -- \brief A simple FSM to control the execution of the ADXL362 accelerometer
 -- testing.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //Recursive Moore Machine-------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module acl_tester_fsm(
@@ -281,3 +282,4 @@ end : p_tester_fsm_comb
 
 endmodule : acl_tester_fsm
 //------------------------------------------------------------------------------
+`end_keywords

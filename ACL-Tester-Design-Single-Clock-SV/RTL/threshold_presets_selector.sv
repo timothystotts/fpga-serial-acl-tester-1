@@ -27,6 +27,7 @@
 -- \brief A threshold presets selector with a parameter input of the
 -- configuration values.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //------------------------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module thresh_presets_selector
@@ -49,6 +50,9 @@ module thresh_presets_selector
 
 
 // Part 2: Declarations---------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 typedef enum logic [3:0] {
 	ST_0, ST_1, ST_2, ST_3, ST_4, ST_5, ST_6, ST_7, ST_8,
 	ST_9, ST_A, ST_B, ST_C, ST_D, ST_E, ST_F
@@ -143,3 +147,4 @@ end : p_fsm_comb
 
 endmodule : thresh_presets_selector
 //------------------------------------------------------------------------------
+`end_keywords

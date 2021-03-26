@@ -31,6 +31,7 @@
 -- mixing palette causes more mixing of brightness than color, except at the
 -- lower brightness levels.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //Generate loops for PWMs-------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module led_pwm_driver
@@ -58,6 +59,9 @@ module led_pwm_driver
 		);
 
 //Part 2: Declarations----------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 localparam integer c_pwm_period_ms = parm_FCLK / 1000 * parm_pwm_period_milliseconds;
 localparam integer c_pwm_color_max_duty_cycle = c_pwm_period_ms / 10 * 8;
 localparam integer c_pwm_color_max_duty_cycle_ratioed = c_pwm_color_max_duty_cycle / 255;
@@ -265,3 +269,4 @@ endgenerate
 
 endmodule : led_pwm_driver
 //------------------------------------------------------------------------------
+`end_keywords

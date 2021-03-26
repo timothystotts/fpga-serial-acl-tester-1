@@ -28,6 +28,7 @@
 -- SPI Mode 0. The design only enables clearing the display, or writing a full
 -- sixteen character line of one of the two lines of the display at a time.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //------------------------------------------------------------------------------
 //Recursive Moore Machine
 //Part 1: Module header:--------------------------------------------------------
@@ -58,6 +59,9 @@ module pmod_cls_stand_spi_solo
 		);
 
 // Part 2: Declarations---------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 /* Timer signals and constants. */
 localparam integer c_cls_drv_time_value_bits = 24;
 typedef logic [(c_cls_drv_time_value_bits - 1):0] t_cls_drv_time_value;
@@ -393,3 +397,4 @@ end : p_fsm_comb
 
 endmodule : pmod_cls_stand_spi_solo
 //------------------------------------------------------------------------------
+`end_keywords

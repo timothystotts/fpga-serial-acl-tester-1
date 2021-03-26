@@ -34,6 +34,7 @@
 -- this module implements a clock divider.
 ------------------------------------------------------------------------------*/
 //------------------------------------------------------------------------------
+`begin_keywords "1800-2017"
 //Part 1: Module header:--------------------------------------------------------
 module clock_divider
 	#(parameter
@@ -46,6 +47,9 @@ module clock_divider
 		input logic i_rst_mhz);
 
 // Part 2: Declarations---------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 /* A constant representing the counter maximum which is an even division of the
    source clock, per paramter \ref par_clk_divisor . */
 localparam integer c_clk_max = (par_clk_divisor / 2) - 1;
@@ -106,3 +110,4 @@ assign o_rst_div = s_rst_out;
 
 endmodule : clock_divider
 //------------------------------------------------------------------------------
+`end_keywords

@@ -27,6 +27,7 @@
 -- \brief A Seven Segment Display driver for a single Pmod SSD. The input is a
 -- 8-bit hexademical value which is display as hexadecimal on the Pmod SSD.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //------------------------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module two_digit_ssd_out
@@ -39,6 +40,9 @@ module two_digit_ssd_out
 		);
 
 // Part 2: Declarations---------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 /* A function to convert a 4-bit hexadecimal value to a single hexadecimal
    digit of a 7-bit 7-segment display of the PMOD SSD. */
 function automatic [6:0] unsigned_to_ssd(input [3:0] val);
@@ -217,3 +221,4 @@ pmod_ssd_out #() u_pmod_ssd_out (
 
 endmodule : one_pmod_ssd_display
 //------------------------------------------------------------------------------
+`end_keywords

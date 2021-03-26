@@ -32,6 +32,7 @@
 --
 -- Note that this module does not track the clock locking of the MMCM.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //Reset Synchronizer------------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module arty_reset_synchronizer(
@@ -40,6 +41,9 @@ module arty_reset_synchronizer(
 	output logic o_rst_mhz);
 
 //Part 2: Declarations----------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 localparam integer c_RESET_STAGES = 14;
 
 logic [(c_RESET_STAGES - 1):0] s_rst_shift;
@@ -57,3 +61,4 @@ assign o_rst_mhz = s_rst_shift[c_RESET_STAGES-1];
 
 endmodule : arty_reset_synchronizer
 //------------------------------------------------------------------------------
+`end_keywords

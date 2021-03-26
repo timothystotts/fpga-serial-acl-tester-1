@@ -26,6 +26,7 @@
 --
 -- \brief A timed FSM to feed display updates to a two-line LCD.
 ------------------------------------------------------------------------------*/
+`begin_keywords "1800-2017"
 //Recursive Moore Machine-------------------------------------------------------
 //Part 1: Module header:--------------------------------------------------------
 module lcd_text_feed
@@ -42,6 +43,9 @@ module lcd_text_feed
 	output logic o_lcd_feed_is_idle);
 
 //Part 2: Declarations----------------------------------------------------------
+timeunit 1ns;
+timeprecision 1ps;
+
 /* Connections and variables for instance of the PMOD CLS SPI SOLO driver. */
 `define c_lcd_update_fsm_bits 4
 
@@ -200,3 +204,4 @@ assign o_lcd_feed_is_idle = (s_lcd_upd_pr_state == ST_LCD_LINE2_DLY) ? 1'b1 : 1'
 
 endmodule : lcd_text_feed
 //------------------------------------------------------------------------------
+`end_keywords
