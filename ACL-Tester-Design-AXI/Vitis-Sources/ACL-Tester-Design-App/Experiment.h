@@ -22,12 +22,20 @@
 -- SOFTWARE.
 ------------------------------------------------------------------------------*/
 /**-----------------------------------------------------------------------------
--- \file Experiment.h
---
--- \brief A SoPC top-level design with the PMOD SF3 FreeRTOS driver.
--- This design erases a group of subsectors, programs the subsectors, and then
--- byte-compares the contents of the subsectors. The progress is displayed on
--- a PMOD CLS 16x2 dot-matrix LCD and printed on a USB-UART display terminal.
+ * @file Experiment.h
+ *
+ * @brief A SoPC top-level design with the PMOD ACL2 custom driver.
+ * This design tests an accelerometer. The readings are displayed on
+ * a PMOD CLS 16x2 dot-matrix LCD and printed on a USB-UART display terminal.
+ *
+ * @author
+ * Timothy Stotts (timothystotts08@gmail.com)
+ *
+ * @copyright
+ * (c) 2020 Copyright Timothy Stotts
+ *
+ * This program is free software; distributed under the terms of the MIT
+ * License.
 ------------------------------------------------------------------------------*/
 #ifndef _EXPERIMENT_H_
 #define _EXPERIMENT_H_

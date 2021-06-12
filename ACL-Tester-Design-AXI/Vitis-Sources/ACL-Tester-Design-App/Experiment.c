@@ -25,7 +25,7 @@
  * @file Experiment.c
  *
  * @brief A SoPC top-level design with the PMOD ACL2 custom driver.
- * This design tests and accelerometer. The readings are displayed on
+ * This design tests an accelerometer. The readings are displayed on
  * a PMOD CLS 16x2 dot-matrix LCD and printed on a USB-UART display terminal.
  *
  * @author
