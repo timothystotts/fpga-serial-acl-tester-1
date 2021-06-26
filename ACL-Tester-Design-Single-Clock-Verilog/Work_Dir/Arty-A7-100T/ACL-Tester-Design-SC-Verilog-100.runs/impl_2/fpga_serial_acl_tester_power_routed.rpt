@@ -1,8 +1,8 @@
-Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| Tool Version     : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
-| Date             : Thu Jan  7 22:11:36 2021
-| Host             : J1STUDY running 64-bit major release  (build 9200)
+| Tool Version     : Vivado v.2021.1 (win64) Build 3247384 Thu Jun 10 19:36:33 MDT 2021
+| Date             : Sat Jun 26 17:03:38 2021
+| Host             : M3ENGINEERING running 64-bit major release  (build 9200)
 | Command          : report_power -file fpga_serial_acl_tester_power_routed.rpt -pb fpga_serial_acl_tester_power_summary_routed.pb -rpx fpga_serial_acl_tester_power_routed.rpx
 | Design           : fpga_serial_acl_tester
 | Device           : xc7a100ticsg324-1L
@@ -53,13 +53,13 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |     0.003 |       14 |       --- |             --- |
-| Slice Logic    |     0.002 |     7919 |       --- |             --- |
-|   LUT as Logic |     0.001 |     3644 |     63400 |            5.75 |
-|   CARRY4       |    <0.001 |      573 |     15850 |            3.62 |
-|   Register     |    <0.001 |     2474 |    126800 |            1.95 |
-|   F7/F8 Muxes  |    <0.001 |       12 |     63400 |            0.02 |
-|   Others       |     0.000 |       70 |       --- |             --- |
-| Signals        |     0.001 |     5321 |       --- |             --- |
+| Slice Logic    |     0.001 |     7712 |       --- |             --- |
+|   LUT as Logic |     0.001 |     3518 |     63400 |            5.55 |
+|   CARRY4       |    <0.001 |      569 |     15850 |            3.59 |
+|   Register     |    <0.001 |     2456 |    126800 |            1.94 |
+|   F7/F8 Muxes  |    <0.001 |        6 |     63400 |           <0.01 |
+|   Others       |     0.000 |       69 |       --- |             --- |
+| Signals        |     0.001 |     5172 |       --- |             --- |
 | Block RAM      |    <0.001 |        2 |       135 |            1.48 |
 | MMCM           |     0.102 |        1 |         6 |           16.67 |
 | DSPs           |    <0.001 |       16 |       240 |            6.67 |
@@ -128,17 +128,17 @@ Table of Contents
 2.2 Clock Constraints
 ---------------------
 
-+----------------+------------------------------------------------------------------------------------+-----------------+
-| Clock          | Domain                                                                             | Constraint (ns) |
-+----------------+------------------------------------------------------------------------------------+-----------------+
-| clk100hz_ssd   | u_one_pmod_ssd_display/u_pmod_ssd_out/u_clock_divider/o_clk_div                    |      10000000.0 |
-| genclk5mhz     | u_pmod_acl2_custom_driver/u_pmod_generic_spi_solo/u_spi_1x_clock_divider/o_clk_div |           200.0 |
-| genclk625khz   | u_pmod_cls_custom_driver/u_pmod_generic_spi_solo/u_spi_1x_clock_divider/o_clk_div  |          1600.0 |
-| s_clk_20mhz    | s_clk_20mhz                                                                        |            50.0 |
-| s_clk_7_37mhz  | s_clk_7_37mhz                                                                      |           135.6 |
-| s_clk_clkfbout | s_clk_clkfbout                                                                     |            50.0 |
-| sys_clk_pin    | CLK100MHZ                                                                          |            10.0 |
-+----------------+------------------------------------------------------------------------------------+-----------------+
++----------------+---------------------------------------------------------------------------------------+-----------------+
+| Clock          | Domain                                                                                | Constraint (ns) |
++----------------+---------------------------------------------------------------------------------------+-----------------+
+| clk100hz_ssd   | u_one_pmod_ssd_display/u_pmod_ssd_out/u_clock_divider/s_clk_out                       |      10000000.0 |
+| genclk5mhz     | u_pmod_acl2_custom_driver/u_pmod_generic_spi_solo/u_spi_1x_clock_divider/s_spi_clk_1x |           200.0 |
+| genclk625khz   | u_pmod_cls_custom_driver/u_pmod_generic_spi_solo/u_spi_1x_clock_divider/s_spi_clk_1x  |          1600.0 |
+| s_clk_20mhz    | s_clk_20mhz                                                                           |            50.0 |
+| s_clk_7_37mhz  | s_clk_7_37mhz                                                                         |           135.6 |
+| s_clk_clkfbout | s_clk_clkfbout                                                                        |            50.0 |
+| sys_clk_pin    | CLK100MHZ                                                                             |            10.0 |
++----------------+---------------------------------------------------------------------------------------+-----------------+
 
 
 3. Detailed Reports

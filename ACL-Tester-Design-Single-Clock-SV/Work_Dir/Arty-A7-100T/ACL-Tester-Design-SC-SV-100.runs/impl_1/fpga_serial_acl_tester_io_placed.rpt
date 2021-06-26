@@ -1,8 +1,8 @@
-Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------
-| Tool Version              : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
-| Date                      : Thu Mar 25 21:11:35 2021
-| Host                      : l4study running 64-bit Ubuntu 18.04.5 LTS
+| Tool Version              : Vivado v.2021.1 (win64) Build 3247384 Thu Jun 10 19:36:33 MDT 2021
+| Date                      : Sat Jun 26 17:14:06 2021
+| Host                      : M3ENGINEERING running 64-bit major release  (build 9200)
 | Command                   : report_io -file fpga_serial_acl_tester_io_placed.rpt
 | Design                    : fpga_serial_acl_tester
 | Device                    : xc7a100ti
