@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Product Version: Vivado v2020.2 (64-bit)              -->
+<!-- Product Version: Vivado v2021.1 (64-bit)              -->
 <!--                                                         -->
-<!-- Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.   -->
+<!-- Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.   -->
 
-<Project Version="7" Minor="54" Path="W:/wa/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.xpr">
+<Project Version="7" Minor="55" Path="C:/wa/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.xpr">
   <DefaultLaunch Dir="$PRUNDIR"/>
   <Configuration>
     <Option Name="Id" Val="a435604cd97545538b889ddc3859814d"/>
     <Option Name="Part" Val="xc7a100ticsg324-1L"/>
-    <Option Name="CompiledLibDir" Val="C:/Aldec/Xilinx_lib_2020.2"/>
+    <Option Name="CompiledLibDir" Val="$PPRDIR/../../../../../Aldec/Xilinx_lib_2020.2"/>
     <Option Name="CompiledLibDirXSim" Val=""/>
     <Option Name="CompiledLibDirModelSim" Val="$PCACHEDIR/compile_simlib/modelsim"/>
     <Option Name="CompiledLibDirQuesta" Val="$PCACHEDIR/compile_simlib/questa"/>
     <Option Name="CompiledLibDirIES" Val="$PCACHEDIR/compile_simlib/ies"/>
     <Option Name="CompiledLibDirXcelium" Val="$PCACHEDIR/compile_simlib/xcelium"/>
     <Option Name="CompiledLibDirVCS" Val="$PCACHEDIR/compile_simlib/vcs"/>
-    <Option Name="CompiledLibDirRiviera" Val="C:/Aldec/Xilinx_lib_2020.2"/>
+    <Option Name="CompiledLibDirRiviera" Val="$PPRDIR/../../../../../Aldec/Xilinx_lib_2020.2"/>
     <Option Name="CompiledLibDirActivehdl" Val="$PCACHEDIR/compile_simlib/activehdl"/>
     <Option Name="SimulatorInstallDirModelSim" Val=""/>
     <Option Name="SimulatorInstallDirQuesta" Val=""/>
@@ -31,6 +31,22 @@
     <Option Name="SimulatorGccInstallDirVCS" Val=""/>
     <Option Name="SimulatorGccInstallDirRiviera" Val=""/>
     <Option Name="SimulatorGccInstallDirActiveHdl" Val=""/>
+    <Option Name="SimulatorVersionXsim" Val="2021.1"/>
+    <Option Name="SimulatorVersionModelSim" Val="2020.4"/>
+    <Option Name="SimulatorVersionQuesta" Val="2020.4"/>
+    <Option Name="SimulatorVersionIES" Val="15.20.083"/>
+    <Option Name="SimulatorVersionXcelium" Val="20.09.006"/>
+    <Option Name="SimulatorVersionVCS" Val="R-2020.12"/>
+    <Option Name="SimulatorVersionRiviera" Val="2020.10"/>
+    <Option Name="SimulatorVersionActiveHdl" Val="12.0"/>
+    <Option Name="SimulatorGccVersionXsim" Val="6.2.0"/>
+    <Option Name="SimulatorGccVersionModelSim" Val="5.3.0"/>
+    <Option Name="SimulatorGccVersionQuesta" Val="5.3.0"/>
+    <Option Name="SimulatorGccVersionIES" Val="6.2.0"/>
+    <Option Name="SimulatorGccVersionXcelium" Val="6.3"/>
+    <Option Name="SimulatorGccVersionVCS" Val="6.2.0"/>
+    <Option Name="SimulatorGccVersionRiviera" Val="6.2.0"/>
+    <Option Name="SimulatorGccVersionActiveHdl" Val="6.2.0"/>
     <Option Name="TargetSimulator" Val="Riviera"/>
     <Option Name="BoardPart" Val="digilentinc.com:arty-a7-100:part0:1.0"/>
     <Option Name="ActiveSimSet" Val="sim_1"/>
@@ -39,6 +55,7 @@
     <Option Name="IPRepoPath" Val="$PPRDIR/../../IP/local_ip/MuxSSD_1.0"/>
     <Option Name="IPRepoPath" Val="$PPRDIR/../../IP/vivado-library"/>
     <Option Name="IPOutputRepo" Val="$PCACHEDIR/ip"/>
+    <Option Name="IPDefaultOutputPath" Val="$PGENDIR/sources_1"/>
     <Option Name="IPCachePermission" Val="read"/>
     <Option Name="IPCachePermission" Val="write"/>
     <Option Name="EnableCoreContainer" Val="FALSE"/>
@@ -54,13 +71,13 @@
     <Option Name="WTVcsLaunchSim" Val="0"/>
     <Option Name="WTRivieraLaunchSim" Val="5"/>
     <Option Name="WTActivehdlLaunchSim" Val="0"/>
-    <Option Name="WTXSimExportSim" Val="42"/>
-    <Option Name="WTModelSimExportSim" Val="42"/>
-    <Option Name="WTQuestaExportSim" Val="42"/>
-    <Option Name="WTIesExportSim" Val="42"/>
-    <Option Name="WTVcsExportSim" Val="42"/>
-    <Option Name="WTRivieraExportSim" Val="42"/>
-    <Option Name="WTActivehdlExportSim" Val="42"/>
+    <Option Name="WTXSimExportSim" Val="44"/>
+    <Option Name="WTModelSimExportSim" Val="44"/>
+    <Option Name="WTQuestaExportSim" Val="44"/>
+    <Option Name="WTIesExportSim" Val="44"/>
+    <Option Name="WTVcsExportSim" Val="44"/>
+    <Option Name="WTRivieraExportSim" Val="44"/>
+    <Option Name="WTActivehdlExportSim" Val="44"/>
     <Option Name="GenerateIPUpgradeLog" Val="TRUE"/>
     <Option Name="XSimRadix" Val="hex"/>
     <Option Name="XSimTimeUnit" Val="ns"/>
@@ -72,9 +89,10 @@
     <Option Name="SimTypes" Val="tlm_dpi"/>
     <Option Name="MEMEnableMemoryMapGeneration" Val="TRUE"/>
     <Option Name="DcpsUptoDate" Val="TRUE"/>
+    <Option Name="ClassicSocBoot" Val="FALSE"/>
   </Configuration>
   <FileSets Version="1" Minor="31">
-    <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1">
+    <FileSet Name="sources_1" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
       <Filter Type="Srcs"/>
       <File Path="$PPRDIR/../../IPI-BDs/system_100T/system_100T.bd">
         <FileInfo>
@@ -82,77 +100,77 @@
           <Attr Name="UsedIn" Val="implementation"/>
           <Attr Name="UsedIn" Val="simulation"/>
         </FileInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_microblaze_0_0/system_100T_microblaze_0_0.xci">
-          <Proxy FileSetName="system_100T_microblaze_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_clk_wiz_0_0/system_100T_clk_wiz_0_0.xci">
-          <Proxy FileSetName="system_100T_clk_wiz_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_lmb_bram_0/system_100T_lmb_bram_0.xci">
-          <Proxy FileSetName="system_100T_lmb_bram_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_mdm_1_0/system_100T_mdm_1_0.xci">
-          <Proxy FileSetName="system_100T_mdm_1_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_dlmb_bram_if_cntlr_0/system_100T_dlmb_bram_if_cntlr_0.xci">
-          <Proxy FileSetName="system_100T_dlmb_bram_if_cntlr_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_microblaze_0_axi_intc_0/system_100T_microblaze_0_axi_intc_0.xci">
-          <Proxy FileSetName="system_100T_microblaze_0_axi_intc_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_rst_mig_7series_0_83M_0/system_100T_rst_mig_7series_0_83M_0.xci">
-          <Proxy FileSetName="system_100T_rst_mig_7series_0_83M_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_axi_uartlite_0_0/system_100T_axi_uartlite_0_0.xci">
-          <Proxy FileSetName="system_100T_axi_uartlite_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_axi_ethernetlite_0_0/system_100T_axi_ethernetlite_0_0.xci">
-          <Proxy FileSetName="system_100T_axi_ethernetlite_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_axi_smc_0/system_100T_axi_smc_0.xci">
-          <Proxy FileSetName="system_100T_axi_smc_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_PWM_0_0/system_100T_PWM_0_0.xci">
-          <Proxy FileSetName="system_100T_PWM_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_axi_gpio_0_0/system_100T_axi_gpio_0_0.xci">
-          <Proxy FileSetName="system_100T_axi_gpio_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_PWM_1_0/system_100T_PWM_1_0.xci">
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_PWM_1_0_1/system_100T_PWM_1_0.xci">
           <Proxy FileSetName="system_100T_PWM_1_0"/>
         </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_ilmb_bram_if_cntlr_0/system_100T_ilmb_bram_if_cntlr_0.xci">
-          <Proxy FileSetName="system_100T_ilmb_bram_if_cntlr_0"/>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_axi_uartlite_0_0_1/system_100T_axi_uartlite_0_0.xci">
+          <Proxy FileSetName="system_100T_axi_uartlite_0_0"/>
         </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_ilmb_v10_0/system_100T_ilmb_v10_0.xci">
-          <Proxy FileSetName="system_100T_ilmb_v10_0"/>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_rst_mig_7series_0_83M_0_1/system_100T_rst_mig_7series_0_83M_0.xci">
+          <Proxy FileSetName="system_100T_rst_mig_7series_0_83M_0"/>
         </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_axi_timer_0_0/system_100T_axi_timer_0_0.xci">
-          <Proxy FileSetName="system_100T_axi_timer_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_axi_quad_spi_0_0/system_100T_axi_quad_spi_0_0.xci">
-          <Proxy FileSetName="system_100T_axi_quad_spi_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_PmodACL2_0_0/system_100T_PmodACL2_0_0.xci">
-          <Proxy FileSetName="system_100T_PmodACL2_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_PmodCLS_0_0/system_100T_PmodCLS_0_0.xci">
-          <Proxy FileSetName="system_100T_PmodCLS_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_mig_7series_0_1/system_100T_mig_7series_0_1.xci">
-          <Proxy FileSetName="system_100T_mig_7series_0_1"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_xbar_0/system_100T_xbar_0.xci">
-          <Proxy FileSetName="system_100T_xbar_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_MuxSSD_0_0/system_100T_MuxSSD_0_0.xci">
-          <Proxy FileSetName="system_100T_MuxSSD_0_0"/>
-        </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_proc_sys_reset_0_0/system_100T_proc_sys_reset_0_0.xci">
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_proc_sys_reset_0_0_1/system_100T_proc_sys_reset_0_0.xci">
           <Proxy FileSetName="system_100T_proc_sys_reset_0_0"/>
         </CompFileExtendedInfo>
-        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_dlmb_v10_0/system_100T_dlmb_v10_0.xci">
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_axi_ethernetlite_0_0_1/system_100T_axi_ethernetlite_0_0.xci">
+          <Proxy FileSetName="system_100T_axi_ethernetlite_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_lmb_bram_0_1/system_100T_lmb_bram_0.xci">
+          <Proxy FileSetName="system_100T_lmb_bram_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_axi_gpio_0_0_1/system_100T_axi_gpio_0_0.xci">
+          <Proxy FileSetName="system_100T_axi_gpio_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_dlmb_v10_0_1/system_100T_dlmb_v10_0.xci">
           <Proxy FileSetName="system_100T_dlmb_v10_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_axi_quad_spi_0_0_1/system_100T_axi_quad_spi_0_0.xci">
+          <Proxy FileSetName="system_100T_axi_quad_spi_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_ilmb_bram_if_cntlr_0_1/system_100T_ilmb_bram_if_cntlr_0.xci">
+          <Proxy FileSetName="system_100T_ilmb_bram_if_cntlr_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_dlmb_bram_if_cntlr_0_1/system_100T_dlmb_bram_if_cntlr_0.xci">
+          <Proxy FileSetName="system_100T_dlmb_bram_if_cntlr_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_ilmb_v10_0_1/system_100T_ilmb_v10_0.xci">
+          <Proxy FileSetName="system_100T_ilmb_v10_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_PWM_0_0_1/system_100T_PWM_0_0.xci">
+          <Proxy FileSetName="system_100T_PWM_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_axi_smc_0_1/system_100T_axi_smc_0.xci">
+          <Proxy FileSetName="system_100T_axi_smc_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_axi_timer_0_0_1/system_100T_axi_timer_0_0.xci">
+          <Proxy FileSetName="system_100T_axi_timer_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_clk_wiz_0_0_1/system_100T_clk_wiz_0_0.xci">
+          <Proxy FileSetName="system_100T_clk_wiz_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_mig_7series_0_0/system_100T_mig_7series_0_0.xci">
+          <Proxy FileSetName="system_100T_mig_7series_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_mdm_1_0_1/system_100T_mdm_1_0.xci">
+          <Proxy FileSetName="system_100T_mdm_1_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_microblaze_0_axi_intc_0_1/system_100T_microblaze_0_axi_intc_0.xci">
+          <Proxy FileSetName="system_100T_microblaze_0_axi_intc_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_xbar_0_1/system_100T_xbar_0.xci">
+          <Proxy FileSetName="system_100T_xbar_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_PmodCLS_0_0_1/system_100T_PmodCLS_0_0.xci">
+          <Proxy FileSetName="system_100T_PmodCLS_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_MuxSSD_0_0_1/system_100T_MuxSSD_0_0.xci">
+          <Proxy FileSetName="system_100T_MuxSSD_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_PmodACL2_0_0_1/system_100T_PmodACL2_0_0.xci">
+          <Proxy FileSetName="system_100T_PmodACL2_0_0"/>
+        </CompFileExtendedInfo>
+        <CompFileExtendedInfo CompFileName="system_100T.bd" FileRelPathName="ip/system_100T_microblaze_0_0_1/system_100T_microblaze_0_0.xci">
+          <Proxy FileSetName="system_100T_microblaze_0_0"/>
         </CompFileExtendedInfo>
       </File>
       <File Path="$PPRDIR/../../IPI-BDs/system_100T/hdl/system_100T_wrapper.vhd">
@@ -167,13 +185,19 @@
           <Attr Name="ScopedToCell" Val="system_100T_mig_7series_0_1"/>
         </FileInfo>
       </File>
+      <File Path="$PPRDIR/../../IPI-BDs/system_100T/ip/system_100T_mig_7series_0_0/board.prj">
+        <FileInfo>
+          <Attr Name="UsedIn" Val="synthesis"/>
+          <Attr Name="ScopedToCell" Val="system_100T_mig_7series_0_0"/>
+        </FileInfo>
+      </File>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
         <Option Name="TopModule" Val="system_100T_wrapper"/>
         <Option Name="TopAutoSet" Val="TRUE"/>
       </Config>
     </FileSet>
-    <FileSet Name="constrs_1" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
+    <FileSet Name="constrs_1" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1" RelGenDir="$PGENDIR/constrs_1">
       <Filter Type="Constrs"/>
       <File Path="$PPRDIR/../../Constraints/Arty-A7-100-Master.xdc">
         <FileInfo>
@@ -185,7 +209,7 @@
         <Option Name="ConstrsType" Val="XDC"/>
       </Config>
     </FileSet>
-    <FileSet Name="sim_1" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_1">
+    <FileSet Name="sim_1" Type="SimulationSrcs" RelSrcDir="$PSRCDIR/sim_1" RelGenDir="$PGENDIR/sim_1">
       <Filter Type="Srcs"/>
       <Config>
         <Option Name="DesignMode" Val="RTL"/>
@@ -209,153 +233,153 @@
         <Option Name="riviera.simulate.debug" Val="true"/>
       </Config>
     </FileSet>
-    <FileSet Name="utils_1" Type="Utils" RelSrcDir="$PSRCDIR/utils_1">
+    <FileSet Name="utils_1" Type="Utils" RelSrcDir="$PSRCDIR/utils_1" RelGenDir="$PGENDIR/utils_1">
       <Filter Type="Utils"/>
       <Config>
         <Option Name="TopAutoSet" Val="TRUE"/>
       </Config>
     </FileSet>
-    <FileSet Name="system_100T_rst_mig_7series_0_83M_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_rst_mig_7series_0_83M_0">
-      <Config>
-        <Option Name="TopModule" Val="system_100T_rst_mig_7series_0_83M_0"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="system_100T_proc_sys_reset_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_proc_sys_reset_0_0">
-      <Config>
-        <Option Name="TopModule" Val="system_100T_proc_sys_reset_0_0"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="system_100T_clk_wiz_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_clk_wiz_0_0">
-      <Config>
-        <Option Name="TopModule" Val="system_100T_clk_wiz_0_0"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="system_100T_microblaze_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_microblaze_0_0">
-      <Config>
-        <Option Name="TopModule" Val="system_100T_microblaze_0_0"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="system_100T_dlmb_v10_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_dlmb_v10_0">
-      <Config>
-        <Option Name="TopModule" Val="system_100T_dlmb_v10_0"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="system_100T_ilmb_v10_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_ilmb_v10_0">
-      <Config>
-        <Option Name="TopModule" Val="system_100T_ilmb_v10_0"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="system_100T_dlmb_bram_if_cntlr_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_dlmb_bram_if_cntlr_0">
+    <FileSet Name="system_100T_dlmb_bram_if_cntlr_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_dlmb_bram_if_cntlr_0" RelGenDir="$PGENDIR/system_100T_dlmb_bram_if_cntlr_0">
       <Config>
         <Option Name="TopModule" Val="system_100T_dlmb_bram_if_cntlr_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="system_100T_ilmb_bram_if_cntlr_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_ilmb_bram_if_cntlr_0">
+    <FileSet Name="system_100T_dlmb_v10_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_dlmb_v10_0" RelGenDir="$PGENDIR/system_100T_dlmb_v10_0">
+      <Config>
+        <Option Name="TopModule" Val="system_100T_dlmb_v10_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="system_100T_ilmb_bram_if_cntlr_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_ilmb_bram_if_cntlr_0" RelGenDir="$PGENDIR/system_100T_ilmb_bram_if_cntlr_0">
       <Config>
         <Option Name="TopModule" Val="system_100T_ilmb_bram_if_cntlr_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="system_100T_lmb_bram_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_lmb_bram_0">
+    <FileSet Name="system_100T_ilmb_v10_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_ilmb_v10_0" RelGenDir="$PGENDIR/system_100T_ilmb_v10_0">
+      <Config>
+        <Option Name="TopModule" Val="system_100T_ilmb_v10_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="system_100T_lmb_bram_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_lmb_bram_0" RelGenDir="$PGENDIR/system_100T_lmb_bram_0">
       <Config>
         <Option Name="TopModule" Val="system_100T_lmb_bram_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="system_100T_microblaze_0_axi_intc_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_microblaze_0_axi_intc_0">
+    <FileSet Name="system_100T_rst_mig_7series_0_83M_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_rst_mig_7series_0_83M_0" RelGenDir="$PGENDIR/system_100T_rst_mig_7series_0_83M_0">
       <Config>
-        <Option Name="TopModule" Val="system_100T_microblaze_0_axi_intc_0"/>
+        <Option Name="TopModule" Val="system_100T_rst_mig_7series_0_83M_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="system_100T_mdm_1_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_mdm_1_0">
+    <FileSet Name="system_100T_proc_sys_reset_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_proc_sys_reset_0_0" RelGenDir="$PGENDIR/system_100T_proc_sys_reset_0_0">
       <Config>
-        <Option Name="TopModule" Val="system_100T_mdm_1_0"/>
+        <Option Name="TopModule" Val="system_100T_proc_sys_reset_0_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="system_100T_axi_uartlite_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_axi_uartlite_0_0">
-      <Config>
-        <Option Name="TopModule" Val="system_100T_axi_uartlite_0_0"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="system_100T_axi_ethernetlite_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_axi_ethernetlite_0_0">
-      <Config>
-        <Option Name="TopModule" Val="system_100T_axi_ethernetlite_0_0"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="system_100T_axi_timer_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_axi_timer_0_0">
-      <Config>
-        <Option Name="TopModule" Val="system_100T_axi_timer_0_0"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="system_100T_axi_smc_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_axi_smc_0">
-      <Config>
-        <Option Name="TopModule" Val="system_100T_axi_smc_0"/>
-        <Option Name="UseBlackboxStub" Val="1"/>
-      </Config>
-    </FileSet>
-    <FileSet Name="system_100T_PWM_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_PWM_0_0">
+    <FileSet Name="system_100T_PWM_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_PWM_0_0" RelGenDir="$PGENDIR/system_100T_PWM_0_0">
       <Config>
         <Option Name="TopModule" Val="system_100T_PWM_0_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="system_100T_PWM_1_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_PWM_1_0">
+    <FileSet Name="system_100T_PWM_1_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_PWM_1_0" RelGenDir="$PGENDIR/system_100T_PWM_1_0">
       <Config>
         <Option Name="TopModule" Val="system_100T_PWM_1_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="system_100T_axi_gpio_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_axi_gpio_0_0">
+    <FileSet Name="system_100T_axi_ethernetlite_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_axi_ethernetlite_0_0" RelGenDir="$PGENDIR/system_100T_axi_ethernetlite_0_0">
+      <Config>
+        <Option Name="TopModule" Val="system_100T_axi_ethernetlite_0_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="system_100T_axi_gpio_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_axi_gpio_0_0" RelGenDir="$PGENDIR/system_100T_axi_gpio_0_0">
       <Config>
         <Option Name="TopModule" Val="system_100T_axi_gpio_0_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="system_100T_axi_quad_spi_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_axi_quad_spi_0_0">
+    <FileSet Name="system_100T_axi_quad_spi_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_axi_quad_spi_0_0" RelGenDir="$PGENDIR/system_100T_axi_quad_spi_0_0">
       <Config>
         <Option Name="TopModule" Val="system_100T_axi_quad_spi_0_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="system_100T_xbar_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_xbar_0">
+    <FileSet Name="system_100T_axi_smc_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_axi_smc_0" RelGenDir="$PGENDIR/system_100T_axi_smc_0">
+      <Config>
+        <Option Name="TopModule" Val="system_100T_axi_smc_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="system_100T_axi_timer_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_axi_timer_0_0" RelGenDir="$PGENDIR/system_100T_axi_timer_0_0">
+      <Config>
+        <Option Name="TopModule" Val="system_100T_axi_timer_0_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="system_100T_axi_uartlite_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_axi_uartlite_0_0" RelGenDir="$PGENDIR/system_100T_axi_uartlite_0_0">
+      <Config>
+        <Option Name="TopModule" Val="system_100T_axi_uartlite_0_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="system_100T_clk_wiz_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_clk_wiz_0_0" RelGenDir="$PGENDIR/system_100T_clk_wiz_0_0">
+      <Config>
+        <Option Name="TopModule" Val="system_100T_clk_wiz_0_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="system_100T_mdm_1_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_mdm_1_0" RelGenDir="$PGENDIR/system_100T_mdm_1_0">
+      <Config>
+        <Option Name="TopModule" Val="system_100T_mdm_1_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="system_100T_microblaze_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_microblaze_0_0" RelGenDir="$PGENDIR/system_100T_microblaze_0_0">
+      <Config>
+        <Option Name="TopModule" Val="system_100T_microblaze_0_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="system_100T_microblaze_0_axi_intc_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_microblaze_0_axi_intc_0" RelGenDir="$PGENDIR/system_100T_microblaze_0_axi_intc_0">
+      <Config>
+        <Option Name="TopModule" Val="system_100T_microblaze_0_axi_intc_0"/>
+        <Option Name="UseBlackboxStub" Val="1"/>
+      </Config>
+    </FileSet>
+    <FileSet Name="system_100T_xbar_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_xbar_0" RelGenDir="$PGENDIR/system_100T_xbar_0">
       <Config>
         <Option Name="TopModule" Val="system_100T_xbar_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="system_100T_MuxSSD_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_MuxSSD_0_0">
+    <FileSet Name="system_100T_MuxSSD_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_MuxSSD_0_0" RelGenDir="$PGENDIR/system_100T_MuxSSD_0_0">
       <Config>
         <Option Name="TopModule" Val="system_100T_MuxSSD_0_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="system_100T_PmodCLS_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_PmodCLS_0_0">
+    <FileSet Name="system_100T_PmodCLS_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_PmodCLS_0_0" RelGenDir="$PGENDIR/system_100T_PmodCLS_0_0">
       <Config>
         <Option Name="TopModule" Val="system_100T_PmodCLS_0_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="system_100T_PmodACL2_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_PmodACL2_0_0">
+    <FileSet Name="system_100T_PmodACL2_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_PmodACL2_0_0" RelGenDir="$PGENDIR/system_100T_PmodACL2_0_0">
       <Config>
         <Option Name="TopModule" Val="system_100T_PmodACL2_0_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
-    <FileSet Name="system_100T_mig_7series_0_1" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_mig_7series_0_1">
+    <FileSet Name="system_100T_mig_7series_0_0" Type="BlockSrcs" RelSrcDir="$PSRCDIR/system_100T_mig_7series_0_0" RelGenDir="$PGENDIR/system_100T_mig_7series_0_0">
       <Config>
-        <Option Name="TopModule" Val="system_100T_mig_7series_0_1"/>
+        <Option Name="TopModule" Val="system_100T_mig_7series_0_0"/>
         <Option Name="UseBlackboxStub" Val="1"/>
       </Config>
     </FileSet>
@@ -379,258 +403,259 @@
     </Simulator>
   </Simulators>
   <Runs Version="1" Minor="15">
-    <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7a100ticsg324-1L" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/synth_1">
+    <Run Id="synth_1" Type="Ft3:Synth" SrcSet="sources_1" Part="xc7a100ticsg324-1L" ConstrsSet="constrs_1" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PPRDIR/../../../../../home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
-        <Step Id="synth_design"/>
-      </Strategy>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
-      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
-      <RQSFiles/>
-    </Run>
-    <Run Id="system_100T_rst_mig_7series_0_83M_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_rst_mig_7series_0_83M_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_rst_mig_7series_0_83M_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_rst_mig_7series_0_83M_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_rst_mig_7series_0_83M_0_synth_1">
-      <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_proc_sys_reset_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_proc_sys_reset_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_proc_sys_reset_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_proc_sys_reset_0_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_proc_sys_reset_0_0_synth_1">
+    <Run Id="system_100T_dlmb_bram_if_cntlr_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_dlmb_bram_if_cntlr_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_dlmb_bram_if_cntlr_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_dlmb_bram_if_cntlr_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_dlmb_bram_if_cntlr_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_clk_wiz_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_clk_wiz_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_clk_wiz_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_clk_wiz_0_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_clk_wiz_0_0_synth_1">
+    <Run Id="system_100T_dlmb_v10_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_dlmb_v10_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_dlmb_v10_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_dlmb_v10_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_dlmb_v10_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_microblaze_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_microblaze_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_microblaze_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_microblaze_0_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_microblaze_0_0_synth_1">
+    <Run Id="system_100T_ilmb_bram_if_cntlr_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_ilmb_bram_if_cntlr_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_ilmb_bram_if_cntlr_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_ilmb_bram_if_cntlr_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_ilmb_bram_if_cntlr_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_dlmb_v10_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_dlmb_v10_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_dlmb_v10_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_dlmb_v10_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_dlmb_v10_0_synth_1">
+    <Run Id="system_100T_ilmb_v10_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_ilmb_v10_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_ilmb_v10_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_ilmb_v10_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_ilmb_v10_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_ilmb_v10_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_ilmb_v10_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_ilmb_v10_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_ilmb_v10_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_ilmb_v10_0_synth_1">
+    <Run Id="system_100T_lmb_bram_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_lmb_bram_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_lmb_bram_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_lmb_bram_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_lmb_bram_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_dlmb_bram_if_cntlr_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_dlmb_bram_if_cntlr_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_dlmb_bram_if_cntlr_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_dlmb_bram_if_cntlr_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_dlmb_bram_if_cntlr_0_synth_1">
+    <Run Id="system_100T_rst_mig_7series_0_83M_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_rst_mig_7series_0_83M_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_rst_mig_7series_0_83M_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_rst_mig_7series_0_83M_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_rst_mig_7series_0_83M_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_ilmb_bram_if_cntlr_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_ilmb_bram_if_cntlr_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_ilmb_bram_if_cntlr_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_ilmb_bram_if_cntlr_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_ilmb_bram_if_cntlr_0_synth_1">
+    <Run Id="system_100T_proc_sys_reset_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_proc_sys_reset_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_proc_sys_reset_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_proc_sys_reset_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_proc_sys_reset_0_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_lmb_bram_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_lmb_bram_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_lmb_bram_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_lmb_bram_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_lmb_bram_0_synth_1">
+    <Run Id="system_100T_PWM_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_PWM_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PWM_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_PWM_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_PWM_0_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_microblaze_0_axi_intc_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_microblaze_0_axi_intc_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_microblaze_0_axi_intc_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_microblaze_0_axi_intc_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_microblaze_0_axi_intc_0_synth_1">
+    <Run Id="system_100T_PWM_1_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_PWM_1_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PWM_1_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_PWM_1_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_PWM_1_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_mdm_1_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_mdm_1_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_mdm_1_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_mdm_1_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_mdm_1_0_synth_1">
+    <Run Id="system_100T_axi_ethernetlite_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_ethernetlite_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_ethernetlite_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_ethernetlite_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_axi_ethernetlite_0_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_axi_uartlite_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_uartlite_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_uartlite_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_uartlite_0_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_axi_uartlite_0_0_synth_1">
+    <Run Id="system_100T_axi_gpio_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_gpio_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_gpio_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_gpio_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_axi_gpio_0_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_axi_ethernetlite_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_ethernetlite_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_ethernetlite_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_ethernetlite_0_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_axi_ethernetlite_0_0_synth_1">
+    <Run Id="system_100T_axi_quad_spi_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_quad_spi_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_quad_spi_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_quad_spi_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_axi_quad_spi_0_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_axi_timer_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_timer_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_timer_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_timer_0_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_axi_timer_0_0_synth_1">
+    <Run Id="system_100T_axi_smc_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_smc_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_smc_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_smc_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_axi_smc_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_axi_smc_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_smc_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_smc_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_smc_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_axi_smc_0_synth_1">
+    <Run Id="system_100T_axi_timer_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_timer_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_timer_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_timer_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_axi_timer_0_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_PWM_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_PWM_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PWM_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_PWM_0_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_PWM_0_0_synth_1">
+    <Run Id="system_100T_axi_uartlite_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_uartlite_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_uartlite_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_uartlite_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_axi_uartlite_0_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_PWM_1_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_PWM_1_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PWM_1_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_PWM_1_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_PWM_1_0_synth_1">
+    <Run Id="system_100T_clk_wiz_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_clk_wiz_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_clk_wiz_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_clk_wiz_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_clk_wiz_0_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_axi_gpio_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_gpio_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_gpio_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_gpio_0_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_axi_gpio_0_0_synth_1">
+    <Run Id="system_100T_mdm_1_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_mdm_1_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_mdm_1_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_mdm_1_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_mdm_1_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_axi_quad_spi_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_axi_quad_spi_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_quad_spi_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_axi_quad_spi_0_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_axi_quad_spi_0_0_synth_1">
+    <Run Id="system_100T_microblaze_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_microblaze_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_microblaze_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_microblaze_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_microblaze_0_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_xbar_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_xbar_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_xbar_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_xbar_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_xbar_0_synth_1">
+    <Run Id="system_100T_microblaze_0_axi_intc_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_microblaze_0_axi_intc_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_microblaze_0_axi_intc_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_microblaze_0_axi_intc_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_microblaze_0_axi_intc_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_MuxSSD_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_MuxSSD_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_MuxSSD_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_MuxSSD_0_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_MuxSSD_0_0_synth_1">
+    <Run Id="system_100T_xbar_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_xbar_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_xbar_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_xbar_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_xbar_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_PmodCLS_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_PmodCLS_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PmodCLS_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_PmodCLS_0_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_PmodCLS_0_0_synth_1">
+    <Run Id="system_100T_MuxSSD_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_MuxSSD_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_MuxSSD_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_MuxSSD_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_MuxSSD_0_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_PmodACL2_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_PmodACL2_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PmodACL2_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_PmodACL2_0_0_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_PmodACL2_0_0_synth_1">
+    <Run Id="system_100T_PmodCLS_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_PmodCLS_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PmodCLS_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_PmodCLS_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_PmodCLS_0_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_mig_7series_0_1_synth_1" Type="Ft3:Synth" SrcSet="system_100T_mig_7series_0_1" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_mig_7series_0_1" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_mig_7series_0_1_synth_1" IncludeInArchive="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_mig_7series_0_1_synth_1">
+    <Run Id="system_100T_PmodACL2_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_PmodACL2_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PmodACL2_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_PmodACL2_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_PmodACL2_0_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
         <Step Id="synth_design"/>
       </Strategy>
       <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
-      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2020"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="constrs_1" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" SynthRun="synth_1" IncludeInArchive="true" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/impl_1">
+    <Run Id="system_100T_mig_7series_0_0_synth_1" Type="Ft3:Synth" SrcSet="system_100T_mig_7series_0_0" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_mig_7series_0_0" Description="Vivado Synthesis Defaults" AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" Dir="$PRUNDIR/system_100T_mig_7series_0_0_synth_1" IncludeInArchive="true" IsChild="false" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_mig_7series_0_0_synth_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Synthesis Defaults" Flow="Vivado Synthesis 2021"/>
+        <Step Id="synth_design"/>
+      </Strategy>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Synthesis Default Reports" Flow="Vivado Synthesis 2021"/>
+      <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
+      <RQSFiles/>
+    </Run>
+    <Run Id="impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="constrs_1" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" State="current" Dir="$PRUNDIR/impl_1" SynthRun="synth_1" IncludeInArchive="true" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PPRDIR/../../../../../home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/impl_1">
+      <Strategy Version="1" Minor="2">
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -641,13 +666,14 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <GeneratedRun Dir="$PRUNDIR" File="gen_run.xml"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_rst_mig_7series_0_83M_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_rst_mig_7series_0_83M_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_rst_mig_7series_0_83M_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_rst_mig_7series_0_83M_0_impl_1">
+    <Run Id="system_100T_dlmb_bram_if_cntlr_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_dlmb_bram_if_cntlr_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_dlmb_bram_if_cntlr_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_dlmb_bram_if_cntlr_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -658,13 +684,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2019"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_proc_sys_reset_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_proc_sys_reset_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_proc_sys_reset_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_proc_sys_reset_0_0_impl_1">
+    <Run Id="system_100T_dlmb_v10_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_dlmb_v10_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_dlmb_v10_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_dlmb_v10_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2019"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -675,13 +701,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2019"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_clk_wiz_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_clk_wiz_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_clk_wiz_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_clk_wiz_0_0_impl_1">
+    <Run Id="system_100T_ilmb_bram_if_cntlr_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_ilmb_bram_if_cntlr_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_ilmb_bram_if_cntlr_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_ilmb_bram_if_cntlr_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -692,13 +718,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_microblaze_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_microblaze_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_microblaze_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_microblaze_0_0_impl_1">
+    <Run Id="system_100T_ilmb_v10_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_ilmb_v10_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_ilmb_v10_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_ilmb_v10_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -709,13 +735,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_dlmb_v10_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_dlmb_v10_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_dlmb_v10_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_dlmb_v10_0_impl_1">
+    <Run Id="system_100T_lmb_bram_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_lmb_bram_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_lmb_bram_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_lmb_bram_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -726,13 +752,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_ilmb_v10_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_ilmb_v10_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_ilmb_v10_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_ilmb_v10_0_impl_1">
+    <Run Id="system_100T_rst_mig_7series_0_83M_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_rst_mig_7series_0_83M_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_rst_mig_7series_0_83M_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_rst_mig_7series_0_83M_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -743,13 +769,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_dlmb_bram_if_cntlr_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_dlmb_bram_if_cntlr_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_dlmb_bram_if_cntlr_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_dlmb_bram_if_cntlr_0_impl_1">
+    <Run Id="system_100T_proc_sys_reset_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_proc_sys_reset_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_proc_sys_reset_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_proc_sys_reset_0_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -760,13 +786,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_ilmb_bram_if_cntlr_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_ilmb_bram_if_cntlr_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_ilmb_bram_if_cntlr_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_ilmb_bram_if_cntlr_0_impl_1">
+    <Run Id="system_100T_PWM_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PWM_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_PWM_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_PWM_0_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -777,13 +803,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_lmb_bram_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_lmb_bram_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_lmb_bram_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_lmb_bram_0_impl_1">
+    <Run Id="system_100T_PWM_1_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PWM_1_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_PWM_1_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_PWM_1_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -794,13 +820,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_microblaze_0_axi_intc_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_microblaze_0_axi_intc_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_microblaze_0_axi_intc_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_microblaze_0_axi_intc_0_impl_1">
+    <Run Id="system_100T_axi_ethernetlite_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_ethernetlite_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_ethernetlite_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_axi_ethernetlite_0_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -811,13 +837,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_mdm_1_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_mdm_1_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_mdm_1_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_mdm_1_0_impl_1">
+    <Run Id="system_100T_axi_gpio_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_gpio_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_gpio_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_axi_gpio_0_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -828,13 +854,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_axi_uartlite_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_uartlite_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_uartlite_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_axi_uartlite_0_0_impl_1">
+    <Run Id="system_100T_axi_quad_spi_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_quad_spi_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_quad_spi_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_axi_quad_spi_0_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -845,13 +871,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_axi_ethernetlite_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_ethernetlite_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_ethernetlite_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_axi_ethernetlite_0_0_impl_1">
+    <Run Id="system_100T_axi_smc_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_smc_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_smc_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_axi_smc_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -862,13 +888,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_axi_timer_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_timer_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_timer_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_axi_timer_0_0_impl_1">
+    <Run Id="system_100T_axi_timer_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_timer_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_timer_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_axi_timer_0_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -879,13 +905,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_axi_smc_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_smc_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_smc_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_axi_smc_0_impl_1">
+    <Run Id="system_100T_axi_uartlite_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_uartlite_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_uartlite_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_axi_uartlite_0_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -896,13 +922,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_PWM_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PWM_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_PWM_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_PWM_0_0_impl_1">
+    <Run Id="system_100T_clk_wiz_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_clk_wiz_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_clk_wiz_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_clk_wiz_0_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -913,13 +939,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_PWM_1_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PWM_1_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_PWM_1_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_PWM_1_0_impl_1">
+    <Run Id="system_100T_mdm_1_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_mdm_1_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_mdm_1_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_mdm_1_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -930,13 +956,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_axi_gpio_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_gpio_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_gpio_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_axi_gpio_0_0_impl_1">
+    <Run Id="system_100T_microblaze_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_microblaze_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_microblaze_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_microblaze_0_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -947,13 +973,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_axi_quad_spi_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_axi_quad_spi_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_axi_quad_spi_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_axi_quad_spi_0_0_impl_1">
+    <Run Id="system_100T_microblaze_0_axi_intc_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_microblaze_0_axi_intc_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_microblaze_0_axi_intc_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_microblaze_0_axi_intc_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -964,13 +990,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_xbar_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_xbar_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_xbar_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_xbar_0_impl_1">
+    <Run Id="system_100T_xbar_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_xbar_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_xbar_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_xbar_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -981,13 +1007,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_MuxSSD_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_MuxSSD_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_MuxSSD_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_MuxSSD_0_0_impl_1">
+    <Run Id="system_100T_MuxSSD_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_MuxSSD_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_MuxSSD_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_MuxSSD_0_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -998,13 +1024,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_PmodCLS_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PmodCLS_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_PmodCLS_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_PmodCLS_0_0_impl_1">
+    <Run Id="system_100T_PmodCLS_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PmodCLS_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_PmodCLS_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_PmodCLS_0_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -1015,13 +1041,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_PmodACL2_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PmodACL2_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_PmodACL2_0_0_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_PmodACL2_0_0_impl_1">
+    <Run Id="system_100T_PmodACL2_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_PmodACL2_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_PmodACL2_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_PmodACL2_0_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -1032,13 +1058,13 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
-    <Run Id="system_100T_mig_7series_0_1_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_mig_7series_0_1" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_mig_7series_0_1_synth_1" IncludeInArchive="false" GenFullBitstream="true" AutoIncrementalDir="C:/home/timothystotts/Workareas/GitHub/timothystotts/fpga-serial-acl-tester-1/ACL-Tester-Design-AXI/Work_Dir/Arty-A7-100T/ACL-Tester-Design-AXI-100.srcs/utils_1/imports/system_100T_mig_7series_0_1_impl_1">
+    <Run Id="system_100T_mig_7series_0_0_impl_1" Type="Ft2:EntireDesign" Part="xc7a100ticsg324-1L" ConstrsSet="system_100T_mig_7series_0_0" Description="Default settings for Implementation." AutoIncrementalCheckpoint="false" WriteIncrSynthDcp="false" SynthRun="system_100T_mig_7series_0_0_synth_1" IncludeInArchive="false" IsChild="false" GenFullBitstream="true" AutoIncrementalDir="$PSRCDIR/utils_1/imports/system_100T_mig_7series_0_0_impl_1">
       <Strategy Version="1" Minor="2">
-        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2020"/>
+        <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2021"/>
         <Step Id="init_design"/>
         <Step Id="opt_design"/>
         <Step Id="power_opt_design"/>
@@ -1049,7 +1075,7 @@
         <Step Id="post_route_phys_opt_design"/>
         <Step Id="write_bitstream"/>
       </Strategy>
-      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2020"/>
+      <ReportStrategy Name="Vivado Implementation Default Reports" Flow="Vivado Implementation 2021"/>
       <Report Name="ROUTE_DESIGN.REPORT_METHODOLOGY" Enabled="1"/>
       <RQSFiles/>
     </Run>
