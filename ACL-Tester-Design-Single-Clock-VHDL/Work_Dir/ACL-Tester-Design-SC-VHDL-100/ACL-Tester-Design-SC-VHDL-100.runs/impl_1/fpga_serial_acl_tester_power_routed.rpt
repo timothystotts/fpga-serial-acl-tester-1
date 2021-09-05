@@ -1,11 +1,11 @@
-Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| Tool Version     : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
-| Date             : Mon Dec  7 16:24:44 2020
-| Host             : l2study running 64-bit Ubuntu 18.04.5 LTS
+| Tool Version     : Vivado v.2021.1 (lin64) Build 3247384 Thu Jun 10 19:36:07 MDT 2021
+| Date             : Sun Sep  5 16:42:34 2021
+| Host             : l4study running 64-bit Ubuntu 18.04.5 LTS
 | Command          : report_power -file fpga_serial_acl_tester_power_routed.rpt -pb fpga_serial_acl_tester_power_summary_routed.pb -rpx fpga_serial_acl_tester_power_routed.rpx
 | Design           : fpga_serial_acl_tester
-| Device           : xc7a35ticsg324-1L
+| Device           : xc7a100ticsg324-1L
 | Design State     : routed
 | Grade            : industrial
 | Process          : typical
@@ -30,14 +30,14 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.170        |
+| Total On-Chip Power (W)  | 0.192        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
 | Dynamic (W)              | 0.108        |
-| Device Static (W)        | 0.062        |
-| Effective TJA (C/W)      | 4.8          |
-| Max Ambient (C)          | 99.2         |
-| Junction Temperature (C) | 25.8         |
+| Device Static (W)        | 0.084        |
+| Effective TJA (C/W)      | 4.6          |
+| Max Ambient (C)          | 99.1         |
+| Junction Temperature (C) | 25.9         |
 | Confidence Level         | Low          |
 | Setting File             | ---          |
 | Simulation Activity File | ---          |
@@ -53,19 +53,19 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |     0.002 |       14 |       --- |             --- |
-| Slice Logic    |     0.001 |     6883 |       --- |             --- |
-|   LUT as Logic |     0.001 |     3304 |     20800 |           15.88 |
-|   CARRY4       |    <0.001 |      416 |      8150 |            5.10 |
-|   Register     |    <0.001 |     2234 |     41600 |            5.37 |
-|   F7/F8 Muxes  |    <0.001 |        9 |     32600 |            0.03 |
+| Slice Logic    |     0.001 |     6800 |       --- |             --- |
+|   LUT as Logic |    <0.001 |     3278 |     63400 |            5.17 |
+|   CARRY4       |    <0.001 |      412 |     15850 |            2.60 |
+|   Register     |    <0.001 |     2216 |    126800 |            1.75 |
+|   F7/F8 Muxes  |    <0.001 |        3 |     63400 |           <0.01 |
 |   Others       |     0.000 |       70 |       --- |             --- |
-| Signals        |    <0.001 |     4854 |       --- |             --- |
-| Block RAM      |    <0.001 |        2 |        50 |            4.00 |
-| MMCM           |     0.102 |        1 |         5 |           20.00 |
-| DSPs           |    <0.001 |       16 |        90 |           17.78 |
+| Signals        |    <0.001 |     4825 |       --- |             --- |
+| Block RAM      |    <0.001 |        2 |       135 |            1.48 |
+| MMCM           |     0.102 |        1 |         6 |           16.67 |
+| DSPs           |    <0.001 |       16 |       240 |            6.67 |
 | I/O            |    <0.001 |       44 |       210 |           20.95 |
-| Static Power   |     0.062 |          |           |                 |
-| Total          |     0.170 |          |           |                 |
+| Static Power   |     0.084 |          |           |                 |
+| Total          |     0.192 |          |           |                 |
 +----------------+-----------+----------+-----------+-----------------+
 
 
@@ -75,9 +75,9 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       0.950 |     0.011 |       0.005 |      0.006 |       NA    | Unspecified | NA         |
-| Vccaux    |       1.800 |     0.068 |       0.057 |      0.011 |       NA    | Unspecified | NA         |
-| Vcco33    |       3.300 |     0.001 |       0.000 |      0.001 |       NA    | Unspecified | NA         |
+| Vccint    |       0.950 |     0.015 |       0.005 |      0.009 |       NA    | Unspecified | NA         |
+| Vccaux    |       1.800 |     0.073 |       0.057 |      0.016 |       NA    | Unspecified | NA         |
+| Vcco33    |       3.300 |     0.004 |       0.000 |      0.004 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco18    |       1.800 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
 | Vcco15    |       1.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
@@ -115,7 +115,7 @@ Table of Contents
 
 +-----------------------+--------------------------+
 | Ambient Temp (C)      | 25.0                     |
-| ThetaJA (C/W)         | 4.8                      |
+| ThetaJA (C/W)         | 4.6                      |
 | Airflow (LFM)         | 250                      |
 | Heat Sink             | medium (Medium Profile)  |
 | ThetaSA (C/W)         | 4.6                      |

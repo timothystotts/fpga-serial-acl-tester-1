@@ -1,11 +1,11 @@
-Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| Tool Version : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
-| Date         : Mon Dec  7 16:24:44 2020
-| Host         : l2study running 64-bit Ubuntu 18.04.5 LTS
+| Tool Version : Vivado v.2021.1 (lin64) Build 3247384 Thu Jun 10 19:36:07 MDT 2021
+| Date         : Sun Sep  5 16:42:35 2021
+| Host         : l4study running 64-bit Ubuntu 18.04.5 LTS
 | Command      : report_bus_skew -warn_on_violation -file fpga_serial_acl_tester_bus_skew_routed.rpt -pb fpga_serial_acl_tester_bus_skew_routed.pb -rpx fpga_serial_acl_tester_bus_skew_routed.rpx
 | Design       : fpga_serial_acl_tester
-| Device       : 7a35ti-csg324
+| Device       : 7a100ti-csg324
 | Speed File   : -1L  PRODUCTION 1.23 2018-06-13
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

@@ -1,8 +1,8 @@
-Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| Tool Version : Vivado v.2020.2 (win64) Build 3064766 Wed Nov 18 09:12:45 MST 2020
-| Date         : Thu Jan  7 22:01:35 2021
-| Host         : J1STUDY running 64-bit major release  (build 9200)
+| Tool Version : Vivado v.2021.1 (lin64) Build 3247384 Thu Jun 10 19:36:07 MDT 2021
+| Date         : Sun Sep  5 16:42:33 2021
+| Host         : l4study running 64-bit Ubuntu 18.04.5 LTS
 | Command      : report_methodology -file fpga_serial_acl_tester_methodology_drc_routed.rpt -pb fpga_serial_acl_tester_methodology_drc_routed.pb -rpx fpga_serial_acl_tester_methodology_drc_routed.rpx
 | Design       : fpga_serial_acl_tester
 | Device       : xc7a100ticsg324-1L
