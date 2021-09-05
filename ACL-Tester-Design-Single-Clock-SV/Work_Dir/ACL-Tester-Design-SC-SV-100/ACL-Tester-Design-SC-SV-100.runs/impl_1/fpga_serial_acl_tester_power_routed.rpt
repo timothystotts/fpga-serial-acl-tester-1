@@ -1,7 +1,7 @@
-Copyright 1986-2020 Xilinx, Inc. All Rights Reserved.
+Copyright 1986-2021 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| Tool Version     : Vivado v.2020.2 (lin64) Build 3064766 Wed Nov 18 09:12:47 MST 2020
-| Date             : Thu Mar 25 21:12:01 2021
+| Tool Version     : Vivado v.2021.1 (lin64) Build 3247384 Thu Jun 10 19:36:07 MDT 2021
+| Date             : Sun Sep  5 17:17:43 2021
 | Host             : l4study running 64-bit Ubuntu 18.04.5 LTS
 | Command          : report_power -file fpga_serial_acl_tester_power_routed.rpt -pb fpga_serial_acl_tester_power_summary_routed.pb -rpx fpga_serial_acl_tester_power_routed.rpx
 | Design           : fpga_serial_acl_tester
@@ -53,13 +53,13 @@ Table of Contents
 | On-Chip        | Power (W) | Used     | Available | Utilization (%) |
 +----------------+-----------+----------+-----------+-----------------+
 | Clocks         |     0.003 |       14 |       --- |             --- |
-| Slice Logic    |     0.001 |     7862 |       --- |             --- |
-|   LUT as Logic |     0.001 |     3564 |     63400 |            5.62 |
-|   CARRY4       |    <0.001 |      573 |     15850 |            3.62 |
-|   Register     |    <0.001 |     2477 |    126800 |            1.95 |
-|   F7/F8 Muxes  |    <0.001 |       12 |     63400 |            0.02 |
+| Slice Logic    |     0.001 |     7761 |       --- |             --- |
+|   LUT as Logic |     0.001 |     3509 |     63400 |            5.53 |
+|   CARRY4       |    <0.001 |      569 |     15850 |            3.59 |
+|   Register     |    <0.001 |     2459 |    126800 |            1.94 |
+|   F7/F8 Muxes  |    <0.001 |       10 |     63400 |            0.02 |
 |   Others       |     0.000 |       70 |       --- |             --- |
-| Signals        |    <0.001 |     5273 |       --- |             --- |
+| Signals        |    <0.001 |     5209 |       --- |             --- |
 | Block RAM      |    <0.001 |        2 |       135 |            1.48 |
 | MMCM           |     0.102 |        1 |         6 |           16.67 |
 | DSPs           |    <0.001 |       16 |       240 |            6.67 |
