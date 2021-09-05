@@ -11,3 +11,7 @@ synth_?/
 *.runs/
 *.sim/
 *.ip_user_files/
+vivado*.jou
+vivado*.log
+vivado*.str
+*.xpr
