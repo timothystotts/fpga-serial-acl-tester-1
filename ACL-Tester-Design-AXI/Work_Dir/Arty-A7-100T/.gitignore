@@ -1,5 +1,0 @@
-*.hw/
-*.cache/
-*.runs/
-ip_upgrade.log
-*.ip_user_files/
