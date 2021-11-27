@@ -219,6 +219,7 @@ function compile_work () {
         led_pwm_driver.vhdl \
         led_palette_pulser.vhdl \
         \
+        pmod_stand_spi_solo_pkg.vhdl \
         pmod_generic_spi_solo.vhdl \
         pmod_acl2_stand_spi_solo.vhdl \
         pmod_cls_stand_spi_solo.vhdl \
