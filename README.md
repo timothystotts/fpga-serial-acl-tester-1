@@ -3,6 +3,9 @@
 FPGA Serial ACL Tester Version 1
 by Timothy Stotts
 
+Note that this project is deprecated. The most recent project, with wider
+hardware support and occasional updates, is Version 3 and is located at:
+[fpga-serial-acl-tester-3](https://github.com/timothystotts/fpga-serial-acl-tester-3)
 
 ## Description
 A small FPGA project of different implementations for testing Measurement and Activity Events of a SPI accelerometer.
